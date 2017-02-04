@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<tabs>
+    <tab
+        id="@+id/tab_favorites"
+        icon="@drawable/ic_account_balance"
+        title="Favorites"
+        inActiveColor="#ffffff"
+        activeColor="#f2f2f2"
+        barColorWhenSelected="#252525"
+        badgeBackgroundColor="#252525" />
+
+    <tab
+        id="@+id/tab_nearby"
+        icon="@drawable/ic_accessibility"
+        title="Nearby"
+        inActiveColor="#ffffff"
+        activeColor="#f2f2f2"
+        barColorWhenSelected="#252525"
+        badgeBackgroundColor="#252525" />
+
+    <tab
+        id="@+id/tab_friends"
+        icon="@drawable/ic_audiotrack"
+        title="Friends"
+        inActiveColor="#ffffff"
+        activeColor="#f2f2f2"
+        barColorWhenSelected="#252525"
+        badgeBackgroundColor="#252525" />
+
+</tabs>

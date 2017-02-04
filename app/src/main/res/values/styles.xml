@@ -1,5 +1,8 @@
 <resources>
 
+    //added stub to avoid crash on lollipop, for transparency bottombar
+    <style name="AppTheme.TransNav" parent="AppTheme" />
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
