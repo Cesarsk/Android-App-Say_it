@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- This could be your fragment container, or something -->
-    <FrameLayout
-        android:id="@+id/contentContainer"
+    <TextView
+        android:id="@+id/messageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomBar" />
+        android:layout_above="@+id/bottomBar"
+        android:gravity="center"
+        android:text="Hi mom!" />
 
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
+        android:layout_height="57dp"
         android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
         app:bb_tabXmlResource="@xml/bottombar_tabs"
         app:bb_behavior="underNavbar"
-        android:layout_height="57dp" />
+        app:bb_inActiveTabAlpha="0.3"
+        app:bb_inActiveTabColor="@color/colorAccent"
+        app:bb_activeTabColor="@color/colorAccent" />
 
 </RelativeLayout>
-
