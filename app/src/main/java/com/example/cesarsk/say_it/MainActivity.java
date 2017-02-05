@@ -1,70 +1,65 @@
 package com.example.cesarsk.say_it;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-
-import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends FragmentActivity {
 
-    private FragNavController fragNavController;
-
-    private final int TAB_FIRST = FragNavController.TAB1;
-    private final int TAB_SECOND = FragNavController.TAB2;
-    private final int TAB_THIRD = FragNavController.TAB3;
+    final int HOME_FRAGMENT_INDEX = 0;
+    final int FAVORITES_FRAGMENT_INDEX = 1;
+    final int HISTORY_FRAGMENT_INDEX = 2;
+    final int SEARCH_FRAGMENT_INDEX = 3;
+    final int SETTINGS_FRAGMENT_INDEX = 4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //FragNav - list of fragments
-        List<Fragment> fragments = new ArrayList<>(3);
-
-        //add fragments to list
-  //      fragments.add(FirstFragment.newInstance(0));
-  //      fragments.add(SecondFragment.newInstance(0));
-  //      fragments.add(ThirdFragment.newInstance(0));
-
-        //link fragments to container
-  //      fragNavController = new FragNavController(getSupportFragmentManager(),R.id.bottomBar,fragments);
-        //End of FragNav
-
         final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        final FragmentManager fragmentManager = getFragmentManager();
 
-        bottomBar.selectTabAtPosition(1);
+        final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
+        FragmentArrayList.add(new HomeFragment());
+        FragmentArrayList.add(new FavoritesFragment());
+        FragmentArrayList.add(new HistoryFragment());
+        FragmentArrayList.add(new SearchFragment());
+        FragmentArrayList.add(new SettingsFragment());
+
+        fragmentManager.beginTransaction().add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
+
+        bottomBar.selectTabAtPosition(2); //Default: Home
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_favorites) {
-                    // The tab with id R.id.tab_favorites was selected,
-                    // change your content accordingly.
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX)).commit();
                 }
 
                 else if(tabId == R.id.tab_search) {
-
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(SEARCH_FRAGMENT_INDEX)).commit();
                 }
 
                 else if(tabId == R.id.tab_home) {
-
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
                 }
 
                 else if(tabId == R.id.tab_history) {
-
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX)).commit();
                 }
 
                 else if(tabId == R.id.tab_settings) {
-
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(SETTINGS_FRAGMENT_INDEX)).commit();
                 }
             }
         });

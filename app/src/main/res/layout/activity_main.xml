@@ -7,7 +7,7 @@
 
     <!-- Framelayout rappresenta il placeholder nel quale andranno i vari fragments -->
     <FrameLayout
-        android:id="@+id/frame"
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -17,8 +17,6 @@
         android:layout_alignParentBottom="true"
         app:bb_tabXmlResource="@xml/bottombar_tabs"
         app:bb_behavior="underNavbar"
-        android:layout_height="60dp" >
-
-    </com.roughike.bottombar.BottomBar>
+        android:layout_height="60dp" />
 
 </RelativeLayout>
