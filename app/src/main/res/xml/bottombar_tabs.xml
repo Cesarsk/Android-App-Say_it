@@ -5,7 +5,7 @@
         id="@+id/tab_favorites"
         icon="@drawable/ic_star"
         title="Favorites"
-        inActivecolor="#F3F3F3"
+        inActivecolor="#d4d4d4"
         activeColor="#FFFFFF"
         barColorWhenSelected="@color/colorAccent" />
 
@@ -13,15 +13,15 @@
         id="@+id/tab_search"
         icon="@drawable/ic_search"
         title="Search"
-        inActivecolor="#F3F3F3"
+        inActivecolor="#d4d4d4"
         activeColor="#FFFFFF"
-        barColorWhenSelected="@color/colorAccent" />
+        barColorWhenSelected="#FF5252" />
 
     <tab
         id="@+id/tab_home"
         icon="@drawable/ic_home"
         title="Home"
-        inActivecolor="#F3F3F3"
+        inActivecolor="#ffffff"
         activeColor="#FFFFFF"
         barColorWhenSelected="#7B1FA2" />
 
@@ -29,7 +29,7 @@
         id="@+id/tab_history"
         icon="@drawable/ic_history"
         title="History"
-        inActivecolor="#F3F3F3"
+        inActivecolor="#ececec"
         activeColor="#FFFFFF"
         barColorWhenSelected="#5D4037" />
 
@@ -37,7 +37,7 @@
         id="@+id/tab_settings"
         icon="@drawable/ic_settings"
         title="Settings"
-        inActivecolor="#F3F3F3"
+        inActivecolor="#d4d4d4"
         activeColor="#FFFFFF"
         barColorWhenSelected="#FF9800" />
 
