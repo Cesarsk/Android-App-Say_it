@@ -3,34 +3,42 @@
 <tabs>
     <tab
         id="@+id/tab_favorites"
-        icon="@drawable/ic_create"
+        icon="@drawable/ic_star"
         title="Favorites"
         inActivecolor="#F3F3F3"
         activeColor="#FFFFFF"
         barColorWhenSelected="@color/colorAccent" />
 
     <tab
-        id="@+id/tab_history"
-        icon="@drawable/ic_drafts"
-        title="History"
+        id="@+id/tab_search"
+        icon="@drawable/ic_search"
+        title="Search"
         inActivecolor="#F3F3F3"
         activeColor="#FFFFFF"
-        barColorWhenSelected="#5D4037" />
+        barColorWhenSelected="@color/colorAccent" />
 
     <tab
         id="@+id/tab_home"
-        icon="@drawable/ic_accessibility"
+        icon="@drawable/ic_home"
         title="Home"
         inActivecolor="#F3F3F3"
         activeColor="#FFFFFF"
         barColorWhenSelected="#7B1FA2" />
 
     <tab
+        id="@+id/tab_history"
+        icon="@drawable/ic_history"
+        title="History"
+        inActivecolor="#F3F3F3"
+        activeColor="#FFFFFF"
+        barColorWhenSelected="#5D4037" />
+
+    <tab
         id="@+id/tab_settings"
-        icon="@drawable/ic_audiotrack"
+        icon="@drawable/ic_settings"
         title="Settings"
         inActivecolor="#F3F3F3"
         activeColor="#FFFFFF"
-        barColorWhenSelected="#FF5252" />
+        barColorWhenSelected="#FF9800" />
 
 </tabs>

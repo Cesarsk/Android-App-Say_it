@@ -5,6 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="10dp">
 
+    <!-- Framelayout rappresenta il placeholder nel quale andranno i vari fragments -->
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
@@ -12,15 +17,8 @@
         android:layout_alignParentBottom="true"
         app:bb_tabXmlResource="@xml/bottombar_tabs"
         app:bb_behavior="underNavbar"
-        android:layout_height="75dp"
-></com.roughike.bottombar.BottomBar>
+        android:layout_height="60dp" >
 
-    <TextView
-        android:text="Menu HOME"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="114dp"
-        android:id="@+id/textView" />
+    </com.roughike.bottombar.BottomBar>
+
 </RelativeLayout>

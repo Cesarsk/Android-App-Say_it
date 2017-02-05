@@ -24,7 +24,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    //aggiunto questo per l'implementazione della bottom bar
+
     compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.roughike:bottom-bar:2.1.1' //aggiunto questo per l'implementazione della bottom bar
+    compile 'com.roughike:bottom-bar:2.1.1'
+    compile 'com.ncapdevi:frag-nav:1.0.3'
+    compile 'com.android.support:support-v4:25.1.1'
     testCompile 'junit:junit:4.12'
 }
