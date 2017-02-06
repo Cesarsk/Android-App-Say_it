@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static android.speech.tts.Voice.LATENCY_VERY_LOW;
+import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
 
 public class MainActivity extends FragmentActivity {
@@ -37,7 +40,11 @@ public class MainActivity extends FragmentActivity {
     private final int SETTINGS_FRAGMENT_INDEX = 4;
 
     //Definizione variabile TTS
-    private TextToSpeech tts;
+    static TextToSpeech tts;
+    static Voice voice_american = new Voice("American",Locale.US,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+    static Voice voice_british = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+
+
 
     //Definizione variabile WordList
     private ArrayList<String> WordList;
@@ -97,19 +104,12 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onInit(int status) {
                 // TODO Auto-generated method stub
-                if(status == TextToSpeech.SUCCESS){
-                    int result=tts.setLanguage(Locale.US);
-                    if(result==TextToSpeech.LANG_MISSING_DATA ||
-                            result==TextToSpeech.LANG_NOT_SUPPORTED){
-                        Log.e("error", "This Language is not supported");
-                    }
-                    else{
+                if(status == TextToSpeech.SUCCESS) {
+                    //tts.setLanguage(Locale.UK);
+                    tts.setPitch((float)0.90);
+                    tts.setSpeechRate((float)0.90);
+                    tts.setVoice(voice_american);
 
-                        //ConvertTextToSpeech();
-                        //tts.speak("Loaded "+WordList.size()+" words", QUEUE_ADD, null);
-                        tts.speak("Hello Luca, how are you? Let's start with a simple pronunciation of a word. Focus", QUEUE_ADD, null);
-
-                    }
                 }
                 else
                     Log.e("error", "Initilization Failed!");
@@ -118,14 +118,3 @@ public class MainActivity extends FragmentActivity {
 
     }
 }
-/*
-    private void ConvertTextToSpeech() {
-        // TODO Auto-generated method stub
-        String text = et.getText().toString();
-        if(text==null||"".equals(text))
-        {
-            text = "Content not available";
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-        }else
-            tts.speak(text+"is saved", TextToSpeech.QUEUE_FLUSH, null);
-    } */
