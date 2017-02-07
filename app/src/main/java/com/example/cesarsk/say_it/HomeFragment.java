@@ -3,23 +3,16 @@ package com.example.cesarsk.say_it;
 
 import android.os.Bundle;
 import android.app.Fragment;
-import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.Locale;
-
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.tts;
-import static com.example.cesarsk.say_it.MainActivity.voice_american;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
-import static com.example.cesarsk.say_it.MainActivity.voice_british;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
-import static java.sql.DriverManager.println;
 
 
 /**

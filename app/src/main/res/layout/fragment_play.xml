@@ -18,19 +18,31 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="68dp"
         android:id="@+id/rec"
         tools:text="REC"
         android:layout_below="@+id/play"
         android:layout_alignStart="@+id/play" />
 
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch1"
+        android:layout_alignBaseline="@+id/word"
+        android:layout_alignBottom="@+id/word"
+        android:layout_toEndOf="@+id/word"
+        android:layout_marginStart="9dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="43dp"
         android:id="@+id/word"
-        tools:text="Word" />
+        tools:text="Word"
+        android:textSize="80sp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
