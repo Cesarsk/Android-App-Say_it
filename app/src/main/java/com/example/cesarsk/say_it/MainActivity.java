@@ -43,9 +43,6 @@ public class MainActivity extends FragmentActivity {
     static TextToSpeech tts;
     static Voice voice_american_female = new Voice("American",Locale.US,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
     static Voice voice_british_female = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
-    static Voice voice_british_male = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
-
-
 
 
     //Definizione variabile WordList
@@ -107,11 +104,9 @@ public class MainActivity extends FragmentActivity {
             public void onInit(int status) {
                 // TODO Auto-generated method stub
                 if(status == TextToSpeech.SUCCESS) {
-                    //tts.setLanguage(Locale.UK);
                     tts.setPitch((float)0.90);
                     tts.setSpeechRate((float)0.90);
                     tts.setVoice(voice_american_female);
-
                 }
                 else
                     Log.e("error", "Initilization Failed!");
