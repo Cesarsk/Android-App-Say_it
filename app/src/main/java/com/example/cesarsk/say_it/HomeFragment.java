@@ -16,7 +16,9 @@ import java.util.Locale;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american;
+import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british;
+import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
 import static java.sql.DriverManager.println;
 
 
@@ -44,7 +46,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v)
             {
                 EditText et = (EditText)view.findViewById(R.id.editText);
-                tts.setVoice(voice_british);
+                tts.setVoice(voice_british_female);
                 tts.speak(et.getEditableText().toString(), QUEUE_ADD, null, null);
             }
         });
@@ -56,7 +58,7 @@ public class HomeFragment extends Fragment {
            public void onClick(View v)
            {
                EditText et = (EditText)view.findViewById(R.id.editText);
-               tts.setVoice(voice_american);
+               tts.setVoice(voice_american_female);
                tts.speak(et.getEditableText().toString(), QUEUE_ADD, null, null);
            }
         });

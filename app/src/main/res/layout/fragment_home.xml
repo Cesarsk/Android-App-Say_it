@@ -8,13 +8,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HOME FRAGMENT"
-        android:textStyle="normal|bold"
-        android:textSize="30sp"
+        android:text="SAY IT!"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        android:id="@+id/textView2" />
+        android:id="@+id/textView2"
+        android:textSize="48sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="sans-serif" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -26,7 +27,18 @@
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
-        tools:text="Tell me what to say" />
+        tools:text="Tell me what to say!"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimary"
+        android:textAllCaps="false" />
+
+    <Button
+        android:text="SAY IT BE!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/textView2" />
 
     <Button
         android:text="SAY IT AE!"
@@ -35,14 +47,6 @@
         android:id="@+id/button2"
         android:layout_alignBaseline="@+id/button"
         android:layout_alignBottom="@+id/button"
-        android:layout_alignEnd="@+id/textView2" />
-
-    <Button
-        android:text="SAY IT BE!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/textView2" />
+        android:layout_toEndOf="@+id/textView2" />
 
 </RelativeLayout>

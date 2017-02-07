@@ -41,8 +41,10 @@ public class MainActivity extends FragmentActivity {
 
     //Definizione variabile TTS
     static TextToSpeech tts;
-    static Voice voice_american = new Voice("American",Locale.US,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
-    static Voice voice_british = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+    static Voice voice_american_female = new Voice("American",Locale.US,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+    static Voice voice_british_female = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+    static Voice voice_british_male = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+
 
 
 
@@ -108,7 +110,7 @@ public class MainActivity extends FragmentActivity {
                     //tts.setLanguage(Locale.UK);
                     tts.setPitch((float)0.90);
                     tts.setSpeechRate((float)0.90);
-                    tts.setVoice(voice_american);
+                    tts.setVoice(voice_american_female);
 
                 }
                 else
