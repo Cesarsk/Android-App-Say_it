@@ -17,6 +17,10 @@
         android:layout_alignParentBottom="true"
         app:bb_tabXmlResource="@xml/bottombar_tabs"
         app:bb_behavior="underNavbar"
-        android:layout_height="60dp" />
+        android:layout_height="60dp"
+        app:bb_inActiveTabColor="@color/inActiveTabColor"
+        app:bb_activeTabColor="@color/colorPrimary"
+
+        />
 
 </RelativeLayout>
