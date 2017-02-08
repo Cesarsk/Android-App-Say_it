@@ -6,9 +6,6 @@ import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
@@ -30,7 +27,7 @@ public class MainActivity extends FragmentActivity {
     private final int SEARCH_FRAGMENT_INDEX = 3;
     private final int SETTINGS_FRAGMENT_INDEX = 4;
 
-    private ArrayList<String> WordList;
+    public static final ArrayList<String> WordList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +65,6 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        WordList = new ArrayList<>();
         BufferedReader line_reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.wordlist)));
         String line;
 
@@ -83,26 +79,5 @@ public class MainActivity extends FragmentActivity {
         Collections.sort(WordList);
 
         Toast.makeText(this, "Caricate " + WordList.size() + " parole.", Toast.LENGTH_LONG).show();
-    }
-
-    public void SearchWord(View view){
-        //FIXARE problema del non trovato!
-        EditText searchbox = (EditText) findViewById(R.id.SearchBox);
-        TextView result = (TextView) findViewById(R.id.Debug_Result_TextView);
-
-        String lookup = searchbox.getText().toString().toLowerCase();
-
-        if(!lookup.isEmpty()) {
-            int found_index = Collections.binarySearch(WordList, lookup);
-            if (found_index >= 0) {
-                result.setText("Trovata " + WordList.get(found_index) + " all'indice " + found_index);
-            }
-            else{
-                result.setText("Word not found!");
-            }
-        }
-        else{
-            result.setText("You have to write something!");
-        }
     }
 }

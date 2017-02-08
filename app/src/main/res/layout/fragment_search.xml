@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:inputType="textAutoComplete"
+        android:inputType="textCapWords"
         android:ems="10"
         android:hint="@string/search_box_hint"
         android:textAlignment="center"
@@ -24,18 +24,12 @@
         android:layout_below="@id/SearchBox"
         android:layout_marginTop="30dp"
         android:text="@string/say_it_button"
-        android:textSize="24sp"
-        android:onClick="SearchWord"/>
+        android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/Debug_Result_TextView"
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/Say_It_Button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:textSize="18sp"
-        android:textStyle="normal|italic" />
-
+        android:id="@+id/result_list_view"
+        android:layout_below="@id/Say_It_Button"></ListView>
 
 </RelativeLayout>
