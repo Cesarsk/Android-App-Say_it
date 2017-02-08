@@ -45,6 +45,8 @@ public class SearchFragment extends Fragment {
 
                 String lookup = searchbox.getText().toString().toLowerCase();
 
+                //TODO: Implementare algoritmo di stemming
+
                 if(!lookup.isEmpty()) {
                     int found_index = Collections.binarySearch(MainActivity.WordList, lookup);
                     if (found_index >= 0) {
