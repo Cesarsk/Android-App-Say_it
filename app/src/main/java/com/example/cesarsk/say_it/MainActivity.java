@@ -64,7 +64,7 @@ public class MainActivity extends FragmentActivity {
         fragmentManager.beginTransaction().add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
 
         final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.selectTabAtPosition(2); //Default: Home
+        bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX); //Default: Home
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {

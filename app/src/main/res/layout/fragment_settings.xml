@@ -1,63 +1,74 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.cesarsk.say_it.SettingsFragment">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SETTINGS"
-        android:textStyle="normal|bold"
-        android:textSize="50sp"
-        android:layout_marginTop="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/colorPrimary"
-        android:textAlignment="center" />
-
-    <Button
-        android:text="Contact us"
-        android:textSize="30sp"
-        android:layout_marginTop="200dp"
-        android:id="@+id/contact_us"
-        android:layout_height="80dp"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
-
-    <Button
-        android:text="Bug Report"
-        android:textSize="30sp"
-        android:layout_marginTop="300dp"
-        android:id="@+id/bug_report"
-        android:layout_height="80dp"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
-
-    <Button
-        android:text="Rate Us"
-        android:textSize="30sp"
-        android:layout_marginTop="400dp"
-        android:id="@+id/rate_us"
-        android:layout_height="80dp"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+    tools:context="com.example.cesarsk.say_it.SettingsFragment"
+    android:orientation="vertical"
+    app:layout_collapseParallaxMultiplier="0.0"
+    android:layout_weight="1"
+    android:elevation="0dp"
+    app:layout_scrollFlags="scroll"
+    android:baselineAligned="false">
 
     <Button
         android:text="Remove ADS"
-        android:textSize="30sp"
-        android:layout_marginTop="500dp"
+        android:textSize="12sp"
         android:id="@+id/remove_ads"
-        android:layout_height="80dp"
         android:layout_width="match_parent"
-        android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart" />
 
-</RelativeLayout>
+    <Button
+        android:text="Rate Us"
+        android:textSize="12sp"
+        android:id="@+id/rate_us"
+        android:layout_width="match_parent"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_alignBottom="@+id/remove_ads"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart" />
+
+    <Button
+        android:text="Contact us"
+        android:textSize="12sp"
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_alignBottom="@+id/bug_report"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart" />
+
+    <Button
+        android:text="Bug Report"
+        android:textSize="12sp"
+        android:id="@+id/bug_report"
+        android:layout_width="match_parent"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_alignBottom="@+id/rate_us"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart" />
+
+    <Button
+        android:text="Contact us"
+        android:textSize="12sp"
+        android:id="@+id/contact_us"
+        android:layout_width="match_parent"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_alignBottom="@+id/bug_report"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/default_voice"
+        android:id="@+id/default_voice"
+        />
+
+</LinearLayout>

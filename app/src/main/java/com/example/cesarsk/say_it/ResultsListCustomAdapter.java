@@ -1,7 +1,9 @@
 package com.example.cesarsk.say_it;
 
+import android.app.Activity;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
+import android.app.FragmentManager;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,6 +29,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
     private ArrayList<String> results;
     private int PlayButtonIconID;
     private int AddToFavsButtonIconID;
+    private ArrayList<TextView> words;
 
     public ResultsListCustomAdapter(Context context, ArrayList<String> results, int PlayButtonIconID, int AddToFavsButtonIconID){
         this.context = context;
@@ -51,7 +55,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+        final FragmentManager fragmentManager= ((Activity)context).getFragmentManager();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.fragment_settings,
                 null, false);
@@ -59,6 +63,16 @@ public class ResultsListCustomAdapter extends BaseAdapter {
         if(convertView == null) {
             convertView = inflater.inflate(R.layout.search_results_list_item, parent, false);
             final TextView word = (TextView) convertView.findViewById(R.id.Result_TextView);
+            word.setText(results.get(position));
+
+            word.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayFragment()).commit();
+                }
+            });
+
+            //Pulsante QUICK PLAY
             ImageButton play_button = (ImageButton) convertView.findViewById(R.id.play_button);
             play_button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -68,11 +82,22 @@ public class ResultsListCustomAdapter extends BaseAdapter {
                 }
             });
 
+            //Pulsante FAV
             ImageButton add_to_favs_button = (ImageButton) convertView.findViewById(R.id.add_to_favs_button);
+            add_to_favs_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO Inserisci ai preferiti
+                    words.add(word); //Da continuare
+                }
+            });
 
-            word.setText(results.get(position));
+
+
         }
 
         return convertView;
     }
+
+
 }
