@@ -14,16 +14,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import java.util.Locale;
-import java.util.Scanner;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
@@ -44,9 +43,8 @@ public class MainActivity extends FragmentActivity {
     static Voice voice_american_female = new Voice("American",Locale.US,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
     static Voice voice_british_female = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
 
-
     //Definizione variabile WordList
-    private ArrayList<String> WordList;
+    public static final ArrayList<String> WordList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,7 +82,6 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        WordList = new ArrayList<>();
         BufferedReader line_reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.wordlist)));
         String line;
 
@@ -95,6 +92,8 @@ public class MainActivity extends FragmentActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Collections.sort(WordList);
 
         Toast.makeText(this, "Caricate " + WordList.size() + " parole.", Toast.LENGTH_LONG).show();
 
