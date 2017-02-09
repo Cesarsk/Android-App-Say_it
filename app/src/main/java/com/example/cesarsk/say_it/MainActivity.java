@@ -2,6 +2,7 @@ package com.example.cesarsk.say_it;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
@@ -54,6 +55,7 @@ public class MainActivity extends FragmentActivity {
         //Gestione Fragment
         final FragmentManager fragmentManager = getFragmentManager();
 
+
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
         FragmentArrayList.add(new HomeFragment());
         FragmentArrayList.add(new FavoritesFragment());
@@ -61,7 +63,10 @@ public class MainActivity extends FragmentActivity {
         FragmentArrayList.add(new SearchFragment());
         FragmentArrayList.add(new SettingsFragment());
 
-        fragmentManager.beginTransaction().add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
+        transaction.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+        transaction.commit();
 
         final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.selectTabAtPosition(2); //Default: Home
@@ -69,15 +74,30 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_favorites) {
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX)).commit();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+                    transaction.replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX));
+                    transaction.commit();
                 } else if (tabId == R.id.tab_search) {
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(SEARCH_FRAGMENT_INDEX)).commit();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+                    transaction.replace(R.id.fragment_container, FragmentArrayList.get(SEARCH_FRAGMENT_INDEX));
+                    transaction.commit();
                 } else if (tabId == R.id.tab_home) {
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+                    transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
+                    transaction.commit();
                 } else if (tabId == R.id.tab_history) {
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX)).commit();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+                    transaction.replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX));
+                    transaction.commit();
                 } else if (tabId == R.id.tab_settings) {
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(SETTINGS_FRAGMENT_INDEX)).commit();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+                    transaction.replace(R.id.fragment_container, FragmentArrayList.get(SETTINGS_FRAGMENT_INDEX));
+                    transaction.commit();
                 }
             }
         });
