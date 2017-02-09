@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Say_it</string>
     <string name="say_it_button">SAY IT!</string>
     <string name="search_box_hint">Search your word…</string>
     <string name="not_found_error">Word not found!</string>
