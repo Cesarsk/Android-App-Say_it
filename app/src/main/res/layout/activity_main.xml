@@ -18,6 +18,5 @@
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         app:bb_tabXmlResource="@xml/bottombar_tabs"
-        android:layout_height="60dp"
-        app:bb_behavior="shifting" />
+        android:layout_height="60dp" />
 </RelativeLayout>
