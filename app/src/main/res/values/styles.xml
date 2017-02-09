@@ -10,7 +10,7 @@
     </style>
 
     //added stub to avoid crash on lollipop, for transparency bottombar
-    <style name="AppTheme.TransNav" parent="AppTheme" />
+    <!--<style name="AppTheme.TransNav" parent="AppTheme" />-->
 
 
     <style name="CustomTitleTextAppearance">
