@@ -104,6 +104,7 @@ public class MainActivity extends FragmentActivity {
             public void onInit(int status) {
                 // TODO Auto-generated method stub
                 if(status == TextToSpeech.SUCCESS) {
+                    //Ridondante?
                     tts.setPitch((float)0.90);
                     tts.setSpeechRate((float)0.90);
                     tts.setVoice(voice_american_female);

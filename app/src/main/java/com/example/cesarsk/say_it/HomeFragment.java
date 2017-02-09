@@ -54,7 +54,6 @@ public class HomeFragment extends Fragment {
            {
                EditText et = (EditText)view.findViewById(R.id.editText);
                tts.setPitch((float)0.85);
-               //tts.setSpeechRate((float)0.70);
                tts.setSpeechRate((float)0.70);
                tts.setVoice(voice_american_female);
                tts.speak(et.getEditableText().toString(), QUEUE_ADD, null, null);

@@ -7,7 +7,7 @@
         title="Favorites"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/ActiveTabColor"
-        barColorWhenSelected="@color/colorPrimary"/>
+        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_search"
@@ -15,7 +15,7 @@
         title="Search"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/ActiveTabColor"
-        barColorWhenSelected="@color/colorPrimary"/>
+        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_home"
@@ -23,7 +23,7 @@
         title="Home"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/ActiveTabColor"
-        barColorWhenSelected="@color/colorPrimary"/>
+        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_history"
@@ -31,7 +31,7 @@
         title="History"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/ActiveTabColor"
-        barColorWhenSelected="@color/colorPrimary"/>
+        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_settings"
@@ -39,6 +39,6 @@
         title="Settings"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/ActiveTabColor"
-        barColorWhenSelected="@color/colorPrimary"/>
+        barColorWhenSelected="@color/BottomBarColor"/>
 
 </tabs>
