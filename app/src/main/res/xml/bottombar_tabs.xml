@@ -5,40 +5,40 @@
         id="@+id/tab_favorites"
         icon="@drawable/ic_star"
         title="Favorites"
-        inActivecolor="@color/inActiveIcon"
-        activeColor="@color/ActiveIcon"
-        barColorWhenSelected="@color/colorAccent" />
+        inActivecolor="@color/inActiveTabColor"
+        activeColor="@color/ActiveTabColor"
+        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_search"
         icon="@drawable/ic_search"
         title="Search"
-        inActivecolor="@color/inActiveIcon"
-        activeColor="@color/ActiveIcon"
-        barColorWhenSelected="@color/BottomBarRed" />
+        inActivecolor="@color/inActiveTabColor"
+        activeColor="@color/ActiveTabColor"
+        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_home"
         icon="@drawable/ic_home"
         title="Home"
-        inActivecolor="@color/inActiveIcon"
-        activeColor="@color/ActiveIcon"
-        barColorWhenSelected="@color/BottomBarPurple" />
+        inActivecolor="@color/inActiveTabColor"
+        activeColor="@color/ActiveTabColor"
+        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_history"
         icon="@drawable/ic_history"
         title="History"
-        inActivecolor="@color/inActiveIcon"
-        activeColor="@color/ActiveIcon"
-        barColorWhenSelected="@color/BottomBarBrown" />
+        inActivecolor="@color/inActiveTabColor"
+        activeColor="@color/ActiveTabColor"
+        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_settings"
         icon="@drawable/ic_settings"
         title="Settings"
-        inActivecolor="@color/inActiveIcon"
-        activeColor="@color/ActiveIcon"
-        barColorWhenSelected="@color/BottomBarOrange" />
+        inActivecolor="@color/inActiveTabColor"
+        activeColor="@color/ActiveTabColor"
+        barColorWhenSelected="@color/BottomBarColor"/>
 
 </tabs>

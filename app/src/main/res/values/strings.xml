@@ -4,6 +4,6 @@
     <string name="search_box_hint">Search your word…</string>
     <string name="not_found_error">Word not found!</string>
     <string name="empty_field_error">You have to write something!</string>
-
+    <string name="app_name">Say It!</string>
 
 </resources>

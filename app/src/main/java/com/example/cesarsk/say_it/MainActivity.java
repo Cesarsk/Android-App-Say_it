@@ -2,10 +2,15 @@ package com.example.cesarsk.say_it;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.os.Handler;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
@@ -17,6 +22,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.util.Locale;
+
+import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static android.speech.tts.Voice.LATENCY_VERY_LOW;
+import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
+
 
 public class MainActivity extends FragmentActivity {
 
@@ -27,6 +38,12 @@ public class MainActivity extends FragmentActivity {
     private final int SEARCH_FRAGMENT_INDEX = 3;
     private final int SETTINGS_FRAGMENT_INDEX = 4;
 
+    //Definizione variabile TTS
+    static TextToSpeech tts;
+    static Voice voice_american_female = new Voice("American",Locale.US,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+    static Voice voice_british_female = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+
+    //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
 
     @Override
@@ -79,5 +96,22 @@ public class MainActivity extends FragmentActivity {
         Collections.sort(WordList);
 
         Toast.makeText(this, "Caricate " + WordList.size() + " parole.", Toast.LENGTH_LONG).show();
+
+        //IMPOSTAZIONE TEXT TO SPEECH
+        tts= new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                // TODO Auto-generated method stub
+                if(status == TextToSpeech.SUCCESS) {
+                    //Ridondante?
+                    tts.setPitch((float)0.90);
+                    tts.setSpeechRate((float)0.90);
+                    tts.setVoice(voice_american_female);
+                }
+                else
+                    Log.e("error", "Initilization Failed!");
+            }
+        });
+
     }
 }
