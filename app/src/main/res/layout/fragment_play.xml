@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="43dp"
-        android:id="@+id/word"
+        android:id="@+id/selected_word"
         android:text="Word"
         android:textSize="80sp"
         android:textAlignment="center"
@@ -26,23 +26,61 @@
         android:id="@+id/rec_button"
         android:layout_marginBottom="91dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/imageButton3" />
+        android:layout_alignStart="@+id/play_original" />
 
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/switch1"
-        android:layout_alignBottom="@+id/imageButton3"
-        android:layout_toEndOf="@+id/imageButton3"
+        android:layout_alignBottom="@+id/play_original"
+        android:layout_toEndOf="@+id/play_original"
         android:layout_marginBottom="19dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/common_google_signin_btn_icon_dark"
-        android:id="@+id/imageButton3"
-        android:layout_marginTop="107dp"
-        android:layout_below="@+id/word"
+        android:id="@+id/play_original"
+        android:layout_marginTop="57dp"
+        android:layout_below="@+id/selected_word"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Original"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/play_original"
+        android:layout_toStartOf="@+id/play_original"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/textView3" />
+
+    <TextView
+        android:text="REC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rec_button"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_marginBottom="13dp"
+        android:id="@+id/textView4" />
+
+    <TextView
+        android:text="PLAY REC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rec_button"
+        android:layout_alignEnd="@+id/textView3"
+        android:layout_marginBottom="35dp"
+        android:id="@+id/textView5" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal"
+        android:layout_above="@+id/rec_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:id="@+id/play_rec"
+        android:background="@drawable/common_google_signin_btn_icon_dark_normal" />
 
 </RelativeLayout>
