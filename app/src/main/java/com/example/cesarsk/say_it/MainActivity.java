@@ -101,7 +101,7 @@ public class MainActivity extends FragmentActivity {
         tts= new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                // TODO Auto-generated method stub
+                // TODO OTTIMIZZARE TTS
                 if(status == TextToSpeech.SUCCESS) {
                     //Ridondante?
                     tts.setPitch((float)0.90);

@@ -2,6 +2,7 @@ package com.example.cesarsk.say_it;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.app.FragmentManager;
 import android.view.ContextThemeWrapper;
@@ -30,6 +31,8 @@ public class ResultsListCustomAdapter extends BaseAdapter {
     private int PlayButtonIconID;
     private int AddToFavsButtonIconID;
     private ArrayList<TextView> words;
+    //TODO SOSTITUIRE CON BUNDLE FRAGMENT
+    static CharSequence selected_word_charseq;
 
     public ResultsListCustomAdapter(Context context, ArrayList<String> results, int PlayButtonIconID, int AddToFavsButtonIconID){
         this.context = context;
@@ -68,7 +71,8 @@ public class ResultsListCustomAdapter extends BaseAdapter {
             word.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayFragment()).commit();
+                    selected_word_charseq = word.getText();
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, newInstance(word.getText())).commit();
                 }
             });
 
@@ -99,5 +103,15 @@ public class ResultsListCustomAdapter extends BaseAdapter {
         return convertView;
     }
 
+    //NON DEFAULT CONSTRUCTOR NON ACCEPTED BY FRAGMENTS, U
+    public static PlayFragment newInstance(CharSequence word) {
+        PlayFragment myFragment = new PlayFragment();
+
+        Bundle args = new Bundle();
+        args.putString("word",word.toString());
+        myFragment.setArguments(args);
+
+        return myFragment;
+    }
 
 }
