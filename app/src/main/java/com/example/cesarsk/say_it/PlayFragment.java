@@ -45,12 +45,16 @@ public class PlayFragment extends Fragment {
     private String file_exts[] = {AUDIO_RECORDER_FILE_EXT_AAC};
     public static final int RequestPermissionCode = 1;
     MediaPlayer mediaPlayer;
+    int N = 10;
+    private CharSequence[] coda_cronologia;
+    int testa = 0;
 
 
     public PlayFragment() {
         //TODO SISTEMARE FRAGMENT
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();
+        coda_cronologia = new CharSequence[N];
         //word = new String(getArguments().getCharSequence("word").toString());
     }
 
@@ -64,6 +68,10 @@ public class PlayFragment extends Fragment {
 
         TextView selected_word = (TextView) view.findViewById(R.id.selected_word);
         selected_word.setText(selected_word_charseq);
+
+        //Inserimento in cronologia
+        coda_cronologia[testa] = selected_word_charseq;
+        testa = (testa+1)%N; //
 
         ImageButton play_original_button = (ImageButton) view.findViewById(R.id.play_original);
         play_original_button.setOnClickListener(new View.OnClickListener() {

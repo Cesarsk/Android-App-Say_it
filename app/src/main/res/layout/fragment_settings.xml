@@ -32,17 +32,6 @@
         android:textAlignment="viewStart" />
 
     <Button
-        android:text="Contact us"
-        android:textSize="12sp"
-        android:id="@+id/button4"
-        android:layout_width="match_parent"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_alignBottom="@+id/bug_report"
-        android:layout_alignParentStart="true"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart" />
-
-    <Button
         android:text="Bug Report"
         android:textSize="12sp"
         android:id="@+id/bug_report"
@@ -57,6 +46,17 @@
         android:text="Contact us"
         android:textSize="12sp"
         android:id="@+id/contact_us"
+        android:layout_width="match_parent"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_alignBottom="@+id/contact_us"
+        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart" />
+
+    <Button
+        android:text="Delete recordings"
+        android:textSize="12sp"
+        android:id="@+id/delete_recordings"
         android:layout_width="match_parent"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_alignBottom="@+id/bug_report"

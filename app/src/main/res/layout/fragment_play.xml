@@ -65,18 +65,9 @@
         android:layout_alignBottom="@+id/play_original"
         android:layout_toStartOf="@+id/play_rec"
         android:checked="false"
-        android:splitTrack="false"
         android:textOn="British"
-        android:textOff="English" />
-
-    <TextView
-        android:text="REC"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/play_rec"
-        android:layout_alignStart="@+id/selected_word"
-        android:layout_marginTop="11dp" />
+        android:textOff="English"
+        android:splitTrack="false" />
 
     <TextView
         android:text="Original"
@@ -95,5 +86,14 @@
         android:layout_marginTop="22dp"
         android:layout_alignTop="@+id/play_rec"
         android:layout_alignStart="@+id/switch_accent" />
+
+    <TextView
+        android:text="REC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:layout_marginTop="11dp"
+        android:layout_below="@+id/play_rec"
+        android:layout_alignEnd="@+id/textView5" />
 
 </RelativeLayout>

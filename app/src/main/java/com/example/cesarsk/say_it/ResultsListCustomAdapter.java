@@ -21,7 +21,7 @@ import static com.example.cesarsk.say_it.MainActivity.tts;
 import static java.sql.DriverManager.println;
 
 /**
- * Created by Claudio on 08/02/2017.
+ * Created by Claffo on 08/02/2017.
  */
 
 public class ResultsListCustomAdapter extends BaseAdapter {
@@ -30,7 +30,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
     private ArrayList<String> results;
     private int PlayButtonIconID;
     private int AddToFavsButtonIconID;
-    private ArrayList<TextView> words;
+    private static ArrayList<CharSequence> favorites;
     //TODO SOSTITUIRE CON BUNDLE FRAGMENT
     static CharSequence selected_word_charseq;
 
@@ -92,7 +92,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     //TODO Inserisci ai preferiti
-                    words.add(word); //Da continuare
+                    favorites.add(word.getText()); //Da continuare
                 }
             });
 
@@ -103,7 +103,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
         return convertView;
     }
 
-    //NON DEFAULT CONSTRUCTOR NON ACCEPTED BY FRAGMENTS, U
+    //NON DEFAULT CONSTRUCTOR NON ACCEPTED BY FRAGMENTS, USED A STATIC VARIABLE INSTEAD
     public static PlayFragment newInstance(CharSequence word) {
         PlayFragment myFragment = new PlayFragment();
 

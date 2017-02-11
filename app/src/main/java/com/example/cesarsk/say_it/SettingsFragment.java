@@ -3,6 +3,7 @@ package com.example.cesarsk.say_it;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -55,6 +56,14 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        Button rate_us = (Button) view.findViewById(R.id.rate_us);
+        rate_us.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rateUs();
+            }
+        });
+
         final Spinner default_voice = (Spinner) view.findViewById((R.id.default_voice));
 
         //Spinner default voice
@@ -84,6 +93,29 @@ public class SettingsFragment extends Fragment {
         //emailIntent.putExtra(Intent.EXTRA_TEXT, content);
         emailIntent.setType("text/plain");
         startActivity(emailIntent);
+    }
+
+    //Rate-Us Module
+    public void rateUs(){
+        Uri uri = Uri.parse("market://details?id=" + getActivity().getPackageName());
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName())));
+        }
+
+    }
+
+    public boolean delete_recordings() {
+        //TODO DELETE ALL FILES IN THE FOLDER EXCEPT FOR .NOMEDIA FILE
+        return true;
     }
 
 }

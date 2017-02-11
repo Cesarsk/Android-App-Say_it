@@ -32,10 +32,10 @@ import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 public class MainActivity extends FragmentActivity {
 
     //Indici per la FragmentList
-    private final int HOME_FRAGMENT_INDEX = 0;
-    private final int FAVORITES_FRAGMENT_INDEX = 1;
-    private final int HISTORY_FRAGMENT_INDEX = 2;
-    private final int SEARCH_FRAGMENT_INDEX = 3;
+    private final int FAVORITES_FRAGMENT_INDEX = 0;
+    private final int SEARCH_FRAGMENT_INDEX = 1;
+    private final int HOME_FRAGMENT_INDEX = 2;
+    private final int HISTORY_FRAGMENT_INDEX = 3;
     private final int SETTINGS_FRAGMENT_INDEX = 4;
 
     //Definizione variabile TTS
@@ -55,10 +55,10 @@ public class MainActivity extends FragmentActivity {
         final FragmentManager fragmentManager = getFragmentManager();
 
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
-        FragmentArrayList.add(new HomeFragment());
         FragmentArrayList.add(new FavoritesFragment());
-        FragmentArrayList.add(new HistoryFragment());
         FragmentArrayList.add(new SearchFragment());
+        FragmentArrayList.add(new HomeFragment());
+        FragmentArrayList.add(new HistoryFragment());
         FragmentArrayList.add(new SettingsFragment());
 
         fragmentManager.beginTransaction().add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
