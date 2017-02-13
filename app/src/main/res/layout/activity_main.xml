@@ -6,12 +6,6 @@
     android:paddingTop="10dp">
 
     <!-- Framelayout rappresenta il placeholder nel quale andranno i vari fragments -->
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-    </FrameLayout>
 
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
@@ -20,5 +14,25 @@
         app:bb_tabXmlResource="@xml/bottombar_tabs"
         android:layout_height="60dp"
         app:bb_activeTabAlpha="1" />
+
+    <com.google.android.gms.ads.AdView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/adView"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-9284620118215899"
+        android:layout_marginBottom="19dp"
+        android:layout_above="@+id/bottomBar"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
+
+
+    </FrameLayout>
 
 </RelativeLayout>

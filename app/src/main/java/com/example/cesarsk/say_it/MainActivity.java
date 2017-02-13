@@ -20,6 +20,9 @@ import android.view.MenuInflater;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -39,11 +42,10 @@ import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 public class MainActivity extends AppCompatActivity {
 
     //Indici per la FragmentList
-    private final int FAVORITES_FRAGMENT_INDEX = 0;
-    private final int SEARCH_FRAGMENT_INDEX = 1;
-    private final int HOME_FRAGMENT_INDEX = 2;
-    private final int HISTORY_FRAGMENT_INDEX = 3;
-    private final int SETTINGS_FRAGMENT_INDEX = 4;
+    private final int HOME_FRAGMENT_INDEX = 0;
+    private final int FAVORITES_FRAGMENT_INDEX = 1;
+    private final int HISTORY_FRAGMENT_INDEX = 2;
+    private final int SEARCH_FRAGMENT_INDEX = 3; //TODO sostituire con Recordings TAB
 
     //Definizione variabile TTS
     static TextToSpeech tts;
@@ -62,11 +64,10 @@ public class MainActivity extends AppCompatActivity {
         final FragmentManager fragmentManager = getFragmentManager();
 
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
-        FragmentArrayList.add(new FavoritesFragment());
-        FragmentArrayList.add(new SearchFragment());
         FragmentArrayList.add(new HomeFragment());
+        FragmentArrayList.add(new FavoritesFragment());
         FragmentArrayList.add(new HistoryFragment());
-        FragmentArrayList.add(new SettingsFragment());
+        FragmentArrayList.add(new SearchFragment());
 
         fragmentManager.beginTransaction().add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
 
@@ -83,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
                     fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
                 } else if (tabId == R.id.tab_history) {
                     fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX)).commit();
-                } else if (tabId == R.id.tab_settings) {
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(SETTINGS_FRAGMENT_INDEX)).commit();
                 }
             }
         });
@@ -119,6 +118,11 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("error", "Initilization Failed!");
             }
         });
+
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-9284620118215899");
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 

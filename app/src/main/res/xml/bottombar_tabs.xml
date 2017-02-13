@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <tabs>
-    <tab
-        id="@+id/tab_favorites"
-        icon="@drawable/ic_star"
-        title="Favorites"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/RudolphsNose"
-        barColorWhenSelected="@color/BottomBarColor"/>
-
-    <tab
-        id="@+id/tab_search"
-        icon="@drawable/ic_search"
-        title="Search"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/RudolphsNose"
-        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_home"
         icon="@drawable/ic_home"
         title="Home"
+        inActivecolor="@color/inActiveTabColor"
+        activeColor="@color/RudolphsNose"
+        barColorWhenSelected="@color/BottomBarColor"/>
+
+    <tab
+        id="@+id/tab_favorites"
+        icon="@drawable/ic_favorite"
+        title="Favorites"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/RudolphsNose"
         barColorWhenSelected="@color/BottomBarColor"/>
@@ -34,9 +27,9 @@
         barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
-        id="@+id/tab_settings"
-        icon="@drawable/ic_settings"
-        title="Settings"
+        id="@+id/tab_search"
+        icon="@drawable/ic_search"
+        title="Search"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/RudolphsNose"
         barColorWhenSelected="@color/BottomBarColor"/>
