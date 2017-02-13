@@ -12,7 +12,7 @@
 
     <tab
         id="@+id/tab_favorites"
-        icon="@drawable/ic_favorite"
+        icon="@drawable/ic_favorite_border"
         title="Favorites"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/RudolphsNose"
