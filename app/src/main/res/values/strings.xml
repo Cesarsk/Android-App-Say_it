@@ -4,6 +4,7 @@
     <string name="not_found_error">Word not found!</string>
     <string name="empty_field_error">You have to write something!</string>
     <string name="app_name">Say It!</string>
+    <string name="search_hint">Search...</string>
 
     <string-array name="default_voice">
         <item>Default Voice</item>

@@ -2,6 +2,9 @@ package com.example.cesarsk.say_it;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
@@ -124,9 +127,12 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
 
-        SearchView search_bar = (SearchView) menu.findItem(R.id.top_search).getActionView();
-        search_bar.setIconified(false);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
+        SearchView search_bar = (SearchView) menu.findItem(R.id.top_search).getActionView();
+        search_bar.setIconifiedByDefault(false);
+
+        search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
     }
