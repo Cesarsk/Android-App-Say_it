@@ -2,6 +2,7 @@ package com.example.cesarsk.say_it;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -40,8 +41,10 @@ public class HomeFragment extends Fragment {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO REPLACE WITH ACTIVITYSETTING
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                //TODO CONFIGURARE SETTINGSACTIVITY
+                final Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
+                //fragmentManager.beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
             }
         });
 
