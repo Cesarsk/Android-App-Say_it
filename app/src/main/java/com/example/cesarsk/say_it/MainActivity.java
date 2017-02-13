@@ -9,6 +9,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,7 +30,7 @@ import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
     //Indici per la FragmentList
     private final int FAVORITES_FRAGMENT_INDEX = 0;
