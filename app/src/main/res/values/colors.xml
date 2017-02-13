@@ -12,9 +12,9 @@
     <color name="BottomBarOrange">#FF9800</color>
 
     <!-- MAIN PALETTE -->
-    <color name="SneakySienna">#FBB05D</color>
+    <color name="SneakySienna">#fbb05d</color>
     <color name="BurntSienna">#EA863E</color>
-    <color name="RudolphsNose">#DD1A3A</color>
+    <color name="RudolphsNose">#dd1a3a</color>
     <color name="ElectricMint">#B5EF6F</color>
 
 </resources>
