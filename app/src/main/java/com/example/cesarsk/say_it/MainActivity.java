@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private final int HOME_FRAGMENT_INDEX = 0;
     private final int FAVORITES_FRAGMENT_INDEX = 1;
     private final int HISTORY_FRAGMENT_INDEX = 2;
-    private final int SEARCH_FRAGMENT_INDEX = 3; //TODO sostituire con Recordings TAB
+    private final int RECORDINGS_FRAGMENT_INDEX = 3;
 
     //Definizione variabile TTS
     static TextToSpeech tts;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentArrayList.add(new HomeFragment());
         FragmentArrayList.add(new FavoritesFragment());
         FragmentArrayList.add(new HistoryFragment());
-        FragmentArrayList.add(new SearchFragment());
+        FragmentArrayList.add(new RecordingsFragment());
 
         fragmentManager.beginTransaction().add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
 
@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_favorites) {
                     fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX)).commit();
-                } else if (tabId == R.id.tab_search) {
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(SEARCH_FRAGMENT_INDEX)).commit();
+                } else if (tabId == R.id.tab_recordings) {
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX)).commit();
                 } else if (tabId == R.id.tab_home) {
                     fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
                 } else if (tabId == R.id.tab_history) {
@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
             public void onTabReSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_favorites) {
                     fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX)).commit();
-                } else if (tabId == R.id.tab_search) {
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(SEARCH_FRAGMENT_INDEX)).commit();
+                } else if (tabId == R.id.tab_recordings) {
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX)).commit();
                 } else if (tabId == R.id.tab_home) {
                     fragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX)).commit();
                 } else if (tabId == R.id.tab_history) {

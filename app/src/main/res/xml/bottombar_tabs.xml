@@ -12,7 +12,7 @@
 
     <tab
         id="@+id/tab_favorites"
-        icon="@drawable/ic_favorite_border"
+        icon="@drawable/ic_favorite"
         title="Favorites"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/RudolphsNose"
@@ -27,9 +27,9 @@
         barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
-        id="@+id/tab_search"
-        icon="@drawable/ic_search"
-        title="Search"
+        id="@+id/tab_recordings"
+        icon="@drawable/ic_voicemail"
+        title="Recordings"
         inActivecolor="@color/inActiveTabColor"
         activeColor="@color/RudolphsNose"
         barColorWhenSelected="@color/BottomBarColor"/>
