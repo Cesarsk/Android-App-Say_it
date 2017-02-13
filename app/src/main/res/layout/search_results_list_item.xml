@@ -11,7 +11,8 @@
         android:textSize="22sp"
         android:visibility="visible"
         android:textAlignment="center"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:clickable="true" />
 
     <ImageButton
         android:id="@+id/play_button"
