@@ -17,4 +17,36 @@
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_sync" />
 
+
+    <header
+        android:fragment="com.example.cesarsk.say_it.SettingsActivity$Contact_us"
+        android:id="@+id/contact_us"
+        android:title="Contact Us" />
+
+    <!--
+        <header
+            android:fragment="com.example.cesarsk.say_it.SettingsActivity$DataSyncPreferenceFragment"
+            android:title="Rate Us!" />
+
+        <header
+            android:fragment="com.example.cesarsk.say_it.SettingsActivity$DataSyncPreferenceFragment"
+            android:title="Remove ADS" />
+
+        <header
+            android:fragment="com.example.cesarsk.say_it.SettingsActivity$DataSyncPreferenceFragment"
+            android:title="Default Accent" />
+
+        <header
+            android:fragment="com.example.cesarsk.say_it.SettingsActivity$DataSyncPreferenceFragment"
+            android:title="Rate Us" />
+
+        <header
+            android:fragment="com.example.cesarsk.say_it.SettingsActivity$DataSyncPreferenceFragment"
+            android:title="Bug Report" />
+
+        <header
+            android:fragment="com.example.cesarsk.say_it.SettingsActivity$DataSyncPreferenceFragment"
+            android:title="Delete recordings" />
+            -->
+
 </preference-headers>

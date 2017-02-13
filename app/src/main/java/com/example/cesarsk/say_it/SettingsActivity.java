@@ -19,7 +19,12 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -116,10 +121,30 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
+    //TODO CONTROLLARE QUI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        final String emails[] = {"luca.cesarano1@gmail.com"};
+        ListView contact_us = (ListView) this.findViewById(R.id.contact_us);
+        contact_us.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareToMail(emails,"PROVA");
+            }
+        });
+
+    }
+
+    //Method used for BUG_REPORT and CONTACT_US Modules
+    public void shareToMail(String[] email, String subject) {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, email);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        //emailIntent.putExtra(Intent.EXTRA_TEXT, content);
+        emailIntent.setType("text/plain");
+        startActivity(emailIntent);
     }
 
     /**
@@ -243,6 +268,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
+            Toast.makeText(getActivity(), "ON OPTION ITEM SELECTED", Toast.LENGTH_SHORT).show();
             int id = item.getItemId();
             if (id == android.R.id.home) {
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
@@ -251,4 +277,5 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
 }

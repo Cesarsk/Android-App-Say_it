@@ -39,6 +39,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
         this.results = results;
         this.PlayButtonIconID = PlayButtonIconID;
         this.AddToFavsButtonIconID = AddToFavsButtonIconID;
+        favorites = new ArrayList<>();
     }
 
     @Override
@@ -58,7 +59,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final FragmentManager fragmentManager= ((Activity)context).getFragmentManager();
+        final FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.fragment_settings,
                 null, false);
@@ -91,7 +92,8 @@ public class ResultsListCustomAdapter extends BaseAdapter {
             add_to_favs_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO Inserisci ai preferiti
+                    //TODO Inserisci ai preferiti (DA GESTIRE CON PERSISTENZA)
+                    Toast.makeText(context, "Added "+word.getText()+" to favorites", Toast.LENGTH_SHORT).show();
                     favorites.add(word.getText()); //Da continuare
                 }
             });
