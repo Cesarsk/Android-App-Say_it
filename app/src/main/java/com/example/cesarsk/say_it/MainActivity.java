@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Gestione AD
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_id));
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
