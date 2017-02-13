@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
@@ -12,6 +13,8 @@ import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -152,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
 
         SearchView search_bar = (SearchView) menu.findItem(R.id.top_search).getActionView();
         search_bar.setIconifiedByDefault(false);
-
         search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
