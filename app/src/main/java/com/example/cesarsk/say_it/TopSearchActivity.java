@@ -26,8 +26,6 @@ public class TopSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_search);
         HandleIntent(getIntent());
-
-        //TODO Migrare il codice del fragment nella ricerca
     }
 
     @Override
@@ -59,7 +57,7 @@ public class TopSearchActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Toast.makeText(view.getContext(), "Elemento cliccato", Toast.LENGTH_SHORT).show();
-                            fragmentManager.beginTransaction().replace(R.id.fragment_container, new PlayFragment()).commit();
+                            fragmentManager.beginTransaction().replace(R.id.fragment_container_searchresults, new PlayFragment()).commit();
                         }
                     });
                 }
