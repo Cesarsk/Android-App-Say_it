@@ -5,11 +5,14 @@
     <string name="empty_field_error">You have to write something!</string>
     <string name="app_name">Say It!</string>
     <string name="search_hint">Search...</string>
+    <string name="banner_id">ca-app-pub-9284620118215899</string>
 
     <string-array name="default_voice">
         <item>Default Voice</item>
         <item>British English</item>
         <item>American English</item>
     </string-array>
+    
+    
 
 </resources>

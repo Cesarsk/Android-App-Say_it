@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-9284620118215899");
+        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_id));
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
