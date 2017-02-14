@@ -4,24 +4,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -39,7 +29,6 @@ import java.util.Collections;
 
 import java.util.Locale;
 
-import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
@@ -109,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //CARICAMENTO WORDLIST
             BufferedReader line_reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.wordlist)));
         String line;
 
@@ -140,26 +130,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //CONFIGURAZIONE SEARCHBAR
+        SearchView search_bar = (SearchView) findViewById(R.id.top_search_bar);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+
         //Gestione AD
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_id));
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
-
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView search_bar = (SearchView) menu.findItem(R.id.top_search).getActionView();
-        search_bar.setIconifiedByDefault(false);
-        search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-        return true;
     }
 }

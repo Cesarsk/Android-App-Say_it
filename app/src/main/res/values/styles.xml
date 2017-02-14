@@ -1,18 +1,22 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/RudolphsNose</item>
         <item name="colorAccent">@color/ElectricMint</item>
         <item name="android:colorBackground">@android:color/background_light</item>
         <item name="android:navigationBarColor">@color/RudolphsNose</item>
+        <item name="searchViewStyle">@style/CustomSearchViewStyle</item>
     </style>
 
-    //added stub to avoid crash on lollipop, for transparency bottombar
-    <!--<style name="AppTheme.TransNav" parent="AppTheme" />-->
-
     <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
-        <item name="queryBackground">@color/BurntSienna</item>
+        <item name="queryBackground">@color/RudolphsNoseLight</item>
+        <item name="android:background">@color/RudolphsNose</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingStart">-15dp</item>
+        <item name="android:paddingEnd">15dp</item>
+        <item name="android:inputType">textCapWords</item>
     </style>
 
     <style name="CustomTitleTextAppearance">
