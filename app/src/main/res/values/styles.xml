@@ -7,6 +7,8 @@
         <item name="android:colorBackground">@android:color/background_light</item>
         <item name="android:navigationBarColor">@color/RudolphsNose</item>
         <item name="searchViewStyle">@style/CustomSearchViewStyle</item>
+        <item name="android:statusBarColor">@color/RudolphsNose</item>
+        <item name="android:textColorPrimary">@color/primary_text_material_light</item>
     </style>
 
     <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">

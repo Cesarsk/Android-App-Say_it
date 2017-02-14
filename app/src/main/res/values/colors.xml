@@ -17,5 +17,6 @@
     <color name="RudolphsNose">#dd1a3a</color>
     <color name="RudolphsNoseLight">#e83c58</color>
     <color name="ElectricMint">#b5ef6f</color>
+    <color name="primary_text_material_light">#deffffff</color>
 
 </resources>
