@@ -44,7 +44,6 @@ public class HomeFragment extends Fragment {
                 //TODO CONFIGURARE SETTINGSACTIVITY
                 final Intent intent = new Intent(getActivity(), SettingsActivity.class);
                 startActivity(intent);
-                //fragmentManager.beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
             }
         });
 

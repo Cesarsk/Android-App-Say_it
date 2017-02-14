@@ -126,15 +126,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
-        final String emails[] = {"luca.cesarano1@gmail.com"};
-        ListView contact_us = (ListView) this.findViewById(R.id.contact_us);
-        contact_us.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareToMail(emails,"PROVA");
-            }
-        });
-
     }
 
     //Method used for BUG_REPORT and CONTACT_US Modules

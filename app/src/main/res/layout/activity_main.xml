@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/adView"
         app:adSize="BANNER"
-        app:adUnitId="@string/banner_id"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
         android:layout_marginBottom="19dp"
         android:layout_above="@+id/bottomBar"
         android:layout_alignParentEnd="true"

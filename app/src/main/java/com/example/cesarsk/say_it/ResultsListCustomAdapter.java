@@ -1,6 +1,7 @@
 package com.example.cesarsk.say_it;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -60,6 +61,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.fragment_settings,
                 null, false);

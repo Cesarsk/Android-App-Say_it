@@ -31,6 +31,7 @@ import java.util.Locale;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
+import static com.google.ads.AdRequest.TEST_EMULATOR;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Gestione AD
-        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_id));
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
