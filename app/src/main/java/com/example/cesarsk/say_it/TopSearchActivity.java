@@ -1,5 +1,6 @@
 package com.example.cesarsk.say_it;
 
+import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class TopSearchActivity extends AppCompatActivity {
-
-    FragmentManager fragmentManager = getFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +50,15 @@ public class TopSearchActivity extends AppCompatActivity {
                         found.add(MainActivity.WordList.get(found_index+i));
                         Collections.sort(found);
                     }
+                    final FragmentManager fragmentManager = this.getFragmentManager();
+                    final Fragment play_frag = new PlayFragment();
                     ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this, found, R.id.play_button, R.id.add_to_favs_button);
                     result_listView.setAdapter(adapter);
                     result_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Toast.makeText(view.getContext(), "Elemento cliccato", Toast.LENGTH_SHORT).show();
-                            fragmentManager.beginTransaction().replace(R.id.fragment_container_searchresults, new PlayFragment()).commit();
+                            fragmentManager.beginTransaction().replace(R.id.fragment_container_searchresults, play_frag).commit();
                         }
                     });
                 }

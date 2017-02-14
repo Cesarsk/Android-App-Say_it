@@ -73,7 +73,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     selected_word_charseq = word.getText();
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, newInstance(word.getText())).commit();
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container_searchresults, newInstance(word.getText())).commit();
                 }
             });
 
