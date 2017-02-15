@@ -44,9 +44,7 @@ public class TopSearchActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String lookup = intent.getStringExtra(SearchManager.QUERY).toLowerCase();
 
-            fragmentManager.beginTransaction().add(R.id.fragment_container_searchresults, SearchResultsFragment.newInstance(lookup)).commit();
-
-            /*final ListView result_listView = (ListView) findViewById(R.id.result_list_view);
+            final ListView result_listView = (ListView) findViewById(R.id.result_list_view);
 
             //TODO: Implementare algoritmo di stemming
 
@@ -59,18 +57,12 @@ public class TopSearchActivity extends AppCompatActivity {
                         Collections.sort(found);
                     }
 
-
                     ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this, found, R.id.quick_play_button, R.id.add_to_favs_button);
                     result_listView.setAdapter(adapter);
                     result_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                             Log.i("Say it:", "Entrato in onItemClick della lista");
-
-
-                            Log.i("Say it:", "View Name = " + view.getClass().getName());
-                            fragmentManager.beginTransaction().replace(R.id.fragment_container_searchresults, play_frag).commit();
                         }
                     });
                 }
@@ -80,7 +72,7 @@ public class TopSearchActivity extends AppCompatActivity {
             }
             else{
                 Toast.makeText(this, "Campo di testo vuoto!", Toast.LENGTH_SHORT).show();
-            }*/
+            }
         }
     }
 }

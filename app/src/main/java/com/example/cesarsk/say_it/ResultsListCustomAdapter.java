@@ -63,7 +63,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
         final FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View view = inflater.inflate(R.layout.fragment_settings, null, false);
+        //final View view = inflater.inflate(R.layout.fragment_settings, null, false);
 
         if(convertView == null) {
             convertView = inflater.inflate(R.layout.search_results_list_item, parent, false);
