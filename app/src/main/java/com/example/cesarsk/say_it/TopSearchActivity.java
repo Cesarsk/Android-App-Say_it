@@ -46,6 +46,8 @@ public class TopSearchActivity extends AppCompatActivity {
 
             final ListView result_listView = (ListView) findViewById(R.id.result_list_view);
 
+            final Intent play_activity_intent = new Intent(this, PlayActivity.class);
+
             //TODO: Implementare algoritmo di stemming
 
             if(!lookup.isEmpty()) {
@@ -63,6 +65,7 @@ public class TopSearchActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Log.i("Say it:", "Entrato in onItemClick della lista");
+                            startActivity(play_activity_intent);
                         }
                     });
                 }
