@@ -80,14 +80,14 @@ public class ResultsListCustomAdapter extends BaseAdapter {
             });
 
             //Pulsante QUICK PLAY
-            ImageButton play_button = (ImageButton) convertView.findViewById(R.id.play_button);
+            /*ImageButton play_button = (ImageButton) convertView.findViewById(R.id.play_button);
             play_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Cliccando su Play Button nella search result tab riproduce play.
                     tts.speak(word.getText(), QUEUE_ADD, null, null);
                 }
-            });
+            });*/
 
             //Pulsante FAV
             ImageButton add_to_favs_button = (ImageButton) convertView.findViewById(R.id.add_to_favs_button);

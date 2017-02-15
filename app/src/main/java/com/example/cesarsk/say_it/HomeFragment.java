@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.app.FragmentManager;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.tts;
@@ -37,8 +38,8 @@ public class HomeFragment extends Fragment {
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
 
-        ImageButton settings = (ImageButton)view.findViewById(R.id.settings);
-        settings.setOnClickListener(new View.OnClickListener() {
+        ImageButton settings_button = (ImageButton)view.findViewById(R.id.settings_button);
+        settings_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO CONFIGURARE SETTINGSACTIVITY

@@ -8,6 +8,7 @@ import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -18,7 +19,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static com.example.cesarsk.say_it.MainActivity.tts;
+
 public class TopSearchActivity extends AppCompatActivity {
+
+    private final FragmentManager fragmentManager = this.getFragmentManager();
+    final Fragment play_frag = new PlayFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +44,7 @@ public class TopSearchActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String lookup = intent.getStringExtra(SearchManager.QUERY).toLowerCase();
 
-            ListView result_listView = (ListView) findViewById(R.id.result_list_view);
+            final ListView result_listView = (ListView) findViewById(R.id.result_list_view);
 
 
             //TODO: Implementare algoritmo di stemming
@@ -50,14 +57,20 @@ public class TopSearchActivity extends AppCompatActivity {
                         found.add(MainActivity.WordList.get(found_index+i));
                         Collections.sort(found);
                     }
-                    final FragmentManager fragmentManager = this.getFragmentManager();
-                    final Fragment play_frag = new PlayFragment();
-                    ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this, found, R.id.play_button, R.id.add_to_favs_button);
+
+
+                    ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this, found, R.id.quick_play_button, R.id.add_to_favs_button);
                     result_listView.setAdapter(adapter);
                     result_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Toast.makeText(view.getContext(), "Elemento cliccato", Toast.LENGTH_SHORT).show();
+
+                            Log.i("Say it:", "Entrato in onItemClick della lista");
+
+                            if(view.getId() == R.id.quick_play_button) {
+                                Log.i("Say it:", "Quick Play Button toccato");
+                                tts.speak((String)result_listView.getAdapter().getItem(position), QUEUE_ADD, null, null);
+                            }
                             fragmentManager.beginTransaction().replace(R.id.fragment_container_searchresults, play_frag).commit();
                         }
                     });
