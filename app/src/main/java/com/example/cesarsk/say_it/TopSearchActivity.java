@@ -25,7 +25,7 @@ import static com.example.cesarsk.say_it.MainActivity.tts;
 public class TopSearchActivity extends AppCompatActivity {
 
     private final FragmentManager fragmentManager = this.getFragmentManager();
-    final Fragment play_frag = new PlayFragment();
+    final PlayFragment play_frag = new PlayFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,9 @@ public class TopSearchActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String lookup = intent.getStringExtra(SearchManager.QUERY).toLowerCase();
 
-            final ListView result_listView = (ListView) findViewById(R.id.result_list_view);
+            fragmentManager.beginTransaction().add(R.id.fragment_container_searchresults, SearchResultsFragment.newInstance(lookup)).commit();
 
+            /*final ListView result_listView = (ListView) findViewById(R.id.result_list_view);
 
             //TODO: Implementare algoritmo di stemming
 
@@ -67,10 +68,8 @@ public class TopSearchActivity extends AppCompatActivity {
 
                             Log.i("Say it:", "Entrato in onItemClick della lista");
 
-                            if(view.getId() == R.id.quick_play_button) {
-                                Log.i("Say it:", "Quick Play Button toccato");
-                                tts.speak((String)result_listView.getAdapter().getItem(position), QUEUE_ADD, null, null);
-                            }
+
+                            Log.i("Say it:", "View Name = " + view.getClass().getName());
                             fragmentManager.beginTransaction().replace(R.id.fragment_container_searchresults, play_frag).commit();
                         }
                     });
@@ -81,7 +80,7 @@ public class TopSearchActivity extends AppCompatActivity {
             }
             else{
                 Toast.makeText(this, "Campo di testo vuoto!", Toast.LENGTH_SHORT).show();
-            }
+            }*/
         }
     }
 }

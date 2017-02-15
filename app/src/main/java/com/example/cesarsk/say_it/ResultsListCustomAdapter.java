@@ -63,21 +63,20 @@ public class ResultsListCustomAdapter extends BaseAdapter {
         final FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View view = inflater.inflate(R.layout.fragment_settings,
-                null, false);
+        final View view = inflater.inflate(R.layout.fragment_settings, null, false);
 
         if(convertView == null) {
             convertView = inflater.inflate(R.layout.search_results_list_item, parent, false);
             final TextView word = (TextView) convertView.findViewById(R.id.Result_TextView);
             word.setText(results.get(position));
 
-            word.setOnClickListener(new View.OnClickListener() {
+            /*word.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     selected_word_charseq = word.getText();
                     fragmentManager.beginTransaction().replace(R.id.fragment_container_searchresults, newInstance(word.getText())).commit();
                 }
-            });
+            });*/
 
             //Pulsante QUICK PLAY
             /*ImageButton play_button = (ImageButton) convertView.findViewById(R.id.play_button);
@@ -90,7 +89,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
             });*/
 
             //Pulsante FAV
-            ImageButton add_to_favs_button = (ImageButton) convertView.findViewById(R.id.add_to_favs_button);
+            /*ImageButton add_to_favs_button = (ImageButton) convertView.findViewById(R.id.add_to_favs_button);
             add_to_favs_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,7 +97,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
                     Toast.makeText(context, "Added "+word.getText()+" to favorites", Toast.LENGTH_SHORT).show();
                     favorites.add(word.getText()); //Da continuare
                 }
-            });
+            });*/
 
 
 
