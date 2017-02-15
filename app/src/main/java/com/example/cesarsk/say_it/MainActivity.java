@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
 
-        //Gestione AD
+        //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
