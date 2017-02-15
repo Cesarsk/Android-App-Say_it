@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -100,20 +103,22 @@ public class MainActivity extends AppCompatActivity {
 
 
         //CARICAMENTO WORDLIST
+        if(WordList.isEmpty()) {
             BufferedReader line_reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.wordlist)));
-        String line;
+            String line;
 
-        try {
-            while((line = line_reader.readLine()) != null){
-                WordList.add(line);
+            try {
+                while ((line = line_reader.readLine()) != null) {
+                    WordList.add(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            Collections.sort(WordList);
+
+            Toast.makeText(this, "Caricate " + WordList.size() + " parole.", Toast.LENGTH_LONG).show();
         }
-
-        Collections.sort(WordList);
-
-        Toast.makeText(this, "Caricate " + WordList.size() + " parole.", Toast.LENGTH_LONG).show();
 
         //IMPOSTAZIONE TEXT TO SPEECH
         tts= new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
