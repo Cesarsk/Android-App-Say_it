@@ -53,11 +53,17 @@ public class TopSearchActivity extends AppCompatActivity {
             if(!lookup.isEmpty()) {
                 int found_index = Collections.binarySearch(MainActivity.WordList, lookup);
                 if (found_index >= 0) {
+                    String found_word = MainActivity.WordList.get(found_index);
                     ArrayList<String> found = new ArrayList<>();
-                    for(int i=0; i<10; i++){
-                        found.add(MainActivity.WordList.get(found_index+i));
-                        Collections.sort(found);
+                    found.add(found_word);
+                    int range_index = found_index - 10;
+                    if (found_index < 10) range_index = 0;
+                    while(range_index < found_index+10) {
+                        if(MainActivity.WordList.get(range_index).equals(found_word));
+                        else if(MainActivity.WordList.get(range_index).contains(found_word))found.add(MainActivity.WordList.get(range_index));
+                        range_index++;
                     }
+                    Collections.sort(found);
 
                     ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this, found);
                     result_listView.setAdapter(adapter);

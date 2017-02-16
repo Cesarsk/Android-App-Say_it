@@ -29,6 +29,7 @@
         <activity
             android:name=".TopSearchActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -41,8 +42,14 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeActionBar" />
-        <activity android:name=".PlayActivity"></activity>
+
+        <activity
+            android:name=".PlayActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeActionBar" >
+        </activity>
     </application>
 
 </manifest>
