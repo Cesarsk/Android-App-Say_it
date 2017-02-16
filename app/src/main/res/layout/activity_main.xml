@@ -38,10 +38,11 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
         android:layout_below="@id/top_search_bar"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_above="@id/bottomBar"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentStart="true"
+        android:layout_height="match_parent">
     </FrameLayout>
 
 </RelativeLayout>
