@@ -25,7 +25,6 @@ import static com.example.cesarsk.say_it.MainActivity.tts;
 public class TopSearchActivity extends AppCompatActivity {
 
     private final FragmentManager fragmentManager = this.getFragmentManager();
-    final PlayFragment play_frag = new PlayFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

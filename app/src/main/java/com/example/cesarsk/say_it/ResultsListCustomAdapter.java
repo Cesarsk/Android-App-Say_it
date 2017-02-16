@@ -105,16 +105,4 @@ public class ResultsListCustomAdapter extends BaseAdapter {
 
         return convertView;
     }
-
-    //NON DEFAULT CONSTRUCTOR NON ACCEPTED BY FRAGMENTS, USED A STATIC VARIABLE INSTEAD
-    public static PlayFragment newInstance(CharSequence word) {
-        PlayFragment myFragment = new PlayFragment();
-
-        Bundle args = new Bundle();
-        args.putString("word",word.toString());
-        myFragment.setArguments(args);
-
-        return myFragment;
-    }
-
 }
