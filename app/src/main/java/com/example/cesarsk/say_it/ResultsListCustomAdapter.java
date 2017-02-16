@@ -3,9 +3,11 @@ package com.example.cesarsk.say_it;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.app.FragmentManager;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,17 +31,11 @@ public class ResultsListCustomAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<String> results;
-    private int PlayButtonIconID;
-    private int AddToFavsButtonIconID;
     private static ArrayList<CharSequence> favorites;
-    //TODO SOSTITUIRE CON BUNDLE FRAGMENT
-    static CharSequence selected_word_charseq;
 
-    public ResultsListCustomAdapter(Context context, ArrayList<String> results, int PlayButtonIconID, int AddToFavsButtonIconID){
+    public ResultsListCustomAdapter(Context context, ArrayList<String> results){
         this.context = context;
         this.results = results;
-        this.PlayButtonIconID = PlayButtonIconID;
-        this.AddToFavsButtonIconID = AddToFavsButtonIconID;
         favorites = new ArrayList<>();
     }
 
@@ -60,23 +56,22 @@ public class ResultsListCustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
-
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //final View view = inflater.inflate(R.layout.fragment_settings, null, false);
 
         if(convertView == null) {
             convertView = inflater.inflate(R.layout.search_results_list_item, parent, false);
             final TextView word = (TextView) convertView.findViewById(R.id.Result_TextView);
             word.setText(results.get(position));
 
-            /*word.setOnClickListener(new View.OnClickListener() {
+            word.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    selected_word_charseq = word.getText();
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container_searchresults, newInstance(word.getText())).commit();
+                    final Intent play_activity_intent = new Intent(context, PlayActivity.class);
+                    play_activity_intent.putExtra(PlayActivity.PLAY_WORD, word.getText());
+
+                    context.startActivity(play_activity_intent);
                 }
-            });*/
+            });
 
             //Pulsante QUICK PLAY
             /*ImageButton play_button = (ImageButton) convertView.findViewById(R.id.play_button);

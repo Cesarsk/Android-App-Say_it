@@ -30,10 +30,10 @@ import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
-import static com.example.cesarsk.say_it.ResultsListCustomAdapter.selected_word_charseq;
 
 public class PlayActivity extends AppCompatActivity {
 
+    public final static String PLAY_WORD = "com.example.cesarsk.say_it.WORD";
     private static final String AUDIO_RECORDER_FILE_EXT_AAC = ".aac";
     private static final String AUDIO_RECORDER_FOLDER = "Say it";
     private MediaRecorder recorder = null;
@@ -45,6 +45,7 @@ public class PlayActivity extends AppCompatActivity {
     int N = 10;
     private CharSequence[] history;
     int testa = 0;
+    private String selected_word;
 
 
     @Override
@@ -52,15 +53,18 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        selected_word = getIntent().getStringExtra(PLAY_WORD);
+
         //TODO SISTEMARE FRAGMENT
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();
         history = new CharSequence[N];
         //word = new String(getArguments().getCharSequence("word").toString());
 
-        TextView selected_word = (TextView)findViewById(R.id.selected_word);
-        selected_word.setText(selected_word_charseq);
+        final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
+        selected_word_view.setText(selected_word);
 
+        /*
         //TODO Controllare e NO DUPLICATI (AGGIUNGERE SOLO SE NON C'E')
         for(int i = 0; i < N; i++)
         {
@@ -70,7 +74,7 @@ public class PlayActivity extends AppCompatActivity {
                 history[testa] = selected_word_charseq;
                 testa = (testa+1)%N;
             }
-        }
+        }*/
 
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
@@ -82,7 +86,7 @@ public class PlayActivity extends AppCompatActivity {
         play_original_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tts.speak(selected_word_charseq, QUEUE_ADD, null, null);
+                tts.speak(selected_word, QUEUE_ADD, null, null);
             }
         });
 
@@ -158,7 +162,7 @@ public class PlayActivity extends AppCompatActivity {
             try { nomedia.createNewFile(); } catch (IOException e) {Log.i("LOG:",".nomedia not created");}
         }
 
-        return (file.getAbsolutePath() + "/" + selected_word_charseq + file_exts[currentFormat]);
+        return (file.getAbsolutePath() + "/" + selected_word + file_exts[currentFormat]);
     }
 
     private void startRecording() {
@@ -209,8 +213,8 @@ public class PlayActivity extends AppCompatActivity {
     private void playRecording() {
         try {
             //TODO CHECK IF RECORDING ALREADY EXISTS. IF DOES NOT, DO NOT PLAY.
-            Log.i("Say it!","Playing recording: "+Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word_charseq+".aac");
-            mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word_charseq+".aac");
+            Log.i("Say it!","Playing recording: "+Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
+            mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (IOException e) {

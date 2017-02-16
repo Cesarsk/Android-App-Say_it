@@ -25,6 +25,7 @@ import static com.example.cesarsk.say_it.MainActivity.tts;
 public class TopSearchActivity extends AppCompatActivity {
 
     private final FragmentManager fragmentManager = this.getFragmentManager();
+    public static String clicked_word;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class TopSearchActivity extends AppCompatActivity {
 
             final ListView result_listView = (ListView) findViewById(R.id.result_list_view);
 
-            final Intent play_activity_intent = new Intent(this, PlayActivity.class);
+
 
             //TODO: Implementare algoritmo di stemming
 
@@ -58,13 +59,11 @@ public class TopSearchActivity extends AppCompatActivity {
                         Collections.sort(found);
                     }
 
-                    ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this, found, R.id.quick_play_button, R.id.add_to_favs_button);
+                    ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this, found);
                     result_listView.setAdapter(adapter);
                     result_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.i("Say it:", "Entrato in onItemClick della lista");
-                            startActivity(play_activity_intent);
                         }
                     });
                 }
