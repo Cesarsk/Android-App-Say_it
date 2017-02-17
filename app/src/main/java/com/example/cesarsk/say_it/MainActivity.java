@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Caricamento preferenze
-        preferences = getSharedPreferences(PREFS_NAME, 0);
+        preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         favorites_word = preferences.getStringSet(PREFS_WORDS_FAVORITES, new HashSet<String>());
 
         //Gestione Fragment
@@ -137,8 +137,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Collections.sort(WordList);
-
-            Toast.makeText(this, "Caricate " + WordList.size() + " parole.", Toast.LENGTH_LONG).show();
         }
 
         //IMPOSTAZIONE TEXT TO SPEECH
