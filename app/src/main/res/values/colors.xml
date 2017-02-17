@@ -18,5 +18,6 @@
     <color name="RudolphsNoseLight">#e83c58</color>
     <color name="ElectricMint">#b5ef6f</color>
     <color name="primary_text_material_light">#deffffff</color>
+    <color name="quoraSearchBar">#852a23</color>
 
 </resources>
