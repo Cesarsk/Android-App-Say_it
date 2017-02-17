@@ -49,6 +49,7 @@ public class TopSearchActivity extends AppCompatActivity {
 
 
             //TODO: Implementare algoritmo di stemming
+            //TODO: RACCHIUDERE IN UN MODULO L'ALGORITMO
 
             if(!lookup.isEmpty()) {
                 int found_index = Collections.binarySearch(MainActivity.WordList, lookup);

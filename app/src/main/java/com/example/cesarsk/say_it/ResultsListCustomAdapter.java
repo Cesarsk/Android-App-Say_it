@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static com.example.cesarsk.say_it.MainActivity.favorites_word;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static java.sql.DriverManager.println;
 
@@ -84,15 +85,13 @@ public class ResultsListCustomAdapter extends BaseAdapter {
             });
 
             //Pulsante FAV
-            /*ImageButton add_to_favs_button = (ImageButton) convertView.findViewById(R.id.add_to_favs_button);
+            ImageButton add_to_favs_button = (ImageButton) convertView.findViewById(R.id.add_to_favs_button);
             add_to_favs_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO Inserisci ai preferiti (DA GESTIRE CON PERSISTENZA)
-                    Toast.makeText(context, "Added "+word.getText()+" to favorites", Toast.LENGTH_SHORT).show();
-                    favorites.add(word.getText()); //Da continuare
+                    Utility.addFavs(favorites_word, word.getText().toString());
                 }
-            });*/
+            });
 
 
 

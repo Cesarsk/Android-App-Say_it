@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
@@ -30,7 +31,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -50,13 +53,31 @@ public class MainActivity extends AppCompatActivity {
     static Voice voice_american_female = new Voice("American",Locale.US,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
     static Voice voice_british_female = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
 
+    //Gestione preferiti
+    public static Set<String> favorites_word = null;
+
+    //Gestione Preferenze
+    public final static String PREFS_NAME = "SAY_IT_PREFS";
+    public final static String PREFS_WORDS_FAVORITES = "FAVORITES";
+    static SharedPreferences preferences;
+
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Utility.savePrefs(this, favorites_word);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Caricamento preferenze
+        preferences = getSharedPreferences(PREFS_NAME, 0);
+        favorites_word = preferences.getStringSet(PREFS_WORDS_FAVORITES, new HashSet<String>());
 
         //Gestione Fragment
         final FragmentManager fragmentManager = getFragmentManager();

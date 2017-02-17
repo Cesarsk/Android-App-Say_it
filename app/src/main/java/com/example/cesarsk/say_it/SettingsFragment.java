@@ -22,6 +22,8 @@ import java.util.List;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
+import static com.example.cesarsk.say_it.Utility.rateUs;
+import static com.example.cesarsk.say_it.Utility.shareToMail;
 
 
 /**
@@ -44,7 +46,7 @@ public class SettingsFragment extends Fragment {
         contact_us.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareToMail(emails, "[CONTACT US - SAY IT!]");
+                shareToMail(emails, "[CONTACT US - SAY IT!]", getActivity());
             }
         });
 
@@ -52,7 +54,7 @@ public class SettingsFragment extends Fragment {
         bug_report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareToMail(emails, "[BUG REPORT - SAY IT!]");
+                shareToMail(emails, "[BUG REPORT - SAY IT!]", getActivity());
             }
         });
 
@@ -60,7 +62,7 @@ public class SettingsFragment extends Fragment {
         rate_us.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rateUs();
+                rateUs(getActivity());
             }
         });
 
@@ -85,37 +87,7 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
-    //Method used for BUG_REPORT and CONTACT_US Modules
-    public void shareToMail(String[] email, String subject) {
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, email);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        //emailIntent.putExtra(Intent.EXTRA_TEXT, content);
-        emailIntent.setType("text/plain");
-        startActivity(emailIntent);
-    }
 
-    //Rate-Us Module
-    public void rateUs(){
-        Uri uri = Uri.parse("market://details?id=" + getActivity().getPackageName());
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        // To count with Play market backstack, After pressing back button,
-        // to taken back to our application, we need to add following flags to intent.
-        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        try {
-            startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName())));
-        }
 
-    }
-
-    public boolean delete_recordings() {
-        //TODO DELETE ALL FILES IN THE FOLDER EXCEPT FOR .NOMEDIA FILE
-        return true;
-    }
 
 }
