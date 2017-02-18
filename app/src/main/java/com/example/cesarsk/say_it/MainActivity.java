@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Definizione variabile TTS
     static TextToSpeech tts;
-    static Voice voice_american_female = new Voice("American",Locale.US,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
-    static Voice voice_british_female = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+    static Voice voice_american_female = new Voice("American", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    static Voice voice_british_female = new Voice("British", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
     //Gestione preferiti
     public static Set<String> favorites_word = null;
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                         last_index = HISTORY_FRAGMENT_INDEX;
                         break;
 
-                    case R.id.tab_settings:
+                    case R.id.tab_recordings:
                         if (RECORDINGS_FRAGMENT_INDEX > last_index) {
                             transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
@@ -161,15 +161,15 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-            Collections.sort(WordList);
-        }
+        Collections.sort(WordList);
+
 
         //IMPOSTAZIONE TEXT TO SPEECH
         tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 // TODO OTTIMIZZARE TTS
-                if(status == TextToSpeech.SUCCESS) {
+                if (status == TextToSpeech.SUCCESS) {
                     //Ridondante?
                     tts.setPitch((float) 0.90);
                     tts.setSpeechRate((float) 0.90);
