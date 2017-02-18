@@ -57,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
     public static Set<String> favorites_word = null;
 
     //Gestione Preferenze
-    public final static String PREFS_NAME = "SAY_IT_PREFS";
-    public final static String PREFS_WORDS_FAVORITES = "FAVORITES";
-    static SharedPreferences preferences;
+    public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
+    public final static String PREFS_WORDS_FAVORITES = "FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
+    public static SharedPreferences preferences;
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
@@ -76,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Caricamento preferenze
-        preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        favorites_word = preferences.getStringSet(PREFS_WORDS_FAVORITES, new HashSet<String>());
+        Utility.loadFavs(this);
 
         //Gestione Fragment
         final FragmentManager fragmentManager = getFragmentManager();

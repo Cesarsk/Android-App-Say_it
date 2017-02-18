@@ -8,7 +8,10 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.cesarsk.say_it.MainActivity.PREFS_NAME;
@@ -56,19 +59,29 @@ public class Utility {
     //Gestione Preferences
     public static void savePrefs(Context context, Set<String> favorites_word)
     {
-        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
-        Log.i("SAY IT DEBUG: ", favorites_word.toString());
-        editor.putStringSet(PREFS_WORDS_FAVORITES, favorites_word);
-        editor.commit();
+
+        editor.putStringSet(MainActivity.PREFS_WORDS_FAVORITES, favorites_word);
+        editor.apply();
     }
 
-    public static void addFavs(Context context, Set<String> favorites_word, String word)
+    public static void addFavs(Context context, String word)
     {
-        if(!favorites_word.contains(word)) {
-            favorites_word.add(word);
-            savePrefs(context, favorites_word);
+        Set<String> new_favs = new TreeSet<>();
+        loadFavs(context);
+        if(MainActivity.favorites_word != null){
+            for (String element: MainActivity.favorites_word) {
+                new_favs.add(element);
+            }
         }
+        new_favs.add(word);
+        savePrefs(context, new_favs);
+    }
+
+    public static void loadFavs(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.favorites_word = sharedPreferences.getStringSet(PREFS_WORDS_FAVORITES, new TreeSet<String>());
     }
 }
 

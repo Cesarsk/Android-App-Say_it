@@ -89,7 +89,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
             add_to_favs_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utility.addFavs(context, favorites_word, word.getText().toString());
+                    Utility.addFavs(context, word.getText().toString());
                     Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
                 }
             });
