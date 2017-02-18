@@ -2,14 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.cesarsk.say_it.HistoryFragment">
+    tools:context="com.example.cesarsk.say_it.FavoritesFragment">
 
-    <TextView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="HISTORY FRAGMENT"
-        android:textStyle="normal|bold"
-        android:textSize="30sp" />
+        android:id="@+id/history_list" />
 
 </RelativeLayout>

@@ -55,7 +55,6 @@ public class PlayActivity extends AppCompatActivity {
 
         selected_word = getIntent().getStringExtra(PLAY_WORD);
 
-        //TODO SISTEMARE FRAGMENT
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();
         history = new CharSequence[N];

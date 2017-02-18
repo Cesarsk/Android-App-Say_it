@@ -46,8 +46,6 @@ public class TopSearchActivity extends AppCompatActivity {
 
             final ListView result_listView = (ListView) findViewById(R.id.result_list_view);
 
-
-
             //TODO: Implementare algoritmo di stemming
             //TODO: RACCHIUDERE IN UN MODULO L'ALGORITMO
 

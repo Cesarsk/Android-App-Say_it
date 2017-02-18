@@ -69,7 +69,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     final Intent play_activity_intent = new Intent(context, PlayActivity.class);
                     play_activity_intent.putExtra(PlayActivity.PLAY_WORD, word.getText());
-
+                    Utility.addHist(context, word.getText().toString());
                     context.startActivity(play_activity_intent);
                 }
             });

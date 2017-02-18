@@ -4,9 +4,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -18,6 +23,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -53,12 +59,15 @@ public class MainActivity extends AppCompatActivity {
     static Voice voice_american_female = new Voice("American", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
     static Voice voice_british_female = new Voice("British", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
-    //Gestione preferiti
+    //Gestione preferiti e history
     public static Set<String> favorites_word = null;
+    public static Set<String> history_word = null;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
     public final static String PREFS_WORDS_FAVORITES = "FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
+    public final static String PREFS_WORDS_HISTORY = "HISTORY"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
+
     public static SharedPreferences preferences;
 
     //Definizione variabile WordList
@@ -68,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Utility.savePrefs(this, favorites_word);
+        //Utility.saveprefs(this, history_word); //TODO BISOGNA METTERLO QUESTO O BASTA SOLO FAVORITES?
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

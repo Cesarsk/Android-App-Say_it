@@ -16,6 +16,7 @@ import java.util.TreeSet;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.cesarsk.say_it.MainActivity.PREFS_NAME;
 import static com.example.cesarsk.say_it.MainActivity.PREFS_WORDS_FAVORITES;
+import static com.example.cesarsk.say_it.MainActivity.PREFS_WORDS_HISTORY;
 
 /**
  * Created by cesarsk on 17/02/2017.
@@ -79,9 +80,28 @@ public class Utility {
         savePrefs(context, new_favs);
     }
 
+    public static void addHist(Context context, String word)
+    {
+        Set<String> new_hist = new TreeSet<>();
+        loadFavs(context);
+        if(MainActivity.history_word != null){
+            for (String element: MainActivity.history_word) {
+                new_hist.add(element);
+            }
+        }
+        new_hist.add(word);
+        savePrefs(context, new_hist);
+    }
+
     public static void loadFavs(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.favorites_word = sharedPreferences.getStringSet(PREFS_WORDS_FAVORITES, new TreeSet<String>());
+    }
+
+    public static void loadHist(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.history_word = sharedPreferences.getStringSet(PREFS_WORDS_HISTORY, new TreeSet<String>());
+
     }
 }
 
