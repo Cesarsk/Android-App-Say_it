@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends SlidingFragment {
 
     private String emails[] = {"luca.cesarano1@gmail.com"};
     public SettingsFragment() {

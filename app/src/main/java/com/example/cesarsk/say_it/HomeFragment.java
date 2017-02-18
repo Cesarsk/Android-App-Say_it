@@ -18,7 +18,7 @@ import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends SlidingFragment {
 
 
 

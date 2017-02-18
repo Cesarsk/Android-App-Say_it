@@ -19,7 +19,7 @@ import java.util.Collections;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchFragment extends Fragment {
+public class SearchFragment extends SlidingFragment {
 
 
     public SearchFragment() {
