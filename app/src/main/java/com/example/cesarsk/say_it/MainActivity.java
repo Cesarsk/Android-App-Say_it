@@ -69,7 +69,6 @@ public class MainActivity extends FragmentActivity {
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
 
             private int last_index = HOME_FRAGMENT_INDEX;
-            private int current_index = HOME_FRAGMENT_INDEX;
 
             @Override
             public void onTabSelected(@IdRes int tabId) {
