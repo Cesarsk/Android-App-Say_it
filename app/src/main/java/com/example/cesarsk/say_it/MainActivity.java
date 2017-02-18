@@ -3,16 +3,26 @@ package com.example.cesarsk.say_it;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.io.BufferedReader;
@@ -21,51 +31,69 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
+import static com.google.ads.AdRequest.TEST_EMULATOR;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
     //Indici per la FragmentList
-    private final int HOME_FRAGMENT_INDEX = 2;
-    private final int FAVORITES_FRAGMENT_INDEX = 0;
-    private final int HISTORY_FRAGMENT_INDEX = 3;
-    private final int SEARCH_FRAGMENT_INDEX = 1;
-    private final int SETTINGS_FRAGMENT_INDEX = 4;
+    private final int HOME_FRAGMENT_INDEX = 0;
+    private final int FAVORITES_FRAGMENT_INDEX = 1;
+    private final int HISTORY_FRAGMENT_INDEX = 2;
+    private final int RECORDINGS_FRAGMENT_INDEX = 3;
 
     //Definizione variabile TTS
     static TextToSpeech tts;
-    static Voice voice_american_female = new Voice("American", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
-    static Voice voice_british_female = new Voice("British", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    static Voice voice_american_female = new Voice("American",Locale.US,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+    static Voice voice_british_female = new Voice("British",Locale.UK,QUALITY_VERY_HIGH,LATENCY_VERY_LOW,false,null);
+
+    //Gestione preferiti
+    public static Set<String> favorites_word = null;
+
+    //Gestione Preferenze
+    public final static String PREFS_NAME = "SAY_IT_PREFS";
+    public final static String PREFS_WORDS_FAVORITES = "FAVORITES";
+    static SharedPreferences preferences;
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Utility.savePrefs(this, favorites_word);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Caricamento preferenze
+        preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        favorites_word = preferences.getStringSet(PREFS_WORDS_FAVORITES, new HashSet<String>());
+
         //Gestione Fragment
         final FragmentManager fragmentManager = getFragmentManager();
 
-
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
-        FragmentArrayList.add(new FavoritesFragment());
-        FragmentArrayList.add(new SearchFragment());
         FragmentArrayList.add(new HomeFragment());
+        FragmentArrayList.add(new FavoritesFragment());
         FragmentArrayList.add(new HistoryFragment());
-        FragmentArrayList.add(new SettingsFragment());
+        FragmentArrayList.add(new RecordingsFragment());
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
         transaction.commit();
 
         final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.selectTabAtPosition(2); //Default: Home
+        bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX); //Default: Home
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
 
             private int last_index = HOME_FRAGMENT_INDEX;
@@ -86,16 +114,6 @@ public class MainActivity extends FragmentActivity {
                         }
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX));
                         last_index = FAVORITES_FRAGMENT_INDEX;
-                        break;
-
-                    case R.id.tab_search:
-                        if (SEARCH_FRAGMENT_INDEX > last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
-                        } else if (SEARCH_FRAGMENT_INDEX < last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
-                        }
-                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(SEARCH_FRAGMENT_INDEX));
-                        last_index = SEARCH_FRAGMENT_INDEX;
                         break;
 
                     case R.id.tab_home:
@@ -119,13 +137,13 @@ public class MainActivity extends FragmentActivity {
                         break;
 
                     case R.id.tab_settings:
-                        if (SETTINGS_FRAGMENT_INDEX > last_index) {
+                        if (RECORDINGS_FRAGMENT_INDEX > last_index) {
                             transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
-                        } else if (SETTINGS_FRAGMENT_INDEX < last_index) {
+                        } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
                             transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
-                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(SETTINGS_FRAGMENT_INDEX));
-                        last_index = SETTINGS_FRAGMENT_INDEX;
+                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX));
+                        last_index = RECORDINGS_FRAGMENT_INDEX;
                         break;
                 }
                 transaction.commit();
@@ -143,16 +161,15 @@ public class MainActivity extends FragmentActivity {
             e.printStackTrace();
         }
 
-        Collections.sort(WordList);
-
-        Toast.makeText(this, "Caricate " + WordList.size() + " parole.", Toast.LENGTH_LONG).show();
+            Collections.sort(WordList);
+        }
 
         //IMPOSTAZIONE TEXT TO SPEECH
         tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                // TODO Auto-generated method stub
-                if (status == TextToSpeech.SUCCESS) {
+                // TODO OTTIMIZZARE TTS
+                if(status == TextToSpeech.SUCCESS) {
                     //Ridondante?
                     tts.setPitch((float) 0.90);
                     tts.setSpeechRate((float) 0.90);
@@ -161,6 +178,20 @@ public class MainActivity extends FragmentActivity {
                     Log.e("error", "Initilization Failed!");
             }
         });
+
+        //CONFIGURAZIONE SEARCHBAR
+        SearchView search_bar = (SearchView) findViewById(R.id.top_search_bar);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+
+        //Gestione AD (TEST AD)
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        mAdView.bringToFront();
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
 
     }
 }

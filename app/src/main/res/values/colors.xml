@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#5285ef</color>
     <color name="colorPrimaryDark">#5285ef</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ff4081</color>
     <color name="inActiveTabColor">#484848</color>
     <color name="BottomBarColor">#fefefe</color>
     <color name="ActiveTabColor">#5285ef</color>
@@ -10,5 +10,14 @@
     <color name="BottomBarPurple">#7B1FA2</color>
     <color name="BottomBarBrown">#5d4037</color>
     <color name="BottomBarOrange">#FF9800</color>
+
+    <!-- MAIN PALETTE -->
+    <color name="SneakySienna">#fbb05d</color>
+    <color name="BurntSienna">#ea863e</color>
+    <color name="RudolphsNose">#dd1a3a</color>
+    <color name="RudolphsNoseLight">#e83c58</color>
+    <color name="ElectricMint">#b5ef6f</color>
+    <color name="primary_text_material_light">#deffffff</color>
+    <color name="quoraSearchBar">#852a23</color>
 
 </resources>
