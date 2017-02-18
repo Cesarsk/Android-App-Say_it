@@ -74,8 +74,6 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onTabSelected(@IdRes int tabId) {
 
-                //TODO Riscrivere il codice negli if perché tabid non è l'indice!
-
                 //Creating the Fragment transaction
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
