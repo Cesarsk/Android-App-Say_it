@@ -38,13 +38,9 @@ public class FavoritesFragment extends SlidingFragment {
         Collections.sort(sortedFavoritesList);
 
         ListView listView = (ListView) view.findViewById(R.id.favorites_list);
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, FAVORITES.toArray(new String[FAVORITES.size()]));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, sortedFavoritesList);
         listView.setAdapter(adapter);
 
-        Log.i("SAY IT: FAVORITES", FAVORITES.toString());
-
-        // Inflate the layout for this fragment
         return view;
     }
 }

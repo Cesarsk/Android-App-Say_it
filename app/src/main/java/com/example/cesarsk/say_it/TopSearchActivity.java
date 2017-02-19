@@ -25,7 +25,6 @@ import static com.example.cesarsk.say_it.MainActivity.tts;
 public class TopSearchActivity extends AppCompatActivity {
 
     private final FragmentManager fragmentManager = this.getFragmentManager();
-    public static String clicked_word;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +52,7 @@ public class TopSearchActivity extends AppCompatActivity {
                 int found_index = Collections.binarySearch(MainActivity.WordList, lookup);
                 if (found_index >= 0) {
                     String found_word = MainActivity.WordList.get(found_index);
+                    Utility.addHist(this, found_word);
                     ArrayList<String> found = new ArrayList<>();
                     found.add(found_word);
                     int range_index = found_index - 10;
