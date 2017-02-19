@@ -14,8 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
@@ -129,15 +131,23 @@ public class Utility {
         tts.speak(word, QUEUE_ADD, null, null);
     }
 
-    public static void loadRecordings()
-    { //TODO SISTEMARE METODO LOADRECORDINGS
+    public static ArrayList<String> loadRecordings()
+    {
         //load all recordings, needs to be used in order to build the HistoryFragment
-      /*  ArrayList<String> recordings;
-        String line = "";
-        while(line != null) {
-            Log.i("Say it:", Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+line+".aac");
-            recordings.add(line);
-        }*/
+        ArrayList<String> recordings = new ArrayList<>();
+        String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
+        Log.d("Files", "Path: " + path);
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        Log.d("Files", "Size: "+ files.length);
+        for (int i = 0; i < files.length; i++)
+        {
+            Log.d("Files", "FileName:" + files[i].getName());
+            if(files[i].getName().equals(".nomedia"));
+            else recordings.add(files[i].getName().substring(0, files[i].getName().lastIndexOf(".")));
+        }
+
+        return recordings;
     }
 
     public static void loadDictionary(Activity activity) {
