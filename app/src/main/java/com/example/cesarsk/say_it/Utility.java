@@ -5,13 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.speech.tts.Voice;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.Set;
 import java.util.TreeSet;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.HISTORY_PREFS_KEY;
+import static com.example.cesarsk.say_it.MainActivity.tts;
+import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
+import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
 
 /**
  * Created by cesarsk on 17/02/2017.
@@ -88,43 +96,24 @@ public class Utility {
         savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
     }
 
-    public static void loadFavs(Context context){
+    public static void loadFavs(Context context)
+    {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.FAVORITES = sharedPreferences.getStringSet(FAVORITES_PREFS_KEY, new TreeSet<String>());
     }
 
-    public static void loadHist(Context context){
+    public static void loadHist(Context context)
+    {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.HISTORY = sharedPreferences.getStringSet(HISTORY_PREFS_KEY, new TreeSet<String>());
 
     }
+
+    public static void pronunciateWord(CharSequence word, float pitch, float speechRate, Voice accent)
+    {
+        tts.setPitch(pitch);
+        tts.setSpeechRate(speechRate);
+        tts.setVoice(accent);
+        tts.speak(word, QUEUE_ADD, null, null);
+    }
 }
-
-//Old two buttons used to manual TTS a word.
-/*Button button = (Button) view.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                EditText et = (EditText)view.findViewById(R.id.editText);
-                tts.setPitch((float)0.85);
-                tts.setSpeechRate((float)0.90);
-                tts.setVoice(voice_british_female);
-                tts.speak(et.getEditableText().toString(), QUEUE_ADD, null, null);
-            }
-        });
-
-        Button button1 = (Button) view.findViewById(R.id.button2);
-        button1.setOnClickListener(new View.OnClickListener()
-        {
-           @Override
-           public void onClick(View v)
-           {
-               EditText et = (EditText)view.findViewById(R.id.editText);
-               tts.setPitch((float)0.85);
-               tts.setSpeechRate((float)0.70);
-               tts.setVoice(voice_american_female);
-               tts.speak(et.getEditableText().toString(), QUEUE_ADD, null, null);
-           }
-        }); */
