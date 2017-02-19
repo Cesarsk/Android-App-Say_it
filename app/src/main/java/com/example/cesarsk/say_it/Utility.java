@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
@@ -146,7 +147,6 @@ public class Utility {
             if(files[i].getName().equals(".nomedia"));
             else recordings.add(files[i].getName().substring(0, files[i].getName().lastIndexOf(".")));
         }
-
         return recordings;
     }
 
@@ -163,5 +163,18 @@ public class Utility {
         }
 
         Collections.sort(WordList);
+    }
+
+    public static void deleteRecordings()
+    {
+        //delete all recordings
+        String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        for (int i = 0; i < files.length; i++)
+        {
+            if(files[i].getName().equals(".nomedia"));
+            else files[i].delete();
+        }
     }
 }
