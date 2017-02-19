@@ -9,7 +9,7 @@
         android:id="@+id/Result_TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
+        android:textSize="30sp"
         android:textColor="#FFFFFF"
         android:textAlignment="center"
         android:layout_weight="1" />
