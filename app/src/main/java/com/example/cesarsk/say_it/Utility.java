@@ -141,12 +141,12 @@ public class Utility {
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();
-        Log.d("Files", "Size: "+ files.length);
-        for (int i = 0; i < files.length; i++)
-        {
-            Log.d("Files", "FileName:" + files[i].getName());
-            if(files[i].getName().equals(".nomedia"));
-            else recordings.add(files[i].getName().substring(0, files[i].getName().lastIndexOf(".")));
+        if(files != null) {
+            for (int i = 0; i < files.length; i++) {
+                Log.d("Files", "FileName:" + files[i].getName());
+                if (!files[i].getName().equals(".nomedia"))
+                    recordings.add(files[i].getName().substring(0, files[i].getName().lastIndexOf(".")));
+            }
         }
         return recordings;
     }
@@ -172,10 +172,11 @@ public class Utility {
         String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
         File directory = new File(path);
         File[] files = directory.listFiles();
-        for (int i = 0; i < files.length; i++)
-        {
-            if(files[i].getName().equals(".nomedia"));
-            else files[i].delete();
+        if(files != null) {
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].getName().equals(".nomedia")) ;
+                else files[i].delete();
+            }
         }
     }
 }
