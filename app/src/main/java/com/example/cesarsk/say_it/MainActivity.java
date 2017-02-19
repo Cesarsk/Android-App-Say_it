@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Utility.savePrefs(this, FAVORITES);
-        //Utility.saveprefs(this, HISTORY); //TODO BISOGNA METTERLO QUESTO O BASTA SOLO FAVORITES?
+        Utility.savePrefs(this, FAVORITES, FAVORITES_PREFS_KEY);
+        Utility.savePrefs(this, HISTORY, HISTORY_PREFS_KEY);
     }
 
     @Override
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Caricamento preferenze
         Utility.loadFavs(this);
+        Utility.loadHist(this);
 
         //Gestione Fragment
         final FragmentManager fragmentManager = getFragmentManager();

@@ -53,12 +53,12 @@ public class Utility {
     }
 
     //Gestione Preferences
-    public static void savePrefs(Context context, Set<String> set)
+    public static void savePrefs(Context context, Set<String> set, String prefs_key)
     {
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
 
-        editor.putStringSet(MainActivity.FAVORITES_PREFS_KEY, set);
+        editor.putStringSet(prefs_key, set);
         editor.apply();
     }
 
@@ -72,20 +72,20 @@ public class Utility {
             }
         }
         new_favs.add(word);
-        savePrefs(context, new_favs);
+        savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
     public static void addHist(Context context, String word)
     {
         Set<String> new_hist = new TreeSet<>();
-        loadFavs(context);
+        loadHist(context);
         if(MainActivity.HISTORY != null){
             for (String element: MainActivity.HISTORY) {
                 new_hist.add(element);
             }
         }
         new_hist.add(word);
-        savePrefs(context, new_hist);
+        savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
     }
 
     public static void loadFavs(Context context){
