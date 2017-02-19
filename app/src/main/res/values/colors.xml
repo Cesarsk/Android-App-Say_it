@@ -20,4 +20,9 @@
     <color name="primary_text_material_light">#deffffff</color>
     <color name="quoraSearchBar">#852a23</color>
 
+    <!-- Palette Scelta -->
+    <color name="MainYellow">#FECF59</color>
+    <color name="MainBlue">#22344C</color>
+    <color name="LightBlue">#485871</color>
+
 </resources>
