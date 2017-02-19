@@ -5,18 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
-import android.widget.Toast;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.cesarsk.say_it.MainActivity.PREFS_NAME;
-import static com.example.cesarsk.say_it.MainActivity.PREFS_WORDS_FAVORITES;
-import static com.example.cesarsk.say_it.MainActivity.PREFS_WORDS_HISTORY;
+import static com.example.cesarsk.say_it.MainActivity.FAVORITES_PREFS_KEY;
+import static com.example.cesarsk.say_it.MainActivity.HISTORY_PREFS_KEY;
 
 /**
  * Created by cesarsk on 17/02/2017.
@@ -58,12 +53,12 @@ public class Utility {
     }
 
     //Gestione Preferences
-    public static void savePrefs(Context context, Set<String> favorites_word)
+    public static void savePrefs(Context context, Set<String> set)
     {
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
 
-        editor.putStringSet(MainActivity.PREFS_WORDS_FAVORITES, favorites_word);
+        editor.putStringSet(MainActivity.FAVORITES_PREFS_KEY, set);
         editor.apply();
     }
 
@@ -71,8 +66,8 @@ public class Utility {
     {
         Set<String> new_favs = new TreeSet<>();
         loadFavs(context);
-        if(MainActivity.favorites_word != null){
-            for (String element: MainActivity.favorites_word) {
+        if(MainActivity.FAVORITES != null){
+            for (String element: MainActivity.FAVORITES) {
                 new_favs.add(element);
             }
         }
@@ -84,8 +79,8 @@ public class Utility {
     {
         Set<String> new_hist = new TreeSet<>();
         loadFavs(context);
-        if(MainActivity.history_word != null){
-            for (String element: MainActivity.history_word) {
+        if(MainActivity.HISTORY != null){
+            for (String element: MainActivity.HISTORY) {
                 new_hist.add(element);
             }
         }
@@ -95,12 +90,12 @@ public class Utility {
 
     public static void loadFavs(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
-        MainActivity.favorites_word = sharedPreferences.getStringSet(PREFS_WORDS_FAVORITES, new TreeSet<String>());
+        MainActivity.FAVORITES = sharedPreferences.getStringSet(FAVORITES_PREFS_KEY, new TreeSet<String>());
     }
 
     public static void loadHist(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
-        MainActivity.history_word = sharedPreferences.getStringSet(PREFS_WORDS_HISTORY, new TreeSet<String>());
+        MainActivity.HISTORY = sharedPreferences.getStringSet(HISTORY_PREFS_KEY, new TreeSet<String>());
 
     }
 }

@@ -1,14 +1,7 @@
 package com.example.cesarsk.say_it;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.app.FragmentManager;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
-import static com.example.cesarsk.say_it.MainActivity.favorites_word;
 import static com.example.cesarsk.say_it.MainActivity.tts;
-import static java.sql.DriverManager.println;
 
 /**
  * Created by Claffo on 08/02/2017.

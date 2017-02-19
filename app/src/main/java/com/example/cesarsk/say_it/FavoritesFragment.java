@@ -12,11 +12,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
-import static com.example.cesarsk.say_it.MainActivity.favorites_word;
-import static com.example.cesarsk.say_it.Utility.savePrefs;
-import static java.sql.DriverManager.println;
+import static com.example.cesarsk.say_it.MainActivity.FAVORITES;
 
 
 /**
@@ -37,15 +34,15 @@ public class FavoritesFragment extends SlidingFragment {
         final View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         Utility.loadFavs(getActivity());
-        ArrayList<String> sortedFavoritesList = new ArrayList<>(MainActivity.favorites_word);
+        ArrayList<String> sortedFavoritesList = new ArrayList<>(MainActivity.FAVORITES);
         Collections.sort(sortedFavoritesList);
 
         ListView listView = (ListView) view.findViewById(R.id.favorites_list);
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, favorites_word.toArray(new String[favorites_word.size()]));
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, FAVORITES.toArray(new String[FAVORITES.size()]));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, sortedFavoritesList);
         listView.setAdapter(adapter);
 
-        Log.i("SAY IT: FAVORITES", favorites_word.toString());
+        Log.i("SAY IT: FAVORITES", FAVORITES.toString());
 
         // Inflate the layout for this fragment
         return view;

@@ -4,14 +4,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -20,15 +14,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.io.BufferedReader;
@@ -37,13 +27,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
-import static com.google.ads.AdRequest.TEST_EMULATOR;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -60,15 +48,13 @@ public class MainActivity extends AppCompatActivity {
     static Voice voice_british_female = new Voice("British", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
     //Gestione preferiti e history
-    public static Set<String> favorites_word = null;
-    public static Set<String> history_word = null;
+    public static Set<String> FAVORITES = null;
+    public static Set<String> HISTORY = null;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
-    public final static String PREFS_WORDS_FAVORITES = "FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
-    public final static String PREFS_WORDS_HISTORY = "HISTORY"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
-
-    public static SharedPreferences preferences;
+    public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
+    public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
@@ -76,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Utility.savePrefs(this, favorites_word);
-        //Utility.saveprefs(this, history_word); //TODO BISOGNA METTERLO QUESTO O BASTA SOLO FAVORITES?
+        Utility.savePrefs(this, FAVORITES);
+        //Utility.saveprefs(this, HISTORY); //TODO BISOGNA METTERLO QUESTO O BASTA SOLO FAVORITES?
     }
 
     @Override

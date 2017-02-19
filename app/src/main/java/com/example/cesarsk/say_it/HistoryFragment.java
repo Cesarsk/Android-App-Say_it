@@ -2,18 +2,6 @@ package com.example.cesarsk.say_it;
 
 
 import android.app.Fragment;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
-import static com.example.cesarsk.say_it.MainActivity.history_word;
 
 
 /**
@@ -32,7 +20,7 @@ public class HistoryFragment extends SlidingFragment {
                              Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
-        ArrayList<String> sortedHistoryList = new ArrayList<>(MainActivity.history_word);
+        ArrayList<String> sortedHistoryList = new ArrayList<>(MainActivity.HISTORY);
         Utility.loadFavs(getActivity());
         Collections.sort(sortedHistoryList);
 
@@ -40,7 +28,7 @@ public class HistoryFragment extends SlidingFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, sortedHistoryList);
         listView.setAdapter(adapter);
 
-        Log.i("SAY IT: HISTORY", history_word.toString());
+        Log.i("SAY IT: HISTORY", HISTORY.toString());
 
         // Inflate the layout for this fragment
         return view;
