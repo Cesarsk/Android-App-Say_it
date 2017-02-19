@@ -39,7 +39,7 @@
     <RelativeLayout
         android:id="@+id/display_play"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="155dp"
         android:background="@color/MainYellow" >
 
         <TextView
