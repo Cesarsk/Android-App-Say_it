@@ -10,6 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="22sp"
+        android:text="#FFFFFF"
         android:textAlignment="center"
         android:layout_weight="1" />
 
