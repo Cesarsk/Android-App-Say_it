@@ -222,6 +222,7 @@ public class PlayActivity extends AppCompatActivity {
         try {
             //TODO CHECK IF RECORDING ALREADY EXISTS. IF DOES NOT, DO NOT PLAY.
             Log.i("Say it!","Playing recording: "+Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
+            mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
             mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
             mediaPlayer.prepare();
             mediaPlayer.start();
