@@ -39,7 +39,7 @@
     <RelativeLayout
         android:id="@+id/display_play"
         android:layout_width="match_parent"
-        android:layout_height="155dp"
+        android:layout_height="165dp"
         android:background="@color/MainYellow" >
 
         <TextView
@@ -47,7 +47,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/selected_word"
             android:text="Word"
+            android:textAllCaps="true"
             android:textSize="45sp"
+            android:layout_marginTop="10dp"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:layout_centerHorizontal="true" />

@@ -11,6 +11,11 @@
         <item name="android:textColorPrimary">#FFFFFF</item>
     </style>
 
+    <style name="AppThemeNoActionBarDarkStatus" parent="AppThemeNoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@color/MainBlue</item>
+    </style>
+
     <style name="AppThemeActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/MainYellow</item>
