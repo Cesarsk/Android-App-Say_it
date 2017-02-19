@@ -180,7 +180,5 @@ public class MainActivity extends AppCompatActivity {
         mAdView.bringToFront();
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
-        Utility.loadRecordings();
     }
 }

@@ -134,6 +134,7 @@ public class Utility {
 
     public static ArrayList<String> loadRecordings()
     {
+        //TODO CLAFFOLO SISTEMA QUI, NULLPOINTER SE NON CI SONO REGISTRAZIONI, VAI NEL RECORDING FRAGMENT PER L'UTILIZZO DI QUESTA FUNZIONE
         //load all recordings, needs to be used in order to build the HistoryFragment
         ArrayList<String> recordings = new ArrayList<>();
         String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
