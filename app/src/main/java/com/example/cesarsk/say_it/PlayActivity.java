@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.formats.NativeAd;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,6 +81,14 @@ public class PlayActivity extends AppCompatActivity {
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        ImageButton delete_button = (ImageButton)findViewById(R.id.delete_button);
+        delete_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.deleteRecording(v.getContext(), selected_word);
+            }
+        });
 
         ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
         play_original_button.setOnClickListener(new View.OnClickListener() {

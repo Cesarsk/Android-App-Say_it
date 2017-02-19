@@ -49,7 +49,7 @@
         <activity
             android:name=".PlayActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeActionBar" >
+            android:theme="@style/AppThemeNoActionBar" >
         </activity>
     </application>
 

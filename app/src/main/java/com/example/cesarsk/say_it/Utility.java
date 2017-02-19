@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -175,6 +176,20 @@ public class Utility {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].getName().equals(".nomedia")) ;
                 else files[i].delete();
+            }
+        }
+    }
+
+    public static void deleteRecording(Context context, String word)
+    {
+        //delete a recording
+        String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        if(files != null) {
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].getName().equals(word)) files[i].delete();
+                Toast.makeText(context, "Deleted recording", Toast.LENGTH_SHORT).show();
             }
         }
     }
