@@ -1,15 +1,23 @@
 package com.example.cesarsk.say_it;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Environment;
 import android.speech.tts.Voice;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -17,6 +25,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.HISTORY_PREFS_KEY;
+import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
@@ -26,6 +35,8 @@ import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
  */
 
 public class Utility {
+
+    private static final String AUDIO_RECORDER_FOLDER = "Say it";
 
     public static boolean delete_recordings() {
         //TODO DELETE ALL FILES IN THE FOLDER EXCEPT FOR .NOMEDIA FILE
@@ -111,9 +122,36 @@ public class Utility {
 
     public static void pronunciateWord(CharSequence word, float pitch, float speechRate, Voice accent)
     {
+        //manual pronunciation of a word, never used.
         tts.setPitch(pitch);
         tts.setSpeechRate(speechRate);
         tts.setVoice(accent);
         tts.speak(word, QUEUE_ADD, null, null);
+    }
+
+    public static void loadRecordings()
+    { //TODO SISTEMARE METODO LOADRECORDINGS
+        //load all recordings, needs to be used in order to build the HistoryFragment
+      /*  ArrayList<String> recordings;
+        String line = "";
+        while(line != null) {
+            Log.i("Say it:", Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+line+".aac");
+            recordings.add(line);
+        }*/
+    }
+
+    public static void loadDictionary(Activity activity) {
+        //loading wordslist from file.
+        BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.wordlist)));
+        String line;
+        try {
+            while ((line = line_reader.readLine()) != null) {
+                WordList.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Collections.sort(WordList);
     }
 }

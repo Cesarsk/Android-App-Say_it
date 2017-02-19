@@ -151,19 +151,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        BufferedReader line_reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.wordlist)));
-        String line;
-
-        try {
-            while ((line = line_reader.readLine()) != null) {
-                WordList.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Collections.sort(WordList);
-
+        //Caricamento dizionario
+        Utility.loadDictionary(this);
 
         //IMPOSTAZIONE TEXT TO SPEECH
         tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
@@ -185,14 +174,11 @@ public class MainActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
-
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
         mAdView.bringToFront();
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
-
     }
 }
