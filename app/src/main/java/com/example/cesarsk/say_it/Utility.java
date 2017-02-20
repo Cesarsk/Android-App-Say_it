@@ -209,9 +209,9 @@ public class Utility {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].getName().equals(word + ".aac")){
                     files[i].delete();
-                    //Toast.makeText(context, "Deleted recording", Toast.LENGTH_SHORT).show();
                 }
             }
+            Toast.makeText(context, "Deleted recording", Toast.LENGTH_SHORT).show();
         }
     }
 
