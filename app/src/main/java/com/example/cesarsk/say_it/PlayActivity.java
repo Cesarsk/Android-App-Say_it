@@ -47,6 +47,8 @@ public class PlayActivity extends AppCompatActivity {
     private CharSequence[] history;
     int testa = 0;
     private String selected_word;
+    private boolean slow_mode = false;
+
 
 
     @Override
@@ -87,6 +89,34 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Utility.deleteRecording(v.getContext(), selected_word);
+                //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
+            }
+        });
+
+        ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
+        favorite_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.addFavs(v.getContext(), selected_word);
+                //TODO CAMBIO ICON CUORE VUOTO / CUORE PIENO
+            }
+        });
+
+        ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
+        slow_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!slow_mode) {tts.setSpeechRate((float)0.40); slow_mode = !slow_mode;}
+                else tts.setSpeechRate((float)0.90);
+            }
+        });
+
+        ImageButton accent_button = (ImageButton)findViewById(R.id.accent_button);
+        accent_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(tts.getVoice() == voice_american_female) tts.setVoice(voice_british_female);
+                else tts.setVoice(voice_american_female);
             }
         });
 
@@ -131,26 +161,6 @@ public class PlayActivity extends AppCompatActivity {
                     requestPermission();
                 }
                 return false;
-            }
-        });
-
-
-        final Switch switch_slow = (Switch)findViewById(R.id.switch_slow);
-        switch_slow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //TODO SISTEMARE, AMERICAN SLOW MODE SHOULD BE SLOWER THAN BRITISH'S ONE
-                if(isChecked) tts.setSpeechRate((float)0.40);
-                else if(!isChecked) tts.setSpeechRate((float)0.90);
-            }
-        });
-
-        final Switch switch_accent = (Switch)findViewById(R.id.switch_accent);
-        switch_accent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) tts.setVoice(voice_british_female);
-                else if(!isChecked) tts.setVoice(voice_american_female);
             }
         });
     }
