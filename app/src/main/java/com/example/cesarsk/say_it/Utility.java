@@ -207,8 +207,10 @@ public class Utility {
         File[] files = directory.listFiles();
         if(files != null) {
             for (int i = 0; i < files.length; i++) {
-                if (files[i].getName().equals(word + ".aac")) files[i].delete();
-                Toast.makeText(context, "Deleted recording", Toast.LENGTH_SHORT).show();
+                if (files[i].getName().equals(word + ".aac")){
+                    files[i].delete();
+                    //Toast.makeText(context, "Deleted recording", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -246,6 +248,8 @@ public class Utility {
 
     public static void startRecording(MediaRecorder recorder, int output_formats[], int currentFormat, String file_exts[]) {
         //TODO SE IL FILE GIA' ESISTE, CANCELLALO E REGISTRA NUOVAMENTE
+        try {
+
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(output_formats[currentFormat]);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
@@ -255,7 +259,7 @@ public class Utility {
         recorder.setOnErrorListener(errorListener);
         recorder.setOnInfoListener(infoListener);
 
-        try {
+
             recorder.prepare();
             recorder.start();
         } catch (IllegalStateException e) {
@@ -269,9 +273,6 @@ public class Utility {
         if (null != recorder) {
             recorder.stop();
             recorder.reset();
-            recorder.release();
-
-            recorder = null;
         }
     }
 
