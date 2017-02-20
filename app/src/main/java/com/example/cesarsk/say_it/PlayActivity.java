@@ -48,6 +48,8 @@ public class PlayActivity extends AppCompatActivity {
     int testa = 0;
     private String selected_word;
     private boolean slow_mode = false;
+    private boolean accent_flag = false;
+
 
 
 
@@ -98,6 +100,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Utility.addFavs(v.getContext(), selected_word);
+                Toast.makeText(PlayActivity.this, "Added to favorite!", Toast.LENGTH_SHORT).show();
                 //TODO CAMBIO ICON CUORE VUOTO / CUORE PIENO
             }
         });
@@ -115,7 +118,8 @@ public class PlayActivity extends AppCompatActivity {
         accent_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(tts.getVoice() == voice_american_female) tts.setVoice(voice_british_female);
+                //TODO BUGFIXING
+                if(!accent_flag) {tts.setVoice(voice_british_female); accent_flag = !accent_flag;}
                 else tts.setVoice(voice_american_female);
             }
         });
