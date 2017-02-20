@@ -9,7 +9,6 @@
     <com.google.android.gms.ads.AdView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:scaleX="1.3"
         android:id="@+id/adView"
         app:adSize="BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111"
@@ -43,75 +42,6 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_below="@id/display_play"
-    android:background="@color/LightBlue" >
-
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/recordings_button"
-            android:background="@drawable/ic_format_list_bulleted"
-            android:backgroundTint="@color/white"
-            android:layout_marginLeft="19dp"
-            android:layout_gravity="center"
-
-            />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/accent_button"
-            android:background="@drawable/ic_flag"
-            android:backgroundTint="@color/white"
-            android:layout_marginLeft="15dp"
-            android:layout_gravity="center"
-            />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/slow_button"
-            android:background="@drawable/ic_slow_motion_video"
-            android:backgroundTint="@color/white"
-            android:layout_marginLeft="15dp"
-            android:layout_gravity="center"
-            />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/favorite_button"
-            android:background="@drawable/ic_favorite"
-            android:backgroundTint="@color/white"
-            android:layout_marginLeft="15dp"
-            android:layout_gravity="center"
-            />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/remove_ads_button"
-            android:background="@drawable/ic_local_grocery_store"
-            android:backgroundTint="@color/white"
-            android:layout_marginLeft="170dp"
-            android:layout_gravity="center"
-            />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/delete_button"
-            android:background="@drawable/ic_delete"
-            android:backgroundTint="@color/white"
-            android:layout_marginLeft="15dp"
-            android:layout_gravity="center"
-            />
-
-    </LinearLayout>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -128,6 +58,87 @@
         android:layout_marginBottom="81dp"
         android:layout_above="@+id/play_original"
         android:layout_alignStart="@+id/play_original" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/LightBlue"
+        android:layout_below="@+id/display_play"
+        android:layout_alignParentStart="true">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/recordings_button"
+                android:src="@drawable/ic_format_list_bulleted"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+
+            />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/accent_button"
+                android:src="@drawable/ic_flag"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+            />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/slow_button"
+                android:src="@drawable/ic_slow_motion_video"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+            />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/favorite_button"
+                android:src="@drawable/ic_favorite"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></View>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/remove_ads_button"
+                android:src="@drawable/ic_local_grocery_store"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_gravity="center"
+                />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/delete_button"
+                android:src="@drawable/ic_delete"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_gravity="center"
+                />
+
+    </LinearLayout>
 
 </RelativeLayout>
 

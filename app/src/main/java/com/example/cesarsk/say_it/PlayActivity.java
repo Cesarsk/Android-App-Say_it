@@ -1,5 +1,6 @@
 package com.example.cesarsk.say_it;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -68,18 +69,6 @@ public class PlayActivity extends AppCompatActivity {
         final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
         selected_word_view.setText(selected_word);
 
-        /*
-        //TODO Controllare e NO DUPLICATI (AGGIUNGERE SOLO SE NON C'E')
-        for(int i = 0; i < N; i++)
-        {
-            if(selected_word_charseq == history[i]) break;
-            else
-            {
-                history[testa] = selected_word_charseq;
-                testa = (testa+1)%N;
-            }
-        }*/
-
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -136,7 +125,7 @@ public class PlayActivity extends AppCompatActivity {
         play_rec_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playRecording();
+                Utility.playRecording(mediaPlayer);
             }
         });
 
@@ -145,125 +134,31 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
 
-                if (checkPermission())
+                if (Utility.checkPermission(view.getContext()))
                 {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
-                            startRecording();
+                            Utility.startRecording(recorder, output_formats, currentFormat, file_exts);
                             break;
 
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
-                            stopRecording();
+                            Utility.stopRecording(recorder);
                             break;
                     }
                 }
 
                 else
                 {
-                    requestPermission();
+                    Utility.requestPermission(view.getContext());
                 }
                 return false;
             }
         });
     }
 
-
-
-
-
-    //FUNZIONI DI REGISTRAZIONE
-    private String getFilename() {
-        String filepath = Environment.getExternalStorageDirectory().getPath();
-        File file = new File(filepath, AUDIO_RECORDER_FOLDER);
-
-        if (!file.exists()) {
-            file.mkdirs();
-            File nomedia = new File(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/.nomedia");
-            try { nomedia.createNewFile(); } catch (IOException e) {Log.i("LOG:",".nomedia not created");}
-        }
-
-        return (file.getAbsolutePath() + "/" + selected_word + file_exts[currentFormat]);
-    }
-
-    private void startRecording() {
-        //TODO SE IL FILE GIA' ESISTE, CANCELLALO E REGISTRA NUOVAMENTE
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(output_formats[currentFormat]);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
-        recorder.setAudioEncodingBitRate(16);
-        recorder.setAudioSamplingRate(44100);
-        recorder.setOutputFile(getFilename());
-        recorder.setOnErrorListener(errorListener);
-        recorder.setOnInfoListener(infoListener);
-
-        try {
-            recorder.prepare();
-            recorder.start();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
-        @Override
-        public void onError(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!","Error: " + what + ", " + extra);
-        }
-    };
-
-    private MediaRecorder.OnInfoListener infoListener = new MediaRecorder.OnInfoListener() {
-        @Override
-        public void onInfo(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!","Warning: " + what + ", " + extra);
-        }
-    };
-
-    private void stopRecording() {
-        if (null != recorder) {
-            recorder.stop();
-            recorder.reset();
-            recorder.release();
-
-            recorder = null;
-        }
-    }
-
-    private void playRecording() {
-        try {
-            //TODO CHECK IF RECORDING ALREADY EXISTS. IF DOES NOT, DO NOT PLAY.
-            Log.i("Say it!","Playing recording: "+Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
-            mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
-            mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-
-    //FUNZIONI PER RICHIESTA PERMESSI
-    public boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(this,
-                WRITE_EXTERNAL_STORAGE);
-        int result1 = ContextCompat.checkSelfPermission(this,
-                RECORD_AUDIO);
-        return result == PackageManager.PERMISSION_GRANTED &&
-                result1 == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new
-                String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO}, RequestPermissionCode);
-    }
-
+    //TODO QUESTO OVERRIDE SI PUO SPOSTARE IN UTILITY? X CLAFFOLO
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {

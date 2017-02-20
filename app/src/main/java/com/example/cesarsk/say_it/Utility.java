@@ -5,9 +5,14 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.speech.tts.Voice;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +30,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.Context.MODE_PRIVATE;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.FAVORITES_PREFS_KEY;
@@ -33,6 +40,8 @@ import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
+import static com.example.cesarsk.say_it.PlayActivity.RequestPermissionCode;
+import static com.example.cesarsk.say_it.R.id.selected_word;
 
 /**
  * Created by cesarsk on 17/02/2017.
@@ -193,4 +202,93 @@ public class Utility {
             }
         }
     }
+
+
+    //FUNZIONI PER RICHIESTA PERMESSI
+    public static boolean checkPermission(Context context) {
+        int result = ContextCompat.checkSelfPermission(context,
+                WRITE_EXTERNAL_STORAGE);
+        int result1 = ContextCompat.checkSelfPermission(context,
+                RECORD_AUDIO);
+        return result == PackageManager.PERMISSION_GRANTED &&
+                result1 == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void requestPermission(Context context) {
+        ActivityCompat.requestPermissions((Activity) context, new
+                String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO}, RequestPermissionCode);
+    }
+
+
+    //FUNZIONI DI REGISTRAZIONE
+    public static String getFilename(String file_exts[], int currentFormat) {
+        String filepath = Environment.getExternalStorageDirectory().getPath();
+        File file = new File(filepath, AUDIO_RECORDER_FOLDER);
+
+        if (!file.exists()) {
+            file.mkdirs();
+            File nomedia = new File(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/.nomedia");
+            try { nomedia.createNewFile(); } catch (IOException e) {Log.i("LOG:",".nomedia not created");}
+        }
+
+        return (file.getAbsolutePath() + "/" + selected_word + file_exts[currentFormat]);
+    }
+
+    public static void startRecording(MediaRecorder recorder, int output_formats[], int currentFormat, String file_exts[]) {
+        //TODO SE IL FILE GIA' ESISTE, CANCELLALO E REGISTRA NUOVAMENTE
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(output_formats[currentFormat]);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
+        recorder.setAudioEncodingBitRate(16);
+        recorder.setAudioSamplingRate(44100);
+        recorder.setOutputFile(getFilename(file_exts, currentFormat));
+        recorder.setOnErrorListener(errorListener);
+        recorder.setOnInfoListener(infoListener);
+
+        try {
+            recorder.prepare();
+            recorder.start();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void stopRecording(MediaRecorder recorder) {
+        if (null != recorder) {
+            recorder.stop();
+            recorder.reset();
+            recorder.release();
+
+            recorder = null;
+        }
+    }
+
+    public static void playRecording(MediaPlayer mediaPlayer) {
+        try {
+            //TODO CHECK IF RECORDING ALREADY EXISTS. IF DOES NOT, DO NOT PLAY.
+            Log.i("Say it!","Playing recording: "+Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
+            mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
+            mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
+        @Override
+        public void onError(MediaRecorder mr, int what, int extra) {
+            Log.i("Say it!","Error: " + what + ", " + extra);
+        }
+    };
+
+    private static MediaRecorder.OnInfoListener infoListener = new MediaRecorder.OnInfoListener() {
+        @Override
+        public void onInfo(MediaRecorder mr, int what, int extra) {
+            Log.i("Say it!","Warning: " + what + ", " + extra);
+        }
+    };
 }
