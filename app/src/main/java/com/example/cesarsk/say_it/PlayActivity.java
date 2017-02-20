@@ -121,13 +121,13 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton play_rec_button = (ImageButton)findViewById(R.id.play_rec);
+        /*ImageButton play_rec_button = (ImageButton)findViewById(R.id.play_rec);
         play_rec_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utility.playRecording(mediaPlayer);
             }
-        });
+        });*/
 
         ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
         rec_button.setOnTouchListener(new View.OnTouchListener() {
