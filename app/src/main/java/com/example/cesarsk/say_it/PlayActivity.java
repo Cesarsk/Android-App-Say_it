@@ -49,7 +49,7 @@ public class PlayActivity extends AppCompatActivity {
     int N = 10;
     private CharSequence[] history;
     int testa = 0;
-    private String selected_word;
+    public static String selected_word;
     private boolean slow_mode = false;
     private boolean accent_flag = false;
 

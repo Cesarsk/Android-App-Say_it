@@ -41,7 +41,7 @@ import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
 import static com.example.cesarsk.say_it.PlayActivity.RequestPermissionCode;
-import static com.example.cesarsk.say_it.R.id.selected_word;
+import static com.example.cesarsk.say_it.PlayActivity.selected_word;
 
 /**
  * Created by cesarsk on 17/02/2017.
