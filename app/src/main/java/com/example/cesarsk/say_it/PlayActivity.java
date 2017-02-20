@@ -29,6 +29,8 @@ import java.io.IOException;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
@@ -59,6 +61,15 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        final ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
+        final ImageButton play_button = (ImageButton)findViewById(R.id.play_button);
+        final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
+        final ImageButton delete_button = (ImageButton)findViewById(R.id.delete_button);
+        ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
+        ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
+        ImageButton accent_button = (ImageButton)findViewById(R.id.accent_button);
+        ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
+
         selected_word = getIntent().getStringExtra(PLAY_WORD);
 
         recorder = new MediaRecorder();
@@ -66,8 +77,24 @@ public class PlayActivity extends AppCompatActivity {
         history = new CharSequence[N];
         //word = new String(getArguments().getCharSequence("word").toString());
 
-        final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
         selected_word_view.setText(selected_word);
+        if(Utility.checkFile(selected_word))
+        {
+            rec_button.setEnabled(false);
+            rec_button.setVisibility(INVISIBLE);
+            play_button.setEnabled(true);
+            play_button.setVisibility(VISIBLE);
+            delete_button.setEnabled(true);
+            delete_button.setVisibility(VISIBLE);
+        } else
+        {
+            play_button.setEnabled(false);
+            play_button.setVisibility(INVISIBLE);
+            rec_button.setEnabled(true);
+            rec_button.setVisibility(VISIBLE);
+            delete_button.setEnabled(false);
+            delete_button.setVisibility(INVISIBLE);
+        }
 
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
@@ -75,16 +102,28 @@ public class PlayActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        ImageButton delete_button = (ImageButton)findViewById(R.id.delete_button);
+        play_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.playRecording(mediaPlayer);
+            }
+        });
+
         delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utility.deleteRecording(v.getContext(), selected_word);
                 //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
+                Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
+                play_button.setEnabled(false);
+                rec_button.setEnabled(true);
+                play_button.setVisibility(INVISIBLE);
+                rec_button.setVisibility(VISIBLE);
+                delete_button.setEnabled(false);
+                delete_button.setVisibility(INVISIBLE);
             }
         });
 
-        ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
         favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +133,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
         slow_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,17 +141,15 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton accent_button = (ImageButton)findViewById(R.id.accent_button);
         accent_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO BUGFIXING
                 if(!accent_flag) {tts.setVoice(voice_british_female); accent_flag = !accent_flag;}
-                else tts.setVoice(voice_american_female);
+                else {tts.setVoice(voice_american_female); accent_flag = !accent_flag;}
             }
         });
 
-        ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
         play_original_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,15 +157,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        /*ImageButton play_rec_button = (ImageButton)findViewById(R.id.play_rec);
-        play_rec_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utility.playRecording(mediaPlayer);
-            }
-        });*/
-
-        ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
         rec_button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -139,12 +166,20 @@ public class PlayActivity extends AppCompatActivity {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
+                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec));
                             Utility.startRecording(recorder, output_formats, currentFormat, file_exts);
                             break;
 
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
+                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec_light));
                             Utility.stopRecording(recorder);
+                            rec_button.setEnabled(false);
+                            rec_button.setVisibility(INVISIBLE);
+                            play_button.setEnabled(true);
+                            play_button.setVisibility(VISIBLE);
+                            delete_button.setVisibility(VISIBLE);
+                            delete_button.setEnabled(true);
                             break;
                     }
                 }

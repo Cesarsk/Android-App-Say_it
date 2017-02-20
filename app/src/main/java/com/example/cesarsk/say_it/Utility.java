@@ -160,6 +160,16 @@ public class Utility {
         return recordings;
     }
 
+    public static boolean checkFile(String word) {
+        String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
+        Log.i("DEBUG FILE: ", path+"/"+word+".aac");
+        File f = new File(path+"/"+word+".aac");
+        if(f.exists() && !f.isDirectory()) {
+            Log.i("DEBUG FILE:", "FILE ESISTE! RITORNO TRUE");
+            return true;
+        } else return false;
+    }
+
     public static void loadDictionary(Activity activity) {
         //loading wordslist from file.
         BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.wordlist)));
@@ -268,11 +278,21 @@ public class Utility {
     public static void playRecording(MediaPlayer mediaPlayer) {
         try {
             //TODO CHECK IF RECORDING ALREADY EXISTS. IF DOES NOT, DO NOT PLAY.
-            Log.i("Say it!","Playing recording: "+Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
-            mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
-            mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+                Log.i("Say it!","Playing recording: "+Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
+                mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
+                mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
+            else {
+                Log.i("Say it!", "Playing recording: " + Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
+                mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
+                mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

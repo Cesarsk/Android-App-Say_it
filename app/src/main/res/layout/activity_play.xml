@@ -36,32 +36,13 @@
 
     </RelativeLayout>
 
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rec_button"
-        android:background="@drawable/ic_rec"
-        android:layout_centerInParent="true"/>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="center"
-        android:scaleX="0.6"
-        android:scaleY="0.6"
-        android:id="@+id/play_original"
-        android:background="@drawable/ic_play_original"
-        android:layout_below="@id/rec_button"
-        android:layout_alignEnd="@id/rec_button"
-        android:layout_centerHorizontal="true" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/LightBlue"
         android:layout_below="@+id/display_play"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/buttons_bar">
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -136,6 +117,43 @@
                 />
 
     </LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rec_button"
+        android:background="@drawable/ic_rec_light"
+        android:scaleX="2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="200dp"
+        android:layout_above="@+id/adView"
+        android:scaleY="2"
+        />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/play_button"
+        android:background="@drawable/ic_rec_green"
+        android:scaleX="2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="200dp"
+        android:layout_above="@+id/adView"
+        android:scaleY="2"
+        />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:id="@+id/play_original"
+        android:background="@drawable/ic_play_original"
+
+        android:layout_above="@+id/adView"
+        android:layout_toEndOf="@+id/rec_button"
+        android:layout_marginBottom="150dp" />
 
 </RelativeLayout>
 
