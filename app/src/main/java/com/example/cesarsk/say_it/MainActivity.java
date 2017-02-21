@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -13,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.transition.Slide;
 import android.util.Log;
 
 import com.google.android.gms.ads.AdRequest;
@@ -194,5 +194,11 @@ public class MainActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
 
+    }
+
+    private void setupSlideExitTransition() {
+        Slide slide = new Slide();
+        slide.setDuration(1000);
+        getWindow().setExitTransition(slide);
     }
 }
