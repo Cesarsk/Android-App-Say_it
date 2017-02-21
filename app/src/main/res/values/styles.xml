@@ -28,9 +28,11 @@
     </style>
 
     <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name ="voiceIcon">@drawable/ic_flag</item>
+        <item name ="searchIcon">@drawable/ic_search</item>
         <item name="queryBackground">@color/DarkYellow</item>
         <item name="android:background">@color/MainYellow</item>
-        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingBottom">20dp</item>
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingStart">-15dp</item>
         <item name="android:paddingEnd">15dp</item>
