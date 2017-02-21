@@ -89,11 +89,6 @@
                 android:layout_gravity="center"
             />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,7 +97,13 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:tint="@color/white"
                 android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
                 />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -111,7 +112,6 @@
                 android:src="@drawable/ic_trash_full"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:tint="@color/white"
-                android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_gravity="center"
                 />

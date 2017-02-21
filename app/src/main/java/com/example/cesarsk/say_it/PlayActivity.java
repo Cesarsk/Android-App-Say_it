@@ -73,7 +73,7 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton accent_button = (ImageButton)findViewById(R.id.accent_button);
         final ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
         final ImageButton your_recordings = (ImageButton)findViewById(R.id.recordings_button);
-
+        final ImageButton remove_ad = (ImageButton)findViewById(R.id.remove_ads_button);
         selected_word = getIntent().getStringExtra(PLAY_WORD);
 
         recorder = new MediaRecorder();
@@ -99,6 +99,13 @@ public class PlayActivity extends AppCompatActivity {
             delete_button.setEnabled(false);
             delete_button.setVisibility(INVISIBLE);
         }
+
+        remove_ad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
