@@ -1,7 +1,9 @@
 package com.example.cesarsk.say_it;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -52,6 +54,7 @@ public class PlayActivity extends AppCompatActivity {
     public static String selected_word;
     private boolean slow_mode = false;
     private boolean accent_flag = false;
+    private boolean favorite_flag = false;
 
 
 
@@ -65,19 +68,20 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton play_button = (ImageButton)findViewById(R.id.play_button);
         final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
         final ImageButton delete_button = (ImageButton)findViewById(R.id.delete_button);
-        ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
-        ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
-        ImageButton accent_button = (ImageButton)findViewById(R.id.accent_button);
-        ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
+        final ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
+        final ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
+        final ImageButton accent_button = (ImageButton)findViewById(R.id.accent_button);
+        final ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
+        final ImageButton your_recordings = (ImageButton)findViewById(R.id.recordings_button);
 
         selected_word = getIntent().getStringExtra(PLAY_WORD);
 
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();
         history = new CharSequence[N];
-        //word = new String(getArguments().getCharSequence("word").toString());
 
         selected_word_view.setText(selected_word);
+
         if(Utility.checkFile(selected_word))
         {
             rec_button.setEnabled(false);
@@ -102,6 +106,12 @@ public class PlayActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        your_recordings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
         play_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,29 +134,60 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
+        favorite_flag = Utility.checkFavs(this, selected_word);
+        if(favorite_flag) favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+
         favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utility.addFavs(v.getContext(), selected_word);
-                Toast.makeText(PlayActivity.this, "Added to favorite!", Toast.LENGTH_SHORT).show();
-                //TODO CAMBIO ICON CUORE VUOTO / CUORE PIENO
+                if(!favorite_flag) {
+                    Utility.addFavs(v.getContext(), selected_word);
+                    favorite_flag= !favorite_flag;
+                    Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
+                    favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+                }
+                else {
+                    favorite_button.setColorFilter(getResources().getColor(R.color.white));
+                    Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
+                    Utility.removeFavs(v.getContext(), selected_word);
+                    favorite_flag = !favorite_flag;
+                }
             }
         });
 
         slow_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!slow_mode) {tts.setSpeechRate((float)0.40); slow_mode = !slow_mode;}
-                else tts.setSpeechRate((float)0.90);
+                if(!slow_mode) {
+                    tts.setSpeechRate((float)0.40);
+                    slow_mode = !slow_mode;
+                    Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
+                    slow_button.setColorFilter(getResources().getColor(R.color.MainYellow));
+                }
+                else {
+                    tts.setSpeechRate((float)0.90);
+                    Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
+                    slow_button.setColorFilter(getResources().getColor(R.color.white));
+                    slow_mode = !slow_mode;
+                }
             }
         });
 
         accent_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO BUGFIXING
-                if(!accent_flag) {tts.setVoice(voice_british_female); accent_flag = !accent_flag;}
-                else {tts.setVoice(voice_american_female); accent_flag = !accent_flag;}
+                if(!accent_flag) {
+                    tts.setVoice(voice_british_female);
+                    accent_button.setColorFilter(getResources().getColor(R.color.MainYellow));
+                    Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
+                    accent_flag = !accent_flag;
+                }
+                else {
+                    tts.setVoice(voice_american_female);
+                    accent_button.setColorFilter(getResources().getColor(R.color.white));
+                    Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
+                    accent_flag = !accent_flag;
+                }
             }
         });
 

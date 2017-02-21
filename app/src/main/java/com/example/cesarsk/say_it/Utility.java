@@ -114,6 +114,32 @@ public class Utility {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
+    public static void removeFavs(Context context, String word)
+    {
+        Set<String> new_favs = new TreeSet<>();
+        loadFavs(context);
+        if(MainActivity.FAVORITES != null){
+            for (String element: MainActivity.FAVORITES) {
+                new_favs.add(element);
+            }
+        }
+        new_favs.remove(word);
+        savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
+    }
+
+    public static boolean checkFavs(Context context, String word)
+    {
+        Set<String> new_favs = new TreeSet<>();
+        loadFavs(context);
+        if(MainActivity.FAVORITES != null){
+            for (String element: MainActivity.FAVORITES) {
+                new_favs.add(element);
+            }
+        }
+        if(new_favs.contains(word)) return true;
+        else return false;
+    }
+
     public static void addHist(Context context, String word)
     {
         Set<String> new_hist = new TreeSet<>();
