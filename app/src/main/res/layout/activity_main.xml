@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_bar_height"
         android:layout_alignParentStart="true"
-        android:minHeight="?attr/actionBarSize"
         app:iconifiedByDefault="false"
         app:queryHint="@string/search_hint"
         android:layout_alignParentEnd="true" />
@@ -26,16 +25,6 @@
         app:bb_inActiveTabAlpha="0.8"
         app:bb_activeTabAlpha="1" />
 
-    <com.google.android.gms.ads.AdView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/adView"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        android:layout_above="@+id/bottomBar"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
-
     <!-- Framelayout rappresenta il placeholder nel quale andranno i vari fragments -->
 
     <FrameLayout
@@ -46,6 +35,16 @@
         android:layout_alignParentTop="false"
         android:layout_alignParentStart="true"
         android:layout_height="match_parent">
+
     </FrameLayout>
 
+    <com.google.android.gms.ads.AdView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/adView"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        android:layout_above="@+id/bottomBar"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

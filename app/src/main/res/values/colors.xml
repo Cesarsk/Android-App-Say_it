@@ -20,8 +20,9 @@
 
     <!-- Palette Scelta -->
     <color name="MainYellow">#ffc637</color>
+    <color name="LightYellow">#f7d172</color>
     <color name="MainBlue">#22344C</color>
-    <color name="DarkYellow">#e0e9ad18</color>
+    <color name="DarkYellow">#e9ad18</color>
     <color name="LightBlue">#485871</color>
 
 </resources>
