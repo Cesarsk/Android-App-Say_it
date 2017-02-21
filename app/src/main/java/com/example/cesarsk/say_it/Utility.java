@@ -211,7 +211,6 @@ public class Utility {
                     files[i].delete();
                 }
             }
-            Toast.makeText(context, "Deleted recording", Toast.LENGTH_SHORT).show();
         }
     }
 
