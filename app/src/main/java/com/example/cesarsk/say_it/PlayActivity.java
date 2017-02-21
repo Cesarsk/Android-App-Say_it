@@ -166,13 +166,13 @@ public class PlayActivity extends AppCompatActivity {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
-                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec));
+                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec, null));
                             Utility.startRecording(recorder, output_formats, currentFormat, file_exts);
                             break;
 
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
-                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec_light));
+                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec_light, null));
                             Utility.stopRecording(recorder);
                             rec_button.setEnabled(false);
                             rec_button.setVisibility(INVISIBLE);

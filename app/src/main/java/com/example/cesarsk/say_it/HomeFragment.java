@@ -15,11 +15,13 @@ import android.app.FragmentManager;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
+import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 
 
 /*
@@ -36,6 +38,9 @@ public class HomeFragment extends SlidingFragment {
 
         final View view = inflater.inflate(R.layout.fragment_home,
                 container, false);
+
+        TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
+        wordOfTheDayTextView.setText(wordOfTheDay);
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
 

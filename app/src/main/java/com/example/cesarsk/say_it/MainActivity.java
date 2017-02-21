@@ -24,11 +24,14 @@ import com.roughike.bottombar.OnTabSelectListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
+    static String wordOfTheDay = new String();
 
     @Override
     protected void onStop() {
@@ -79,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
         //Caricamento preferenze
         Utility.loadFavs(this);
         Utility.loadHist(this);
+
+        //Caricamento dizionario (inclusa word of the day)
+        Utility.loadDictionary(this);
 
         //Gestione Fragment
         final FragmentManager fragmentManager = getFragmentManager();
@@ -150,9 +157,6 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
-
-        //Caricamento dizionario
-        Utility.loadDictionary(this);
 
         //IMPOSTAZIONE TEXT TO SPEECH
         tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {

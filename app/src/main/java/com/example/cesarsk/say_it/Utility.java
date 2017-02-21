@@ -25,9 +25,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.TreeSet;
 
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -40,6 +46,7 @@ import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
+import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 import static com.example.cesarsk.say_it.PlayActivity.RequestPermissionCode;
 import static com.example.cesarsk.say_it.PlayActivity.selected_word;
 
@@ -183,6 +190,25 @@ public class Utility {
         }
 
         Collections.sort(WordList);
+
+        //Word of the day
+        Long timestamp = System.currentTimeMillis();
+        Log.i("RANDOM SEED:", getDate(timestamp));
+        String seed = getDate(timestamp);
+        Long longSeed = Long.parseLong(seed);
+        wordOfTheDay =  WordList.get(new Random(longSeed).nextInt(WordList.size()));
+    }
+
+    private static String getDate(long timeStamp){
+
+        try{
+            DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Date netDate = (new Date(timeStamp));
+            return sdf.format(netDate);
+        }
+        catch(Exception ex){
+            return "xx";
+        }
     }
 
     public static void deleteRecordings()
