@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
     public static final ArrayList<String> WordList = new ArrayList<>();
     static String wordOfTheDay = new String();
 
+    //Bottom Bar variable
+    BottomBar bottomBar;
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -73,6 +76,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bundle b = getIntent().getExtras();
+        int value = 0; // or other values
+        if(b != null)
+        {
+            value = b.getInt("fragment_index");
+            bottomBar.selectTabAtPosition(value);
+        }
+        else bottomBar.selectTabAtPosition(0);
     }
 
     @Override
@@ -100,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
         transaction.commit();
 
-        final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX); //Default: Home
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
 

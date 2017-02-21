@@ -109,6 +109,12 @@ public class PlayActivity extends AppCompatActivity {
         your_recordings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final Intent main_activity_intent = new Intent(v.getContext(), MainActivity.class);
+                Bundle b = new Bundle();
+                b.putInt("fragment_index", 3); //Your id
+                main_activity_intent.putExtras(b); //Put your id to your next Intent
+                v.getContext().startActivity(main_activity_intent);
+                finish(); //distruggiamo il play activity relativo alla parola
             }
         });
 

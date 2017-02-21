@@ -149,6 +149,7 @@ public class Utility {
                 new_hist.add(element);
             }
         }
+        //TODO INFINITI ELEMENTI NELLA HISTORY? NON VA BENE!!!
         new_hist.add(word);
         savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
     }
@@ -218,6 +219,7 @@ public class Utility {
         Collections.sort(WordList);
 
         //Word of the day
+        //TODO BUGFIXING WORD OF THE DAY
         Long timestamp = System.currentTimeMillis();
         Log.i("RANDOM SEED:", getDate(timestamp));
         String seed = getDate(timestamp);
