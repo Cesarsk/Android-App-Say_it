@@ -13,6 +13,7 @@
         android:layout_alignParentStart="true"
         app:iconifiedByDefault="false"
         app:queryHint="@string/search_hint"
+        app:searchHintIcon="@drawable/ic_favorite"
         android:layout_alignParentEnd="true" />
 
     <com.roughike.bottombar.BottomBar

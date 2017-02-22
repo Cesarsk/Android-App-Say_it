@@ -16,7 +16,8 @@
         android:theme="@style/AppThemeNoActionBar">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".TopSearchActivity" />

@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
@@ -79,16 +80,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Bundle b = getIntent().getExtras();
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle b = intent.getExtras();
         int value = 0; // or other values
         if(b != null)
         {
             value = b.getInt("fragment_index");
             bottomBar.selectTabAtPosition(value);
         }
-        else bottomBar.selectTabAtPosition(0);
+        else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
     }
 
     @Override

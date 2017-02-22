@@ -120,6 +120,7 @@ public class PlayActivity extends AppCompatActivity {
                 Bundle b = new Bundle();
                 b.putInt("fragment_index", 3); //Your id
                 main_activity_intent.putExtras(b); //Put your id to your next Intent
+                main_activity_intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 v.getContext().startActivity(main_activity_intent);
                 finish(); //distruggiamo il play activity relativo alla parola
             }
@@ -248,6 +249,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     //TODO QUESTO OVERRIDE SI PUO SPOSTARE IN UTILITY? X CLAFFOLO
+    //Si può fare, è da spostare l'implementazione in un metodo e poi questa funzione chiama quel metodo.
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
