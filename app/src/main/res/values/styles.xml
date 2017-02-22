@@ -29,7 +29,7 @@
 
     <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name ="voiceIcon">@drawable/ic_flag</item>
-        <item name="searchHintIcon">@drawable/ic_favorite</item>
+        <item name="searchIcon">@drawable/ic_search</item>
         <item name="queryBackground">@color/DarkYellow</item>
         <item name="android:background">@color/MainYellow</item>
         <item name="android:paddingBottom">20dp</item>
