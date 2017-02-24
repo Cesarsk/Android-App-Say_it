@@ -12,8 +12,10 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -89,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentArrayList.add(new HistoryFragment());
         FragmentArrayList.add(new RecordingsFragment());
 
+        for(Fragment element: FragmentArrayList){
+            element.setExitTransition(new Fade());
+        }
+
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
         transaction.commit();
@@ -105,13 +111,14 @@ public class MainActivity extends AppCompatActivity {
                 //Creating the Fragment transaction
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-
                 switch (tabId) {
                     case R.id.tab_favorites:
                         if (FAVORITES_FRAGMENT_INDEX > last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (FAVORITES_FRAGMENT_INDEX < last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX));
                         last_index = FAVORITES_FRAGMENT_INDEX;
@@ -119,9 +126,11 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_home:
                         if (HOME_FRAGMENT_INDEX > last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HOME_FRAGMENT_INDEX < last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
                         last_index = HOME_FRAGMENT_INDEX;
@@ -129,9 +138,11 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_history:
                         if (HISTORY_FRAGMENT_INDEX > last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HISTORY_FRAGMENT_INDEX < last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX));
                         last_index = HISTORY_FRAGMENT_INDEX;
@@ -139,9 +150,11 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_recordings:
                         if (RECORDINGS_FRAGMENT_INDEX > last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
-                            transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX));
                         last_index = RECORDINGS_FRAGMENT_INDEX;
