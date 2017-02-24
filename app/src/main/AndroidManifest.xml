@@ -18,10 +18,6 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask">
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value=".TopSearchActivity" />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,6 +48,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBarDarkStatus" >
         </activity>
+
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".TopSearchActivity" />
+
     </application>
 
 </manifest>

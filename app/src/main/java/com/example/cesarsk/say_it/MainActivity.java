@@ -204,10 +204,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        //TODO FINIRE!
         //CONFIGURAZIONE SEARCHBAR
         SearchView search_bar = (SearchView) findViewById(R.id.top_search_bar);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        search_bar.setIconified(false);
 
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
