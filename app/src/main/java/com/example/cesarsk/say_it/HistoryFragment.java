@@ -21,6 +21,7 @@ import java.util.Collections;
  */
 public class HistoryFragment extends SlidingFragment {
 
+
     public HistoryFragment() {
     }
 

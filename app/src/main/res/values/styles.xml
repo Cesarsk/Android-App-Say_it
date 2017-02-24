@@ -12,7 +12,6 @@
     </style>
 
     <style name="AppThemeNoActionBarDarkStatus" parent="AppThemeNoActionBar">
-        <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@color/MainBlue</item>
     </style>
 

@@ -1,5 +1,7 @@
 package com.example.cesarsk.say_it;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -61,7 +63,7 @@ public class ResultsListCustomAdapter extends BaseAdapter {
                     final Intent play_activity_intent = new Intent(context, PlayActivity.class);
                     play_activity_intent.putExtra(PlayActivity.PLAY_WORD, word.getText());
                     Utility.addHist(context, word.getText().toString());
-                    context.startActivity(play_activity_intent);
+                    context.startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity)context).toBundle());
                 }
             });
 
