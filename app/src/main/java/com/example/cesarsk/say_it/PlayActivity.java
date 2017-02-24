@@ -1,6 +1,9 @@
 package com.example.cesarsk.say_it;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.formats.NativeAd;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +31,8 @@ import java.io.IOException;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
@@ -45,7 +51,12 @@ public class PlayActivity extends AppCompatActivity {
     int N = 10;
     private CharSequence[] history;
     int testa = 0;
-    private String selected_word;
+    public static String selected_word;
+    private boolean slow_mode = false;
+    private boolean accent_flag = false;
+    private boolean favorite_flag = false;
+
+
 
 
     @Override
@@ -53,27 +64,48 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        final ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
+        final ImageButton play_button = (ImageButton)findViewById(R.id.play_button);
+        final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
+        final ImageButton delete_button = (ImageButton)findViewById(R.id.delete_button);
+        final ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
+        final ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
+        final ImageButton accent_button = (ImageButton)findViewById(R.id.accent_button);
+        final ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
+        final ImageButton your_recordings = (ImageButton)findViewById(R.id.recordings_button);
+        final ImageButton remove_ad = (ImageButton)findViewById(R.id.remove_ads_button);
         selected_word = getIntent().getStringExtra(PLAY_WORD);
 
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();
         history = new CharSequence[N];
-        //word = new String(getArguments().getCharSequence("word").toString());
 
-        final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
         selected_word_view.setText(selected_word);
 
-        /*
-        //TODO Controllare e NO DUPLICATI (AGGIUNGERE SOLO SE NON C'E')
-        for(int i = 0; i < N; i++)
+        if(Utility.checkFile(selected_word))
         {
-            if(selected_word_charseq == history[i]) break;
-            else
-            {
-                history[testa] = selected_word_charseq;
-                testa = (testa+1)%N;
+            rec_button.setEnabled(false);
+            rec_button.setVisibility(INVISIBLE);
+            play_button.setEnabled(true);
+            play_button.setVisibility(VISIBLE);
+            delete_button.setEnabled(true);
+            delete_button.setVisibility(VISIBLE);
+        } else
+        {
+            play_button.setEnabled(false);
+            play_button.setVisibility(INVISIBLE);
+            rec_button.setEnabled(true);
+            rec_button.setVisibility(VISIBLE);
+            delete_button.setEnabled(false);
+            delete_button.setVisibility(INVISIBLE);
+        }
+
+        remove_ad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
-        }*/
+        });
 
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
@@ -81,7 +113,98 @@ public class PlayActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
+        your_recordings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent main_activity_intent = new Intent(v.getContext(), MainActivity.class);
+                Bundle b = new Bundle();
+                b.putInt("fragment_index", 3); //Your id
+                main_activity_intent.putExtras(b); //Put your id to your next Intent
+                main_activity_intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                v.getContext().startActivity(main_activity_intent);
+                finish(); //distruggiamo il play activity relativo alla parola
+            }
+        });
+
+        play_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.playRecording(mediaPlayer);
+            }
+        });
+
+        delete_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.deleteRecording(v.getContext(), selected_word);
+                //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
+                Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
+                play_button.setEnabled(false);
+                rec_button.setEnabled(true);
+                play_button.setVisibility(INVISIBLE);
+                rec_button.setVisibility(VISIBLE);
+                delete_button.setEnabled(false);
+                delete_button.setVisibility(INVISIBLE);
+            }
+        });
+
+        favorite_flag = Utility.checkFavs(this, selected_word);
+        if(favorite_flag) favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+
+        favorite_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!favorite_flag) {
+                    Utility.addFavs(v.getContext(), selected_word);
+                    favorite_flag= !favorite_flag;
+                    Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
+                    favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+                }
+                else {
+                    favorite_button.setColorFilter(getResources().getColor(R.color.white));
+                    Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
+                    Utility.removeFavs(v.getContext(), selected_word);
+                    favorite_flag = !favorite_flag;
+                }
+            }
+        });
+
+        slow_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!slow_mode) {
+                    tts.setSpeechRate((float)0.40);
+                    slow_mode = !slow_mode;
+                    Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
+                    slow_button.setColorFilter(getResources().getColor(R.color.MainYellow));
+                }
+                else {
+                    tts.setSpeechRate((float)0.90);
+                    Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
+                    slow_button.setColorFilter(getResources().getColor(R.color.white));
+                    slow_mode = !slow_mode;
+                }
+            }
+        });
+
+        accent_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!accent_flag) {
+                    tts.setVoice(voice_british_female);
+                    accent_button.setColorFilter(getResources().getColor(R.color.MainYellow));
+                    Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
+                    accent_flag = !accent_flag;
+                }
+                else {
+                    tts.setVoice(voice_american_female);
+                    accent_button.setColorFilter(getResources().getColor(R.color.white));
+                    Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
+                    accent_flag = !accent_flag;
+                }
+            }
+        });
+
         play_original_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,157 +212,44 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton play_rec_button = (ImageButton)findViewById(R.id.play_rec);
-        play_rec_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playRecording();
-            }
-        });
-
-        ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
         rec_button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
 
-                if (checkPermission())
+                if (Utility.checkPermission(view.getContext()))
                 {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
-                            startRecording();
+                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec, null));
+                            Utility.startRecording(recorder, output_formats, currentFormat, file_exts);
                             break;
 
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
-                            stopRecording();
+                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec_light, null));
+                            Utility.stopRecording(recorder);
+                            rec_button.setEnabled(false);
+                            rec_button.setVisibility(INVISIBLE);
+                            play_button.setEnabled(true);
+                            play_button.setVisibility(VISIBLE);
+                            delete_button.setVisibility(VISIBLE);
+                            delete_button.setEnabled(true);
                             break;
                     }
                 }
 
                 else
                 {
-                    requestPermission();
+                    Utility.requestPermission(view.getContext());
                 }
                 return false;
             }
         });
-
-
-        final Switch switch_slow = (Switch)findViewById(R.id.switch_slow);
-        switch_slow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //TODO SISTEMARE, AMERICAN SLOW MODE SHOULD BE SLOWER THAN BRITISH'S ONE
-                if(isChecked) tts.setSpeechRate((float)0.40);
-                else if(!isChecked) tts.setSpeechRate((float)0.90);
-            }
-        });
-
-        final Switch switch_accent = (Switch)findViewById(R.id.switch_accent);
-        switch_accent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) tts.setVoice(voice_british_female);
-                else if(!isChecked) tts.setVoice(voice_american_female);
-            }
-        });
     }
 
-
-
-
-
-    //FUNZIONI DI REGISTRAZIONE
-    private String getFilename() {
-        String filepath = Environment.getExternalStorageDirectory().getPath();
-        File file = new File(filepath, AUDIO_RECORDER_FOLDER);
-
-        if (!file.exists()) {
-            file.mkdirs();
-            File nomedia = new File(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/.nomedia");
-            try { nomedia.createNewFile(); } catch (IOException e) {Log.i("LOG:",".nomedia not created");}
-        }
-
-        return (file.getAbsolutePath() + "/" + selected_word + file_exts[currentFormat]);
-    }
-
-    private void startRecording() {
-        //TODO SE IL FILE GIA' ESISTE, CANCELLALO E REGISTRA NUOVAMENTE
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(output_formats[currentFormat]);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
-        recorder.setAudioEncodingBitRate(16);
-        recorder.setAudioSamplingRate(44100);
-        recorder.setOutputFile(getFilename());
-        recorder.setOnErrorListener(errorListener);
-        recorder.setOnInfoListener(infoListener);
-
-        try {
-            recorder.prepare();
-            recorder.start();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
-        @Override
-        public void onError(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!","Error: " + what + ", " + extra);
-        }
-    };
-
-    private MediaRecorder.OnInfoListener infoListener = new MediaRecorder.OnInfoListener() {
-        @Override
-        public void onInfo(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!","Warning: " + what + ", " + extra);
-        }
-    };
-
-    private void stopRecording() {
-        if (null != recorder) {
-            recorder.stop();
-            recorder.reset();
-            recorder.release();
-
-            recorder = null;
-        }
-    }
-
-    private void playRecording() {
-        try {
-            //TODO CHECK IF RECORDING ALREADY EXISTS. IF DOES NOT, DO NOT PLAY.
-            Log.i("Say it!","Playing recording: "+Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
-            mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-
-    //FUNZIONI PER RICHIESTA PERMESSI
-    public boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(this,
-                WRITE_EXTERNAL_STORAGE);
-        int result1 = ContextCompat.checkSelfPermission(this,
-                RECORD_AUDIO);
-        return result == PackageManager.PERMISSION_GRANTED &&
-                result1 == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new
-                String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO}, RequestPermissionCode);
-    }
-
+    //TODO QUESTO OVERRIDE SI PUO SPOSTARE IN UTILITY? X CLAFFOLO
+    //Si può fare, è da spostare l'implementazione in un metodo e poi questa funzione chiama quel metodo.
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {

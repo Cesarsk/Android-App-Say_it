@@ -9,7 +9,8 @@
         android:id="@+id/Result_TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
+        android:textSize="30sp"
+        android:textColor="#FFFFFF"
         android:textAlignment="center"
         android:layout_weight="1" />
 
@@ -17,12 +18,14 @@
         android:id="@+id/quick_play_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
         android:background="@drawable/ic_play_arrow" />
 
     <ImageButton
         android:id="@+id/add_to_favs_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
         android:background="@drawable/ic_favorite_border" />
 
 </LinearLayout>

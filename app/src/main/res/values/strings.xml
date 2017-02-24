@@ -1,10 +1,9 @@
 <resources>
     <string name="say_it_button">SAY IT!</string>
-    <string name="search_box_hint">Search your word…</string>
     <string name="not_found_error">Word not found!</string>
     <string name="empty_field_error">You have to write something!</string>
     <string name="app_name">Say It!</string>
-    <string name="search_hint">Let me Say it! for you</string>
+    <string name="search_hint">Say It!</string>
     <string name="banner_id">ca-app-pub-9284620118215899</string>
 
     <string-array name="default_voice">

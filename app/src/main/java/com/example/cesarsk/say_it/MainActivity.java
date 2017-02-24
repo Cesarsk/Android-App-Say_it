@@ -5,6 +5,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -26,11 +28,14 @@ import com.roughike.bottombar.OnTabSelectListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -60,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
+    static String wordOfTheDay = new String();
+
+    //Bottom Bar variable
+    BottomBar bottomBar;
 
     @Override
     protected void onStop() {
@@ -74,6 +83,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle b = intent.getExtras();
+        int value = 0; // or other values
+        if(b != null)
+        {
+            value = b.getInt("fragment_index");
+            bottomBar.selectTabAtPosition(value);
+        }
+        else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -81,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
         //Caricamento preferenze
         Utility.loadFavs(this);
         Utility.loadHist(this);
+
+        //Caricamento dizionario (inclusa word of the day)
+        Utility.loadDictionary(this);
 
         //Gestione Fragment
         final FragmentManager fragmentManager = getFragmentManager();
@@ -99,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
         transaction.commit();
 
-        final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX); //Default: Home
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
 
@@ -164,20 +189,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        BufferedReader line_reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.wordlist)));
-        String line;
-
-        try {
-            while ((line = line_reader.readLine()) != null) {
-                WordList.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Collections.sort(WordList);
-
-
         //IMPOSTAZIONE TEXT TO SPEECH
         tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
@@ -198,15 +209,12 @@ public class MainActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
-
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
         mAdView.bringToFront();
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
-
     }
 
     private void setupSlideExitTransition() {

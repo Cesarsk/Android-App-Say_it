@@ -5,66 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:id="@+id/selected_word"
-        android:text="Word"
-        android:textSize="80sp"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/switch_slow"
-        tools:text="Slow Mode"
-        android:layout_alignBottom="@+id/play_original"
-        android:layout_toEndOf="@+id/play_rec"
-        android:textOn="Slow On"
-        android:textOff="Slow Off" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/switch_accent"
-        tools:text="Accent"
-        android:layout_alignBottom="@+id/play_original"
-        android:layout_toStartOf="@+id/play_rec"
-        android:checked="false"
-        android:textOn="British"
-        android:textOff="English"
-        android:splitTrack="false" />
-
-    <TextView
-        android:text="Original"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        android:layout_above="@+id/switch_slow"
-        android:layout_alignStart="@+id/play_original"
-        android:layout_marginBottom="30dp" />
-
-    <TextView
-        android:text="PLAY REC"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView5"
-        android:layout_marginTop="22dp"
-        android:layout_alignTop="@+id/play_rec"
-        android:layout_alignStart="@+id/switch_accent" />
-
-    <TextView
-        android:text="REC"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4"
-        android:layout_marginTop="11dp"
-        android:layout_below="@+id/play_rec"
-        android:layout_alignEnd="@+id/textView5" />
 
     <com.google.android.gms.ads.AdView
         android:layout_width="match_parent"
@@ -76,36 +16,145 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"/>
 
-<!-- TODO FIX BANNER SIZE HERE AND IN MAIN ACTIVITY-->
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_play_arrow"
-        android:id="@+id/play_original"
-        android:layout_marginTop="57dp"
-        android:layout_below="@+id/selected_word"
-        android:layout_centerHorizontal="true" />
+    <RelativeLayout
+        android:id="@+id/display_play"
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:background="@color/MainYellow" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/selected_word"
+            android:text="Word"
+            android:textAllCaps="true"
+            android:textSize="45sp"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/LightBlue"
+        android:layout_below="@+id/display_play"
+        android:layout_alignParentStart="true"
+        android:id="@+id/buttons_bar">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/recordings_button"
+                android:src="@drawable/ic_format_list_bulleted"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+
+            />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/accent_button"
+                android:src="@drawable/ic_flag"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+            />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/slow_button"
+                android:src="@drawable/ic_slow_motion_video"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+            />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/favorite_button"
+                android:src="@drawable/ic_favorite"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+            />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/remove_ads_button"
+                android:src="@drawable/ic_local_grocery_store"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/delete_button"
+                android:src="@drawable/ic_trash_full"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:layout_marginRight="20dp"
+                android:layout_gravity="center"
+                />
+
+    </LinearLayout>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal"
-        android:layout_marginBottom="44dp"
-        android:id="@+id/play_rec"
-        android:background="@drawable/common_google_signin_btn_icon_dark_normal"
-        android:layout_above="@+id/rec_button"
-        android:layout_centerHorizontal="true" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_keyboard_voice"
         android:id="@+id/rec_button"
-        android:layout_marginBottom="23dp"
+        android:background="@drawable/ic_rec_light"
+        android:scaleX="2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="200dp"
         android:layout_above="@+id/adView"
-        android:layout_alignStart="@+id/play_original" />
+        android:scaleY="2"
+        />
 
-    !--android:background="@drawable/common_google_signin_btn_icon_dark" -->
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/play_button"
+        android:background="@drawable/ic_rec_green"
+        android:scaleX="2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="200dp"
+        android:layout_above="@+id/adView"
+        android:scaleY="2"
+        />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:id="@+id/play_original"
+        android:background="@drawable/ic_play_original"
+
+        android:layout_above="@+id/adView"
+        android:layout_toEndOf="@+id/rec_button"
+        android:layout_marginBottom="150dp" />
+
 </RelativeLayout>
 
 

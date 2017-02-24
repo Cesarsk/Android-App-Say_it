@@ -6,32 +6,28 @@
         id="@+id/tab_home"
         icon="@drawable/ic_home"
         title="Home"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/RudolphsNose"
+        activeColor="@color/MainYellow"
         barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_favorites"
         icon="@drawable/ic_favorite"
         title="Favorites"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/RudolphsNose"
+        activeColor="@color/MainYellow"
         barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_history"
         icon="@drawable/ic_history"
         title="History"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/RudolphsNose"
+        activeColor="@color/MainYellow"
         barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_recordings"
         icon="@drawable/ic_voicemail"
         title="Recordings"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/RudolphsNose"
+        activeColor="@color/MainYellow"
         barColorWhenSelected="@color/BottomBarColor"/>
 
 </tabs>
