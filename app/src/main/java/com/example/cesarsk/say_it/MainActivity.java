@@ -14,10 +14,15 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -99,6 +104,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //SETUP TOOLBAR
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
+
+        //TODO Aprire l'activity dei risultati al momento del click
+        EditText editText = (EditText) findViewById(R.id.search_bar_edit_text);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Toast.makeText(v.getContext(), "Cercato: " + v.getText(), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
 
         //Caricamento preferenze
         Utility.loadFavs(this);
@@ -189,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //TODO Risolvere eccezione SERVICE CONNECTION!
         //IMPOSTAZIONE TEXT TO SPEECH
         tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
@@ -203,7 +224,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("error", "Initilization Failed!");
             }
         });
-
 
         //TODO FINIRE!
         //CONFIGURAZIONE SEARCHBAR
