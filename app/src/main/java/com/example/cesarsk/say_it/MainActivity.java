@@ -20,6 +20,7 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
     //Bottom Bar variable
     BottomBar bottomBar;
 
+    final FragmentManager fragmentManager = getFragmentManager();
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -112,13 +115,13 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO Aprire l'activity dei risultati al momento del click
         EditText editText = (EditText) findViewById(R.id.search_bar_edit_text);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        editText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Toast.makeText(v.getContext(), "Cercato: " + v.getText(), Toast.LENGTH_SHORT).show();
-                return false;
+            public void onClick(View v) {
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, new SearchResultsFragment()).commit();
             }
         });
+
 
         //Caricamento preferenze
         Utility.loadFavs(this);
@@ -128,8 +131,6 @@ public class MainActivity extends AppCompatActivity {
         Utility.loadDictionary(this);
 
         //Gestione Fragment
-        final FragmentManager fragmentManager = getFragmentManager();
-
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
         FragmentArrayList.add(new HomeFragment());
         FragmentArrayList.add(new FavoritesFragment());
@@ -207,7 +208,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 transaction.commit();
             }
+
         });
+
+
 
         //TODO Risolvere eccezione SERVICE CONNECTION!
         //IMPOSTAZIONE TEXT TO SPEECH

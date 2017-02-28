@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,22 +17,22 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.tts;
 
 /**
  * Created by Claffo on 08/02/2017.
  */
 
-public class ResultsListCustomAdapter extends BaseAdapter {
+public class ResultsListCustomAdapter extends BaseAdapter implements Filterable {
 
     private Context context;
     private ArrayList<String> results;
-    private static ArrayList<CharSequence> favorites;
+    SearchResultsFilter resultsFilter;
 
     public ResultsListCustomAdapter(Context context, ArrayList<String> results){
         this.context = context;
         this.results = results;
-        favorites = new ArrayList<>();
     }
 
     @Override
@@ -87,10 +89,50 @@ public class ResultsListCustomAdapter extends BaseAdapter {
                 }
             });
 
-
-
         }
 
         return convertView;
     }
+
+    @Override
+    public Filter getFilter() {
+
+        if(resultsFilter == null){
+            resultsFilter = new SearchResultsFilter();
+        }
+
+        return resultsFilter;
+    }
+
+    private class SearchResultsFilter extends Filter{
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            FilterResults filterResults = new FilterResults();
+
+            ArrayList<String> found = new ArrayList<>();
+
+            if(constraint != null){
+                for(String word:WordList){
+                    if(word.contains(constraint.toString().toLowerCase())){
+                        found.add(word);
+                    }
+                }
+            }
+
+            filterResults.values = found;
+            filterResults.count = found.size();
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+            results.clear();
+            results.addAll((ArrayList<String>) filterResults.values);
+            notifyDataSetChanged();
+        }
+    }
+
 }
