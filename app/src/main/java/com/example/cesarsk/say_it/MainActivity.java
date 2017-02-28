@@ -4,9 +4,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -20,8 +22,12 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +49,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
+import static android.R.attr.data;
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
+    private final int REQ_CODE_SPEECH_INPUT = 100;
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
@@ -75,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
 
     //Bottom Bar variable
     BottomBar bottomBar;
+
+    //EditText Searchbar variable
+    EditText editText;
+
+    ImageButton voice_search_button;
+
 
     final FragmentManager fragmentManager = getFragmentManager();
 
@@ -114,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         //TODO Aprire l'activity dei risultati al momento del click
-        EditText editText = (EditText) findViewById(R.id.search_bar_edit_text);
+        voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);
+        editText = (EditText) findViewById(R.id.search_bar_edit_text);
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
-
         //TODO Risolvere eccezione SERVICE CONNECTION!
         //IMPOSTAZIONE TEXT TO SPEECH
         tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
@@ -226,6 +239,15 @@ public class MainActivity extends AppCompatActivity {
                     tts.setVoice(voice_american_female);
                 } else
                     Log.e("error", "Initilization Failed!");
+            }
+        });
+
+
+        //Voice Search Listener
+        voice_search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promptSpeechInput();
             }
         });
 
@@ -249,4 +271,46 @@ public class MainActivity extends AppCompatActivity {
         slide.setDuration(1000);
         getWindow().setExitTransition(slide);
     }
+
+    /**
+     * Showing google speech input dialog
+     * */
+    private void promptSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                getString(R.string.speech_prompt));
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.speech_not_supported),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Receiving speech input
+     * */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQ_CODE_SPEECH_INPUT: {
+                if (resultCode == RESULT_OK && null != data) {
+
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    editText.setText(result.get(0));
+                    //TODO AVVIARE ATTIVITA' CON TESTO RESULT.GET(0)
+                }
+                break;
+            }
+
+        }
+    }
+
 }

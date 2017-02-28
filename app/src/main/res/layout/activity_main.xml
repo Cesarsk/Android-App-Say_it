@@ -16,35 +16,41 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <LinearLayout
+            android:id="@+id/search_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingEnd="16dp">
 
             <ImageView
                 android:id="@+id/search_bar_hint_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_search"/>
 
             <EditText
                 android:id="@+id/search_bar_edit_text"
                 android:layout_width="0dp"
-                android:layout_height="24dp"
                 android:hint="@string/search_hint"
                 android:textColorHint="@color/LightYellow"
                 android:backgroundTint="@color/DarkYellow"
                 android:background="@color/DarkYellow"
                 android:inputType="textCapWords"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_height="30dp" />
 
             <ImageButton
                 android:id="@+id/search_bar_voice_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="@drawable/ic_mic" />
 
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_logo"
+            ></ImageView>
 
     </android.support.v7.widget.Toolbar>
 

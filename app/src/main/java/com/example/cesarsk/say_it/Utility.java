@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
+import android.speech.RecognizerIntent;
 import android.speech.tts.Voice;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -370,4 +371,5 @@ public class Utility {
         //TODO migrare la ricerca della parola dalla TopSearchActivity
         Toast.makeText(context, "CERCATO!", Toast.LENGTH_SHORT).show();
     }
+
 }
