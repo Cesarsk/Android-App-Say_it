@@ -31,8 +31,8 @@ public class SearchResultsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_results, container, false);
 
-        ListView result_list = (ListView) view.findViewById(R.id.result_list_view);
-        final ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(view.getContext(), new ArrayList<String>());
+        final ListView result_list = (ListView) view.findViewById(R.id.result_list_view);
+        final ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(view.getContext());
         result_list.setAdapter(adapter);
 
         EditText search_bar_edit_text = (EditText) getActivity().findViewById(R.id.search_bar_edit_text);
@@ -44,12 +44,11 @@ public class SearchResultsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.getFilter().filter(s);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                adapter.getFilter().filter(s);
             }
         });
 

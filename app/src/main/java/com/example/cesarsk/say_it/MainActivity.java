@@ -137,6 +137,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, new SearchResultsFragment()).commit();
+                }
+            }
+        });
+
 
         //Caricamento preferenze
         Utility.loadFavs(this);

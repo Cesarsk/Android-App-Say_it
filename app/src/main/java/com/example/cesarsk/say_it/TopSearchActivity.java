@@ -71,7 +71,7 @@ public class TopSearchActivity extends AppCompatActivity {
                     }
                     Collections.sort(found);
 
-                    ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this, found);
+                    ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this);
                     result_listView.setAdapter(adapter);
                     result_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
