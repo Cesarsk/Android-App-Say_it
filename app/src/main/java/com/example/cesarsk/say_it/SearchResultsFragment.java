@@ -44,11 +44,11 @@ public class SearchResultsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(s);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                adapter.getFilter().filter(s);
             }
         });
 
