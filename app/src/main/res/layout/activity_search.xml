@@ -6,20 +6,19 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
+        android:id="@+id/toolbar_search"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:background="?attr/colorPrimary"
         android:layout_alignParentStart="true"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:focusable="false"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="2dp"
-            android:paddingEnd="16dp">
+            android:paddingEnd="16dp"
+            >
 
             <ImageView
                 android:id="@+id/search_bar_hint_icon"
@@ -47,43 +46,4 @@
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
-
-    <ImageView
-        android:id="@+id/imageview_logo"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_below="@id/my_toolbar"
-        android:src="@drawable/ic_logo"
-        android:background="@color/MainYellow"
-        />
-
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        app:bb_tabXmlResource="@xml/bottombar_tabs"
-        android:layout_height="60dp"
-        app:bb_inActiveTabColor="@color/inActiveTabColor"
-        app:bb_inActiveTabAlpha="0.8"
-        app:bb_activeTabAlpha="1" />
-
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_above="@id/bottomBar"
-        android:layout_alignParentTop="false"
-        android:layout_below="@id/imageview_logo"
-        android:layout_alignParentStart="true"
-        android:layout_height="match_parent">
-    </FrameLayout>
-
-    <com.google.android.gms.ads.AdView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/adView"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        android:layout_above="@+id/bottomBar"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
 </RelativeLayout>

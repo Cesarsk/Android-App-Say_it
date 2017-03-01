@@ -120,9 +120,8 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
             FilterResults filterResults = new FilterResults();
 
             ArrayList<String> found = new ArrayList<>();
-            ArrayList<String> wordlist_copy = MainActivity.WordList;
             if (constraint != null) {
-                for (String word : wordlist_copy) {
+                for (String word : MainActivity.WordList) {
                     if (word.startsWith(constraint.toString().toLowerCase())) {
                         found.add(word);
                     }
@@ -149,7 +148,6 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
             }
 
         }
-
     }
 
     static class SearchResultViewHolder {

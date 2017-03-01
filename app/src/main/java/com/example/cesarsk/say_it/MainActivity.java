@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     //EditText Searchbar variable
     EditText editText;
-
+    ImageView lens_search_button;
     ImageButton voice_search_button;
 
 
@@ -127,25 +128,26 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
 
-        //TODO Aprire l'activity dei risultati al momento del click
+        //TODO SISTEMARE LISTENER
         voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);
+
         editText = (EditText) findViewById(R.id.search_bar_edit_text);
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, new SearchResultsFragment()).commit();
+                Intent search_activity_intent = new Intent(v.getContext(), SearchActivity.class);
+                startActivity(search_activity_intent);
             }
         });
 
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        lens_search_button = (ImageView) findViewById(R.id.search_bar_hint_icon);
+        lens_search_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, new SearchResultsFragment()).commit();
-                }
+            public void onClick(View v) {
+                Intent search_activity_intent = new Intent(v.getContext(), SearchActivity.class);
+                startActivity(search_activity_intent);
             }
         });
-
 
         //Caricamento preferenze
         Utility.loadFavs(this);
