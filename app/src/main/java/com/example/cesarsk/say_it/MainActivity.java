@@ -149,6 +149,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
+        voice_search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent search_activity_intent = new Intent(view.getContext(), SearchActivity.class);
+                search_activity_intent.putExtra("VOICE_SEARCH_SELECTED", true);
+                startActivity(search_activity_intent);
+            }
+        });
+
         //Caricamento preferenze
         Utility.loadFavs(this);
         Utility.loadHist(this);
@@ -255,12 +265,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Voice Search Listener
-        voice_search_button.setOnClickListener(new View.OnClickListener() {
+       /* voice_search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 promptSpeechInput();
             }
-        });
+        });*/
 
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");

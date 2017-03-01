@@ -46,4 +46,10 @@
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar_search"
+        android:id="@+id/result_list_view" />
 </RelativeLayout>

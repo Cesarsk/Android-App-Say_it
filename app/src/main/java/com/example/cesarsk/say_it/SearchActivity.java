@@ -6,9 +6,12 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,7 +33,31 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        final ListView result_list = (ListView) findViewById(R.id.result_list_view);
+        final ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this);
+        result_list.setAdapter(adapter);
+
         editText = (EditText) findViewById(R.id.search_bar_edit_text);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        //Check Voiche Search
+        if(getIntent().getBooleanExtra("VOICE_SEARCH_SELECTED", false)){
+            promptSpeechInput();
+        }
 
         //Voice Search Listener
         ImageButton voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);
