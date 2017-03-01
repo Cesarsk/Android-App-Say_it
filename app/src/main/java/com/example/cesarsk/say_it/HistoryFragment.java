@@ -19,7 +19,7 @@ import java.util.Collections;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HistoryFragment extends SlidingFragment {
+public class HistoryFragment extends Fragment {
 
 
     public HistoryFragment() {

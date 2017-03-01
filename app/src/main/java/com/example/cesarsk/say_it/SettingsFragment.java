@@ -29,7 +29,7 @@ import static com.example.cesarsk.say_it.Utility.shareToMail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends SlidingFragment {
+public class SettingsFragment extends Fragment {
 
     private String emails[] = {"luca.cesarano1@gmail.com"};
     public SettingsFragment() {

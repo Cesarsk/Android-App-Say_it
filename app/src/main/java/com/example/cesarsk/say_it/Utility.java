@@ -367,9 +367,4 @@ public class Utility {
         }
     };
 
-    public static void SearchWord(Context context){
-        //TODO migrare la ricerca della parola dalla TopSearchActivity
-        Toast.makeText(context, "CERCATO!", Toast.LENGTH_SHORT).show();
-    }
-
 }

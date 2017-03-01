@@ -27,7 +27,7 @@ import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 /*
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends SlidingFragment {
+public class HomeFragment extends Fragment {
 
     public HomeFragment() {
     }
