@@ -118,12 +118,14 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         protected FilterResults performFiltering(CharSequence constraint) {
 
             FilterResults filterResults = new FilterResults();
-
             ArrayList<String> found = new ArrayList<>();
+
             if (constraint != null) {
-                for (String word : MainActivity.WordList) {
-                    if (word.startsWith(constraint.toString().toLowerCase())) {
-                        found.add(word);
+                if (!(constraint.toString().isEmpty())) {
+                    for (String word : MainActivity.WordList) {
+                        if (word.startsWith(constraint.toString().toLowerCase())) {
+                            found.add(word);
+                        }
                     }
                 }
             }
@@ -137,12 +139,10 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults filterResults) {
             if (filterResults.count > 0) {
-                Log.println(Log.INFO, "Results", "FOUND");
                 results.clear();
                 results.addAll((ArrayList<String>) filterResults.values);
                 notifyDataSetChanged();
             } else {
-                Log.println(Log.INFO, "Results", "-");
                 results.clear();
                 notifyDataSetInvalidated();
             }
@@ -150,7 +150,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         }
     }
 
-    static class SearchResultViewHolder {
+    private static class SearchResultViewHolder {
         TextView wordTextView;
         ImageButton quickPlayImgButton;
         ImageButton addToFavsImgButton;
