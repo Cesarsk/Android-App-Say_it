@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
 
-        ImageButton settings_button = (ImageButton)view.findViewById(R.id.settings_button);
+        /*ImageButton settings_button = (ImageButton)view.findViewById(R.id.settings_button);
         settings_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
                 final Intent intent = new Intent(getActivity(), SettingsActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         return view;
     }

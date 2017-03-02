@@ -13,7 +13,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeNoActionBar">
+        android:theme="@style/BlueYellowThemeNoActionBar">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
@@ -29,11 +29,11 @@
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppThemeActionBar" />
+            android:theme="@style/BlueYellowThemeActionBar" />
         <activity
             android:name=".PlayActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBarDarkStatus" />
+            android:theme="@style/BlueYellowThemeNoActionBar" />
 
         <activity android:name=".SearchActivity"
             android:screenOrientation="portrait"
