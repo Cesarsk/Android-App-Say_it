@@ -33,6 +33,7 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         final ListView result_list = (ListView) findViewById(R.id.result_list_view);
         final ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this);
         result_list.setAdapter(adapter);

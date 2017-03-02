@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_search"
@@ -24,16 +24,19 @@
                 android:id="@+id/search_bar_hint_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/ic_search"/>
+                android:src="@drawable/ic_search_blue_yellow"
+                android:background="@color/primary_dark"
+                />
 
             <EditText
                 android:id="@+id/search_bar_edit_text"
                 android:layout_width="0dp"
                 android:hint="@string/search_hint"
-                android:textColorHint="@color/LightYellow"
-                android:backgroundTint="@color/DarkYellow"
-                android:background="@color/DarkYellow"
+                android:textColorHint="@color/primary_light"
+                android:backgroundTint="@color/primary_dark"
+                android:background="@color/primary_dark"
                 android:inputType="textCapWords"
+                android:textColor="@color/primary_light"
                 android:layout_weight="1"
                 android:layout_height="32dp" />
 
@@ -41,7 +44,8 @@
                 android:id="@+id/search_bar_voice_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/ic_mic" />
+                android:src="@drawable/ic_mic_blue_yellow"
+                android:background="@color/primary_dark"/>
 
         </LinearLayout>
 
@@ -51,5 +55,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar_search"
-        android:id="@+id/result_list_view" />
+        android:id="@+id/result_list_view"
+        android:divider="@color/divider"
+        android:dividerHeight="1.5px"
+        />
 </RelativeLayout>

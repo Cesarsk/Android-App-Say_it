@@ -7,6 +7,8 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/favorites_list" />
+        android:id="@+id/favorites_list"
+        android:divider="@color/divider"
+        android:dividerHeight="1.5px"/>
 
 </RelativeLayout>

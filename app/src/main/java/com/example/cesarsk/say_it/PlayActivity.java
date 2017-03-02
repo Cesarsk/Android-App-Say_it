@@ -176,7 +176,7 @@ public class PlayActivity extends AppCompatActivity {
                     tts.setSpeechRate((float)0.40);
                     slow_mode = !slow_mode;
                     Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(getResources().getColor(R.color.MainYellow));
+                    slow_button.setColorFilter(getResources().getColor(R.color.Yellow500));
                 }
                 else {
                     tts.setSpeechRate((float)0.90);
@@ -192,7 +192,7 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!accent_flag) {
                     tts.setVoice(voice_british_female);
-                    accent_button.setColorFilter(getResources().getColor(R.color.MainYellow));
+                    accent_button.setColorFilter(getResources().getColor(R.color.Yellow500));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 }
