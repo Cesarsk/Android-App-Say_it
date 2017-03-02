@@ -146,7 +146,6 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
                 results.clear();
                 notifyDataSetInvalidated();
             }
-
         }
     }
 

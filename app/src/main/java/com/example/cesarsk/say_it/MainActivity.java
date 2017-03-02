@@ -25,6 +25,8 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView lens_search_button;
     ImageButton voice_search_button;
 
+    //Thread animazione fade-out-in words
 
     final FragmentManager fragmentManager = getFragmentManager();
 
@@ -128,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
         //SETUP TOOLBAR
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
 
         //TODO SISTEMARE LISTENER
         voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);
@@ -281,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
     }
-    
+
     boolean doubleBackToExitPressedOnce = false;
 
     @Override

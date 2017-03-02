@@ -205,6 +205,12 @@ public class Utility {
         } else return false;
     }
 
+    public static String getRandomWord(Activity activity)
+    {
+        String random_word =  WordList.get(new Random().nextInt(WordList.size()));
+        return random_word;
+    }
+
     public static void loadDictionary(Activity activity) {
         //loading wordslist from file.
         BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.wordlist)));
