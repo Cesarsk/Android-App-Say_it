@@ -11,107 +11,120 @@
     android:layout_centerHorizontal="true"
     android:id="@+id/WOTD_word"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:text="First"
         android:layout_centerInParent="true"
-        android:textAlignment="center"
-        android:id="@+id/first_wotd"/>
+        android:id="@+id/first_row_linear_layout">
 
-       <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="Second"
-           android:textSize="15sp"
-           android:layout_alignParentEnd="true"
-           android:textAlignment="center"
-           android:paddingEnd="80dp"
-           android:layout_alignBaseline="@id/first_wotd"
-           android:id="@+id/second_wotd"
-    />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="First"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:id="@+id/first_wotd"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Second"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:id="@+id/second_wotd"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Third"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:id="@+id/third_wotd"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Third"
-        android:textSize="15sp"
-        android:layout_alignParentStart="true"
-        android:textAlignment="center"
-        android:layout_alignBaseline="@id/first_wotd"
-        android:paddingStart="80dp"
-        android:id="@+id/third_wotd"
-        />
+        android:layout_centerInParent="true"
+        android:layout_below="@id/first_row_linear_layout"
+        android:id="@+id/second_row_linear_layout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fourth"
-        android:textSize="15sp"
-        android:layout_below="@id/first_wotd"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="5dp"
-        android:id="@+id/fourth_wotd"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fourth"
+            android:textSize="15sp"
+            android:paddingTop="5dp"
+            android:textAlignment="center"
+            android:id="@+id/fourth_wotd"
+            android:layout_weight="1"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fifth"
-        android:textSize="15sp"
-        android:layout_alignParentEnd="true"
-        android:textAlignment="center"
-        android:paddingEnd="80dp"
-        android:layout_alignBaseline="@id/fourth_wotd"
-        android:id="@+id/fifth_wotd"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fifth"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:id="@+id/fifth_wotd"
+            android:layout_weight="1"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sixth"
-        android:textSize="15sp"
-        android:layout_alignBaseline="@id/fourth_wotd"
-        android:layout_alignParentStart="true"
-        android:textAlignment="center"
-        android:paddingStart="80dp"
-        android:id="@+id/sixth_wotd"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sixth"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:id="@+id/sixth_wotd"
+            android:layout_weight="1"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Seventh"
-        android:textSize="15sp"
-        android:layout_below="@id/fourth_wotd"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="5dp"
-        android:id="@+id/seventh_wotd"
-        />
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Eighth"
-        android:textSize="15sp"
-        android:layout_alignBaseline="@id/seventh_wotd"
-        android:layout_alignParentStart="true"
-        android:textAlignment="center"
-        android:paddingStart="80dp"
-        android:id="@+id/eighth_wotd"
-        />
+        android:layout_centerInParent="true"
+        android:layout_below="@id/second_row_linear_layout"
+        android:id="@+id/third_row_linear_layout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ninth"
-        android:textSize="15sp"
-        android:layout_alignParentEnd="true"
-        android:textAlignment="center"
-        android:paddingEnd="80dp"
-        android:layout_alignBaseline="@id/seventh_wotd"
-        android:id="@+id/ninth_wotd"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seventh"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:paddingTop="5dp"
+            android:id="@+id/seventh_wotd"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eighth"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:id="@+id/eighth_wotd"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ninth"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:id="@+id/ninth_wotd"
+            />
+
+        </LinearLayout>
 
 </RelativeLayout>
