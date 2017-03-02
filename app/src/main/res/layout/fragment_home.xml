@@ -18,16 +18,16 @@
         android:id="@+id/first_row_linear_layout">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:text="First"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:layout_weight="1"
-            android:id="@+id/first_wotd"/>
+            android:id="@+id/first_wotd" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Second"
             android:textSize="15sp"
@@ -36,11 +36,11 @@
             android:id="@+id/second_wotd"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Third"
             android:textSize="15sp"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:id="@+id/third_wotd"
             android:layout_weight="1"
             />
@@ -55,18 +55,18 @@
         android:id="@+id/second_row_linear_layout">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Fourth"
             android:textSize="15sp"
             android:paddingTop="5dp"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:id="@+id/fourth_wotd"
             android:layout_weight="1"
             />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Fifth"
             android:textSize="15sp"
@@ -76,11 +76,11 @@
             />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Sixth"
             android:textSize="15sp"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:id="@+id/sixth_wotd"
             android:layout_weight="1"
             />
@@ -95,18 +95,18 @@
         android:id="@+id/third_row_linear_layout">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Seventh"
             android:textSize="15sp"
             android:layout_weight="1"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:paddingTop="5dp"
             android:id="@+id/seventh_wotd"
             />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Eighth"
             android:textSize="15sp"
@@ -116,11 +116,11 @@
             />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Ninth"
             android:textSize="15sp"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:layout_weight="1"
             android:id="@+id/ninth_wotd"
             />

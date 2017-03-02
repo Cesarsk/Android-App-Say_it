@@ -3,6 +3,7 @@ package com.example.cesarsk.say_it;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -80,56 +81,65 @@ public class HomeFragment extends Fragment {
         final TextView ninth_wotd = (TextView)view.findViewById(R.id.ninth_wotd);
 
         first_wotd.setText(Utility.getRandomWord(getActivity()));
+        first_wotd.setPaintFlags(first_wotd.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         second_wotd.setText(Utility.getRandomWord(getActivity()));
+        second_wotd.setPaintFlags(second_wotd.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         third_wotd.setText(Utility.getRandomWord(getActivity()));
+        third_wotd.setPaintFlags(third_wotd.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         fourth_wotd.setText(Utility.getRandomWord(getActivity()));
+        fourth_wotd.setPaintFlags(fourth_wotd.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         fifth_wotd.setText(Utility.getRandomWord(getActivity()));
+        fifth_wotd.setPaintFlags(fifth_wotd.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         sixth_wotd.setText(Utility.getRandomWord(getActivity()));
+        sixth_wotd.setPaintFlags(sixth_wotd.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         seventh_wotd.setText(Utility.getRandomWord(getActivity()));
+        seventh_wotd.setPaintFlags(seventh_wotd.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         eighth_wotd.setText(Utility.getRandomWord(getActivity()));
+        eighth_wotd.setPaintFlags(eighth_wotd.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         ninth_wotd.setText(Utility.getRandomWord(getActivity()));
+        ninth_wotd.setPaintFlags(ninth_wotd.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(2000 + (int)(Math.random() * 4000));
         anim.setRepeatCount(5);
         anim.setRepeatMode(Animation.REVERSE);
 
-        AlphaAnimation anim2 = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation anim2 = new AlphaAnimation(0.0f, 1.0f);
         anim2.setDuration(5000 + (int)(Math.random() * 8000));
         anim2.setRepeatCount(Animation.INFINITE);
         anim2.setRepeatMode(Animation.REVERSE);
 
-        AlphaAnimation anim3 = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation anim3 = new AlphaAnimation(0.0f, 1.0f);
         anim3.setDuration(5000 + (int)(Math.random() * 8000));
         anim3.setRepeatCount(Animation.INFINITE);
         anim3.setRepeatMode(Animation.REVERSE);
 
-        AlphaAnimation anim4 = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation anim4 = new AlphaAnimation(0.0f, 1.0f);
         anim4.setDuration(5000 + (int)(Math.random() * 8000));
         anim4.setRepeatCount(Animation.INFINITE);
         anim4.setRepeatMode(Animation.REVERSE);
 
-        AlphaAnimation anim5 = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation anim5 = new AlphaAnimation(0.0f, 1.0f);
         anim5.setDuration(5000 + (int)(Math.random() * 8000));
         anim5.setRepeatCount(Animation.INFINITE);
         anim5.setRepeatMode(Animation.REVERSE);
 
-        AlphaAnimation anim6 = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation anim6 = new AlphaAnimation(0.0f, 1.0f);
         anim6.setDuration(5000 + (int)(Math.random() * 8000));
         anim6.setRepeatCount(Animation.INFINITE);
         anim6.setRepeatMode(Animation.REVERSE);
 
-        AlphaAnimation anim7 = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation anim7 = new AlphaAnimation(0.0f, 1.0f);
         anim7.setDuration(5000 + (int)(Math.random() * 8000));
         anim7.setRepeatCount(Animation.INFINITE);
         anim7.setRepeatMode(Animation.REVERSE);
 
-        AlphaAnimation anim8 = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation anim8 = new AlphaAnimation(0.0f, 1.0f);
         anim8.setDuration(5000 + (int)(Math.random() * 8000));
         anim8.setRepeatCount(Animation.INFINITE);
         anim8.setRepeatMode(Animation.REVERSE);
 
-        AlphaAnimation anim9 = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation anim9 = new AlphaAnimation(0.0f, 1.0f);
         anim9.setDuration(5000 + (int)(Math.random() * 8000));
         anim9.setRepeatCount(Animation.INFINITE);
         anim9.setRepeatMode(Animation.REVERSE);
@@ -144,6 +154,8 @@ public class HomeFragment extends Fragment {
         eighth_wotd.startAnimation(anim8);
         ninth_wotd.startAnimation(anim9);
 
+        //TODO RIBILANCIARE LE SCRITTE DELLE ANIMAZIONI, SONO TROPPO PRECISINE DIOCRISTO
+
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -156,7 +168,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if(!anim_direction1) first_wotd.setText(Utility.getRandomWord(getActivity()));
+                if(anim_direction1) first_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction1=!anim_direction1;
             }
         });
@@ -173,7 +185,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if(!anim_direction2) second_wotd.setText(Utility.getRandomWord(getActivity()));
+                if(anim_direction2) second_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction2 = !anim_direction2;
             }
         });
@@ -190,7 +202,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if(!anim_direction3) third_wotd.setText(Utility.getRandomWord(getActivity()));
+                if(anim_direction3) third_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction3 = !anim_direction3;
             }
         });
@@ -207,7 +219,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if(!anim_direction4) fourth_wotd.setText(Utility.getRandomWord(getActivity()));
+                if(anim_direction4) fourth_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction4 = !anim_direction4;
             }
         });
@@ -224,7 +236,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if(!anim_direction5) fifth_wotd.setText(Utility.getRandomWord(getActivity()));
+                if(anim_direction5) fifth_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction5 = !anim_direction5;
             }
         });
@@ -241,7 +253,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if(!anim_direction6) sixth_wotd.setText(Utility.getRandomWord(getActivity()));
+                if(anim_direction6) sixth_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction6 = !anim_direction6;
             }
         });
@@ -258,7 +270,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if(!anim_direction7) seventh_wotd.setText(Utility.getRandomWord(getActivity()));
+                if(anim_direction7) seventh_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction7 = !anim_direction7;
             }
         });
@@ -275,7 +287,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if(!anim_direction8) eighth_wotd.setText(Utility.getRandomWord(getActivity()));
+                if(anim_direction8) eighth_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction8 = !anim_direction8;
             }
         });
@@ -292,7 +304,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                if(!anim_direction9) ninth_wotd.setText(Utility.getRandomWord(getActivity()));
+                if(anim_direction9) ninth_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction9 = !anim_direction9;
             }
         });
