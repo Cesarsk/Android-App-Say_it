@@ -21,7 +21,7 @@ import static com.example.cesarsk.say_it.MainActivity.FAVORITES;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavoritesFragment extends SlidingFragment {
+public class FavoritesFragment extends Fragment {
 
 
     public FavoritesFragment() {

@@ -22,7 +22,7 @@ import static com.example.cesarsk.say_it.Utility.loadRecordings;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecordingsFragment extends SlidingFragment {
+public class RecordingsFragment extends Fragment {
 
     public RecordingsFragment() {
     }

@@ -27,14 +27,13 @@
     </style>
 
     <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
-        <item name ="voiceIcon">@drawable/ic_flag</item>
-        <item name="searchIcon">@drawable/ic_search</item>
-        <item name="searchHintIcon">@drawable/ic_favorite</item>
+        <item name ="voiceIcon">@android:drawable/ic_btn_speak_now</item>
+        <item name="searchHintIcon">@android:drawable/ic_menu_search</item>
         <item name="queryBackground">@color/DarkYellow</item>
         <item name="android:background">@color/MainYellow</item>
         <item name="android:paddingBottom">20dp</item>
         <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingStart">-15dp</item>
+        <item name="android:paddingStart">60dp</item>
         <item name="android:paddingEnd">15dp</item>
         <item name="android:inputType">textCapWords</item>
     </style>

@@ -4,9 +4,12 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -14,10 +17,21 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -37,6 +51,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
+import static android.R.attr.data;
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
@@ -62,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
+    private final int REQ_CODE_SPEECH_INPUT = 100;
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
@@ -69,6 +85,14 @@ public class MainActivity extends AppCompatActivity {
 
     //Bottom Bar variable
     BottomBar bottomBar;
+
+    //EditText Searchbar variable
+    EditText editText;
+    ImageView lens_search_button;
+    ImageButton voice_search_button;
+
+
+    final FragmentManager fragmentManager = getFragmentManager();
 
     @Override
     protected void onStop() {
@@ -80,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        tts.shutdown();
     }
 
     @Override
@@ -100,6 +125,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //SETUP TOOLBAR
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
+
+        //TODO SISTEMARE LISTENER
+        voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);
+
+        editText = (EditText) findViewById(R.id.search_bar_edit_text);
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent search_activity_intent = new Intent(v.getContext(), SearchActivity.class);
+                startActivity(search_activity_intent);
+            }
+        });
+
+        lens_search_button = (ImageView) findViewById(R.id.search_bar_hint_icon);
+        lens_search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent search_activity_intent = new Intent(v.getContext(), SearchActivity.class);
+                startActivity(search_activity_intent);
+            }
+        });
+
+        voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
+        voice_search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent search_activity_intent = new Intent(view.getContext(), SearchActivity.class);
+                search_activity_intent.putExtra("VOICE_SEARCH_SELECTED", true);
+                startActivity(search_activity_intent);
+            }
+        });
+
         //Caricamento preferenze
         Utility.loadFavs(this);
         Utility.loadHist(this);
@@ -108,8 +169,6 @@ public class MainActivity extends AppCompatActivity {
         Utility.loadDictionary(this);
 
         //Gestione Fragment
-        final FragmentManager fragmentManager = getFragmentManager();
-
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
         FragmentArrayList.add(new HomeFragment());
         FragmentArrayList.add(new FavoritesFragment());
@@ -187,8 +246,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 transaction.commit();
             }
+
         });
 
+        //TODO Risolvere eccezione SERVICE CONNECTION!
         //IMPOSTAZIONE TEXT TO SPEECH
         tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
@@ -205,12 +266,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //TODO FINIRE!
-        //CONFIGURAZIONE SEARCHBAR
-        SearchView search_bar = (SearchView) findViewById(R.id.top_search_bar);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        search_bar.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        search_bar.setIconified(false);
+        //Voice Search Listener
+       /* voice_search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promptSpeechInput();
+            }
+        });*/
 
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
@@ -219,10 +281,25 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
     }
+    
+    boolean doubleBackToExitPressedOnce = false;
 
-    private void setupSlideExitTransition() {
-        Slide slide = new Slide();
-        slide.setDuration(1000);
-        getWindow().setExitTransition(slide);
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }

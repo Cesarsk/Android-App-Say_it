@@ -16,8 +16,8 @@
         android:theme="@style/AppThemeNoActionBar">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,34 +25,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TopSearchActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
-        <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeActionBar" />
-
         <activity
             android:name=".PlayActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBarDarkStatus" >
+            android:theme="@style/AppThemeNoActionBarDarkStatus" />
+
+        <activity android:name=".SearchActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity">
         </activity>
-
-        <meta-data
-            android:name="android.app.default_searchable"
-            android:value=".TopSearchActivity" />
-
     </application>
 
 </manifest>
