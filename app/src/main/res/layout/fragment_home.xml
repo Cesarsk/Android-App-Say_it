@@ -224,13 +224,23 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="38dp"
-        android:layout_marginEnd="38dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/ic_settings"
-        android:backgroundTint="@color/MainYellow"
-        android:scaleX="2"
-        android:scaleY="2">
-
+        android:backgroundTint="@color/primary_dark"
+        android:scaleX="1.5"
+        android:scaleY="1.5">
     </ImageButton>
 
+   <!-- <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/primary_dark"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="8dp"
+        android:scaleX="1.1"
+        android:scaleY="1.1">
 
+    </android.support.design.widget.FloatingActionButton> -->
 </RelativeLayout>
