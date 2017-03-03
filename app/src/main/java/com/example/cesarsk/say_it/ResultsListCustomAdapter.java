@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
-import static com.example.cesarsk.say_it.MainActivity.WordList;
-import static com.example.cesarsk.say_it.MainActivity.tts;
+import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 
 /**
  * Created by Claffo on 08/02/2017.
@@ -86,7 +84,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
             @Override
             public void onClick(View v) {
                 //Cliccando su Play Button nella search result tab riproduce play.
-                tts.speak(viewHolder.wordTextView.getText(), QUEUE_ADD, null, null);
+                american_speaker_google.speak(viewHolder.wordTextView.getText(), QUEUE_ADD, null, null);
             }
         });
 

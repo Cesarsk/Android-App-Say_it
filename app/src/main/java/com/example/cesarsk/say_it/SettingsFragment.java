@@ -1,15 +1,8 @@
 package com.example.cesarsk.say_it;
 
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import java.util.List;
-
-import static com.example.cesarsk.say_it.MainActivity.tts;
+import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
 import static com.example.cesarsk.say_it.Utility.rateUs;
@@ -73,8 +64,8 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //TODO GESTIRE DEFAULT VOICE ALL'AVVIO
-                if (default_voice.getSelectedItem().toString().compareTo("British English") == 0) tts.setVoice(voice_british_female);
-                else if(default_voice.getSelectedItem().toString().compareTo("American English") == 0) tts.setVoice(voice_american_female);
+                if (default_voice.getSelectedItem().toString().compareTo("British English") == 0) american_speaker_google.setVoice(voice_british_female);
+                else if(default_voice.getSelectedItem().toString().compareTo("American English") == 0) american_speaker_google.setVoice(voice_american_female);
 
             }
 

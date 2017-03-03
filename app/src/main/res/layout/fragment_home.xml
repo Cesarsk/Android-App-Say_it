@@ -4,12 +4,15 @@
     android:layout_height="match_parent"
     tools:context="com.example.cesarsk.say_it.HomeFragment">
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="WOTD"
-    android:layout_centerHorizontal="true"
-    android:id="@+id/WOTD_word"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WOTD"
+        android:id="@+id/WOTD_word"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -126,5 +129,21 @@
             />
 
         </LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_settings"
+        android:backgroundTint="@color/MainYellow"
+        android:id="@+id/imageButton"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="38dp"
+        android:scaleY="2"
+        android:scaleX="2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true">
+
+    </ImageButton>
+
 
 </RelativeLayout>

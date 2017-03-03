@@ -1,41 +1,27 @@
 package com.example.cesarsk.say_it;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.formats.NativeAd;
 
-import java.io.File;
-import java.io.IOException;
-
-import static android.Manifest.permission.RECORD_AUDIO;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
-import static com.example.cesarsk.say_it.MainActivity.tts;
-import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
-import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
+import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
+import static com.example.cesarsk.say_it.MainActivity.british_speaker_google;
 
 public class PlayActivity extends AppCompatActivity {
 
@@ -173,13 +159,15 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!slow_mode) {
-                    tts.setSpeechRate((float)0.40);
+                    american_speaker_google.setSpeechRate((float)0.40);
+                    british_speaker_google.setSpeechRate((float)0.40);
                     slow_mode = !slow_mode;
                     Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
                     slow_button.setColorFilter(getResources().getColor(R.color.Yellow500));
                 }
                 else {
-                    tts.setSpeechRate((float)0.90);
+                    american_speaker_google.setSpeechRate((float)0.90);
+                    british_speaker_google.setSpeechRate((float)0.90);
                     Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
                     slow_button.setColorFilter(getResources().getColor(R.color.white));
                     slow_mode = !slow_mode;
@@ -191,13 +179,13 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!accent_flag) {
-                    tts.setVoice(voice_british_female);
+                   // american_speaker_google.setVoice(voice_british_female);
                     accent_button.setColorFilter(getResources().getColor(R.color.Yellow500));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 }
                 else {
-                    tts.setVoice(voice_american_female);
+                   // american_speaker_google.setVoice(voice_american_female);
                     accent_button.setColorFilter(getResources().getColor(R.color.white));
                     Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
@@ -208,7 +196,8 @@ public class PlayActivity extends AppCompatActivity {
         play_original_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tts.speak(selected_word, QUEUE_ADD, null, null);
+                if(!accent_flag) american_speaker_google.speak(selected_word, QUEUE_ADD, null, null);
+                else british_speaker_google.speak(selected_word, QUEUE_ADD, null, null);
             }
         });
 

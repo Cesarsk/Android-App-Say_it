@@ -3,36 +3,23 @@ package com.example.cesarsk.say_it;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.SearchManager;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
-import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -41,19 +28,11 @@ import com.google.android.gms.ads.MobileAds;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 
-import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TimeZone;
 
-import static android.R.attr.data;
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
@@ -67,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private final int RECORDINGS_FRAGMENT_INDEX = 3;
 
     //Definizione variabile TTS
-    static TextToSpeech tts;
+    static TextToSpeech american_speaker_google;
+    static TextToSpeech british_speaker_google;
     static Voice voice_american_female = new Voice("American", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
     static Voice voice_british_female = new Voice("British", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
@@ -107,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        tts.shutdown();
+        american_speaker_google.shutdown();
+        british_speaker_google.shutdown();
     }
 
     @Override
@@ -251,17 +232,31 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        //TODO Risolvere eccezione SERVICE CONNECTION!
         //IMPOSTAZIONE TEXT TO SPEECH
-        tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
+        american_speaker_google = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 // TODO OTTIMIZZARE TTS
                 if (status == TextToSpeech.SUCCESS) {
                     //Ridondante?
-                    tts.setPitch((float) 0.90);
-                    tts.setSpeechRate((float) 0.90);
-                    tts.setVoice(voice_american_female);
+                    american_speaker_google.setPitch((float) 0.90);
+                    american_speaker_google.setSpeechRate((float) 0.90);
+                    american_speaker_google.setVoice(voice_american_female);
+                } else
+                    Log.e("error", "Initilization Failed!");
+            }
+        });
+
+        //TODO SE INSERITA COME DEFAULT LA LINGUA, NEL QUICK PLAY DEV'ESSERE RIPRODOTTA QUELLA, RISOLVERE!
+        british_speaker_google = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                // TODO OTTIMIZZARE TTS
+                if (status == TextToSpeech.SUCCESS) {
+                    //Ridondante?
+                    british_speaker_google.setPitch((float) 0.90);
+                    british_speaker_google.setSpeechRate((float) 0.90);
+                    british_speaker_google.setVoice(voice_british_female);
                 } else
                     Log.e("error", "Initilization Failed!");
             }

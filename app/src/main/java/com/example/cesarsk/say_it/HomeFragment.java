@@ -1,10 +1,7 @@
 package com.example.cesarsk.say_it;
 
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Paint;
-import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,20 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.Button;
-import android.widget.EditText;
 import android.app.FragmentManager;
-import android.widget.ImageButton;
-import android.widget.ListAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.Random;
-
-import static android.speech.tts.TextToSpeech.QUEUE_ADD;
-import static com.example.cesarsk.say_it.MainActivity.tts;
-import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
-import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 
 

@@ -10,31 +10,22 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
-import android.speech.RecognizerIntent;
 import android.speech.tts.Voice;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.TreeSet;
 
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -44,9 +35,7 @@ import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.HISTORY_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.WordList;
-import static com.example.cesarsk.say_it.MainActivity.tts;
-import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
-import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
+import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 import static com.example.cesarsk.say_it.PlayActivity.RequestPermissionCode;
 import static com.example.cesarsk.say_it.PlayActivity.selected_word;
@@ -171,10 +160,10 @@ public class Utility {
     public static void pronunciateWord(CharSequence word, float pitch, float speechRate, Voice accent)
     {
         //manual pronunciation of a word, never used.
-        tts.setPitch(pitch);
-        tts.setSpeechRate(speechRate);
-        tts.setVoice(accent);
-        tts.speak(word, QUEUE_ADD, null, null);
+        american_speaker_google.setPitch(pitch);
+        american_speaker_google.setSpeechRate(speechRate);
+        american_speaker_google.setVoice(accent);
+        american_speaker_google.speak(word, QUEUE_ADD, null, null);
     }
 
     public static ArrayList<String> loadRecordings()
