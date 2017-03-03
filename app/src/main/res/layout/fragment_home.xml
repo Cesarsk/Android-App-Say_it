@@ -4,144 +4,231 @@
     android:layout_height="match_parent"
     tools:context="com.example.cesarsk.say_it.HomeFragment">
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="WOTD"
-        android:id="@+id/WOTD_word"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp" />
-
     <LinearLayout
+        android:id="@+id/Welcome_Layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/first_row_linear_layout">
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp">
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/welcome_text_view"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="First"
-            android:textAlignment="textEnd"
-            android:layout_weight="1"
-            android:id="@+id/first_wotd" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Second"
-            android:textSize="15sp"
-            android:textAlignment="center"
-            android:layout_weight="1"
-            android:id="@+id/second_wotd"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Third"
-            android:textSize="15sp"
-            android:textAlignment="textStart"
-            android:id="@+id/third_wotd"
-            android:layout_weight="1"
-            />
+            android:text="Welcome, "
+            android:textSize="17sp" />
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/WOTD_Layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/first_row_linear_layout"
-        android:id="@+id/second_row_linear_layout">
+        android:layout_height="170dp"
+        android:layout_below="@id/Welcome_Layout"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:elevation="8dp">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fourth"
-            android:textSize="15sp"
-            android:paddingTop="5dp"
-            android:textAlignment="textEnd"
-            android:id="@+id/fourth_wotd"
-            android:layout_weight="1"
-            />
+            android:padding="16dp"
+            android:text="@string/WOTD_Subtext" />
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/WOTD_word"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fifth"
-            android:textSize="15sp"
-            android:textAlignment="center"
-            android:id="@+id/fifth_wotd"
-            android:layout_weight="1"
-            />
+            android:layout_centerInParent="true"
+            android:text="WOTD"
+            android:textSize="40sp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Sixth"
-            android:textSize="15sp"
-            android:textAlignment="textStart"
-            android:id="@+id/sixth_wotd"
-            android:layout_weight="1"
-            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:padding="8dp">
 
-    </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/second_row_linear_layout"
-        android:id="@+id/third_row_linear_layout">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/ic_favorite"
+                android:backgroundTint="@color/secondary_text" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Seventh"
-            android:textSize="15sp"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
-            android:paddingTop="5dp"
-            android:id="@+id/seventh_wotd"
-            />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/ic_play_circle"
+                android:backgroundTint="@color/secondary_text"
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Eighth"
-            android:textSize="15sp"
-            android:textAlignment="center"
-            android:layout_weight="1"
-            android:id="@+id/eighth_wotd"
-            />
+                />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Ninth"
-            android:textSize="15sp"
-            android:textAlignment="textStart"
-            android:layout_weight="1"
-            android:id="@+id/ninth_wotd"
-            />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/ic_reply"
+                android:backgroundTint="@color/secondary_text" />
 
         </LinearLayout>
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/Random_Words_Layout"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/WOTD_Layout"
+        android:layout_marginTop="8dp">
+
+        <LinearLayout
+            android:id="@+id/first_row_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/first_wotd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="First"
+                android:textAlignment="textEnd"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/second_wotd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Second"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/third_wotd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Third"
+                android:textAlignment="textStart"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/second_row_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/first_row_linear_layout">
+
+            <TextView
+                android:id="@+id/fourth_wotd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="90dp"
+                android:paddingTop="5dp"
+                android:text="Fourth"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/sixth_wotd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="90dp"
+                android:text="Sixth"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/third_row_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/second_row_linear_layout">
+
+            <TextView
+                android:id="@+id/seventh_wotd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="5dp"
+                android:text="Seventh"
+                android:textAlignment="textEnd"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/eighth_wotd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Eighth"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/ninth_wotd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ninth"
+                android:textAlignment="textStart"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/Recent_Search"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_below="@id/Random_Words_Layout"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:elevation="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Recent_Search_Subtext"
+            android:padding="16dp"/>
+
+
+    </RelativeLayout>
+
     <ImageButton
+        android:id="@+id/imageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="38dp"
+        android:layout_marginEnd="38dp"
         android:background="@drawable/ic_settings"
         android:backgroundTint="@color/MainYellow"
-        android:id="@+id/imageButton"
-        android:layout_marginEnd="38dp"
-        android:layout_marginBottom="38dp"
-        android:scaleY="2"
         android:scaleX="2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true">
+        android:scaleY="2">
 
     </ImageButton>
 

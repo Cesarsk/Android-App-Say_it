@@ -1,4 +1,10 @@
 <resources>
+
+    <!-- Home Fragment Strings -->
+    <string name="WOTD_Subtext">Here\'s your word of the day:</string>
+    <string name="Recent_Search_Subtext">You recently searched:</string>
+
+
     <string name="say_it_button">SAY IT!</string>
     <string name="not_found_error">Word not found!</string>
     <string name="empty_field_error">You have to write something!</string>
