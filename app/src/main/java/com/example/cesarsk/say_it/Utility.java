@@ -223,6 +223,13 @@ public class Utility {
         wordOfTheDay =  WordList.get(new Random(longSeed).nextInt(WordList.size()));
     }
 
+    public static void loadDictionaryWithIPA(Activity activity)
+    {
+        //TODO HO AGGIUNTO I DUE FILE, BASTA CARICARE IN UN HASHMAP O ARRAYLIST. MODIFICARE TUTE LE VIEW
+        //TODO PERCHE' GLI IPA NON VENGONO MOSTRATI CORRETTAMENTE? CONTROLLARE UNICODE16 SENZA BESTEMMIARE IDDIO
+        //TODO PAROLE DAL NUOVO DIZIONARIO NON VEONGONO TROVATE NELLA LISTVIEW E COME WOTD, AIUTO.
+    }
+
     private static String getDate(long timeStamp){
 
         try{
