@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment {
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
         wordOfTheDayTextView.setText(wordOfTheDay);
 
+
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
 
         /*ImageButton settings_button = (ImageButton)view.findViewById(R.id.settings_button);
