@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -202,11 +203,16 @@ public class Utility {
 
     public static void loadDictionary(Activity activity) {
         //loading wordslist from file.
-        BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.wordlist)));
+
+        //Tentativo di caricamento IPA
+        //BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipa), Charset.forName("UTF-16LE")));
+
+        BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionaryutf8)));
+
         String line;
         try {
             while ((line = line_reader.readLine()) != null) {
-                WordList.add(line);
+                WordList.add(line.toLowerCase());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -215,7 +221,7 @@ public class Utility {
         Collections.sort(WordList);
 
         //Word of the day
-        //TODO BUGFIXING WORD OF THE DAY
+        //TODO BUGFIXING WORD OF THE DAY CON LA NUOVA ARRAYLIST
         Long timestamp = System.currentTimeMillis();
         Log.i("RANDOM SEED:", getDate(timestamp));
         String seed = getDate(timestamp);
