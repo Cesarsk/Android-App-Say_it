@@ -207,12 +207,12 @@ public class Utility {
         //Tentativo di caricamento IPA
         BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipautf16le), Charset.forName("UTF-16LE")));
 
-        //BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionaryutf8)));
+        //BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipautf16le)));
 
         String line;
         try {
             while ((line = line_reader.readLine()) != null) {
-                WordList.add(line.toLowerCase());
+                WordList.add(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -221,7 +221,6 @@ public class Utility {
         Collections.sort(WordList);
 
         //Word of the day
-        //TODO BUGFIXING WORD OF THE DAY CON LA NUOVA ARRAYLIST
         Long timestamp = System.currentTimeMillis();
         Log.i("RANDOM SEED:", getDate(timestamp));
         String seed = getDate(timestamp);
@@ -232,7 +231,7 @@ public class Utility {
     public static void loadDictionaryWithIPA(Activity activity)
     {
         //TODO HO AGGIUNTO I DUE FILE, BASTA CARICARE IN UN HASHMAP O ARRAYLIST. MODIFICARE TUTE LE VIEW
-        //TODO PERCHE' GLI IPA NON VENGONO MOSTRATI CORRETTAMENTE? CONTROLLARE UNICODE16 SENZA BESTEMMIARE IDDIO
+        //TODO PERCHE' GLI ipa NON VENGONO MOSTRATI CORRETTAMENTE? CONTROLLARE UNICODE16 SENZA BESTEMMIARE IDDIO
         //TODO PAROLE DAL NUOVO DIZIONARIO NON VEONGONO TROVATE NELLA LISTVIEW E COME WOTD, AIUTO.
     }
 
