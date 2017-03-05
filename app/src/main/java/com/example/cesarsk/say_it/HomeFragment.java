@@ -7,6 +7,7 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.Settings;
@@ -52,7 +53,9 @@ public class HomeFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_home,
                 container, false);
 
+        Typeface plain = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
+        wordOfTheDayTextView.setTypeface(plain);
         wordOfTheDayTextView.setText(wordOfTheDay);
 
 

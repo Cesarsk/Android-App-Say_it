@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
+import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -205,14 +206,15 @@ public class Utility {
         //loading wordslist from file.
 
         //Tentativo di caricamento IPA
-        BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionaryutf8)));
+        //TODO SISTEMARE CARICAMENTO CON I SEPARATORI @ PER INIZIO E # PER CAMBIO LETTERA
+        BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionary_new8utf)));
 
-        //BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipautf16le)));
+        //BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipa_new16utfle), Charset.forName("UTF-16LE")));
 
         String line;
         try {
             while ((line = line_reader.readLine()) != null) {
-                WordList.add(line);
+                WordList.add(line.toLowerCase());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -231,8 +233,6 @@ public class Utility {
     public static void loadDictionaryWithIPA(Activity activity)
     {
         //TODO HO AGGIUNTO I DUE FILE, BASTA CARICARE IN UN HASHMAP O ARRAYLIST. MODIFICARE TUTE LE VIEW
-        //TODO PERCHE' GLI ipa NON VENGONO MOSTRATI CORRETTAMENTE? CONTROLLARE UNICODE16 SENZA BESTEMMIARE IDDIO
-        //TODO PAROLE DAL NUOVO DIZIONARIO NON VEONGONO TROVATE NELLA LISTVIEW E COME WOTD, AIUTO.
     }
 
     private static String getDate(long timeStamp){
@@ -373,5 +373,17 @@ public class Utility {
             Log.i("Say it!","Warning: " + what + ", " + extra);
         }
     };
+
+    //IMPOSTAZIONE TEXT TO SPEECH
+    public static Voice searchVoice(String voiceName, TextToSpeech tts)
+    {
+        //Log.i("VOICES:", textToSpeech.getVoices().toString()); //stampa tutte le voci disponibili
+        for (Voice tmpVoice : tts.getVoices()) {
+            if (tmpVoice.getName().equals(voiceName)) {
+                return tmpVoice;
+            }
+        }
+        return null;
+    }
 
 }
