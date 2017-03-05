@@ -1,5 +1,7 @@
 <resources>
 
+    <string name="PLACEHOLDER">Placeholder</string>
+
     <!-- Home Fragment Strings -->
     <string name="WOTD_Subtext">Here\'s your word of the day:</string>
     <string name="Recent_Search_Subtext">You recently searched:</string>

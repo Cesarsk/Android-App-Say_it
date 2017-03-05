@@ -205,7 +205,7 @@ public class Utility {
         //loading wordslist from file.
 
         //Tentativo di caricamento IPA
-        BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipautf16le), Charset.forName("UTF-16LE")));
+        BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionaryutf8)));
 
         //BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipautf16le)));
 

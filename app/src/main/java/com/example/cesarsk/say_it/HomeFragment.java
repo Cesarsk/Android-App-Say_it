@@ -1,17 +1,29 @@
 package com.example.cesarsk.say_it;
 
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
+import android.content.Context;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.app.FragmentManager;
+import android.view.animation.Interpolator;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Random;
+
+import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 
 
@@ -56,7 +68,7 @@ public class HomeFragment extends Fragment {
             }
         });*/
 
-        final TextView first_wotd = (TextView)view.findViewById(R.id.first_wotd);
+        /*final TextView first_wotd = (TextView)view.findViewById(R.id.first_wotd);
         final TextView second_wotd = (TextView)view.findViewById(R.id.second_wotd);
         final TextView third_wotd = (TextView)view.findViewById(R.id.third_wotd);
         final TextView fourth_wotd = (TextView)view.findViewById(R.id.fourth_wotd);
@@ -130,6 +142,8 @@ public class HomeFragment extends Fragment {
         seventh_wotd.startAnimation(anim7);
         eighth_wotd.startAnimation(anim8);
         ninth_wotd.startAnimation(anim9);
+
+
 
         //TODO RIBILANCIARE LE SCRITTE DELLE ANIMAZIONI, SONO TROPPO PRECISINE DIOCRISTO
 
@@ -267,7 +281,7 @@ public class HomeFragment extends Fragment {
                 if(anim_direction9) ninth_wotd.setText(Utility.getRandomWord(getActivity()));
                 anim_direction9 = !anim_direction9;
             }
-        });
+        });*/
 
         return view;
     }
