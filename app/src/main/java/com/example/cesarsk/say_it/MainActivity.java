@@ -39,6 +39,9 @@ import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
 public class MainActivity extends AppCompatActivity {
 
+    //TODO LA PAROLA DEL GIORNO CAMBIA SE L'ATTIVITA' VA IN BACKGROUND.
+    //TODO IL DIZIONARIO VIENE RICARICATO SE L'ATTIVITA' VA IN BACKGROUND.
+
     //Indici per la FragmentList
     private final int HOME_FRAGMENT_INDEX = 0;
     private final int FAVORITES_FRAGMENT_INDEX = 1;
