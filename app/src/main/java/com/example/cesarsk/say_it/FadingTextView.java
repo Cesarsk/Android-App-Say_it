@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
 
 import java.util.Calendar;
@@ -26,7 +27,6 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView{
         super(context);
         animSetUp();
     }
-
 
     public FadingTextView(Context context, AttributeSet attrs) {
         super(context, attrs);

@@ -5,7 +5,10 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -21,6 +24,7 @@ import android.app.FragmentManager;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -41,6 +45,7 @@ public class HomeFragment extends Fragment {
     boolean anim_direction7 = false;
     boolean anim_direction8 = false;
     boolean anim_direction9 = false;
+    int index_random_words = 0;
 
 
     public HomeFragment() {
@@ -57,7 +62,34 @@ public class HomeFragment extends Fragment {
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
         wordOfTheDayTextView.setTypeface(plain);
         wordOfTheDayTextView.setText(wordOfTheDay);
+        wordOfTheDayTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
+                play_activity_intent.putExtra(PlayActivity.PLAY_WORD, MainActivity.wordOfTheDay);
+                v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext()).toBundle());
+            }
+        });
 
+        final ArrayList<TextView> random_words = new ArrayList<>();
+        ArrayList<Integer> random_words_id = new ArrayList<>();
+        random_words_id.add(R.id.first_wotd); random_words_id.add(R.id.second_wotd); random_words_id.add(R.id.third_wotd); random_words_id.add(R.id.fourth_wotd);
+        random_words_id.add(R.id.sixth_wotd); random_words_id.add(R.id.seventh_wotd); random_words_id.add(R.id.eighth_wotd); random_words_id.add(R.id.ninth_wotd);
+
+        //TODO CLAFFOLO HELP A SETTARE I LISTENER SULLE VARIE FADINGTEXTVIEW
+
+        for(index_random_words = 0; index_random_words < random_words_id.size(); index_random_words++)
+        {
+            random_words.add(index_random_words, (TextView)view.findViewById(random_words_id.get(index_random_words)));
+            random_words.get(index_random_words).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
+                    play_activity_intent.putExtra(PlayActivity.PLAY_WORD, random_words.get(index_random_words).getText());
+                    v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext()).toBundle());
+                }
+            });
+        }
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
 
@@ -70,6 +102,7 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });*/
+        //TODO CLAFFOLO CANCELLIAMO QUESTO CODICE??!
 
         /*final TextView first_wotd = (TextView)view.findViewById(R.id.first_wotd);
         final TextView second_wotd = (TextView)view.findViewById(R.id.second_wotd);
