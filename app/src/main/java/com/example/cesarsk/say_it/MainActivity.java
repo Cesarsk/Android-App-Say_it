@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
@@ -128,16 +129,14 @@ public class MainActivity extends AppCompatActivity {
         Utility.loadDictionary(this);
 
         //TODO Daily notification
-        //NotificationReceiver notificationReceiver = new NotificationReceiver();
-        //notificationReceiver.showNotification(this);
+
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 15);
-        calendar.set(Calendar.MINUTE, 07);
-        calendar.set(Calendar.SECOND, 30);
-        Intent daily_notification = new Intent(MainActivity.this, NotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, daily_notification, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        calendar.set(Calendar.HOUR_OF_DAY, 19); calendar.set(Calendar.MINUTE, 21); calendar.set(Calendar.SECOND, 00);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.example.cesarsk.say_it"),0);
+
+        registerReceiver(new NotificationReceiver(), new IntentFilter("com.example.cesarsk.say_it"));
+        AlarmManager am = (AlarmManager) this.getSystemService(MainActivity.ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() , pendingIntent);
 
 
         //SETUP TOOLBAR
