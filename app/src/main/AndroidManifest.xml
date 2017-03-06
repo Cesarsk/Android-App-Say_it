@@ -8,7 +8,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
+    <!-- permission required to use NotificationReceiver -->
     <receiver android:name="com.example.Cesarsk.NotificationReceiver"></receiver>
+
+    <!-- permission required to use Alarm Manager -->
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
 
 
     <application

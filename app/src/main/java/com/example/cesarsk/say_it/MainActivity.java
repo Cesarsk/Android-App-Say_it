@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -34,6 +35,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 import java.util.ArrayList;
 
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Set;
 
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
+    boolean doubleBackToExitPressedOnce = false;
+
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
     static String wordOfTheDay = new String();
@@ -81,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     ImageView lens_search_button;
     ImageButton voice_search_button;
-
-    //Thread animazione fade-out-in words
 
     final FragmentManager fragmentManager = getFragmentManager();
 
@@ -118,12 +120,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Daily notification
-        Intent notificationIntent = new Intent(MainActivity.this, NotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, REQUEST_CODE, notificationIntent, 0);
-        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-        am.setRepeating(am.RTC_WAKEUP, System.currentTimeMillis(), am.INTERVAL_DAY*7, pendingIntent);
-        
+        //Caricamento preferenze
+        Utility.loadFavs(this);
+        Utility.loadHist(this);
+
+        //Caricamento dizionario (inclusa word of the day)
+        Utility.loadDictionary(this);
+
+        //TODO Daily notification
+        //NotificationReceiver notificationReceiver = new NotificationReceiver();
+        //notificationReceiver.showNotification(this);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.MINUTE, 07);
+        calendar.set(Calendar.SECOND, 30);
+        Intent daily_notification = new Intent(MainActivity.this, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, daily_notification, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+
         //SETUP TOOLBAR
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -158,13 +174,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(search_activity_intent);
             }
         });
-
-        //Caricamento preferenze
-        Utility.loadFavs(this);
-        Utility.loadHist(this);
-
-        //Caricamento dizionario (inclusa word of the day)
-        Utility.loadDictionary(this);
 
         //Gestione Fragment
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
@@ -277,15 +286,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        //Voice Search Listener
-       /* voice_search_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                promptSpeechInput();
-            }
-        });*/
-
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -293,8 +293,6 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
     }
-
-    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onBackPressed() {
