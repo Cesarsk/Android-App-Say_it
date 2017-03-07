@@ -136,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager am = (AlarmManager) this.getSystemService(MainActivity.ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
-
         //SETUP TOOLBAR
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);

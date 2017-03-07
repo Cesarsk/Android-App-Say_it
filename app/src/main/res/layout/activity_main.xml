@@ -59,20 +59,6 @@
         app:bb_inActiveTabAlpha="0.8"
         app:bb_activeTabAlpha="1" />
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/ic_settings"
-        app:fabSize="normal"
-        android:id="@+id/floating_button"
-        android:clickable="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_above="@id/bottomBar"
-        />
-
     <com.google.android.gms.ads.AdView
         android:layout_width="match_parent"
         android:layout_height="50dp"

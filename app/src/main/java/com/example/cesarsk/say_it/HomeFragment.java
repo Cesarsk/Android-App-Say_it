@@ -18,6 +18,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -193,6 +194,25 @@ public class HomeFragment extends Fragment {
         wotd_text_view9.setOnClickListener(random_word_listener);
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
+
+        wordOfTheDayTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
+                play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wordOfTheDayTextView.getText());
+                Utility.addHist(v.getContext(), wordOfTheDayTextView.getText().toString());
+                v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+            }
+        });
+
+        FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(getActivity(),SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         /*ImageButton settings_button = (ImageButton)view.findViewById(R.id.settings_button);
         settings_button.setOnClickListener(new View.OnClickListener() {
