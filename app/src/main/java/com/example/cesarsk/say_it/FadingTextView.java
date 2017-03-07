@@ -3,15 +3,10 @@ package com.example.cesarsk.say_it;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.AttributeSet;
 
-import java.util.Calendar;
 import java.util.Random;
-
-import static com.example.cesarsk.say_it.MainActivity.WordList;
 
 /**
  * Created by Claudio on 05/03/2017.
@@ -42,7 +37,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView{
         final FadingTextView current_instance = this;
         rand = new Random();
 
-        current_instance.setText(Utility.getRandomWord((Activity)current_instance.getContext()));
+        current_instance.setText(Utility.getRandomWord());
         fade_animator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f);
         fade_animator.setDuration((long)rand.nextInt((8000 - 5000) + 1) + 5000);
         fade_animator.setRepeatMode(ValueAnimator.REVERSE);
@@ -69,7 +64,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView{
             @Override
             public void onAnimationRepeat(Animator animator) {
                 if(!repeated) {
-                    current_instance.setText(Utility.getRandomWord((Activity)current_instance.getContext()));
+                    current_instance.setText(Utility.getRandomWord());
                 }
                 repeated = !repeated;
             }

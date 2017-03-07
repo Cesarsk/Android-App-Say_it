@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.StringDef;
 import android.support.annotation.WorkerThread;
+import android.support.v4.util.Pair;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,13 +120,19 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         protected FilterResults performFiltering(CharSequence constraint) {
 
             FilterResults filterResults = new FilterResults();
+
+            ArrayList<Pair<String, String>> temp_list = null;
             ArrayList<String> found = new ArrayList<>();
 
             if (constraint != null) {
                 if (!(constraint.toString().isEmpty())) {
-                    for (String word : MainActivity.WordList) {
-                        if (word.startsWith(constraint.toString().toLowerCase())) {
-                            found.add(word);
+                    temp_list = MainActivity.Wordlists_Map.get(constraint.toString().substring(0,1).toLowerCase());
+
+                    if(temp_list != null){
+                        for(Pair<String, String> element : temp_list){
+                            if(element.first.startsWith(constraint.toString())){
+                                found.add(element.first);
+                            }
                         }
                     }
                 }

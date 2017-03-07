@@ -45,7 +45,8 @@ public class SearchResultsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                new AsyncFiltering().execute(adapter, s);
+                //new AsyncFiltering().execute(adapter, s);
+                adapter.getFilter().filter(s);
             }
 
             @Override

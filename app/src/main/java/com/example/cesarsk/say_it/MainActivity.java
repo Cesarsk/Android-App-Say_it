@@ -16,6 +16,7 @@ import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
@@ -34,9 +35,11 @@ import com.google.android.gms.ads.MobileAds;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
@@ -77,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
-    static String wordOfTheDay = new String();
+    public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
+    static String wordOfTheDay;
 
     //Bottom Bar variable
     BottomBar bottomBar;
@@ -126,7 +130,11 @@ public class MainActivity extends AppCompatActivity {
         Utility.loadHist(this);
 
         //Caricamento dizionario (inclusa word of the day)
-        Utility.loadDictionary(this);
+        try {
+            Utility.loadDictionary(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 12); calendar.set(Calendar.MINUTE, 00); calendar.set(Calendar.SECOND, 00);

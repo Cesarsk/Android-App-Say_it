@@ -14,6 +14,7 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -24,7 +25,7 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.Set;
@@ -36,7 +37,6 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.HISTORY_PREFS_KEY;
-import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 import static com.example.cesarsk.say_it.PlayActivity.RequestPermissionCode;
@@ -66,7 +66,7 @@ public class Utility {
     }
 
     //Rate-Us Module
-    public static void rateUs(Context context){
+    public static void rateUs(Context context) {
         Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         // To count with Play market backstack, After pressing back button,
@@ -84,8 +84,7 @@ public class Utility {
     }
 
     //Gestione Preferences
-    public static void savePrefs(Context context, Set<String> set, String prefs_key)
-    {
+    public static void savePrefs(Context context, Set<String> set, String prefs_key) {
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
 
@@ -93,12 +92,11 @@ public class Utility {
         editor.apply();
     }
 
-    public static void addFavs(Context context, String word)
-    {
+    public static void addFavs(Context context, String word) {
         Set<String> new_favs = new TreeSet<>();
         loadFavs(context);
-        if(MainActivity.FAVORITES != null){
-            for (String element: MainActivity.FAVORITES) {
+        if (MainActivity.FAVORITES != null) {
+            for (String element : MainActivity.FAVORITES) {
                 new_favs.add(element);
             }
         }
@@ -106,12 +104,11 @@ public class Utility {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
-    public static void removeFavs(Context context, String word)
-    {
+    public static void removeFavs(Context context, String word) {
         Set<String> new_favs = new TreeSet<>();
         loadFavs(context);
-        if(MainActivity.FAVORITES != null){
-            for (String element: MainActivity.FAVORITES) {
+        if (MainActivity.FAVORITES != null) {
+            for (String element : MainActivity.FAVORITES) {
                 new_favs.add(element);
             }
         }
@@ -119,25 +116,23 @@ public class Utility {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
-    public static boolean checkFavs(Context context, String word)
-    {
+    public static boolean checkFavs(Context context, String word) {
         Set<String> new_favs = new TreeSet<>();
         loadFavs(context);
-        if(MainActivity.FAVORITES != null){
-            for (String element: MainActivity.FAVORITES) {
+        if (MainActivity.FAVORITES != null) {
+            for (String element : MainActivity.FAVORITES) {
                 new_favs.add(element);
             }
         }
-        if(new_favs.contains(word)) return true;
+        if (new_favs.contains(word)) return true;
         else return false;
     }
 
-    public static void addHist(Context context, String word)
-    {
+    public static void addHist(Context context, String word) {
         Set<String> new_hist = new TreeSet<>();
         loadHist(context);
-        if(MainActivity.HISTORY != null){
-            for (String element: MainActivity.HISTORY) {
+        if (MainActivity.HISTORY != null) {
+            for (String element : MainActivity.HISTORY) {
                 new_hist.add(element);
             }
         }
@@ -146,21 +141,18 @@ public class Utility {
         savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
     }
 
-    public static void loadFavs(Context context)
-    {
+    public static void loadFavs(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.FAVORITES = sharedPreferences.getStringSet(FAVORITES_PREFS_KEY, new TreeSet<String>());
     }
 
-    public static void loadHist(Context context)
-    {
+    public static void loadHist(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.HISTORY = sharedPreferences.getStringSet(HISTORY_PREFS_KEY, new TreeSet<String>());
 
     }
 
-    public static void pronunciateWord(CharSequence word, float pitch, float speechRate, Voice accent)
-    {
+    public static void pronunciateWord(CharSequence word, float pitch, float speechRate, Voice accent) {
         //manual pronunciation of a word, never used.
         american_speaker_google.setPitch(pitch);
         american_speaker_google.setSpeechRate(speechRate);
@@ -168,15 +160,14 @@ public class Utility {
         american_speaker_google.speak(word, QUEUE_ADD, null, null);
     }
 
-    public static ArrayList<String> loadRecordings()
-    {
+    public static ArrayList<String> loadRecordings() {
         //load all recordings, needs to be used in order to build the HistoryFragment
         ArrayList<String> recordings = new ArrayList<>();
-        String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
+        String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();
-        if(files != null) {
+        if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 Log.d("Files", "FileName:" + files[i].getName());
                 if (!files[i].getName().equals(".nomedia"))
@@ -187,31 +178,81 @@ public class Utility {
     }
 
     public static boolean checkFile(String word) {
-        String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
-        Log.i("DEBUG FILE: ", path+"/"+word+".aac");
-        File f = new File(path+"/"+word+".aac");
-        if(f.exists() && !f.isDirectory()) {
+        String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
+        Log.i("DEBUG FILE: ", path + "/" + word + ".aac");
+        File f = new File(path + "/" + word + ".aac");
+        if (f.exists() && !f.isDirectory()) {
             Log.i("DEBUG FILE:", "FILE ESISTE! RITORNO TRUE");
             return true;
         } else return false;
     }
 
-    public static String getRandomWord(Activity activity)
-    {
-        String random_word =  WordList.get(new Random().nextInt(WordList.size()));
-        return random_word;
+    public static String getRandomWord() {
+
+        Random rand = new Random();
+
+        //Creating a List from the WordList_Map values
+        ArrayList<ArrayList<Pair<String, String>>> MapValues =  new ArrayList<>(MainActivity.Wordlists_Map.values());
+
+        //Getting a random sublist and then extracting a random word from it
+        ArrayList<Pair<String, String>> random_list = MapValues.get(rand.nextInt(MapValues.size()));
+        Pair<String, String> random_pair = random_list.get(rand.nextInt(random_list.size()));
+
+        //String random_word = WordList.get(new Random().nextInt(WordList.size()));
+        return random_pair.first;
     }
 
-    public static void loadDictionary(Activity activity) {
-        //loading wordslist from file.
+    public static String getRandomWord(long seed) {
 
-        //Tentativo di caricamento IPA
-        //TODO SISTEMARE CARICAMENTO CON I SEPARATORI @ PER INIZIO E # PER CAMBIO LETTERA
-        BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionary_new8utf)));
+        Random rand = new Random(seed);
 
-        //BufferedReader line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipa_new16utfle), Charset.forName("UTF-16LE")));
+        //Creating a List from the WordList_Map values
+        ArrayList<ArrayList<Pair<String, String>>> MapValues =  new ArrayList<>(MainActivity.Wordlists_Map.values());
 
-        String line;
+        //Getting a random sublist and then extracting a random word from it
+        ArrayList<Pair<String, String>> random_list = MapValues.get(rand.nextInt(MapValues.size()));
+        Pair<String, String> random_pair = random_list.get(rand.nextInt(random_list.size()));
+
+        //String random_word = WordList.get(new Random().nextInt(WordList.size()));
+        return random_pair.first;
+    }
+
+    public static void loadDictionary(Activity activity) throws IOException {
+
+        //Getting Buffered Readers linked to the two txt files in the raw folder
+        BufferedReader dictionary_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionary_new8utf)));
+        BufferedReader ipa_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipa_new16utfle), Charset.forName("UTF-16LE")));
+
+        //Temporary wordlist that stores the "current" element in the loop
+        ArrayList<Pair<String, String>> temp_wordlist = new ArrayList<>();
+
+        //Skip until line 38 (Copyright message)
+        for (int i = 0; i < 39; i++) {
+            dictionary_line_reader.readLine();
+            ipa_line_reader.readLine();
+        }
+
+        //If the line is not the # character keep creating Pairs of values and store them into
+        //the temporary list. When the # is reached a sublist has been completed so it is stored
+        //in the Wordlist_Map that contains all the sublists.
+        String dictionary_line, ipa_line;
+        while (((dictionary_line = dictionary_line_reader.readLine()) != null) && ((ipa_line = ipa_line_reader.readLine()) != null)) {
+
+            if (!(dictionary_line.equalsIgnoreCase("#")) && !(ipa_line.equalsIgnoreCase("#"))) {
+
+                Pair<String, String> current_word = new Pair<>(dictionary_line, ipa_line);
+                temp_wordlist.add(current_word);
+            } else {
+                MainActivity.Wordlists_Map.put(temp_wordlist.get(0).first.substring(0, 1).toLowerCase(), temp_wordlist);
+                temp_wordlist = new ArrayList<>();
+            }
+        }
+
+        Calendar c = Calendar.getInstance();
+        Long seed = Long.parseLong(getDate(c.getTimeInMillis()));
+        wordOfTheDay = getRandomWord(seed);
+
+        /*String line;
         try {
             while ((line = line_reader.readLine()) != null) {
                 WordList.add(line.toLowerCase());
@@ -227,33 +268,26 @@ public class Utility {
         Log.i("RANDOM SEED:", getDate(timestamp));
         String seed = getDate(timestamp);
         Long longSeed = Long.parseLong(seed);
-        wordOfTheDay =  WordList.get(new Random(longSeed).nextInt(WordList.size()));
+        wordOfTheDay =  WordList.get(new Random(longSeed).nextInt(WordList.size()));*/
     }
 
-    public static void loadDictionaryWithIPA(Activity activity)
-    {
-        //TODO HO AGGIUNTO I DUE FILE, BASTA CARICARE IN UN HASHMAP O ARRAYLIST. MODIFICARE TUTE LE VIEW
-    }
+    private static String getDate(long timeStamp) {
 
-    private static String getDate(long timeStamp){
-
-        try{
+        try {
             DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Date netDate = (new Date(timeStamp));
             return sdf.format(netDate);
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return "xx";
         }
     }
 
-    public static void deleteRecordings()
-    {
+    public static void deleteRecordings() {
         //delete all recordings
-        String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
+        String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
         File directory = new File(path);
         File[] files = directory.listFiles();
-        if(files != null) {
+        if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].getName().equals(".nomedia")) ;
                 else files[i].delete();
@@ -261,15 +295,14 @@ public class Utility {
         }
     }
 
-    public static void deleteRecording(Context context, String word)
-    {
+    public static void deleteRecording(Context context, String word) {
         //delete a recording
-        String path = Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER;
+        String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
         File directory = new File(path);
         File[] files = directory.listFiles();
-        if(files != null) {
+        if (files != null) {
             for (int i = 0; i < files.length; i++) {
-                if (files[i].getName().equals(word + ".aac")){
+                if (files[i].getName().equals(word + ".aac")) {
                     files[i].delete();
                 }
             }
@@ -300,8 +333,12 @@ public class Utility {
 
         if (!file.exists()) {
             file.mkdirs();
-            File nomedia = new File(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/.nomedia");
-            try { nomedia.createNewFile(); } catch (IOException e) {Log.i("LOG:",".nomedia not created");}
+            File nomedia = new File(Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/.nomedia");
+            try {
+                nomedia.createNewFile();
+            } catch (IOException e) {
+                Log.i("LOG:", ".nomedia not created");
+            }
         }
 
         return (file.getAbsolutePath() + "/" + selected_word + file_exts[currentFormat]);
@@ -311,14 +348,14 @@ public class Utility {
         //TODO SE IL FILE GIA' ESISTE, CANCELLALO E REGISTRA NUOVAMENTE
         try {
 
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(output_formats[currentFormat]);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
-        recorder.setAudioEncodingBitRate(16);
-        recorder.setAudioSamplingRate(44100);
-        recorder.setOutputFile(getFilename(file_exts, currentFormat));
-        recorder.setOnErrorListener(errorListener);
-        recorder.setOnInfoListener(infoListener);
+            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            recorder.setOutputFormat(output_formats[currentFormat]);
+            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
+            recorder.setAudioEncodingBitRate(16);
+            recorder.setAudioSamplingRate(44100);
+            recorder.setOutputFile(getFilename(file_exts, currentFormat));
+            recorder.setOnErrorListener(errorListener);
+            recorder.setOnInfoListener(infoListener);
 
 
             recorder.prepare();
@@ -342,13 +379,12 @@ public class Utility {
             //TODO CHECK IF RECORDING ALREADY EXISTS. IF DOES NOT, DO NOT PLAY.
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
-                Log.i("Say it!","Playing recording: "+Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
+                Log.i("Say it!", "Playing recording: " + Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
                 mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
-                mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath()+"/"+AUDIO_RECORDER_FOLDER+"/"+selected_word+".aac");
+                mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
                 mediaPlayer.prepare();
                 mediaPlayer.start();
-            }
-            else {
+            } else {
                 Log.i("Say it!", "Playing recording: " + Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
                 mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
                 mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
@@ -363,20 +399,19 @@ public class Utility {
     private static MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
         @Override
         public void onError(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!","Error: " + what + ", " + extra);
+            Log.i("Say it!", "Error: " + what + ", " + extra);
         }
     };
 
     private static MediaRecorder.OnInfoListener infoListener = new MediaRecorder.OnInfoListener() {
         @Override
         public void onInfo(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!","Warning: " + what + ", " + extra);
+            Log.i("Say it!", "Warning: " + what + ", " + extra);
         }
     };
 
     //IMPOSTAZIONE TEXT TO SPEECH
-    public static Voice searchVoice(String voiceName, TextToSpeech tts)
-    {
+    public static Voice searchVoice(String voiceName, TextToSpeech tts) {
         //Log.i("VOICES:", textToSpeech.getVoices().toString()); //stampa tutte le voci disponibili
         for (Voice tmpVoice : tts.getVoices()) {
             if (tmpVoice.getName().equals(voiceName)) {
