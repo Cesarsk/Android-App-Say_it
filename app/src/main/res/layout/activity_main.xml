@@ -37,7 +37,7 @@
                 android:layout_weight="1"
                 android:layout_height="32dp"
                 android:cursorVisible="false"
-                android:focusable="true"
+                android:focusable="false"
                 />
 
             <ImageButton
