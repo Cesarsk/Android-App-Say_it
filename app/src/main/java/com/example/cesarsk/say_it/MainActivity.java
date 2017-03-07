@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     public static final ArrayList<String> WordList = new ArrayList<>();
     public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
     static String wordOfTheDay;
+    static String IPAofTheDay;
 
     //Bottom Bar variable
     BottomBar bottomBar;
@@ -129,11 +130,13 @@ public class MainActivity extends AppCompatActivity {
         Utility.loadFavs(this);
         Utility.loadHist(this);
 
-        //Caricamento dizionario (inclusa word of the day)
-        try {
-            Utility.loadDictionary(this);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(Wordlists_Map.isEmpty()) {
+            //Caricamento dizionario (inclusa word of the day)
+            try {
+                Utility.loadDictionary(this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         Calendar calendar = Calendar.getInstance();

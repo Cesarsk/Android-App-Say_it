@@ -40,6 +40,7 @@ import java.util.Random;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static com.example.cesarsk.say_it.MainActivity.IPAofTheDay;
 import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
@@ -82,6 +83,10 @@ public class HomeFragment extends Fragment {
                 v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext()).toBundle());
             }
         });
+
+        TextView IPATextView = (TextView) view.findViewById(R.id.ipa_wotd);
+        IPATextView.setTypeface(plain);
+        IPATextView.setText(IPAofTheDay);
 
         final ImageButton favorite_button = (ImageButton)view.findViewById(R.id.favorite_card_button);
         favorite_flag = Utility.checkFavs(getActivity(), wordOfTheDay);

@@ -9,6 +9,9 @@
 
     <!-- Content Description -->
     <string name="FavsContentDescription">Add word to favorites</string>
+    <string name="CopyContentDescription">Copy word to clipboard</string>
+    <string name="QuickPlayContentDescription">Play Word</string>
+    <string name="ShareContentDescription">Share Word</string>
 
 
     <string name="say_it_button">SAY IT!</string>

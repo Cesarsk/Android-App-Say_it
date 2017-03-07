@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,6 +38,8 @@ import static android.content.Context.MODE_PRIVATE;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static com.example.cesarsk.say_it.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.HISTORY_PREFS_KEY;
+import static com.example.cesarsk.say_it.MainActivity.IPAofTheDay;
+import static com.example.cesarsk.say_it.MainActivity.Wordlists_Map;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 import static com.example.cesarsk.say_it.PlayActivity.RequestPermissionCode;
@@ -202,7 +205,7 @@ public class Utility {
         return random_pair.first;
     }
 
-    public static String getRandomWord(long seed) {
+    public static String getRandomWord(long seed, boolean ipa) {
 
         Random rand = new Random(seed);
 
@@ -213,21 +216,30 @@ public class Utility {
         ArrayList<Pair<String, String>> random_list = MapValues.get(rand.nextInt(MapValues.size()));
         Pair<String, String> random_pair = random_list.get(rand.nextInt(random_list.size()));
 
-        //String random_word = WordList.get(new Random().nextInt(WordList.size()));
-        return random_pair.first;
+        if(ipa) {
+            return random_pair.second;
+        }
+
+        else if(!ipa){
+            return random_pair.first;
+        }
+
+        return null;
     }
+
+
 
     public static void loadDictionary(Activity activity) throws IOException {
 
         //Getting Buffered Readers linked to the two txt files in the raw folder
-        BufferedReader dictionary_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionary_new8utf)));
-        BufferedReader ipa_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipa_new16utfle), Charset.forName("UTF-16LE")));
+        BufferedReader dictionary_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionary_utf8)));
+        BufferedReader ipa_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipa_utf16le), Charset.forName("UTF-16LE")));
 
         //Temporary wordlist that stores the "current" element in the loop
         ArrayList<Pair<String, String>> temp_wordlist = new ArrayList<>();
 
         //Skip until line 38 (Copyright message)
-        for (int i = 0; i < 39; i++) {
+        for (int i = 0; i < 38; i++) {
             dictionary_line_reader.readLine();
             ipa_line_reader.readLine();
         }
@@ -250,7 +262,8 @@ public class Utility {
 
         Calendar c = Calendar.getInstance();
         Long seed = Long.parseLong(getDate(c.getTimeInMillis()));
-        wordOfTheDay = getRandomWord(seed);
+        wordOfTheDay = getRandomWord(seed, false);
+        IPAofTheDay = getRandomWord(seed, true);
 
         /*String line;
         try {
