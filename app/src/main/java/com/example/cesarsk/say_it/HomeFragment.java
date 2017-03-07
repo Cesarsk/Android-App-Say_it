@@ -7,11 +7,14 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.Settings;
@@ -33,9 +36,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
+import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.example.cesarsk.say_it.MainActivity.WordList;
+import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 
 
@@ -96,6 +101,25 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        ImageButton copy_button = (ImageButton) view.findViewById(R.id.copy_button_card);
+        copy_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(null, wordOfTheDay);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getActivity(), "Copied to Clipboard!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ImageButton quick_play = (ImageButton) view.findViewById(R.id.quick_play_button_card);
+        quick_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO CHECK DEFAULT ACCENT
+                american_speaker_google.speak(wordOfTheDay, QUEUE_ADD, null, null);
+            }
+        });
 
         final FadingTextView wotd_text_view1 = (FadingTextView)view.findViewById(R.id.first_wotd);
         final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd);
