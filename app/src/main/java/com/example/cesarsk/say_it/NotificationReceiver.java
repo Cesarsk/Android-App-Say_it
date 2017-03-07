@@ -53,10 +53,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         stackBuilder.addNextIntent(resultIntent);
 
         PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -65,8 +62,5 @@ public class NotificationReceiver extends BroadcastReceiver {
         mNotificationManager.notify(REQUEST_CODE, mBuilder.build());
     }
 
-    public void showNotification(Context context) {
-
-    }
 }
 
