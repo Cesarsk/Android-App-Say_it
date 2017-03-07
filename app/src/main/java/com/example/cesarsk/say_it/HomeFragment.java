@@ -71,9 +71,11 @@ public class HomeFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_home,
                 container, false);
 
-        Typeface plain = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
+        Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
+        Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
+
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
-        wordOfTheDayTextView.setTypeface(plain);
+        wordOfTheDayTextView.setTypeface(plainRegular);
         wordOfTheDayTextView.setText(wordOfTheDay);
         wordOfTheDayTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +87,7 @@ public class HomeFragment extends Fragment {
         });
 
         TextView IPATextView = (TextView) view.findViewById(R.id.ipa_wotd);
-        IPATextView.setTypeface(plain);
+        IPATextView.setTypeface(plainItalic);
         IPATextView.setText(IPAofTheDay);
 
         final ImageButton favorite_button = (ImageButton)view.findViewById(R.id.favorite_card_button);
