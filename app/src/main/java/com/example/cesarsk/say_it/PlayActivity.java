@@ -147,7 +147,7 @@ public class PlayActivity extends AppCompatActivity {
                     favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
                 }
                 else {
-                    favorite_button.setColorFilter(getResources().getColor(R.color.white));
+                    favorite_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
                     Utility.removeFavs(v.getContext(), selected_word);
                     favorite_flag = !favorite_flag;
@@ -169,7 +169,7 @@ public class PlayActivity extends AppCompatActivity {
                     american_speaker_google.setSpeechRate((float)0.90);
                     british_speaker_google.setSpeechRate((float)0.90);
                     Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(getResources().getColor(R.color.white));
+                    slow_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     slow_mode = !slow_mode;
                 }
             }
@@ -186,7 +186,7 @@ public class PlayActivity extends AppCompatActivity {
                 }
                 else {
                    // american_speaker_google.setVoice(voice_american_female);
-                    accent_button.setColorFilter(getResources().getColor(R.color.white));
+                    accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 }
