@@ -122,14 +122,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        final FadingTextView wotd_text_view1 = (FadingTextView)view.findViewById(R.id.first_wotd);
-        final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd);
-        final FadingTextView wotd_text_view3 = (FadingTextView)view.findViewById(R.id.third_wotd);
-        final FadingTextView wotd_text_view4 = (FadingTextView)view.findViewById(R.id.fourth_wotd);
-        final FadingTextView wotd_text_view6 = (FadingTextView)view.findViewById(R.id.sixth_wotd);
-        final FadingTextView wotd_text_view7 = (FadingTextView)view.findViewById(R.id.seventh_wotd);
-        final FadingTextView wotd_text_view8 = (FadingTextView)view.findViewById(R.id.eighth_wotd);
-        final FadingTextView wotd_text_view9 = (FadingTextView)view.findViewById(R.id.ninth_wotd);
+        final FadingTextView wotd_text_view1 = (FadingTextView)view.findViewById(R.id.first_wotd); wotd_text_view1.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd); wotd_text_view2.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view3 = (FadingTextView)view.findViewById(R.id.third_wotd); wotd_text_view3.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view4 = (FadingTextView)view.findViewById(R.id.fourth_wotd); wotd_text_view4.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view6 = (FadingTextView)view.findViewById(R.id.sixth_wotd); wotd_text_view6.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view7 = (FadingTextView)view.findViewById(R.id.seventh_wotd); wotd_text_view7.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view8 = (FadingTextView)view.findViewById(R.id.eighth_wotd); wotd_text_view8.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view9 = (FadingTextView)view.findViewById(R.id.ninth_wotd); wotd_text_view9.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
 
         View.OnClickListener random_word_listener = new View.OnClickListener() {
