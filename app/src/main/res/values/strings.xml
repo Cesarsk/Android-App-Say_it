@@ -5,6 +5,10 @@
     <!-- Home Fragment Strings -->
     <string name="WOTD_Subtext">Here\'s your word of the day:</string>
     <string name="Recent_Search_Subtext">You recently searched:</string>
+    <string name="Welcome_Text">Welcome, </string>
+
+    <!-- Content Description -->
+    <string name="FavsContentDescription">Add word to favorites</string>
 
 
     <string name="say_it_button">SAY IT!</string>
