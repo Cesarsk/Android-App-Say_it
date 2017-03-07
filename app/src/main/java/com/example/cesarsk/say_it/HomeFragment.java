@@ -23,6 +23,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.app.FragmentManager;
 import android.view.animation.Interpolator;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 
@@ -49,6 +52,7 @@ public class HomeFragment extends Fragment {
     boolean anim_direction7 = false;
     boolean anim_direction8 = false;
     boolean anim_direction9 = false;
+    private boolean favorite_flag = false;
 
     public HomeFragment() {
     }
@@ -72,6 +76,26 @@ public class HomeFragment extends Fragment {
                 v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext()).toBundle());
             }
         });
+
+        final ImageButton favorite_button = (ImageButton)view.findViewById(R.id.favorite_card_button);
+        favorite_flag = Utility.checkFavs(getActivity(), wordOfTheDay);
+        if(favorite_flag) favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+        favorite_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!favorite_flag) {
+                    Utility.addFavs(v.getContext(), wordOfTheDay);
+                    favorite_flag= !favorite_flag;
+                    favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+                }
+                else {
+                    favorite_button.setColorFilter(getResources().getColor(R.color.white));
+                    Utility.removeFavs(v.getContext(), wordOfTheDay);
+                    favorite_flag = !favorite_flag;
+                }
+            }
+        });
+
 
         final FadingTextView wotd_text_view1 = (FadingTextView)view.findViewById(R.id.first_wotd);
         final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd);

@@ -17,7 +17,7 @@ import android.support.v7.app.NotificationCompat;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
-    public final static int REQUEST_CODE = 1;
+    public static int REQUEST_CODE = 1;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -60,6 +60,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
 // mId allows you to update the notification later on.
         mNotificationManager.notify(REQUEST_CODE, mBuilder.build());
+        REQUEST_CODE++;
     }
 
 }
