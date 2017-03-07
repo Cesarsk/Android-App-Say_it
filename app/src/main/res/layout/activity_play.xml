@@ -99,7 +99,6 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 />
-
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"

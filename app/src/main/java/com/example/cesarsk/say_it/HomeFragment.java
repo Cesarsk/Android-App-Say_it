@@ -15,6 +15,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -177,6 +178,15 @@ public class HomeFragment extends Fragment {
                 play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wordOfTheDayTextView.getText());
                 Utility.addHist(v.getContext(), wordOfTheDayTextView.getText().toString());
                 v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+            }
+        });
+
+        FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(getActivity(),SettingsActivity.class);
+                startActivity(intent);
             }
         });
 
