@@ -71,7 +71,8 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
             viewHolder = (SearchResultViewHolder) convertView.getTag();
         }
 
-        viewHolder.wordTextView.setText(results.get(position));
+        String current_word = results.get(position).substring(0,1).toUpperCase() + results.get(position).substring(1);
+        viewHolder.wordTextView.setText(current_word);
 
         viewHolder.wordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +131,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
 
                     if(temp_list != null){
                         for(Pair<String, String> element : temp_list){
-                            if(element.first.startsWith(constraint.toString())){
+                            if(element.first.startsWith(constraint.toString().toLowerCase())){
                                 found.add(element.first);
                             }
                         }
