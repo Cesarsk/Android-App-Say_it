@@ -141,35 +141,24 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         //TODO SISTEMARE LISTENER
-        voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);
 
         editText = (EditText) findViewById(R.id.search_bar_edit_text);
-        editText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent search_activity_intent = new Intent(v.getContext(), SearchActivity.class);
-                startActivity(search_activity_intent);
-            }
-        });
-
         lens_search_button = (ImageView) findViewById(R.id.search_bar_hint_icon);
-        lens_search_button.setOnClickListener(new View.OnClickListener() {
+        voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
+
+        View.OnClickListener search_bar_listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent search_activity_intent = new Intent(v.getContext(), SearchActivity.class);
+                if(v.getId()==R.id.search_bar_voice_icon)search_activity_intent.putExtra("VOICE_SEARCH_SELECTED", true);
                 startActivity(search_activity_intent);
             }
-        });
+        };
 
-        voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
-        voice_search_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent search_activity_intent = new Intent(view.getContext(), SearchActivity.class);
-                search_activity_intent.putExtra("VOICE_SEARCH_SELECTED", true);
-                startActivity(search_activity_intent);
-            }
-        });
+        editText.setOnClickListener(search_bar_listener);
+        lens_search_button.setOnClickListener(search_bar_listener);
+        voice_search_button.setOnClickListener(search_bar_listener);
+
 
         //Gestione Fragment
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();

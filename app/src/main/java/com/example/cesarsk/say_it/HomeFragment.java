@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -23,6 +24,9 @@ import android.view.animation.Animation;
 import android.app.FragmentManager;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,8 +49,6 @@ public class HomeFragment extends Fragment {
     boolean anim_direction7 = false;
     boolean anim_direction8 = false;
     boolean anim_direction9 = false;
-    int index_random_words = 0;
-
 
     public HomeFragment() {
     }
@@ -71,25 +73,76 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        final ArrayList<TextView> random_words = new ArrayList<>();
-        ArrayList<Integer> random_words_id = new ArrayList<>();
-        random_words_id.add(R.id.first_wotd); random_words_id.add(R.id.second_wotd); random_words_id.add(R.id.third_wotd); random_words_id.add(R.id.fourth_wotd);
-        random_words_id.add(R.id.sixth_wotd); random_words_id.add(R.id.seventh_wotd); random_words_id.add(R.id.eighth_wotd); random_words_id.add(R.id.ninth_wotd);
+        final FadingTextView wotd_text_view1 = (FadingTextView)view.findViewById(R.id.first_wotd);
+        final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd);
+        final FadingTextView wotd_text_view3 = (FadingTextView)view.findViewById(R.id.third_wotd);
+        final FadingTextView wotd_text_view4 = (FadingTextView)view.findViewById(R.id.fourth_wotd);
+        final FadingTextView wotd_text_view6 = (FadingTextView)view.findViewById(R.id.sixth_wotd);
+        final FadingTextView wotd_text_view7 = (FadingTextView)view.findViewById(R.id.seventh_wotd);
+        final FadingTextView wotd_text_view8 = (FadingTextView)view.findViewById(R.id.eighth_wotd);
+        final FadingTextView wotd_text_view9 = (FadingTextView)view.findViewById(R.id.ninth_wotd);
 
-        //TODO CLAFFOLO HELP A SETTARE I LISTENER SULLE VARIE FADINGTEXTVIEW
 
-        for(index_random_words = 0; index_random_words < random_words_id.size(); index_random_words++)
-        {
-            random_words.add(index_random_words, (TextView)view.findViewById(random_words_id.get(index_random_words)));
-            random_words.get(index_random_words).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
-                    play_activity_intent.putExtra(PlayActivity.PLAY_WORD, random_words.get(index_random_words).getText());
-                    v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext()).toBundle());
+        View.OnClickListener random_word_listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
+                switch(v.getId()) {
+                    case R.id.first_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view1.getText());
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    case R.id.second_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view2.getText());
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    case R.id.third_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view3.getText());
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    case R.id.fourth_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view4.getText());
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    case R.id.sixth_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view6.getText());
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    case R.id.seventh_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view7.getText());
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    case R.id.eighth_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view8.getText());
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    case R.id.ninth_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view9.getText());
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    default:
+                        break;
                 }
-            });
-        }
+            }
+        };
+
+        wotd_text_view1.setOnClickListener(random_word_listener);
+        wotd_text_view2.setOnClickListener(random_word_listener);
+        wotd_text_view3.setOnClickListener(random_word_listener);
+        wotd_text_view4.setOnClickListener(random_word_listener);
+        wotd_text_view6.setOnClickListener(random_word_listener);
+        wotd_text_view7.setOnClickListener(random_word_listener);
+        wotd_text_view8.setOnClickListener(random_word_listener);
+        wotd_text_view9.setOnClickListener(random_word_listener);
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
 
