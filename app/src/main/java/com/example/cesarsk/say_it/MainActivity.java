@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 12); calendar.set(Calendar.MINUTE, 00); calendar.set(Calendar.SECOND, 00);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.example.cesarsk.say_it"),0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, new Intent("com.example.cesarsk.say_it"),0);
 
         registerReceiver(new NotificationReceiver(), new IntentFilter("com.example.cesarsk.say_it"));
         AlarmManager am = (AlarmManager) this.getSystemService(MainActivity.ALARM_SERVICE);
@@ -159,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
         editText.setOnClickListener(search_bar_listener);
         lens_search_button.setOnClickListener(search_bar_listener);
         voice_search_button.setOnClickListener(search_bar_listener);
-
 
         //Gestione Fragment
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();

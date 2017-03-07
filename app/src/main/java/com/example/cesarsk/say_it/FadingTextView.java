@@ -42,7 +42,8 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView{
         final FadingTextView current_instance = this;
         rand = new Random();
 
-        fade_animator = ObjectAnimator.ofFloat(this, "alpha", 1f, 0f);
+        current_instance.setText(Utility.getRandomWord((Activity)current_instance.getContext()));
+        fade_animator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f);
         fade_animator.setDuration((long)rand.nextInt((8000 - 5000) + 1) + 5000);
         fade_animator.setRepeatMode(ValueAnimator.REVERSE);
         fade_animator.setRepeatCount(ValueAnimator.INFINITE);
@@ -67,7 +68,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView{
 
             @Override
             public void onAnimationRepeat(Animator animator) {
-                if(repeated) {
+                if(!repeated) {
                     current_instance.setText(Utility.getRandomWord((Activity)current_instance.getContext()));
                 }
                 repeated = !repeated;
