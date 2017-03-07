@@ -131,13 +131,12 @@ public class MainActivity extends AppCompatActivity {
         //TODO Daily notification
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 19); calendar.set(Calendar.MINUTE, 21); calendar.set(Calendar.SECOND, 00);
+        calendar.set(Calendar.HOUR_OF_DAY, 12); calendar.set(Calendar.MINUTE, 00); calendar.set(Calendar.SECOND, 00);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.example.cesarsk.say_it"),0);
 
         registerReceiver(new NotificationReceiver(), new IntentFilter("com.example.cesarsk.say_it"));
         AlarmManager am = (AlarmManager) this.getSystemService(MainActivity.ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() , pendingIntent);
-
 
         //SETUP TOOLBAR
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);

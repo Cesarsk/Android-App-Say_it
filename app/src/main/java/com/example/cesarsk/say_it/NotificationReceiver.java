@@ -31,7 +31,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setContentTitle("Say it! Reminder ")
                         .setContentText("Hey! Here's your word of the day: "+MainActivity.wordOfTheDay)
                         .setSound(alarmSound)
-                        .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                        .setVibrate(new long[]{900, 900, 900, 900, 900})
                         .setAutoCancel(true).setWhen(when);
 
 // Creates an explicit intent for an Activity in your app

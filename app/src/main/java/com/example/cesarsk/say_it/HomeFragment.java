@@ -5,7 +5,10 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -60,6 +63,16 @@ public class HomeFragment extends Fragment {
 
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
+
+        wordOfTheDayTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
+                play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wordOfTheDayTextView.getText());
+                Utility.addHist(v.getContext(), wordOfTheDayTextView.getText().toString());
+                v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+            }
+        });
 
         /*ImageButton settings_button = (ImageButton)view.findViewById(R.id.settings_button);
         settings_button.setOnClickListener(new View.OnClickListener() {
