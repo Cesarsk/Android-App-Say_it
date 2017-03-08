@@ -53,6 +53,9 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        Intent intent = getIntent();
+        Bundle args = intent.getExtras();
+
         final ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
         final ImageButton play_button = (ImageButton)findViewById(R.id.play_button);
         final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
@@ -64,8 +67,8 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
         final ImageButton your_recordings = (ImageButton)findViewById(R.id.recordings_button);
         final ImageButton remove_ad = (ImageButton)findViewById(R.id.remove_ads_button);
-        selected_word = getIntent().getStringExtra(PLAY_WORD);
-        selected_ipa = getIntent().getStringExtra(PLAY_IPA);
+        selected_word = args.getString(PLAY_WORD);
+        selected_ipa = args.getString(PLAY_IPA);
 
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();

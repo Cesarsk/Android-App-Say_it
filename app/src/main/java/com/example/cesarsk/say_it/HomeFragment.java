@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
         wordOfTheDayTextView.setTypeface(plainRegular);
         wordOfTheDayTextView.setText(wordOfTheDay);
-        TextView IPATextView = (TextView) view.findViewById(R.id.ipa_wotd);
+        final TextView IPATextView = (TextView) view.findViewById(R.id.ipa_wotd);
         IPATextView.setTypeface(plainItalic);
         IPATextView.setText(IPAofTheDay);
 
@@ -141,14 +141,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
-                Log.i("LUCALU","IPA PRIMA DI PUTEXTRA: "+IPAofTheDay);
-                play_activity_intent.putExtra(PlayActivity.PLAY_WORD, MainActivity.wordOfTheDay);
-                play_activity_intent.putExtra(PlayActivity.PLAY_IPA, MainActivity.IPAofTheDay);
-                Log.i("LUCALU","IPA GETEXTRA DOPO DI PUTEXTRA: "+play_activity_intent.getStringExtra(PlayActivity.PLAY_IPA));
-                startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                Bundle args = new Bundle();
+                args.putString(PlayActivity.PLAY_WORD, wordOfTheDayTextView.getText().toString());
+                args.putString(PlayActivity.PLAY_IPA, IPATextView.getText().toString());
+                play_activity_intent.putExtras(args);
+                /*play_activity_intent.putExtra(PlayActivity.PLAY_WORD, MainActivity.wordOfTheDay);
+                play_activity_intent.putExtra(PlayActivity.PLAY_IPA, MainActivity.IPAofTheDay);*/
+                getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
             }
         });
-
 
 
         final ImageButton favorite_button = (ImageButton)view.findViewById(R.id.favorite_card_button);

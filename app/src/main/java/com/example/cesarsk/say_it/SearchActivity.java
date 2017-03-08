@@ -48,17 +48,23 @@ public class SearchActivity extends AppCompatActivity {
         result_list.setAdapter(adapter);
 
         final ImageButton clear_editText = (ImageButton) findViewById(R.id.clear_editText);
+        clear_editText.setVisibility(View.GONE);
         editText = (EditText) findViewById(R.id.search_bar_edit_text);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @SuppressWarnings("unchecked")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                clear_editText.setVisibility(View.VISIBLE);
+                if(s.toString().isEmpty()){
+                    clear_editText.setVisibility(View.GONE);
+                }
+                else {
+                    clear_editText.setVisibility(View.VISIBLE);
+                }
+
                 new AsyncFiltering().execute(adapter.getFilter(), s);
             }
 
