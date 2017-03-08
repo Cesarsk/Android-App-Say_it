@@ -57,6 +57,5 @@
         android:layout_below="@id/toolbar_search"
         android:id="@+id/result_list_view"
         android:divider="@color/divider"
-        android:dividerHeight="1.5px"
-        />
+        android:dividerHeight="1.2dp" />
 </RelativeLayout>

@@ -30,7 +30,7 @@ import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 public class ResultsListCustomAdapter extends BaseAdapter implements Filterable {
 
     private Context context;
-    private ArrayList<String> results;
+    private ArrayList<Pair<String, String>> results;
     private SearchResultsFilter resultsFilter;
 
     public ResultsListCustomAdapter(Context context) {
@@ -63,16 +63,21 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
 
             viewHolder = new SearchResultViewHolder();
             convertView = inflater.inflate(R.layout.search_results_list_item, parent, false);
-            viewHolder.wordTextView = (TextView) convertView.findViewById(R.id.Result_TextView);
-            viewHolder.quickPlayImgButton = (ImageButton) convertView.findViewById(R.id.quick_play_button);
+            viewHolder.wordTextView = (TextView) convertView.findViewById(R.id.result_first_line);
+            viewHolder.ipaTextView = (TextView) convertView.findViewById(R.id.result_second_line);
+            viewHolder.quickPlayImgButton = (ImageButton) convertView.findViewById(R.id.quick_play_listbutton);
             viewHolder.addToFavsImgButton = (ImageButton) convertView.findViewById(R.id.add_to_favs_button);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (SearchResultViewHolder) convertView.getTag();
         }
 
-        String current_word = results.get(position).substring(0,1).toUpperCase() + results.get(position).substring(1);
+        String current_word = results.get(position).first.substring(0,1).toUpperCase() + results.get(position).first.substring(1);
         viewHolder.wordTextView.setText(current_word);
+
+        String current_ipa = results.get(position).second;
+        viewHolder.ipaTextView.setText(current_ipa);
 
         viewHolder.wordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +128,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
             FilterResults filterResults = new FilterResults();
 
             ArrayList<Pair<String, String>> temp_list = null;
-            ArrayList<String> found = new ArrayList<>();
+            ArrayList<Pair<String, String>> found = new ArrayList<>();
 
             if (constraint != null) {
                 if (!(constraint.toString().isEmpty())) {
@@ -132,7 +137,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
                     if(temp_list != null){
                         for(Pair<String, String> element : temp_list){
                             if(element.first.startsWith(constraint.toString().toLowerCase())){
-                                found.add(element.first);
+                                found.add(element);
                             }
                         }
                     }
@@ -149,7 +154,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         protected void publishResults(CharSequence constraint, FilterResults filterResults) {
             if (filterResults.count > 0) {
                 results.clear();
-                results.addAll((ArrayList<String>) filterResults.values);
+                results.addAll((ArrayList<Pair<String, String>>) filterResults.values);
                 notifyDataSetChanged();
             } else {
                 results.clear();
@@ -160,6 +165,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
 
     private static class SearchResultViewHolder {
         TextView wordTextView;
+        TextView ipaTextView;
         ImageButton quickPlayImgButton;
         ImageButton addToFavsImgButton;
     }

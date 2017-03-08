@@ -4,7 +4,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.speech.RecognizerIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,8 +37,8 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_search);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
-        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
         final ListView result_list = (ListView) findViewById(R.id.result_list_view);
@@ -49,9 +52,10 @@ public class SearchActivity extends AppCompatActivity {
 
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.getFilter().filter(s);
+                new AsyncFiltering().execute(adapter.getFilter(), s);
             }
 
             @Override
@@ -112,6 +116,20 @@ public class SearchActivity extends AppCompatActivity {
                 break;
             }
 
+        }
+    }
+
+    private class AsyncFiltering extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+            Filter filter = (Filter) objects[0];
+            CharSequence s = (CharSequence) objects[1];
+
+            filter.filter(s);
+
+            return null;
         }
     }
 }

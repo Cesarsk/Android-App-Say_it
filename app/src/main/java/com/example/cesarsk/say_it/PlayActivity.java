@@ -53,6 +53,7 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
         final ImageButton play_button = (ImageButton)findViewById(R.id.play_button);
         final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
+        final TextView ipa_text_view = (TextView) findViewById(R.id.selected_word_ipa);
         final ImageButton delete_button = (ImageButton)findViewById(R.id.delete_button);
         final ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
         final ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
