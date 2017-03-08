@@ -2,6 +2,7 @@ package com.example.cesarsk.say_it;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import static com.example.cesarsk.say_it.MainActivity.british_speaker_google;
 public class PlayActivity extends AppCompatActivity {
 
     public final static String PLAY_WORD = "com.example.cesarsk.say_it.WORD";
+    public final static String PLAY_IPA = "com.example.cesarsk.say_it.IPA";
     private static final String AUDIO_RECORDER_FILE_EXT_AAC = ".aac";
     private static final String AUDIO_RECORDER_FOLDER = "Say it";
     private MediaRecorder recorder = null;
@@ -38,6 +40,7 @@ public class PlayActivity extends AppCompatActivity {
     private CharSequence[] history;
     int testa = 0;
     public static String selected_word;
+    public static String selected_ipa;
     private boolean slow_mode = false;
     private boolean accent_flag = false;
     private boolean favorite_flag = false;
@@ -53,7 +56,7 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
         final ImageButton play_button = (ImageButton)findViewById(R.id.play_button);
         final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
-        final TextView ipa_text_view = (TextView) findViewById(R.id.selected_word_ipa);
+        final TextView selected_ipa_view = (TextView)findViewById(R.id.selected_word_ipa);
         final ImageButton delete_button = (ImageButton)findViewById(R.id.delete_button);
         final ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
         final ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
@@ -62,12 +65,18 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton your_recordings = (ImageButton)findViewById(R.id.recordings_button);
         final ImageButton remove_ad = (ImageButton)findViewById(R.id.remove_ads_button);
         selected_word = getIntent().getStringExtra(PLAY_WORD);
+        selected_ipa = getIntent().getStringExtra(PLAY_IPA);
 
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();
         history = new CharSequence[N];
 
+        Typeface plainItalic = Typeface.createFromAsset(getAssets(), "fonts/GentiumPlus-I.ttf");
+        Typeface plainRegular = Typeface.createFromAsset(getAssets(), "fonts/GentiumPlus-R.ttf");
+        selected_word_view.setTypeface(plainRegular); selected_ipa_view.setTypeface(plainItalic);
         selected_word_view.setText(selected_word);
+        selected_ipa_view.setText(selected_ipa);
+
 
         if(Utility.checkFile(selected_word))
         {

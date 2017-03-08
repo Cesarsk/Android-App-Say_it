@@ -82,8 +82,10 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         viewHolder.wordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO SPOSTARE QUESTO CODICE A SEARCHACTIVITY, OPPURE NON SARA' CLICCABILE IL SINGOLO ELEMENTO MA SOLO IL TESTO
                 final Intent play_activity_intent = new Intent(context, PlayActivity.class);
                 play_activity_intent.putExtra(PlayActivity.PLAY_WORD, viewHolder.wordTextView.getText());
+                play_activity_intent.putExtra(PlayActivity.PLAY_IPA, viewHolder.ipaTextView.getText());
                 Utility.addHist(context, viewHolder.wordTextView.getText().toString());
                 context.startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
             }

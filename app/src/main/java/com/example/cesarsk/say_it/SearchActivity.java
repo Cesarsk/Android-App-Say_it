@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import static android.R.attr.data;
+import static android.R.attr.visible;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -43,8 +44,10 @@ public class SearchActivity extends AppCompatActivity {
 
         final ListView result_list = (ListView) findViewById(R.id.result_list_view);
         final ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this);
+
         result_list.setAdapter(adapter);
 
+        final ImageButton clear_editText = (ImageButton) findViewById(R.id.clear_editText);
         editText = (EditText) findViewById(R.id.search_bar_edit_text);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -55,11 +58,19 @@ public class SearchActivity extends AppCompatActivity {
             @SuppressWarnings("unchecked")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                clear_editText.setVisibility(View.VISIBLE);
                 new AsyncFiltering().execute(adapter.getFilter(), s);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+
+        clear_editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setText("");
             }
         });
 

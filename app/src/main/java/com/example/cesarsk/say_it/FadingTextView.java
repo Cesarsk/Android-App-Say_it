@@ -12,7 +12,7 @@ import java.util.Random;
  * Created by Claudio on 05/03/2017.
  */
 
-public class FadingTextView extends android.support.v7.widget.AppCompatTextView{
+public class FadingTextView extends android.support.v7.widget.AppCompatTextView {
 
     ObjectAnimator fade_animator;
     Random rand;

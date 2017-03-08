@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
+import com.google.android.gms.ads.VideoController;
+import com.google.android.gms.ads.VideoOptions;
 
 import org.w3c.dom.Text;
 
@@ -64,6 +71,11 @@ public class HomeFragment extends Fragment {
     boolean anim_direction9 = false;
     private boolean favorite_flag = false;
 
+    //Gestione ADs
+    NativeExpressAdView mAdView;
+    VideoController mVideoController;
+
+
     public HomeFragment() {
     }
 
@@ -74,24 +86,70 @@ public class HomeFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_home,
                 container, false);
 
+        //Gestione AD (TEST AD)
+    /*    MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        mAdView.bringToFront();
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest); */
+/*
+        mAdView = (NativeExpressAdView)view.findViewById(R.id.adViewCard);
+        mAdView.setVideoOptions(new VideoOptions.Builder()
+                .setStartMuted(true)
+                .build());
+
+        AdRequest request = new AdRequest.Builder()
+                .addTestDevice("f2e4f110")
+                .build();
+        mAdView.loadAd(request);
+
+        mVideoController = mAdView.getVideoController();
+        mVideoController.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
+            @Override
+            public void onVideoEnd() {
+                Log.d("AD DEBUG", "Video playback is finished.");
+                super.onVideoEnd();
+            }
+        });
+
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                if (mVideoController.hasVideoContent()) {
+                    Log.d("AD DEBUG", "Received an ad that contains a video asset.");
+                } else {
+                    Log.d("AD DEBUG", "Received an ad that does not contain a video asset.");
+                }
+            }
+        });
+
+        mAdView.loadAd(new AdRequest.Builder().build());
+
+*/
+
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
         wordOfTheDayTextView.setTypeface(plainRegular);
         wordOfTheDayTextView.setText(wordOfTheDay);
+        TextView IPATextView = (TextView) view.findViewById(R.id.ipa_wotd);
+        IPATextView.setTypeface(plainItalic);
+        IPATextView.setText(IPAofTheDay);
+
         wordOfTheDayTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
+                Log.i("LUCALU","IPA PRIMA DI PUTEXTRA: "+IPAofTheDay);
                 play_activity_intent.putExtra(PlayActivity.PLAY_WORD, MainActivity.wordOfTheDay);
-                v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext()).toBundle());
+                play_activity_intent.putExtra(PlayActivity.PLAY_IPA, MainActivity.IPAofTheDay);
+                Log.i("LUCALU","IPA GETEXTRA DOPO DI PUTEXTRA: "+play_activity_intent.getStringExtra(PlayActivity.PLAY_IPA));
+                startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
             }
         });
 
-        TextView IPATextView = (TextView) view.findViewById(R.id.ipa_wotd);
-        IPATextView.setTypeface(plainItalic);
-        IPATextView.setText(IPAofTheDay);
+
 
         final ImageButton favorite_button = (ImageButton)view.findViewById(R.id.favorite_card_button);
         favorite_flag = Utility.checkFavs(getActivity(), wordOfTheDay);
@@ -128,6 +186,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO CHECK DEFAULT ACCENT
+                //TODO CHANGE QUEUE_ADD TO NOT CREATE A QUEUE_NOT
                 american_speaker_google.speak(wordOfTheDay, QUEUE_ADD, null, null);
             }
         });
@@ -158,6 +217,7 @@ public class HomeFragment extends Fragment {
                 switch(v.getId()) {
                     case R.id.first_wotd:
                         play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view1.getText());
+                        //TODO AGGIUNGERE IPA
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 

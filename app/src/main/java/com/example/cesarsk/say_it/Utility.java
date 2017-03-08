@@ -71,7 +71,7 @@ public class Utility {
     public static void share(String word, String ipa, Context context) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Say It! just said me that the word '"+word+"'"+" is pronounced "+ipa+" !!");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Say It! just taught me that the word '"+word+"'"+" is pronounced "+ipa+" !!");
         sendIntent.setType("text/plain");
         context.startActivity(sendIntent);
     }
