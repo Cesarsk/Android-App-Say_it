@@ -68,6 +68,14 @@ public class Utility {
         context.startActivity(emailIntent);
     }
 
+    public static void share(String word, String ipa, Context context) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Say It! just said me that the word '"+word+"'"+" is pronounced "+ipa+" !!");
+        sendIntent.setType("text/plain");
+        context.startActivity(sendIntent);
+    }
+
     //Rate-Us Module
     public static void rateUs(Context context) {
         Uri uri = Uri.parse("market://details?id=" + context.getPackageName());

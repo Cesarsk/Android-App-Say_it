@@ -28,6 +28,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.app.FragmentManager;
 import android.view.animation.Interpolator;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ import static com.example.cesarsk.say_it.MainActivity.IPAofTheDay;
 import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
+import static com.example.cesarsk.say_it.Utility.shareToMail;
 
 
 /*
@@ -127,6 +129,14 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 //TODO CHECK DEFAULT ACCENT
                 american_speaker_google.speak(wordOfTheDay, QUEUE_ADD, null, null);
+            }
+        });
+
+        ImageButton share_word = (ImageButton) view.findViewById(R.id.share_word_button_card);
+        share_word.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.share(wordOfTheDay, IPAofTheDay, getActivity());
             }
         });
 
@@ -213,6 +223,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        /*
         FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,7 +231,7 @@ public class HomeFragment extends Fragment {
                 final Intent intent = new Intent(getActivity(),SettingsActivity.class);
                 startActivity(intent);
             }
-        });
+        }); */
 
         /*ImageButton settings_button = (ImageButton)view.findViewById(R.id.settings_button);
         settings_button.setOnClickListener(new View.OnClickListener() {
