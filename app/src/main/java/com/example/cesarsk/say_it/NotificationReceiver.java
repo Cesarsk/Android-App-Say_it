@@ -18,7 +18,17 @@ import android.support.v7.app.NotificationCompat;
 public class NotificationReceiver extends BroadcastReceiver {
 
     public static int REQUEST_CODE = 1;
-
+/*
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            // Set the alarm here.
+            Intent service = new Intent(context, NotificationAlarmService.class);
+            service.putExtra("notifId", intent.getIntExtra("notifId", 0));
+            context.startService(service);
+        }
+    }
+*/
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -62,6 +72,5 @@ public class NotificationReceiver extends BroadcastReceiver {
         mNotificationManager.notify(REQUEST_CODE, mBuilder.build());
         REQUEST_CODE++;
     }
-
 }
 

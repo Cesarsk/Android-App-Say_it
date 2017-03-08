@@ -8,12 +8,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
-    <!-- permission required to use NotificationReceiver -->
-    <receiver android:name="com.example.Cesarsk.NotificationReceiver"></receiver>
-
     <!-- permission required to use Alarm Manager -->
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+    <service android:name=".NotificationAlarmService"
+        android:enabled="true"
+        android:exported="false" >
+        <intent-filter>
+            <action android:name="NOTIFICATION_SERVICE" />
+        </intent-filter>
+    </service>
 
 
     <application
@@ -22,10 +27,23 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/BlueYellowThemeNoActionBar">
+
+        <!-- permission required to use NotificationReceiver -->
+        <receiver android:name=".NotificationReceiver">
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

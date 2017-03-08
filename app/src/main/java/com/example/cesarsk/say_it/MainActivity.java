@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
@@ -94,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
     ImageView lens_search_button;
     ImageButton voice_search_button;
 
+    //Notification id
+    final int notifId = 1;
+
+
     final FragmentManager fragmentManager = getFragmentManager();
 
     @Override
@@ -141,13 +146,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 12); calendar.set(Calendar.MINUTE, 00); calendar.set(Calendar.SECOND, 00);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, new Intent("com.example.cesarsk.say_it"),0);
-
-        registerReceiver(new NotificationReceiver(), new IntentFilter("com.example.cesarsk.say_it"));
-        AlarmManager am = (AlarmManager) this.getSystemService(MainActivity.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        //Invocazione notifica
+        scheduleNotification(9, 30);
 
         //SETUP TOOLBAR
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -284,6 +284,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void scheduleNotification(int hour, int minute){
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        notificationIntent.putExtra("notifId", notifId);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifId, notificationIntent, 0);
+
+// Set the alarm to start at approximately at a time
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+// With setInexactRepeating(), you have to use one of the AlarmManager interval
+// constants--in this case, AlarmManager.INTERVAL_DAY.
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -301,5 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce=false;
             }
         }, 2000);
+
+
     }
 }
