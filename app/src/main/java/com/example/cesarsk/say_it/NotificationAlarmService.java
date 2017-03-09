@@ -18,7 +18,6 @@ import android.util.Log;
  */
 
 public class NotificationAlarmService extends Service {
-    NotificationManager notificationManager;
     PendingIntent pendingIntent;
     long when = System.currentTimeMillis();
     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -36,7 +35,8 @@ public class NotificationAlarmService extends Service {
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_flag)
                         .setContentTitle("Say it! Reminder ")
-                        .setContentText("Hey! Here's your word of the day: "+MainActivity.wordOfTheDay)
+                        //TODO AIUTO CARICAMENTO AVVIO SMARTPHONE DELLA PAROLA
+                        .setContentText("Hey! Here's your word of the day: ")
                         .setSound(alarmSound)
                         .setVibrate(new long[]{300, 300, 300, 300, 300})
                         .setAutoCancel(true).setWhen(when);

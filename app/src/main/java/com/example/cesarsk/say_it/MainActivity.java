@@ -281,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification(int hour, int minute){
+
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         notificationIntent.putExtra("notifId", notifId);
 
@@ -291,15 +292,17 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-        if(calendar.getTime().compareTo(new Date()) < 0) calendar.add(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 12);
-
+        //if(calendar.getTime().compareTo(new Date()) < 0) calendar.add(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 // With setInexactRepeating(), you have to use one of the AlarmManager interval
 // constants--in this case, AlarmManager.INTERVAL_DAY.
+
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pendingIntent);
+
     }
 
     @Override

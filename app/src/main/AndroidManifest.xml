@@ -11,6 +11,7 @@
     <!-- permission required to use Alarm Manager -->
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON"/>
 
     <application
         android:allowBackup="true"
