@@ -272,24 +272,6 @@ public class Utility {
         Long seed = Long.parseLong(getDate(c.getTimeInMillis()));
         wordOfTheDay = getRandomWord(seed, false);
         IPAofTheDay = getRandomWord(seed, true);
-
-        /*String line;
-        try {
-            while ((line = line_reader.readLine()) != null) {
-                WordList.add(line.toLowerCase());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Collections.sort(WordList);
-
-        //Word of the day
-        Long timestamp = System.currentTimeMillis();
-        Log.i("RANDOM SEED:", getDate(timestamp));
-        String seed = getDate(timestamp);
-        Long longSeed = Long.parseLong(seed);
-        wordOfTheDay =  WordList.get(new Random(longSeed).nextInt(WordList.size()));*/
     }
 
     private static String getDate(long timeStamp) {
