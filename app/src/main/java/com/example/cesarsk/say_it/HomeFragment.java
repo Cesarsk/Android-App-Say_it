@@ -284,7 +284,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        /*
+
         FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,7 +292,26 @@ public class HomeFragment extends Fragment {
                 final Intent intent = new Intent(getActivity(),SettingsActivity.class);
                 startActivity(intent);
             }
-        }); */
+        });
+
+        /*
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                if (dy > 0 ||dy<0 && fab.isShown())
+                    fab.hide();
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                    fab.show();
+                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+        */
 
         /*ImageButton settings_button = (ImageButton)view.findViewById(R.id.settings_button);
         settings_button.setOnClickListener(new View.OnClickListener() {

@@ -10,5 +10,4 @@
         android:id="@+id/favorites_list"
         android:divider="@color/divider"
         android:dividerHeight="1.5px"/>
-
 </RelativeLayout>

@@ -29,13 +29,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.NativeExpressAdView;
-import com.google.android.gms.ads.VideoController;
-import com.google.android.gms.ads.VideoOptions;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -43,7 +39,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
@@ -79,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
     public final static int REQUEST_CODE = 1;
 
+    private final int REQ_CODE_SPEECH_INPUT = 100;
+
     boolean doubleBackToExitPressedOnce = false;
 
     //Definizione variabile WordList
@@ -94,10 +91,6 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     ImageView lens_search_button;
     ImageButton voice_search_button;
-
-    //Notification id
-    final int notifId = 1;
-
 
     final FragmentManager fragmentManager = getFragmentManager();
 
@@ -146,8 +139,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        //Invocazione notifica
-        scheduleNotification(9, 30);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 19); calendar.set(Calendar.MINUTE,14); calendar.set(Calendar.SECOND,0);
+        registerReceiver(new NotificationReceiver(), new IntentFilter("com.example.cesarsk.say_it"));
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE,new Intent("com.example.cesarsk.say_it") ,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
 
         //SETUP TOOLBAR
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -282,25 +284,13 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("error", "Initilization Failed!");
             }
         });
-    }
 
-    private void scheduleNotification(int hour, int minute){
-        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra("notifId", notifId);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifId, notificationIntent, 0);
-
-// Set the alarm to start at approximately at a time
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-// With setInexactRepeating(), you have to use one of the AlarmManager interval
-// constants--in this case, AlarmManager.INTERVAL_DAY.
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
+        //Gestione AD (TEST AD)
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        mAdView.bringToFront();
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override
@@ -320,7 +310,5 @@ public class MainActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce=false;
             }
         }, 2000);
-
-
     }
 }

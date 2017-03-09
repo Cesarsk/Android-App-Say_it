@@ -18,17 +18,7 @@ import android.support.v7.app.NotificationCompat;
 public class NotificationReceiver extends BroadcastReceiver {
 
     public static int REQUEST_CODE = 1;
-/*
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            // Set the alarm here.
-            Intent service = new Intent(context, NotificationAlarmService.class);
-            service.putExtra("notifId", intent.getIntExtra("notifId", 0));
-            context.startService(service);
-        }
-    }
-*/
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -48,8 +38,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         Intent resultIntent = new Intent(context, PlayActivity.class);
         resultIntent.putExtra(PlayActivity.PLAY_WORD, MainActivity.wordOfTheDay);
 
-        resultIntent.setFlags(resultIntent.FLAG_ACTIVITY_CLEAR_TOP
-                | resultIntent.FLAG_ACTIVITY_SINGLE_TOP);
+        resultIntent.setFlags(resultIntent.FLAG_ACTIVITY_CLEAR_TOP);
 
 // The stack builder object will contain an artificial back stack for the
 // started Activity. This ensures that navigating backward from the Activity leads out of
@@ -71,6 +60,9 @@ public class NotificationReceiver extends BroadcastReceiver {
 // mId allows you to update the notification later on.
         mNotificationManager.notify(REQUEST_CODE, mBuilder.build());
         REQUEST_CODE++;
+
     }
+
+
 }
 
