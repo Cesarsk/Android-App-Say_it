@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="General options">
-        <CheckBoxPreference
-            android:key = "silent_mode"
-            android:defaultValue="false"
-            android:title="Silent Mode"
-            android:summary="Mute all sounds from this app"
+
+        <PreferenceScreen
+            android:key="button_notification"
+            android:title="Notification"
+            android:persistent="false">
+
+        <PreferenceCategory
+                android:title="Notification Settings">
+
+        <Preference
+            android:key="mammina"
+            android:title="La Mamma di Luca"
             />
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="default_language"
-            android:summary="Enable American Accent"
-            android:switchTextOff="No"
-            android:switchTextOn="Yes"
-            android:title="Default Accent" />
+        </PreferenceCategory>
+
+        </PreferenceScreen>
+
+    <!--
+        <ListPreference
+            android:key="default_accent"
+            android:title="Default Accent"
+            android:summary="Type to change accent."
+            android:entries="@array/default_voice"
+            />
+    -->
+        <Preference
+            android:key="bug_report"
+            android:title="Bug Report"/>
+
         <Preference
             android:key="contact_us"
             android:title="Contact Us"
             />
 
         <Preference
-            android:key="bug_report"
-            android:title="Bug Report"/>
-
-        <Preference
             android:key="rate_us"
             android:title="Rate Us"
             />
-    </PreferenceCategory>
 
 </PreferenceScreen>
