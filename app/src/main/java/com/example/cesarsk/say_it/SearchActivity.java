@@ -30,7 +30,6 @@ public class SearchActivity extends AppCompatActivity {
     private final int REQ_CODE_SPEECH_INPUT = 100;
     EditText editText;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +45,7 @@ public class SearchActivity extends AppCompatActivity {
         final ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this);
 
         result_list.setAdapter(adapter);
-
+        final ImageButton voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);
         final ImageButton clear_editText = (ImageButton) findViewById(R.id.clear_editText);
         clear_editText.setVisibility(View.GONE);
         editText = (EditText) findViewById(R.id.search_bar_edit_text);
@@ -60,9 +59,12 @@ public class SearchActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.toString().isEmpty()){
                     clear_editText.setVisibility(View.GONE);
+                    voice_search_button.setVisibility(View.VISIBLE);
                 }
                 else {
                     clear_editText.setVisibility(View.VISIBLE);
+                    voice_search_button.setVisibility(View.GONE);
+
                 }
 
                 new AsyncFiltering().execute(adapter.getFilter(), s);
@@ -86,7 +88,6 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         //Voice Search Listener
-        ImageButton voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);
         voice_search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

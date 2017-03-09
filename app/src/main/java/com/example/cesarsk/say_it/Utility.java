@@ -203,7 +203,7 @@ public class Utility {
         Random rand = new Random();
 
         //Creating a List from the WordList_Map values
-        ArrayList<ArrayList<Pair<String, String>>> MapValues =  new ArrayList<>(MainActivity.Wordlists_Map.values());
+        ArrayList<ArrayList<Pair<String, String>>> MapValues = new ArrayList<>(MainActivity.Wordlists_Map.values());
 
         //Getting a random sublist and then extracting a random word from it
         ArrayList<Pair<String, String>> random_list = MapValues.get(rand.nextInt(MapValues.size()));
