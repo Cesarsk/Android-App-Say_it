@@ -3,16 +3,18 @@ package com.example.cesarsk.say_it;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.Spinner;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.util.Log;
+import android.widget.Toast;
+
 
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
+import static com.example.cesarsk.say_it.MainActivity.british_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
+import static com.example.cesarsk.say_it.R.array.default_voice_values;
 import static com.example.cesarsk.say_it.Utility.rateUs;
 import static com.example.cesarsk.say_it.Utility.shareToMail;
 
@@ -20,65 +22,55 @@ import static com.example.cesarsk.say_it.Utility.shareToMail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends Fragment {
-
+public class SettingsFragment extends PreferenceFragment {
     private String emails[] = {"luca.cesarano1@gmail.com"};
-    public SettingsFragment() {
-    }
+    public boolean accent = true;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_settings,
-                container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.preferences);
+       // mListPreference = (ListPreference)  getPreferenceManager().findPreference("preference_key");
 
-        Button contact_us = (Button) view.findViewById(R.id.contact_us);
-        contact_us.setOnClickListener(new View.OnClickListener() {
+        Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
+        rate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public void onClick(View v) {
-                shareToMail(emails, "[CONTACT US - SAY IT!]", getActivity());
-            }
-        });
-
-        Button bug_report = (Button) view.findViewById(R.id.bug_report);
-        bug_report.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareToMail(emails, "[BUG REPORT - SAY IT!]", getActivity());
-            }
-        });
-
-        Button rate_us = (Button) view.findViewById(R.id.rate_us);
-        rate_us.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public boolean onPreferenceClick(Preference preference) {
                 rateUs(getActivity());
+                return false;
             }
         });
 
-        final Spinner default_voice = (Spinner) view.findViewById((R.id.default_voice));
-
-        //Spinner default voice
-        default_voice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        Preference contact_us = getPreferenceManager().findPreference("contact_us");
+        contact_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //TODO GESTIRE DEFAULT VOICE ALL'AVVIO
-                if (default_voice.getSelectedItem().toString().compareTo("British English") == 0) american_speaker_google.setVoice(voice_british_female);
-                else if(default_voice.getSelectedItem().toString().compareTo("American English") == 0) american_speaker_google.setVoice(voice_american_female);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public boolean onPreferenceClick(Preference preference) {
+                shareToMail(emails,"[CONTACT US - SAY IT!]", getActivity());
+                return false;
             }
         });
 
-        return view;
+        Preference bug_report = getPreferenceManager().findPreference("bug_report");
+        bug_report.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                shareToMail(emails, "[CONTACT US - SAY IT!]", getActivity());
+                return false;
+            }
+        });
+
+        ListPreference default_accent = (ListPreference)getPreferenceManager().findPreference("default_accent");
+
+        default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                if (default_voice_values == 0) {
+                    accent = true;
+                }
+                else if(default_voice_values == 1) accent = false;
+                return accent;
+            }
+        });
+
     }
-
-
-
-
 }
