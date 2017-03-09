@@ -24,6 +24,7 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -53,9 +54,6 @@ import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    //TODO LA PAROLA DEL GIORNO CAMBIA SE L'ATTIVITA' VA IN BACKGROUND.
-    //TODO IL DIZIONARIO VIENE RICARICATO SE L'ATTIVITA' VA IN BACKGROUND.
 
     //Indici per la FragmentList
     private final int HOME_FRAGMENT_INDEX = 0;
@@ -141,13 +139,11 @@ public class MainActivity extends AppCompatActivity {
             //Caricamento dizionario (inclusa word of the day)
             try {
                 Utility.loadDictionary(this);
+                scheduleNotification(12,12); //Invocazione notifica
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-        //Invocazione notifica
-        scheduleNotification(9, 30);
 
         //SETUP TOOLBAR
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -291,10 +287,13 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifId, notificationIntent, 0);
 
 // Set the alarm to start at approximately at a time
+        DatePicker datePicker = new DatePicker(this);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+        if(calendar.getTime().compareTo(new Date()) < 0) calendar.add(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 12);
 
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 // With setInexactRepeating(), you have to use one of the AlarmManager interval
