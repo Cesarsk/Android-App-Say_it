@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Pair;
 
 import java.util.Random;
 
@@ -16,6 +17,8 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
 
     ObjectAnimator fade_animator;
     Random rand;
+    android.support.v4.util.Pair<String, String> pair;
+    String word; String ipa;
     boolean repeated = true;
 
     public FadingTextView(Context context) {
@@ -36,8 +39,9 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
     private void animSetUp(){
         final FadingTextView current_instance = this;
         rand = new Random();
-
-        current_instance.setText(Utility.getRandomWord());
+        pair = Utility.getRandomWordWithIPA();
+        word = pair.first; ipa = pair.second;
+        current_instance.setText(word);
         fade_animator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f);
         fade_animator.setDuration((long)rand.nextInt((8000 - 5000) + 1) + 5000);
         fade_animator.setRepeatMode(ValueAnimator.REVERSE);
@@ -64,7 +68,9 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
             @Override
             public void onAnimationRepeat(Animator animator) {
                 if(!repeated) {
-                    current_instance.setText(Utility.getRandomWord());
+                    pair = Utility.getRandomWordWithIPA();
+                    word = pair.first; ipa = pair.second;
+                    current_instance.setText(pair.first);
                 }
                 repeated = !repeated;
             }

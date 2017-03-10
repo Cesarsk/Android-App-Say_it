@@ -167,7 +167,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(null, wordOfTheDay);
+                ClipData clip = ClipData.newPlainText(null,wordOfTheDay+" ["+IPAofTheDay+"]");
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(getActivity(), "Copied to Clipboard!", Toast.LENGTH_SHORT).show();
             }
@@ -178,7 +178,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO CHECK DEFAULT ACCENT
-                //TODO CHANGE QUEUE_ADD TO NOT CREATE A QUEUE_NOT
                 american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
             }
         });
@@ -208,43 +207,51 @@ public class HomeFragment extends Fragment {
                 final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
                 switch(v.getId()) {
                     case R.id.first_wotd:
-                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view1.getText());
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view1.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view1.ipa);
                         //TODO AGGIUNGERE IPA
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
                     case R.id.second_wotd:
-                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view2.getText());
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view2.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view2.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
                     case R.id.third_wotd:
-                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view3.getText());
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view3.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view3.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
                     case R.id.fourth_wotd:
-                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view4.getText());
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view4.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view4.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
                     case R.id.sixth_wotd:
-                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view6.getText());
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view6.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view6.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
                     case R.id.seventh_wotd:
-                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view7.getText());
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view7.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view7.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
                     case R.id.eighth_wotd:
-                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view8.getText());
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view8.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view8.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
                     case R.id.ninth_wotd:
-                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view9.getText());
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view9.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view9.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 

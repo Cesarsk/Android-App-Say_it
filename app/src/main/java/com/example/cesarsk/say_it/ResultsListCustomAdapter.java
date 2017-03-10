@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 
 /**
@@ -96,7 +97,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
             @Override
             public void onClick(View v) {
                 //Cliccando su Play Button nella search result tab riproduce play.
-                american_speaker_google.speak(viewHolder.wordTextView.getText(), QUEUE_ADD, null, null);
+                american_speaker_google.speak(viewHolder.wordTextView.getText(), QUEUE_FLUSH, null, null);
             }
         });
 

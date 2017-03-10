@@ -19,6 +19,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
@@ -209,7 +210,7 @@ public class PlayActivity extends AppCompatActivity {
         play_original_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!accent_flag) american_speaker_google.speak(selected_word, QUEUE_ADD, null, null);
+                if(!accent_flag) american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
                 else british_speaker_google.speak(selected_word, QUEUE_ADD, null, null);
             }
         });

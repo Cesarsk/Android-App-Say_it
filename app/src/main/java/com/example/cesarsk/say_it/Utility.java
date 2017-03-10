@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,6 +37,7 @@ import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.Context.MODE_PRIVATE;
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
+import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.HISTORY_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.IPAofTheDay;
@@ -55,7 +57,35 @@ public class Utility {
 
     public static boolean delete_recordings() {
         //TODO DELETE ALL FILES IN THE FOLDER EXCEPT FOR .NOMEDIA FILE
+        //load all recordings, needs to be used in order to build the HistoryFragment
+        ArrayList<String> recordings = new ArrayList<>();
+        String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
+        Log.d("Files", "Path: " + path);
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                Log.d("Files", "FileName:" + files[i].getName());
+                if (!files[i].getName().equals(".nomedia"))
+                    files[i].delete();
+            }
+        }
         return true;
+    }
+
+    //CONTROLLARE SE FUNZIONA
+    public static void deleteRecording(Context context, String word) {
+        //delete a recording
+        String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].getName().equals(word + ".aac")) {
+                    files[i].delete();
+                }
+            }
+        }
     }
 
     //Method used for BUG_REPORT and CONTACT_US Modules
@@ -168,7 +198,7 @@ public class Utility {
         american_speaker_google.setPitch(pitch);
         american_speaker_google.setSpeechRate(speechRate);
         american_speaker_google.setVoice(accent);
-        american_speaker_google.speak(word, QUEUE_ADD, null, null);
+        american_speaker_google.speak(word, QUEUE_FLUSH, null, null);
     }
 
     public static ArrayList<String> loadRecordings() {
@@ -213,6 +243,21 @@ public class Utility {
         return random_pair.first;
     }
 
+    public static Pair<String, String> getRandomWordWithIPA() {
+
+        Random rand = new Random();
+
+        //Creating a List from the WordList_Map values
+        ArrayList<ArrayList<Pair<String, String>>> MapValues = new ArrayList<>(MainActivity.Wordlists_Map.values());
+
+        //Getting a random sublist and then extracting a random word from it
+        ArrayList<Pair<String, String>> random_list = MapValues.get(rand.nextInt(MapValues.size()));
+        Pair<String, String> random_pair = random_list.get(rand.nextInt(random_list.size()));
+
+        //String random_word = WordList.get(new Random().nextInt(WordList.size()));
+        return random_pair;
+    }
+
     public static String getRandomWord(long seed, boolean ipa) {
 
         Random rand = new Random(seed);
@@ -234,8 +279,6 @@ public class Utility {
 
         return null;
     }
-
-
 
     public static void loadDictionary(Activity activity) throws IOException {
 
@@ -285,33 +328,15 @@ public class Utility {
         }
     }
 
-    public static void deleteRecordings() {
-        //delete all recordings
-        String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
-        File directory = new File(path);
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].getName().equals(".nomedia")) ;
-                else files[i].delete();
-            }
-        }
+    public static void deletePreferences(Context context) {
+        //TODO AGGIUNGERE IN IMPOSTAZIONI
+        //delete all preferences
+        SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.clear();
+        editor.apply();
+        Toast.makeText(context, "Deleted preferences!", Toast.LENGTH_SHORT).show();
     }
-
-    public static void deleteRecording(Context context, String word) {
-        //delete a recording
-        String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
-        File directory = new File(path);
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].getName().equals(word + ".aac")) {
-                    files[i].delete();
-                }
-            }
-        }
-    }
-
 
     //FUNZIONI PER RICHIESTA PERMESSI
     public static boolean checkPermission(Context context) {

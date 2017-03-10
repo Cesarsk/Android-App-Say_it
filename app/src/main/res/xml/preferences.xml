@@ -36,6 +36,10 @@
             android:title="Bug Report"/>
 
         <Preference
+            android:key="delete_recordings"
+            android:title="Delete Recordings"/>
+
+        <Preference
             android:key="contact_us"
             android:title="Contact Us"
             />

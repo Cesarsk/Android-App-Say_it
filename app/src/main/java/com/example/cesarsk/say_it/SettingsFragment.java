@@ -59,6 +59,23 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
+        Preference delete_recordings = getPreferenceManager().findPreference("delete_recordings");
+        delete_recordings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if(Utility.delete_recordings())
+                {
+                    Toast.makeText(getActivity(), "Recordings deleted!", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        });
+
         ListPreference default_accent = (ListPreference)getPreferenceManager().findPreference("default_accent");
 
         default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
