@@ -1,5 +1,6 @@
 package com.example.cesarsk.say_it;
 
+import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -322,7 +323,6 @@ public class MainActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce=false;
             }
         }, 2000);
-
 
     }
 }
