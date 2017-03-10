@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
             viewHolder.ipaTextView = (TextView) convertView.findViewById(R.id.result_second_line);
             viewHolder.quickPlayImgButton = (ImageButton) convertView.findViewById(R.id.quick_play_listbutton);
             viewHolder.addToFavsImgButton = (ImageButton) convertView.findViewById(R.id.add_to_favs_button);
+            viewHolder.textLayout = (LinearLayout) convertView.findViewById(R.id.search_list_text_layout);
 
             convertView.setTag(viewHolder);
         } else {
@@ -80,14 +82,13 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         String current_ipa = results.get(position).second;
         viewHolder.ipaTextView.setText(current_ipa);
 
-        viewHolder.wordTextView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.textLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //TODO SPOSTARE QUESTO CODICE A SEARCHACTIVITY, OPPURE NON SARA' CLICCABILE IL SINGOLO ELEMENTO MA SOLO IL TESTO
+            public void onClick(View view) {
                 final Intent play_activity_intent = new Intent(context, PlayActivity.class);
                 play_activity_intent.putExtra(PlayActivity.PLAY_WORD, viewHolder.wordTextView.getText());
                 play_activity_intent.putExtra(PlayActivity.PLAY_IPA, viewHolder.ipaTextView.getText());
-                Utility.addHist(context, viewHolder.wordTextView.getText().toString());
+                Utility.addHist(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                 context.startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
             }
         });
@@ -105,7 +106,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         viewHolder.addToFavsImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utility.addFavs(context, viewHolder.wordTextView.getText().toString());
+                Utility.addFavs(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                 Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
             }
         });
@@ -169,6 +170,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
     private static class SearchResultViewHolder {
         TextView wordTextView;
         TextView ipaTextView;
+        LinearLayout textLayout;
         ImageButton quickPlayImgButton;
         ImageButton addToFavsImgButton;
     }

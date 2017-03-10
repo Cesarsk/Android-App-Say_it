@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -150,7 +151,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!favorite_flag) {
-                    Utility.addFavs(v.getContext(), wordOfTheDay);
+                    Utility.addFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag= !favorite_flag;
                     favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
                 }

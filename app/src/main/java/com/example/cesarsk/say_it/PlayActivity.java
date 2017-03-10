@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -155,7 +156,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!favorite_flag) {
-                    Utility.addFavs(v.getContext(), selected_word);
+                    Utility.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag= !favorite_flag;
                     Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
                     favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));

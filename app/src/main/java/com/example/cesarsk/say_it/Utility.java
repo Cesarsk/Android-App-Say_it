@@ -19,6 +19,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -133,7 +135,7 @@ public class Utility {
         editor.apply();
     }
 
-    public static void addFavs(Context context, String word) {
+    public static void addFavs(Context context, Pair<String, String> pair) {
         Set<String> new_favs = new TreeSet<>();
         loadFavs(context);
         if (MainActivity.FAVORITES != null) {
@@ -141,7 +143,9 @@ public class Utility {
                 new_favs.add(element);
             }
         }
-        new_favs.add(word);
+        Gson gson = new Gson();
+        String SerializedPair = gson.toJson(new SayItPair(pair.first, pair.second));
+        new_favs.add(SerializedPair);
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
@@ -169,7 +173,7 @@ public class Utility {
         else return false;
     }
 
-    public static void addHist(Context context, String word) {
+    public static void addHist(Context context, Pair<String, String> pair) {
         Set<String> new_hist = new TreeSet<>();
         loadHist(context);
         if (MainActivity.HISTORY != null) {
@@ -178,7 +182,9 @@ public class Utility {
             }
         }
         //TODO INFINITI ELEMENTI NELLA HISTORY? NON VA BENE!!!
-        new_hist.add(word);
+        Gson gson = new Gson();
+        String SerializedPair = gson.toJson(new SayItPair(pair.first, pair.second));
+        new_hist.add(SerializedPair);
         savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
     }
 

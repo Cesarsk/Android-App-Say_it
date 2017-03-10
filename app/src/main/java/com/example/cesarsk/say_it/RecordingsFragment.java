@@ -49,7 +49,7 @@ public class RecordingsFragment extends Fragment {
                 String selectedFromList = ((String)listView.getItemAtPosition(position));
                 play_activity_intent.putExtra(PlayActivity.PLAY_WORD, selectedFromList);
                 getActivity().startActivity(play_activity_intent);
-                Utility.addHist(getActivity(), selectedFromList);
+                //Utility.addHist(getActivity(), selectedFromList);
             }
         });
 
