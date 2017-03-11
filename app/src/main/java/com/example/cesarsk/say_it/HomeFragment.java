@@ -55,6 +55,7 @@ import static com.example.cesarsk.say_it.MainActivity.IPAofTheDay;
 import static com.example.cesarsk.say_it.MainActivity.WordList;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
+import static com.example.cesarsk.say_it.Utility.getRandomQuote;
 import static com.example.cesarsk.say_it.Utility.shareToMail;
 
 
@@ -190,6 +191,9 @@ public class HomeFragment extends Fragment {
                 Utility.share(wordOfTheDay, IPAofTheDay, getActivity());
             }
         });
+
+        final TextView random_quote = (TextView)view.findViewById(R.id.random_quote);
+        random_quote.setText(getRandomQuote());
 
         final FadingTextView wotd_text_view1 = (FadingTextView)view.findViewById(R.id.first_wotd); wotd_text_view1.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd); wotd_text_view2.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

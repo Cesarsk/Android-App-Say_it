@@ -42,6 +42,7 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Calendar;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
     public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
+    public static final ArrayList<String> Quotes = new ArrayList();
     static String wordOfTheDay;
     static String IPAofTheDay;
 
@@ -140,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             //Caricamento dizionario (inclusa word of the day)
             try {
                 Utility.loadDictionary(this);
+                Utility.loadQuotes(this);
                 scheduleNotification(12,12); //Invocazione notifica
             } catch (IOException e) {
                 e.printStackTrace();

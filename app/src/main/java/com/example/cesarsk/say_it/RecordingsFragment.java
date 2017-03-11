@@ -34,7 +34,6 @@ public class RecordingsFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_recordings, container, false);
 
-        Utility.loadFavs(getActivity());
         ArrayList<String> sortedRecordingsList = new ArrayList<>(Utility.loadRecordings());
         Collections.sort(sortedRecordingsList);
 

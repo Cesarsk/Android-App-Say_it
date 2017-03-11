@@ -207,6 +207,30 @@ public class Utility {
         american_speaker_google.speak(word, QUEUE_FLUSH, null, null);
     }
 
+    public static void loadQuotes(Activity activity) throws IOException {
+
+            //Getting Buffered Readers linked to the two txt files in the raw folder
+            BufferedReader quote_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.quotes)));
+
+            //Temporary wordlist that stores the "current" element in the loop
+            ArrayList<String> temp_wordlist = new ArrayList<>();
+
+            //If the line is not the * character keep creating Pairs of values and store them into
+            //the temporary list. When the * is reached a sublist has been completed so it is stored
+            //in the Wordlist_Map that contains all the sublists.
+            String dictionary_line;
+            while (((dictionary_line = quote_line_reader.readLine()) != null)) {
+
+                if (!(dictionary_line.equalsIgnoreCase("*"))) {
+                    String current_word = new String(dictionary_line);
+                    temp_wordlist.add(current_word);
+                } else {
+                    MainActivity.Quotes.add(temp_wordlist.get(0));
+                    temp_wordlist = new ArrayList<>();
+                }
+            }
+        }
+
     public static ArrayList<String> loadRecordings() {
         //load all recordings, needs to be used in order to build the HistoryFragment
         ArrayList<String> recordings = new ArrayList<>();
@@ -234,6 +258,7 @@ public class Utility {
         } else return false;
     }
 
+
     public static String getRandomWord() {
 
         Random rand = new Random();
@@ -247,6 +272,18 @@ public class Utility {
 
         //String random_word = WordList.get(new Random().nextInt(WordList.size()));
         return random_pair.first;
+    }
+
+    public static String getRandomQuote() {
+
+        Random rand = new Random();
+
+        //Creating a List from the WordList_Map values
+        ArrayList<String> quotes = new ArrayList<>(MainActivity.Quotes);
+
+        //Getting a random sublist and then extracting a random word from it
+        String random_quote = quotes.get(rand.nextInt(quotes.size()));
+        return random_quote;
     }
 
     public static Pair<String, String> getRandomWordWithIPA() {
