@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     static String IPAofTheDay;
 
     //Bottom Bar variable
-    BottomBar bottomBar;
+    static BottomBar bottomBar;
 
     //EditText Searchbar variable
     EditText editText;

@@ -195,6 +195,15 @@ public class HomeFragment extends Fragment {
         final TextView random_quote = (TextView)view.findViewById(R.id.random_quote);
         random_quote.setText(getRandomQuote());
 
+        final TextView view_full_history = (TextView)view.findViewById(R.id.view_full_history);
+        view_full_history.setText("Full History");
+        view_full_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.bottomBar.selectTabAtPosition(2);
+            }
+        });
+
         final FadingTextView wotd_text_view1 = (FadingTextView)view.findViewById(R.id.first_wotd); wotd_text_view1.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd); wotd_text_view2.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view3 = (FadingTextView)view.findViewById(R.id.third_wotd); wotd_text_view3.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
