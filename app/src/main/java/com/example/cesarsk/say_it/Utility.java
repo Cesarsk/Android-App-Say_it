@@ -169,8 +169,21 @@ public class Utility {
                 new_favs.add(element);
             }
         }
-        if (new_favs.contains(word)) return true;
-        else return false;
+
+        ArrayList<Pair<String, String>> DeserializedFavs = new ArrayList<>();
+        Gson gson = new Gson();
+        for(String element : new_favs){
+            SayItPair pair = gson.fromJson(element, SayItPair.class);
+            DeserializedFavs.add(pair);
+        }
+
+        for(Pair<String, String> element : DeserializedFavs){
+            if(element.first.equals(word)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static void addHist(Context context, Pair<String, String> pair) {
@@ -182,8 +195,9 @@ public class Utility {
             }
         }
         //TODO INFINITI ELEMENTI NELLA HISTORY? NON VA BENE!!!
+        Calendar c = Calendar.getInstance();
         Gson gson = new Gson();
-        String SerializedPair = gson.toJson(new SayItPair(pair.first, pair.second));
+        String SerializedPair = gson.toJson(new SayItPair(pair.first, pair.second, c.getTime()));
         new_hist.add(SerializedPair);
         savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
     }

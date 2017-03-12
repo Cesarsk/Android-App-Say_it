@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -41,7 +42,7 @@ public class HistoryFragment extends Fragment {
 
         Utility.loadHist(getActivity());
         ArrayList<String> SerializedHistory = new ArrayList<>(MainActivity.HISTORY);
-        ArrayList<Pair<String, String>> DeserializedHistory = new ArrayList<>();
+        ArrayList<SayItPair> DeserializedHistory = new ArrayList<>();
         Gson gson = new Gson();
 
         for(String element : SerializedHistory){
@@ -49,10 +50,14 @@ public class HistoryFragment extends Fragment {
             DeserializedHistory.add(pair);
         }
 
-        //Collections.sort(DeserializedHistory);
+        Collections.sort(DeserializedHistory, new Comparator<SayItPair>() {
+            @Override
+            public int compare(SayItPair pair1, SayItPair pair2) {
+                return pair2.getAdding_time().compareTo(pair1.getAdding_time());
+            }
+        });
 
         final ListView listView = (ListView) view.findViewById(R.id.history_list);
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, sortedHistoryList);
         HistoryListAdapter adapter = new HistoryListAdapter(getActivity(), DeserializedHistory);
         listView.setAdapter(adapter);
 
@@ -62,9 +67,9 @@ public class HistoryFragment extends Fragment {
     private class HistoryListAdapter extends BaseAdapter {
 
         private Context context;
-        private ArrayList<Pair<String, String>> history;
+        private ArrayList<SayItPair> history;
 
-        public HistoryListAdapter(Context context, ArrayList<Pair<String, String>> history){
+        public HistoryListAdapter(Context context, ArrayList<SayItPair> history){
             this.context = context;
             this.history = history;
         }
