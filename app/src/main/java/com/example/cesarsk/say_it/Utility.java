@@ -16,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -38,12 +37,10 @@ import java.util.TreeSet;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.Context.MODE_PRIVATE;
-import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.HISTORY_PREFS_KEY;
 import static com.example.cesarsk.say_it.MainActivity.IPAofTheDay;
-import static com.example.cesarsk.say_it.MainActivity.Wordlists_Map;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 import static com.example.cesarsk.say_it.PlayActivity.RequestPermissionCode;
@@ -149,7 +146,7 @@ public class Utility {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
-    public static void removeFavs(Context context, String word) {
+    public static void removeFavs(Context context, Pair<String, String> pair) {
         Set<String> new_favs = new TreeSet<>();
         loadFavs(context);
         if (MainActivity.FAVORITES != null) {
@@ -157,8 +154,22 @@ public class Utility {
                 new_favs.add(element);
             }
         }
-        new_favs.remove(word);
+        Gson gson = new Gson();
+        new_favs.remove(gson.toJson(new SayItPair(pair.first, pair.second)));
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
+    }
+
+    public static void removeHist(Context context, SayItPair pair) {
+        Set<String> new_favs = new TreeSet<>();
+        loadHist(context);
+        if (MainActivity.HISTORY != null) {
+            for (String element : MainActivity.HISTORY) {
+                new_favs.add(element);
+            }
+        }
+        Gson gson = new Gson();
+        new_favs.remove(gson.toJson(pair));
+        savePrefs(context, new_favs, MainActivity.HISTORY_PREFS_KEY);
     }
 
     public static boolean checkFavs(Context context, String word) {

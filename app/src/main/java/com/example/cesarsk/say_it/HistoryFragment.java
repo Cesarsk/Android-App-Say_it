@@ -3,26 +3,27 @@ package com.example.cesarsk.say_it;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
+import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
+import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 
 
 /**
@@ -90,7 +91,7 @@ public class HistoryFragment extends Fragment {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             final HistoryElementViewHolder ViewHolder;
@@ -98,11 +99,12 @@ public class HistoryFragment extends Fragment {
             if(view == null){
 
                 ViewHolder = new HistoryElementViewHolder();
-                view = inflater.inflate(R.layout.search_results_list_item, viewGroup, false);
+                view = inflater.inflate(R.layout.history_list_item, viewGroup, false);
                 ViewHolder.wordTextView = (TextView) view.findViewById(R.id.result_first_line);
                 ViewHolder.IPATextView = (TextView) view.findViewById(R.id.result_second_line);
-                ViewHolder.QuickPlayBtn = (ImageButton) view.findViewById(R.id.quick_play_listbutton);
-                ViewHolder.DeleteFromHistoryBtn = (ImageButton) view.findViewById(R.id.add_to_favs_button);
+                ViewHolder.QuickPlayBtn = (ImageButton) view.findViewById(R.id.quick_play_histlistbutton);
+                ViewHolder.AddtoFavsBtn = (ImageButton) view.findViewById(R.id.add_to_favs_histbutton);
+                ViewHolder.DeleteFromHistoryBtn = (ImageButton) view.findViewById(R.id.remove_from_history_button);
 
                 view.setTag(ViewHolder);
             }
@@ -116,6 +118,37 @@ public class HistoryFragment extends Fragment {
             ViewHolder.IPATextView.setText(ipa);
 
             //TODO Listener pulsanti
+            ViewHolder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Cliccando su Play Button nella search result tab riproduce play.
+                    american_speaker_google.speak(ViewHolder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                }
+            });
+
+            final boolean favorite_flag = Utility.checkFavs(getActivity(), history.get(i).first);
+            if(favorite_flag) ViewHolder.AddtoFavsBtn.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+
+            ViewHolder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(favorite_flag) {
+                        Utility.addFavs(context, new Pair<>(ViewHolder.wordTextView.getText().toString(), ViewHolder.IPATextView.getText().toString()));
+                        Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if(!favorite_flag){
+                        Utility.removeFavs(v.getContext(), history.get(i));
+                    }
+                }
+            });
+
+            ViewHolder.DeleteFromHistoryBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utility.removeHist(view.getContext(), new SayItPair(history.get(i).first, history.get(i).second, history.get(i).getAdding_time()));
+                }
+            });
 
             return view;
         }
@@ -125,6 +158,7 @@ public class HistoryFragment extends Fragment {
         TextView wordTextView;
         TextView IPATextView;
         ImageButton QuickPlayBtn;
+        ImageButton AddtoFavsBtn;
         ImageButton DeleteFromHistoryBtn;
     }
 }

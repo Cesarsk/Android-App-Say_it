@@ -158,7 +158,7 @@ public class HomeFragment extends Fragment {
                 }
                 else {
                     favorite_button.setColorFilter(getResources().getColor(R.color.white));
-                    Utility.removeFavs(v.getContext(), wordOfTheDay);
+                    Utility.removeFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag = !favorite_flag;
                 }
             }
