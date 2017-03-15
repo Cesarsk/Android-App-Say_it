@@ -3,14 +3,11 @@ package com.example.cesarsk.say_it;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 /**
@@ -93,11 +89,11 @@ public class FavoritesFragment extends Fragment {
             if(view == null){
 
                 ViewHolder = new FavoritesElementViewHolder();
-                view = inflater.inflate(R.layout.search_results_list_item, viewGroup, false);
-                ViewHolder.wordTextView = (TextView) view.findViewById(R.id.result_first_line);
-                ViewHolder.IPATextView = (TextView) view.findViewById(R.id.result_second_line);
-                ViewHolder.QuickPlayBtn = (ImageButton) view.findViewById(R.id.quick_play_listbutton);
-                ViewHolder.DeleteFromFavoritesBtn = (ImageButton) view.findViewById(R.id.add_to_favs_button);
+                view = inflater.inflate(R.layout.list_item_generic, viewGroup, false);
+                ViewHolder.wordTextView = (TextView) view.findViewById(R.id.list_item_first_line);
+                ViewHolder.IPATextView = (TextView) view.findViewById(R.id.list_item_second_line);
+                ViewHolder.QuickPlayBtn = (ImageButton) view.findViewById(R.id.list_item_quickplay);
+                ViewHolder.DeleteFromFavoritesBtn = (ImageButton) view.findViewById(R.id.list_item_addToFavs);
 
                 view.setTag(ViewHolder);
             }
