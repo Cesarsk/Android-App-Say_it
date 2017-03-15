@@ -118,6 +118,7 @@ public class HistoryFragment extends Fragment {
             ViewHolder.IPATextView.setText(ipa);
 
             //TODO Listener pulsanti
+            //TODO button dei favorites non funziona correttamente
             ViewHolder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
