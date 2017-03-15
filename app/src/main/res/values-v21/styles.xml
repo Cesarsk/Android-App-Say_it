@@ -1,13 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base application theme. -->
+    <style name="BlueYellowThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:colorBackground">@color/Grey100</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+    </style>
 
-    <!--
-    //added for bottombar transparency
-    <style name="AppTheme.TransNav" parent="AppTheme">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-    </style> -->
+    <style name="BlueYellowThemeActionBar" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:colorBackground">@color/Grey100</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+    </style>
 
+    <style name="BlueYellowEditText" parent="Base.V7.Widget.AppCompat.EditText">
+        <item name="background">@color/primary_dark</item>
+        <item name="android:backgroundTint">@color/primary_dark</item>
+        <item name="android:textColorHint">@color/primary_light</item>
+    </style>
+
+    <style name="CustomTitleTextAppearance">
+        <item name="android:textSize">23sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
 </resources>

@@ -1,44 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <tabs>
-    <tab
-        id="@+id/tab_favorites"
-        icon="@drawable/ic_star"
-        title="Favorites"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/ActiveTabColor"
-        barColorWhenSelected="@color/BottomBarColor"/>
-
-    <tab
-        id="@+id/tab_search"
-        icon="@drawable/ic_search"
-        title="Search"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/ActiveTabColor"
-        barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_home"
         icon="@drawable/ic_home"
         title="Home"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/ActiveTabColor"
+        activeColor="@color/primary"
+        barColorWhenSelected="@color/BottomBarColor"/>
+
+    <tab
+        id="@+id/tab_favorites"
+        icon="@drawable/ic_favorite"
+        title="Favorites"
+        activeColor="@color/primary"
         barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
         id="@+id/tab_history"
         icon="@drawable/ic_history"
         title="History"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/ActiveTabColor"
+        activeColor="@color/primary"
         barColorWhenSelected="@color/BottomBarColor"/>
 
     <tab
-        id="@+id/tab_settings"
-        icon="@drawable/ic_settings"
-        title="Settings"
-        inActivecolor="@color/inActiveTabColor"
-        activeColor="@color/ActiveTabColor"
+        id="@+id/tab_recordings"
+        icon="@drawable/ic_voicemail"
+        title="Recordings"
+        activeColor="@color/primary"
         barColorWhenSelected="@color/BottomBarColor"/>
 
 </tabs>

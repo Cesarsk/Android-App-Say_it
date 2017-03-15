@@ -9,60 +9,66 @@
     android:layout_weight="1"
     android:elevation="0dp"
     app:layout_scrollFlags="scroll"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    >
 
     <Button
         android:text="Remove ADS"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:id="@+id/remove_ads"
         android:layout_width="match_parent"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart" />
+        android:textAlignment="viewStart"
+        android:textColor="@color/primary_text"/>
 
     <Button
         android:text="Rate Us"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:id="@+id/rate_us"
         android:layout_width="match_parent"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_alignBottom="@+id/remove_ads"
         android:layout_alignParentStart="true"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart" />
+        android:textAlignment="viewStart"
+        android:textColor="@color/primary_text"/>
 
     <Button
         android:text="Bug Report"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:id="@+id/bug_report"
         android:layout_width="match_parent"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_alignBottom="@+id/rate_us"
         android:layout_alignParentStart="true"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart" />
+        android:textAlignment="viewStart"
+        android:textColor="@color/primary_text"/>
 
     <Button
         android:text="Contact us"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:id="@+id/contact_us"
         android:layout_width="match_parent"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_alignBottom="@+id/contact_us"
         android:layout_alignParentStart="true"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart" />
+        android:textAlignment="viewStart"
+        android:textColor="@color/primary_text"/>
 
     <Button
         android:text="Delete recordings"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:id="@+id/delete_recordings"
         android:layout_width="match_parent"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_alignBottom="@+id/bug_report"
         android:layout_alignParentStart="true"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart" />
+        android:textAlignment="viewStart"
+        android:textColor="@color/primary_text"/>
 
     <Spinner
         android:layout_width="match_parent"

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <PreferenceScreen
+            android:key="button_notification"
+            android:title="Notification"
+            android:persistent="false">
+
+        <PreferenceCategory
+                android:title="Notification Settings">
+
+        <Preference
+            android:key="mammina"
+            android:title="La Mamma di Luca"
+            />
+
+         <Preference
+             android:key="papino"
+             android:title="Il padre di Luca"
+             />
+
+        </PreferenceCategory>
+
+        </PreferenceScreen>
+
+        <ListPreference
+            android:key="default_accent"
+            android:title="Default Accent"
+            android:summary="Click to change accent."
+            android:entries="@array/default_voice"
+            android:entryValues="@array/default_voice_values"
+            />
+
+        <Preference
+            android:key="bug_report"
+            android:title="Bug Report"/>
+
+        <Preference
+            android:key="delete_recordings"
+            android:title="Delete Recordings"/>
+
+        <Preference
+            android:key="contact_us"
+            android:title="Contact Us"
+            />
+
+        <Preference
+            android:key="rate_us"
+            android:title="Rate Us"
+            />
+
+</PreferenceScreen>

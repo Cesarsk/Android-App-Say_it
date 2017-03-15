@@ -1,121 +1,93 @@
 package com.example.cesarsk.say_it;
 
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.Spinner;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.util.Log;
+import android.widget.Toast;
 
-import java.util.List;
 
-import static com.example.cesarsk.say_it.MainActivity.tts;
+import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
+import static com.example.cesarsk.say_it.MainActivity.british_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.voice_american_female;
 import static com.example.cesarsk.say_it.MainActivity.voice_british_female;
+import static com.example.cesarsk.say_it.R.array.default_voice_values;
+import static com.example.cesarsk.say_it.Utility.rateUs;
+import static com.example.cesarsk.say_it.Utility.shareToMail;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends Fragment {
-
+public class SettingsFragment extends PreferenceFragment {
     private String emails[] = {"luca.cesarano1@gmail.com"};
-    public SettingsFragment() {
-    }
+    public boolean accent = true;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_settings,
-                container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.preferences);
+       // mListPreference = (ListPreference)  getPreferenceManager().findPreference("preference_key");
 
-        Button contact_us = (Button) view.findViewById(R.id.contact_us);
-        contact_us.setOnClickListener(new View.OnClickListener() {
+        Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
+        rate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public void onClick(View v) {
-                shareToMail(emails, "[CONTACT US - SAY IT!]");
+            public boolean onPreferenceClick(Preference preference) {
+                rateUs(getActivity());
+                return false;
             }
         });
 
-        Button bug_report = (Button) view.findViewById(R.id.bug_report);
-        bug_report.setOnClickListener(new View.OnClickListener() {
+        Preference contact_us = getPreferenceManager().findPreference("contact_us");
+        contact_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public void onClick(View v) {
-                shareToMail(emails, "[BUG REPORT - SAY IT!]");
+            public boolean onPreferenceClick(Preference preference) {
+                shareToMail(emails,"[CONTACT US - SAY IT!]", getActivity());
+                return false;
             }
         });
 
-        Button rate_us = (Button) view.findViewById(R.id.rate_us);
-        rate_us.setOnClickListener(new View.OnClickListener() {
+        Preference bug_report = getPreferenceManager().findPreference("bug_report");
+        bug_report.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public void onClick(View v) {
-                rateUs();
+            public boolean onPreferenceClick(Preference preference) {
+                shareToMail(emails, "[CONTACT US - SAY IT!]", getActivity());
+                return false;
             }
         });
 
-        final Spinner default_voice = (Spinner) view.findViewById((R.id.default_voice));
-
-        //Spinner default voice
-        default_voice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        Preference delete_recordings = getPreferenceManager().findPreference("delete_recordings");
+        delete_recordings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //TODO GESTIRE DEFAULT VOICE ALL'AVVIO
-                if (default_voice.getSelectedItem().toString().compareTo("British English") == 0) tts.setVoice(voice_british_female);
-                else if(default_voice.getSelectedItem().toString().compareTo("American English") == 0) tts.setVoice(voice_american_female);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public boolean onPreferenceClick(Preference preference) {
+                if(Utility.delete_recordings())
+                {
+                    Toast.makeText(getActivity(), "Recordings deleted!", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
             }
         });
 
-        return view;
-    }
+        ListPreference default_accent = (ListPreference)getPreferenceManager().findPreference("default_accent");
 
-    //Method used for BUG_REPORT and CONTACT_US Modules
-    public void shareToMail(String[] email, String subject) {
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, email);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        //emailIntent.putExtra(Intent.EXTRA_TEXT, content);
-        emailIntent.setType("text/plain");
-        startActivity(emailIntent);
-    }
-
-    //Rate-Us Module
-    public void rateUs(){
-        Uri uri = Uri.parse("market://details?id=" + getActivity().getPackageName());
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        // To count with Play market backstack, After pressing back button,
-        // to taken back to our application, we need to add following flags to intent.
-        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        try {
-            startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName())));
-        }
+        default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                if (default_voice_values == 0) {
+                    accent = true;
+                }
+                else if(default_voice_values == 1) accent = false;
+                return accent;
+            }
+        });
 
     }
-
-    public boolean delete_recordings() {
-        //TODO DELETE ALL FILES IN THE FOLDER EXCEPT FOR .NOMEDIA FILE
-        return true;
-    }
-
 }
