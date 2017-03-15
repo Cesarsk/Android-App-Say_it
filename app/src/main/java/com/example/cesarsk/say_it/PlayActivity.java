@@ -235,7 +235,7 @@ public class PlayActivity extends AppCompatActivity {
                 else {
                     favorite_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
-                    Utility.removeFavs(v.getContext(), selected_word);
+                    Utility.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
                 }
             }
