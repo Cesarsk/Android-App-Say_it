@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -48,7 +49,12 @@ public class FavoritesFragment extends Fragment {
             DeserializedFavs.add(pair);
         }
 
-        //Collections.sort(sortedFavoritesList);
+        Collections.sort(DeserializedFavs, new Comparator<Pair<String, String>>() {
+            @Override
+            public int compare(Pair<String, String> pair1, Pair<String, String> pair2) {
+                return pair1.first.compareTo(pair2.first);
+            }
+        });
 
         final ListView listView = (ListView) view.findViewById(R.id.favorites_list);
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, sortedFavoritesList);
