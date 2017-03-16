@@ -8,6 +8,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +26,11 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static android.view.View.INVISIBLE;
@@ -37,6 +45,7 @@ public class PlayActivity extends AppCompatActivity {
     private static final String AUDIO_RECORDER_FILE_EXT_AAC = ".aac";
     private static final String AUDIO_RECORDER_FOLDER = "Say it";
     private MediaRecorder recorder = null;
+    private ShowTimer timer;
     private int currentFormat = 0;
     private int output_formats[] = {MediaRecorder.OutputFormat.DEFAULT};
     private String file_exts[] = {AUDIO_RECORDER_FILE_EXT_AAC};
@@ -51,9 +60,6 @@ public class PlayActivity extends AppCompatActivity {
     private boolean accent_flag = false;
     private boolean favorite_flag = false;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +68,7 @@ public class PlayActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
 
-     //   final Button recplay_button = (Button)findViewById(R.id.recplay_button);
+        final Button recplay_button = (Button)findViewById(R.id.recplay_button);
         final ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
         final ImageButton play_button = (ImageButton)findViewById(R.id.play_button);
         final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
@@ -71,12 +77,15 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
         final ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
         final ImageButton accent_button = (ImageButton)findViewById(R.id.accent_button);
-        final ImageButton play_original_button = (ImageButton)findViewById(R.id.play_original);
+        final Button play_original_button = (Button)findViewById(R.id.play_original);
         final ImageButton your_recordings = (ImageButton)findViewById(R.id.recordings_button);
         final ImageButton remove_ad = (ImageButton)findViewById(R.id.remove_ads_button);
+        final TextView timerTextView = (TextView)findViewById(R.id.recordingTimer);
+
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
 
+        timer = new ShowTimer(timerTextView);
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();
         history = new CharSequence[N];
@@ -90,6 +99,15 @@ public class PlayActivity extends AppCompatActivity {
 
         if(Utility.checkFile(selected_word))
         {
+
+            int millis = Utility.returnDurationRecording(mediaPlayer);
+            SimpleDateFormat formatter = new SimpleDateFormat("mm:ss:SSS", Locale.UK);
+
+            Date date = new Date(millis);
+            String result = formatter.format(date);
+
+
+            timerTextView.setText(result);
             rec_button.setEnabled(false);
             rec_button.setVisibility(INVISIBLE);
             play_button.setEnabled(true);
@@ -133,12 +151,12 @@ public class PlayActivity extends AppCompatActivity {
                 finish(); //distruggiamo il play activity relativo alla parola
             }
         });
-/*
+
         recplay_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final float[] from = new float[3],
-                        to =   new float[3];
+                Log.i("DEBUG:","DEBUGGIAMO");
+                final float[] from = new float[3], to = new float[3];
 
                 Color.colorToHSV(Color.parseColor("#FFFFFFFF"), from);   // from white
                 Color.colorToHSV(Color.parseColor("#FFFF0000"), to);     // to red
@@ -150,9 +168,9 @@ public class PlayActivity extends AppCompatActivity {
                 anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
                     @Override public void onAnimationUpdate(ValueAnimator animation) {
                         // Transition along each axis of HSV (hue, saturation, value)
-                        hsv[0] = from[0] + (to[0] - from[0])*animation.getAnimatedFraction();
-                        hsv[1] = from[1] + (to[1] - from[1])*animation.getAnimatedFraction();
-                        hsv[2] = from[2] + (to[2] - from[2])*animation.getAnimatedFraction();
+                        hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
+                        hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
+                        hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
 
                         recplay_button.setBackgroundColor(Color.HSVToColor(hsv));
                     }
@@ -161,7 +179,7 @@ public class PlayActivity extends AppCompatActivity {
                 anim.start();
             }
         });
-*/
+
         play_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,13 +197,13 @@ public class PlayActivity extends AppCompatActivity {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
                             rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec, null));
-                            Utility.startRecording(recorder, output_formats, currentFormat, file_exts);
+                            Utility.startRecording(recorder, output_formats, currentFormat, file_exts, timer);
                             break;
 
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
                             rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec_light, null));
-                            Utility.stopRecording(recorder);
+                            Utility.stopRecording(recorder, timer);
                             rec_button.setEnabled(false);
                             rec_button.setVisibility(INVISIBLE);
                             play_button.setEnabled(true);
@@ -209,6 +227,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Utility.deleteRecording(v.getContext(), selected_word);
+                timer.ClearTimer();
                 //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
                 Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
                 play_button.setEnabled(false);
@@ -245,8 +264,8 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!slow_mode) {
-                    american_speaker_google.setSpeechRate((float)0.40);
-                    british_speaker_google.setSpeechRate((float)0.40);
+                    american_speaker_google.setSpeechRate((float)0.30);
+                    british_speaker_google.setSpeechRate((float)0.30);
                     slow_mode = !slow_mode;
                     Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
                     slow_button.setColorFilter(getResources().getColor(R.color.Yellow600));
@@ -288,8 +307,6 @@ public class PlayActivity extends AppCompatActivity {
         });
     }
 
-    //TODO QUESTO OVERRIDE SI PUO SPOSTARE IN UTILITY? X CLAFFOLO
-    //Si può fare, è da spostare l'implementazione in un metodo e poi questa funzione chiama quel metodo.
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
