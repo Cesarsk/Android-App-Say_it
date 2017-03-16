@@ -23,7 +23,6 @@ import java.util.Comparator;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
-import static com.example.cesarsk.say_it.MainActivity.wordOfTheDay;
 
 
 /**
@@ -99,12 +98,12 @@ public class HistoryFragment extends Fragment {
             if(view == null){
 
                 ViewHolder = new HistoryElementViewHolder();
-                view = inflater.inflate(R.layout.history_list_item, viewGroup, false);
-                ViewHolder.wordTextView = (TextView) view.findViewById(R.id.result_first_line);
-                ViewHolder.IPATextView = (TextView) view.findViewById(R.id.result_second_line);
-                ViewHolder.QuickPlayBtn = (ImageButton) view.findViewById(R.id.quick_play_histlistbutton);
-                ViewHolder.AddtoFavsBtn = (ImageButton) view.findViewById(R.id.add_to_favs_histbutton);
-                ViewHolder.DeleteFromHistoryBtn = (ImageButton) view.findViewById(R.id.remove_from_history_button);
+                view = inflater.inflate(R.layout.list_item_history, viewGroup, false);
+                ViewHolder.wordTextView = (TextView) view.findViewById(R.id.list_item_first_line);
+                ViewHolder.IPATextView = (TextView) view.findViewById(R.id.list_item_second_line);
+                ViewHolder.QuickPlayBtn = (ImageButton) view.findViewById(R.id.list_item_quickplay);
+                ViewHolder.AddtoFavsBtn = (ImageButton) view.findViewById(R.id.list_item_addToFavs);
+                ViewHolder.DeleteFromHistoryBtn = (ImageButton) view.findViewById(R.id.list_item_removeFromHistory);
 
                 view.setTag(ViewHolder);
             }
@@ -117,8 +116,6 @@ public class HistoryFragment extends Fragment {
             ViewHolder.wordTextView.setText(word);
             ViewHolder.IPATextView.setText(ipa);
 
-            //TODO Listener pulsanti
-            //TODO button dei favorites non funziona correttamente
             ViewHolder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -133,13 +130,14 @@ public class HistoryFragment extends Fragment {
             ViewHolder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(favorite_flag) {
+                    if(!favorite_flag) {
                         Utility.addFavs(context, new Pair<>(ViewHolder.wordTextView.getText().toString(), ViewHolder.IPATextView.getText().toString()));
-                        Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show();
                     }
 
-                    if(!favorite_flag){
+                    if(favorite_flag){
                         Utility.removeFavs(v.getContext(), history.get(i));
+                        Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -148,6 +146,7 @@ public class HistoryFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Utility.removeHist(view.getContext(), new SayItPair(history.get(i).first, history.get(i).second, history.get(i).getAdding_time()));
+                    Toast.makeText(context, "Removed from History", Toast.LENGTH_SHORT).show();
                 }
             });
 
