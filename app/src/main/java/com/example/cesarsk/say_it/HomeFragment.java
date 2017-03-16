@@ -295,6 +295,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
         /*
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
             @Override

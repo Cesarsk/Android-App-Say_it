@@ -55,7 +55,7 @@
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/BlueYellowThemeActionBar" />
+            android:theme="@style/Preference" />
         <activity
             android:name=".PlayActivity"
             android:screenOrientation="portrait"
