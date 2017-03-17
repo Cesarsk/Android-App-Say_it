@@ -130,10 +130,10 @@
 
             <Button
                 android:id="@+id/recplay_button"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/accent"
                 android:background="@drawable/circle"
-                android:backgroundTint="@color/primary_dark"
                 android:layout_centerInParent="false"
                 />
 

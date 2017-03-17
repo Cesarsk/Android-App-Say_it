@@ -1,16 +1,22 @@
 package com.example.cesarsk.say_it;
 
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +43,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.MainActivity.british_speaker_google;
+import static com.example.cesarsk.say_it.R.id.textView;
 
 public class PlayActivity extends AppCompatActivity {
 
@@ -59,6 +66,7 @@ public class PlayActivity extends AppCompatActivity {
     private boolean slow_mode = false;
     private boolean accent_flag = false;
     private boolean favorite_flag = false;
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,18 +104,16 @@ public class PlayActivity extends AppCompatActivity {
         selected_word_view.setText(selected_word);
         selected_ipa_view.setText(selected_ipa);
 
-
         if(Utility.checkFile(selected_word))
         {
 
             int millis = Utility.returnDurationRecording(mediaPlayer);
             SimpleDateFormat formatter = new SimpleDateFormat("mm:ss:SSS", Locale.UK);
-
             Date date = new Date(millis);
             String result = formatter.format(date);
-
-
             timerTextView.setText(result);
+
+
             rec_button.setEnabled(false);
             rec_button.setVisibility(INVISIBLE);
             play_button.setEnabled(true);
@@ -152,31 +158,25 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        recplay_button.setOnClickListener(new View.OnClickListener() {
+        int colorFrom = getResources().getColor(R.color.accent);
+        int colorTo = getResources().getColor(R.color.primary);
+        final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(2000); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
             @Override
-            public void onClick(View v) {
-                Log.i("DEBUG:","DEBUGGIAMO");
-                final float[] from = new float[3], to = new float[3];
+            public void onAnimationUpdate(ValueAnimator animator) {
+                recplay_button.tint((int) animator.getAnimatedValue());
+            }
 
-                Color.colorToHSV(Color.parseColor("#FFFFFFFF"), from);   // from white
-                Color.colorToHSV(Color.parseColor("#FFFF0000"), to);     // to red
+        });
 
-                ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
-                anim.setDuration(300);                              // for 300 ms
+        recplay_button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                colorAnimation.start();
+                return false;
 
-                final float[] hsv  = new float[3];                  // transition color
-                anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
-                    @Override public void onAnimationUpdate(ValueAnimator animation) {
-                        // Transition along each axis of HSV (hue, saturation, value)
-                        hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
-                        hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
-                        hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
-
-                        recplay_button.setBackgroundColor(Color.HSVToColor(hsv));
-                    }
-                });
-
-                anim.start();
             }
         });
 
