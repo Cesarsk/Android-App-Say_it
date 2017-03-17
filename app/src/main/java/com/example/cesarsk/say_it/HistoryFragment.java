@@ -6,6 +6,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +33,10 @@ import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
  */
 public class HistoryFragment extends Fragment {
 
+    private ArrayList<SayItPair> DeserializedHistory;
 
     public HistoryFragment() {
+
     }
 
     @Nullable
@@ -40,12 +45,121 @@ public class HistoryFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        Utility.loadHist(getActivity());
+        DeserializedHistory = loadDeserializedHistory(getActivity());
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.history_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        HistoryAdapter adapter = new HistoryAdapter(DeserializedHistory);
+        recyclerView.setAdapter(adapter);
+
+        return view;
+    }
+
+    private class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+
+        private ArrayList<SayItPair> history;
+
+        public HistoryAdapter(ArrayList<SayItPair> history_list) {
+            history = history_list;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            TextView wordTextView;
+            TextView IPATextView;
+            ImageButton QuickPlayBtn;
+            ImageButton AddtoFavsBtn;
+            ImageButton DeleteFromHistoryBtn;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+                wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
+                ;
+                IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
+                ;
+                QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
+                ;
+                AddtoFavsBtn = (ImageButton) itemView.findViewById(R.id.list_item_addToFavs);
+                ;
+                DeleteFromHistoryBtn = (ImageButton) itemView.findViewById(R.id.list_item_removeFromHistory);
+                ;
+            }
+        }
+
+        @Override
+        public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+            View view = inflater.inflate(R.layout.list_item_history, parent, false);
+
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final HistoryAdapter.ViewHolder holder, int position) {
+
+            holder.wordTextView.setText(history.get(position).first);
+            holder.IPATextView.setText(history.get(position).second);
+
+            holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Cliccando su Play Button nella search result tab riproduce play.
+                    american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                }
+            });
+
+            final boolean favorite_flag = Utility.checkFavs(getActivity(), history.get(position).first);
+            if (favorite_flag)
+                holder.AddtoFavsBtn.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+
+            holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!favorite_flag) {
+                        Utility.addFavs(getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
+                        Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                        holder.AddtoFavsBtn.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+                    }
+
+                    if (favorite_flag) {
+                        Utility.removeFavs(v.getContext(), history.get(holder.getAdapterPosition()));
+                        Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                        holder.AddtoFavsBtn.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
+                    }
+                }
+            });
+
+            holder.DeleteFromHistoryBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = holder.getAdapterPosition();
+                    Utility.removeHist(view.getContext(), new SayItPair(history.get(pos).first, history.get(pos).second, history.get(pos).getAdding_time()));
+                    history = loadDeserializedHistory(getActivity());
+                    notifyItemRemoved(pos);
+                    Toast.makeText(getActivity(), "Removed from History", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return history.size();
+        }
+    }
+
+    public static ArrayList<SayItPair> loadDeserializedHistory(Context context) {
+
+        Utility.loadHist(context);
         ArrayList<String> SerializedHistory = new ArrayList<>(MainActivity.HISTORY);
         ArrayList<SayItPair> DeserializedHistory = new ArrayList<>();
         Gson gson = new Gson();
 
-        for(String element : SerializedHistory){
+        for (String element : SerializedHistory) {
             SayItPair pair = gson.fromJson(element, SayItPair.class);
             DeserializedHistory.add(pair);
         }
@@ -57,108 +171,6 @@ public class HistoryFragment extends Fragment {
             }
         });
 
-        final ListView listView = (ListView) view.findViewById(R.id.history_list);
-        HistoryListAdapter adapter = new HistoryListAdapter(getActivity(), DeserializedHistory);
-        listView.setAdapter(adapter);
-
-        return view;
-    }
-
-    private class HistoryListAdapter extends BaseAdapter {
-
-        private Context context;
-        private ArrayList<SayItPair> history;
-
-        public HistoryListAdapter(Context context, ArrayList<SayItPair> history){
-            this.context = context;
-            this.history = history;
-        }
-
-        @Override
-        public int getCount() {
-            return history.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return history.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(final int i, View view, ViewGroup viewGroup) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            final HistoryElementViewHolder ViewHolder;
-
-            if(view == null){
-
-                ViewHolder = new HistoryElementViewHolder();
-                view = inflater.inflate(R.layout.list_item_history, viewGroup, false);
-                ViewHolder.wordTextView = (TextView) view.findViewById(R.id.list_item_first_line);
-                ViewHolder.IPATextView = (TextView) view.findViewById(R.id.list_item_second_line);
-                ViewHolder.QuickPlayBtn = (ImageButton) view.findViewById(R.id.list_item_quickplay);
-                ViewHolder.AddtoFavsBtn = (ImageButton) view.findViewById(R.id.list_item_addToFavs);
-                ViewHolder.DeleteFromHistoryBtn = (ImageButton) view.findViewById(R.id.list_item_removeFromHistory);
-
-                view.setTag(ViewHolder);
-            }
-            else {
-                ViewHolder = (HistoryElementViewHolder) view.getTag();
-            }
-
-            String word = history.get(i).first;
-            String ipa = history.get(i).second;
-            ViewHolder.wordTextView.setText(word);
-            ViewHolder.IPATextView.setText(ipa);
-
-            ViewHolder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Cliccando su Play Button nella search result tab riproduce play.
-                    american_speaker_google.speak(ViewHolder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                }
-            });
-
-            final boolean favorite_flag = Utility.checkFavs(getActivity(), history.get(i).first);
-            if(favorite_flag) ViewHolder.AddtoFavsBtn.setColorFilter(getResources().getColor(R.color.RudolphsNose));
-
-            ViewHolder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(!favorite_flag) {
-                        Utility.addFavs(context, new Pair<>(ViewHolder.wordTextView.getText().toString(), ViewHolder.IPATextView.getText().toString()));
-                        Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show();
-                    }
-
-                    if(favorite_flag){
-                        Utility.removeFavs(v.getContext(), history.get(i));
-                        Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-            ViewHolder.DeleteFromHistoryBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Utility.removeHist(view.getContext(), new SayItPair(history.get(i).first, history.get(i).second, history.get(i).getAdding_time()));
-                    Toast.makeText(context, "Removed from History", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            return view;
-        }
-    }
-
-    private static class HistoryElementViewHolder{
-        TextView wordTextView;
-        TextView IPATextView;
-        ImageButton QuickPlayBtn;
-        ImageButton AddtoFavsBtn;
-        ImageButton DeleteFromHistoryBtn;
+        return DeserializedHistory;
     }
 }
