@@ -30,7 +30,7 @@
         <Preference
             android:icon="@drawable/ic_playlist_play"
             android:key="delete_recordings"
-            android:title="Delete Recordings" />
+            android:title="Delete Recordings"/>
 
     </PreferenceCategory>
 

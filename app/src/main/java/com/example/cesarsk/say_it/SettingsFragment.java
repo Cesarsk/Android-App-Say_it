@@ -1,7 +1,9 @@
 package com.example.cesarsk.say_it;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -49,22 +51,28 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        Preference delete_recordings = getPreferenceManager().findPreference("delete_recordings");
+        final Preference delete_recordings = getPreferenceManager().findPreference("delete_recordings");
         delete_recordings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (Utility.delete_recordings()) {
-                    Toast.makeText(getActivity(), "Recordings deleted!", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Delete Recordings")
+                            .setMessage("Are you sure you want to delete all recordings?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Utility.delete_recordings();
+                                    Toast.makeText(getActivity(), "Recordings deleted!", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing
+                                }
+                            })
+                            .show();
                     return true;
-                } else {
-                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
             }
         });
-
-
-
 
         final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
 
