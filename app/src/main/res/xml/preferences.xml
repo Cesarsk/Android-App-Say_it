@@ -11,23 +11,12 @@
             android:icon="@drawable/ic_voicemail">
 
             <PreferenceCategory android:title="Notification Settings">
-
-                <Preference
-                    android:key="mammina"
-                    android:title="La Mamma di Luca" />
-
-                <Preference
-                    android:key="papino"
-                    android:title="Il padre di Luca" />
-
                 <com.example.cesarsk.say_it.TimePreference
                     android:key="time_preference"
-                    android:summary="Set notification time."
-                    android:title="Change Time"
+                    android:title="Set Notification Time"
+                    android:icon="@drawable/ic_history"
                     />
-
             </PreferenceCategory>
-
         </PreferenceScreen>
 
         <ListPreference
