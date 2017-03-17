@@ -35,4 +35,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Preference" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorAccent">@color/primary</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textSize">17sp</item>
+    </style>
 </resources>
