@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,17 +49,45 @@ public class HistoryFragment extends Fragment {
 
         DeserializedHistory = loadDeserializedHistory(getActivity());
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.history_list);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.favorites_list);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        HistoryAdapter adapter = new HistoryAdapter(DeserializedHistory);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),linearLayoutManager.getOrientation());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(defaultItemAnimator);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        final HistoryAdapter adapter = new HistoryAdapter(DeserializedHistory);
         recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                Utility.removeHist(getActivity(), adapter.getHistory().get(viewHolder.getAdapterPosition()));
+                adapter.setHistory(loadDeserializedHistory(getActivity()));
+                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+        });
+
+        touchHelper.attachToRecyclerView(recyclerView);
 
         return view;
     }
 
     private class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+
+        public ArrayList<SayItPair> getHistory() {
+            return history;
+        }
+
+        public void setHistory(ArrayList<SayItPair> history) {
+            this.history = history;
+        }
 
         private ArrayList<SayItPair> history;
 

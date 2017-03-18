@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -72,8 +73,13 @@ public class FavoritesFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.favorites_list);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),linearLayoutManager.getOrientation());
+
+        final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
+        recyclerView.setAdapter(adapter);
+
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -82,21 +88,32 @@ public class FavoritesFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Toast.makeText(getActivity(), "SWIPED!", Toast.LENGTH_SHORT).show();
+                Utility.removeFavs(getActivity(), adapter.getFavorites().get(viewHolder.getAdapterPosition()));
+                adapter.setFavorites(loadDeserializedFavs(getActivity()));
+                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
             }
         });
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(defaultItemAnimator);
         touchHelper.attachToRecyclerView(recyclerView);
-        FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
-        recyclerView.setAdapter(adapter);
 
         return view;
     }
 
     private class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder> {
 
+        public ArrayList<Pair<String, String>> getFavorites() {
+            return favorites;
+        }
+
+        public void setFavorites(ArrayList<Pair<String, String>> favorites) {
+            this.favorites = favorites;
+        }
+
         private ArrayList<Pair<String, String>> favorites;
 
-        public FavoritesAdapter(ArrayList<Pair<String, String>> favorites_list) {
+        FavoritesAdapter(ArrayList<Pair<String, String>> favorites_list) {
             favorites = favorites_list;
         }
 
