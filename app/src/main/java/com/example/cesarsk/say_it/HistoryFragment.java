@@ -49,7 +49,7 @@ public class HistoryFragment extends Fragment {
 
         DeserializedHistory = loadDeserializedHistory(getActivity());
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.favorites_list);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.history_list);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
