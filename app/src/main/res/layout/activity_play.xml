@@ -128,14 +128,12 @@
         android:layout_height="match_parent"
         android:layout_below="@id/buttons_bar">
 
-            <Button
-                android:id="@+id/recplay_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/accent"
-                android:background="@drawable/circle"
-                android:layout_centerInParent="false"
-                />
+        <Button
+            android:id="@+id/recplay_button"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="false"
+            android:background="@drawable/coloranim" />
 
         <ImageButton
             android:id="@+id/rec_button"

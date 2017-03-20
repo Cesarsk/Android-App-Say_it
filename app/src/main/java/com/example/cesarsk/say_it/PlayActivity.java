@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -158,23 +160,14 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        int colorFrom = getResources().getColor(R.color.accent);
-        int colorTo = getResources().getColor(R.color.primary);
-        final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-        colorAnimation.setDuration(2000); // milliseconds
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                recplay_button.tint((int) animator.getAnimatedValue());
-            }
-
-        });
-
         recplay_button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                colorAnimation.start();
+                //colorAnimation.start();
+                int durationMillis = 2000;
+                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                transition.startTransition(durationMillis);
+
                 return false;
 
             }
