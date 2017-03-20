@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/list_item_generic_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="60dp"
+    android:layout_width="match_parent"
+    android:paddingTop="4dp"
+    android:descendantFocusability="blocksDescendants"
+    android:background="?attr/selectableItemBackground">
+
+    <LinearLayout
+
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/list_item_first_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/primary_text"
+            android:text="@string/PLACEHOLDER" />
+
+        <TextView
+            android:id="@+id/list_item_second_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/secondary_text"
+            android:text="@string/PLACEHOLDER" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/list_item_quickplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_play_circle"
+        android:layout_gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:backgroundTint="@color/Grey100"
+        android:tint="@color/primary_dark"/>
+
+    <ImageButton
+        android:id="@+id/list_item_deleteRecording"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:backgroundTint="@color/Grey100"
+        android:src="@drawable/ic_delete_black_24dp"
+        android:tint="@color/primary_dark"/>
+
+</LinearLayout>

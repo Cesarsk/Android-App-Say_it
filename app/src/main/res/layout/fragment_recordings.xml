@@ -4,12 +4,18 @@
     android:layout_height="match_parent"
     tools:context="com.example.cesarsk.say_it.FavoritesFragment">
 
+    <!--
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/recordings_list"
         android:textColor="@color/primary_text"
         android:divider="@color/divider"
-        android:dividerHeight="1.5px"/>
+        android:dividerHeight="1.5px"/> -->
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recordings_list"/>
 
 </RelativeLayout>
