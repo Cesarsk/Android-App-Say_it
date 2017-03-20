@@ -60,4 +60,19 @@
         android:src="@drawable/ic_favorite"
         android:tint="@color/primary_dark"/>
 
+    <TextView
+        android:id="@+id/undo_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UNDO"
+        android:layout_marginEnd="8dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:clickable="true"
+        android:background="@color/Red500"
+        android:visibility="gone"/>
+
 </LinearLayout>
