@@ -91,7 +91,6 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton your_recordings = (ImageButton)findViewById(R.id.recordings_button);
         final ImageButton remove_ad = (ImageButton)findViewById(R.id.remove_ads_button);
         final TextView timerTextView = (TextView)findViewById(R.id.recordingTimer);
-
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
 
@@ -108,13 +107,12 @@ public class PlayActivity extends AppCompatActivity {
 
         if(Utility.checkFile(selected_word))
         {
-
+            recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranim, null));
             int millis = Utility.returnDurationRecording(mediaPlayer);
             SimpleDateFormat formatter = new SimpleDateFormat("mm:ss:SSS", Locale.UK);
             Date date = new Date(millis);
             String result = formatter.format(date);
             timerTextView.setText(result);
-
 
             rec_button.setEnabled(false);
             rec_button.setVisibility(INVISIBLE);
@@ -125,6 +123,8 @@ public class PlayActivity extends AppCompatActivity {
             delete_button.setVisibility(VISIBLE);
         } else
         {
+            recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranimreverse, null));
+
             play_button.setEnabled(false);
             play_button.setVisibility(INVISIBLE);
             rec_button.setEnabled(true);
@@ -163,13 +163,10 @@ public class PlayActivity extends AppCompatActivity {
         recplay_button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                //colorAnimation.start();
-                int durationMillis = 2000;
+                int durationMillis = 700;
                 TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
                 transition.startTransition(durationMillis);
-
                 return false;
-
             }
         });
 
