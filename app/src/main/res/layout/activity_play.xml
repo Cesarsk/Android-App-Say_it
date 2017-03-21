@@ -130,9 +130,9 @@
 
         <Button
             android:id="@+id/recplay_button"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="false"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
             android:background="@drawable/coloranim" />
 
         <ImageButton
@@ -140,7 +140,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/ic_rec_light"
+            android:visibility="invisible"
+            android:src="@drawable/ic_rec_light"
             android:scaleX="2"
             android:scaleY="2" />
 
@@ -149,9 +150,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@color/Grey100"
             android:scaleX="2"
             android:scaleY="2"
+            android:visibility="invisible"
             android:src="@drawable/ic_rec_green" />
 
         <TextView
@@ -165,12 +166,12 @@
 
         <Button
             android:id="@+id/play_original"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@id/rec_button"
-            android:layout_alignEnd="@id/rec_button"
-            android:layout_marginBottom="-38dp"
-            android:layout_marginEnd="-44dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignBottom="@id/recplay_button"
+            android:layout_alignEnd="@id/recplay_button"
+            android:layout_marginBottom="-18dp"
+            android:layout_marginEnd="-30dp"
             android:background="@drawable/circle"
             android:backgroundTint="@color/accent"
             android:scaleType="center" />

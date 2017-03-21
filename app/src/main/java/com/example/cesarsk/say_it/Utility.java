@@ -103,7 +103,7 @@ public class Utility {
     public static void share(String word, String ipa, Context context) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Say It! just taught me that the word '"+word+"'"+" is pronounced "+ipa+" !!");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Say It! just taught me that the word '" + word + "'" + " is pronounced " + ipa + " !!");
         sendIntent.setType("text/plain");
         context.startActivity(sendIntent);
     }
@@ -186,13 +186,13 @@ public class Utility {
 
         ArrayList<Pair<String, String>> DeserializedFavs = new ArrayList<>();
         Gson gson = new Gson();
-        for(String element : new_favs){
+        for (String element : new_favs) {
             SayItPair pair = gson.fromJson(element, SayItPair.class);
             DeserializedFavs.add(pair);
         }
 
-        for(Pair<String, String> element : DeserializedFavs){
-            if(element.first.equals(word)){
+        for (Pair<String, String> element : DeserializedFavs) {
+            if (element.first.equals(word)) {
                 return true;
             }
         }
@@ -237,27 +237,27 @@ public class Utility {
 
     public static void loadQuotes(Activity activity) throws IOException {
 
-            //Getting Buffered Readers linked to the two txt files in the raw folder
-            BufferedReader quote_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.quotes)));
+        //Getting Buffered Readers linked to the two txt files in the raw folder
+        BufferedReader quote_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.quotes)));
 
-            //Temporary wordlist that stores the "current" element in the loop
-            ArrayList<String> temp_wordlist = new ArrayList<>();
+        //Temporary wordlist that stores the "current" element in the loop
+        ArrayList<String> temp_wordlist = new ArrayList<>();
 
-            //If the line is not the * character keep creating Pairs of values and store them into
-            //the temporary list. When the * is reached a sublist has been completed so it is stored
-            //in the Wordlist_Map that contains all the sublists.
-            String dictionary_line;
-            while (((dictionary_line = quote_line_reader.readLine()) != null)) {
+        //If the line is not the * character keep creating Pairs of values and store them into
+        //the temporary list. When the * is reached a sublist has been completed so it is stored
+        //in the Wordlist_Map that contains all the sublists.
+        String dictionary_line;
+        while (((dictionary_line = quote_line_reader.readLine()) != null)) {
 
-                if (!(dictionary_line.equalsIgnoreCase("*"))) {
-                    String current_word = new String(dictionary_line);
-                    temp_wordlist.add(current_word);
-                } else {
-                    MainActivity.Quotes.add(temp_wordlist.get(0));
-                    temp_wordlist = new ArrayList<>();
-                }
+            if (!(dictionary_line.equalsIgnoreCase("*"))) {
+                String current_word = new String(dictionary_line);
+                temp_wordlist.add(current_word);
+            } else {
+                MainActivity.Quotes.add(temp_wordlist.get(0));
+                temp_wordlist = new ArrayList<>();
             }
         }
+    }
 
     public static ArrayList<String> loadRecordings() {
         //load all recordings, needs to be used in order to build the HistoryFragment
@@ -334,17 +334,15 @@ public class Utility {
         Random rand = new Random(seed);
 
         //Creating a List from the WordList_Map values
-        ArrayList<ArrayList<Pair<String, String>>> MapValues =  new ArrayList<>(MainActivity.Wordlists_Map.values());
+        ArrayList<ArrayList<Pair<String, String>>> MapValues = new ArrayList<>(MainActivity.Wordlists_Map.values());
 
         //Getting a random sublist and then extracting a random word from it
         ArrayList<Pair<String, String>> random_list = MapValues.get(rand.nextInt(MapValues.size()));
         Pair<String, String> random_pair = random_list.get(rand.nextInt(random_list.size()));
 
-        if(ipa) {
+        if (ipa) {
             return random_pair.second;
-        }
-
-        else if(!ipa){
+        } else if (!ipa) {
             return random_pair.first;
         }
 
@@ -478,14 +476,13 @@ public class Utility {
             mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
             mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
             mediaPlayer.prepare();
-        } catch(IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return mediaPlayer.getDuration();
     }
 
-        public static void playRecording(MediaPlayer mediaPlayer) {
+    public static void playRecording(MediaPlayer mediaPlayer) {
         try {
             //TODO CHECK IF RECORDING ALREADY EXISTS. IF DOES NOT, DO NOT PLAY.
             if (mediaPlayer.isPlaying()) {
@@ -504,6 +501,15 @@ public class Utility {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void stopPlaying(MediaPlayer mediaPlayer) {
+        if(mediaPlayer != null)
+        {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 

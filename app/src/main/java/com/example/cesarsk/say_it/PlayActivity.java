@@ -69,6 +69,7 @@ public class PlayActivity extends AppCompatActivity {
     private boolean accent_flag = false;
     private boolean favorite_flag = false;
     Context context = this;
+    final int durationMillis = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,19 +79,19 @@ public class PlayActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
 
-        final Button recplay_button = (Button)findViewById(R.id.recplay_button);
-        final ImageButton rec_button = (ImageButton)findViewById(R.id.rec_button);
-        final ImageButton play_button = (ImageButton)findViewById(R.id.play_button);
-        final TextView selected_word_view = (TextView)findViewById(R.id.selected_word);
-        final TextView selected_ipa_view = (TextView)findViewById(R.id.selected_word_ipa);
-        final ImageButton delete_button = (ImageButton)findViewById(R.id.delete_button);
-        final ImageButton favorite_button = (ImageButton)findViewById(R.id.favorite_button);
-        final ImageButton slow_button = (ImageButton)findViewById(R.id.slow_button);
-        final ImageButton accent_button = (ImageButton)findViewById(R.id.accent_button);
-        final Button play_original_button = (Button)findViewById(R.id.play_original);
-        final ImageButton your_recordings = (ImageButton)findViewById(R.id.recordings_button);
-        final ImageButton remove_ad = (ImageButton)findViewById(R.id.remove_ads_button);
-        final TextView timerTextView = (TextView)findViewById(R.id.recordingTimer);
+        final Button recplay_button = (Button) findViewById(R.id.recplay_button);
+        final ImageButton rec_button = (ImageButton) findViewById(R.id.rec_button);
+        final ImageButton play_button = (ImageButton) findViewById(R.id.play_button);
+        final TextView selected_word_view = (TextView) findViewById(R.id.selected_word);
+        final TextView selected_ipa_view = (TextView) findViewById(R.id.selected_word_ipa);
+        final ImageButton delete_button = (ImageButton) findViewById(R.id.delete_button);
+        final ImageButton favorite_button = (ImageButton) findViewById(R.id.favorite_button);
+        final ImageButton slow_button = (ImageButton) findViewById(R.id.slow_button);
+        final ImageButton accent_button = (ImageButton) findViewById(R.id.accent_button);
+        final Button play_original_button = (Button) findViewById(R.id.play_original);
+        final ImageButton your_recordings = (ImageButton) findViewById(R.id.recordings_button);
+        final ImageButton remove_ad = (ImageButton) findViewById(R.id.remove_ads_button);
+        final TextView timerTextView = (TextView) findViewById(R.id.recordingTimer);
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
 
@@ -101,34 +102,80 @@ public class PlayActivity extends AppCompatActivity {
 
         Typeface plainItalic = Typeface.createFromAsset(getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getAssets(), "fonts/GentiumPlus-R.ttf");
-        selected_word_view.setTypeface(plainRegular); selected_ipa_view.setTypeface(plainItalic);
+        selected_word_view.setTypeface(plainRegular);
+        selected_ipa_view.setTypeface(plainItalic);
         selected_word_view.setText(selected_word);
         selected_ipa_view.setText(selected_ipa);
 
-        if(Utility.checkFile(selected_word))
-        {
+        final View.OnClickListener play_listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!mediaPlayer.isPlaying())Utility.playRecording(mediaPlayer);
+            }
+        };
+
+        final View.OnTouchListener rec_listener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+
+                if (Utility.checkPermission(view.getContext())) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            Log.i("Say it!", "Start Recording");
+                            Utility.startRecording(recorder, output_formats, currentFormat, file_exts, timer);
+                            break;
+
+                        case MotionEvent.ACTION_UP:
+                            Log.i("Say it!", "Stop Recording");
+                            Utility.stopRecording(recorder, timer);
+                            recplay_button.setBackground(getDrawable(R.drawable.coloranimreverse));
+                            delete_button.setVisibility(VISIBLE);
+                            delete_button.setEnabled(true);
+                            TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                            transition.reverseTransition(durationMillis);
+                            break;
+
+                        case MotionEvent.ACTION_BUTTON_RELEASE:
+                            recplay_button.setOnTouchListener(null);
+                            recplay_button.setOnClickListener(play_listener);
+                            break;
+                    }
+                } else {
+                    Utility.requestPermission(view.getContext());
+                }
+
+                return false;
+            }
+        };
+
+        if (Utility.checkFile(selected_word)) {
             recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranim, null));
+            recplay_button.setOnClickListener(play_listener);
             int millis = Utility.returnDurationRecording(mediaPlayer);
             SimpleDateFormat formatter = new SimpleDateFormat("mm:ss:SSS", Locale.UK);
             Date date = new Date(millis);
             String result = formatter.format(date);
             timerTextView.setText(result);
 
+            /*
             rec_button.setEnabled(false);
             rec_button.setVisibility(INVISIBLE);
             play_button.setEnabled(true);
             play_button.setVisibility(VISIBLE);
+*/
 
             delete_button.setEnabled(true);
             delete_button.setVisibility(VISIBLE);
-        } else
-        {
+        } else {
             recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranimreverse, null));
+            recplay_button.setOnTouchListener(rec_listener);
 
+            /*
             play_button.setEnabled(false);
             play_button.setVisibility(INVISIBLE);
             rec_button.setEnabled(true);
             rec_button.setVisibility(VISIBLE);
+*/
 
             delete_button.setEnabled(false);
             delete_button.setVisibility(INVISIBLE);
@@ -160,20 +207,9 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        recplay_button.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                int durationMillis = 700;
-                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
-                transition.startTransition(durationMillis);
-                return false;
-            }
-        });
-
         play_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utility.playRecording(mediaPlayer);
             }
         });
 
@@ -181,8 +217,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
 
-                if (Utility.checkPermission(view.getContext()))
-                {
+                if (Utility.checkPermission(view.getContext())) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
@@ -194,18 +229,19 @@ public class PlayActivity extends AppCompatActivity {
                             Log.i("Say it!", "Stop Recording");
                             rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec_light, null));
                             Utility.stopRecording(recorder, timer);
+                           /*
                             rec_button.setEnabled(false);
                             rec_button.setVisibility(INVISIBLE);
                             play_button.setEnabled(true);
                             play_button.setVisibility(VISIBLE);
+                            */
                             delete_button.setVisibility(VISIBLE);
                             delete_button.setEnabled(true);
+                            TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                            transition.startTransition(durationMillis);
                             break;
                     }
-                }
-
-                else
-                {
+                } else {
                     Utility.requestPermission(view.getContext());
                 }
                 return false;
@@ -220,28 +256,33 @@ public class PlayActivity extends AppCompatActivity {
                 timer.ClearTimer();
                 //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
                 Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
+              /*
                 play_button.setEnabled(false);
                 rec_button.setEnabled(true);
                 play_button.setVisibility(INVISIBLE);
                 rec_button.setVisibility(VISIBLE);
+                */
                 delete_button.setEnabled(false);
                 delete_button.setVisibility(INVISIBLE);
+                recplay_button.setOnTouchListener(rec_listener);
+                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                transition.reverseTransition(durationMillis);
             }
         });
 
         favorite_flag = Utility.checkFavs(this, selected_word);
-        if(favorite_flag) favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+        if (favorite_flag)
+            favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
 
         favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!favorite_flag) {
+                if (!favorite_flag) {
                     Utility.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
-                    favorite_flag= !favorite_flag;
+                    favorite_flag = !favorite_flag;
                     Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
                     favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
-                }
-                else {
+                } else {
                     favorite_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
                     Utility.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
@@ -253,16 +294,15 @@ public class PlayActivity extends AppCompatActivity {
         slow_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!slow_mode) {
-                    american_speaker_google.setSpeechRate((float)0.30);
-                    british_speaker_google.setSpeechRate((float)0.30);
+                if (!slow_mode) {
+                    american_speaker_google.setSpeechRate((float) 0.30);
+                    british_speaker_google.setSpeechRate((float) 0.30);
                     slow_mode = !slow_mode;
                     Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
                     slow_button.setColorFilter(getResources().getColor(R.color.Yellow600));
-                }
-                else {
-                    american_speaker_google.setSpeechRate((float)0.90);
-                    british_speaker_google.setSpeechRate((float)0.90);
+                } else {
+                    american_speaker_google.setSpeechRate((float) 0.90);
+                    british_speaker_google.setSpeechRate((float) 0.90);
                     Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
                     slow_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     slow_mode = !slow_mode;
@@ -273,14 +313,13 @@ public class PlayActivity extends AppCompatActivity {
         accent_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!accent_flag) {
-                   // american_speaker_google.setVoice(voice_british_female);
+                if (!accent_flag) {
+                    // american_speaker_google.setVoice(voice_british_female);
                     accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
-                }
-                else {
-                   // american_speaker_google.setVoice(voice_american_female);
+                } else {
+                    // american_speaker_google.setVoice(voice_american_female);
                     accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
@@ -291,8 +330,9 @@ public class PlayActivity extends AppCompatActivity {
         play_original_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!accent_flag) american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                else british_speaker_google.speak(selected_word, QUEUE_ADD, null, null);
+                if (!accent_flag)
+                    american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                else british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
             }
         });
     }
@@ -302,7 +342,7 @@ public class PlayActivity extends AppCompatActivity {
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case RequestPermissionCode:
-                if (grantResults.length> 0) {
+                if (grantResults.length > 0) {
                     boolean StoragePermission = grantResults[0] ==
                             PackageManager.PERMISSION_GRANTED;
                     boolean RecordPermission = grantResults[1] ==
@@ -311,7 +351,7 @@ public class PlayActivity extends AppCompatActivity {
                     if (StoragePermission && RecordPermission) {
                         Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
