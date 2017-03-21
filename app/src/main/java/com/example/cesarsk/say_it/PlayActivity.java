@@ -80,8 +80,6 @@ public class PlayActivity extends AppCompatActivity {
         Bundle args = intent.getExtras();
 
         final Button recplay_button = (Button) findViewById(R.id.recplay_button);
-        final ImageButton rec_button = (ImageButton) findViewById(R.id.rec_button);
-        final ImageButton play_button = (ImageButton) findViewById(R.id.play_button);
         final TextView selected_word_view = (TextView) findViewById(R.id.selected_word);
         final TextView selected_ipa_view = (TextView) findViewById(R.id.selected_word_ipa);
         final ImageButton delete_button = (ImageButton) findViewById(R.id.delete_button);
@@ -110,43 +108,61 @@ public class PlayActivity extends AppCompatActivity {
         final View.OnClickListener play_listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mediaPlayer.isPlaying())Utility.playRecording(mediaPlayer);
+                if (!mediaPlayer.isPlaying()) Utility.playRecording(mediaPlayer);
             }
         };
 
         final View.OnTouchListener rec_listener = new View.OnTouchListener() {
+            private int CLICK_ACTION_THRESHHOLD = 200;
+            private float startX;
+            private float startY;
+
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-
                 if (Utility.checkPermission(view.getContext())) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
+                            startX = event.getX();
+                            startY = event.getY();
                             Utility.startRecording(recorder, output_formats, currentFormat, file_exts, timer);
                             break;
 
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
+                            float endX = event.getX();
+                            float endY = event.getY();
+                            if (isAClick(startX, endX, startY, endY)) {
+                                //do something
+                                recplay_button.setOnClickListener(play_listener);
+                            }
                             Utility.stopRecording(recorder, timer);
                             recplay_button.setBackground(getDrawable(R.drawable.coloranimreverse));
                             delete_button.setVisibility(VISIBLE);
                             delete_button.setEnabled(true);
+                            recplay_button.setOnTouchListener(null);
                             TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
                             transition.reverseTransition(durationMillis);
-                            break;
-
-                        case MotionEvent.ACTION_BUTTON_RELEASE:
-                            recplay_button.setOnTouchListener(null);
-                            recplay_button.setOnClickListener(play_listener);
                             break;
                     }
                 } else {
                     Utility.requestPermission(view.getContext());
                 }
-
                 return false;
             }
+
+            private boolean isAClick(float startX, float endX, float startY, float endY) {
+                float differenceX = Math.abs(startX - endX);
+                float differenceY = Math.abs(startY - endY);
+                if (differenceX > CLICK_ACTION_THRESHHOLD/* =5 */ || differenceY > CLICK_ACTION_THRESHHOLD) {
+                    return false;
+                }
+                return true;
+            }
+
         };
+
+
 
         if (Utility.checkFile(selected_word)) {
             recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranim, null));
@@ -157,26 +173,11 @@ public class PlayActivity extends AppCompatActivity {
             String result = formatter.format(date);
             timerTextView.setText(result);
 
-            /*
-            rec_button.setEnabled(false);
-            rec_button.setVisibility(INVISIBLE);
-            play_button.setEnabled(true);
-            play_button.setVisibility(VISIBLE);
-*/
-
             delete_button.setEnabled(true);
             delete_button.setVisibility(VISIBLE);
         } else {
             recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranimreverse, null));
             recplay_button.setOnTouchListener(rec_listener);
-
-            /*
-            play_button.setEnabled(false);
-            play_button.setVisibility(INVISIBLE);
-            rec_button.setEnabled(true);
-            rec_button.setVisibility(VISIBLE);
-*/
-
             delete_button.setEnabled(false);
             delete_button.setVisibility(INVISIBLE);
         }
@@ -207,48 +208,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        play_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-
-        rec_button.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-
-                if (Utility.checkPermission(view.getContext())) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            Log.i("Say it!", "Start Recording");
-                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec, null));
-                            Utility.startRecording(recorder, output_formats, currentFormat, file_exts, timer);
-                            break;
-
-                        case MotionEvent.ACTION_UP:
-                            Log.i("Say it!", "Stop Recording");
-                            rec_button.setBackground(getResources().getDrawable(R.drawable.ic_rec_light, null));
-                            Utility.stopRecording(recorder, timer);
-                           /*
-                            rec_button.setEnabled(false);
-                            rec_button.setVisibility(INVISIBLE);
-                            play_button.setEnabled(true);
-                            play_button.setVisibility(VISIBLE);
-                            */
-                            delete_button.setVisibility(VISIBLE);
-                            delete_button.setEnabled(true);
-                            TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
-                            transition.startTransition(durationMillis);
-                            break;
-                    }
-                } else {
-                    Utility.requestPermission(view.getContext());
-                }
-                return false;
-            }
-        });
-
-
         delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,12 +215,6 @@ public class PlayActivity extends AppCompatActivity {
                 timer.ClearTimer();
                 //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
                 Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
-              /*
-                play_button.setEnabled(false);
-                rec_button.setEnabled(true);
-                play_button.setVisibility(INVISIBLE);
-                rec_button.setVisibility(VISIBLE);
-                */
                 delete_button.setEnabled(false);
                 delete_button.setVisibility(INVISIBLE);
                 recplay_button.setOnTouchListener(rec_listener);

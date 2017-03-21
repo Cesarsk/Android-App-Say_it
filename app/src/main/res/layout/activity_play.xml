@@ -135,26 +135,6 @@
             android:layout_centerInParent="true"
             android:background="@drawable/coloranim" />
 
-        <ImageButton
-            android:id="@+id/rec_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="invisible"
-            android:src="@drawable/ic_rec_light"
-            android:scaleX="2"
-            android:scaleY="2" />
-
-        <ImageButton
-            android:id="@+id/play_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:scaleX="2"
-            android:scaleY="2"
-            android:visibility="invisible"
-            android:src="@drawable/ic_rec_green" />
-
         <TextView
             android:id="@+id/recordingTimer"
             android:layout_width="wrap_content"
