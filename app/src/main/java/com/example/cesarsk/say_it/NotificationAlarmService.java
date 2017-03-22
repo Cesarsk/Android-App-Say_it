@@ -14,6 +14,9 @@ import android.support.v7.app.NotificationCompat;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.ui.PlayActivity;
+import com.example.cesarsk.say_it.utility.UtilityDictionary;
+
+import java.util.Calendar;
 
 /**
  * Created by cesarsk on 08/03/17.
@@ -27,18 +30,25 @@ public class NotificationAlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flag, int startId)
     {
-
         NotificationManager notificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent mIntent = new Intent(this, MainActivity.class);
         pendingIntent = PendingIntent.getActivity(this, intent.getIntExtra("notifId", 0), mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if(MainActivity.wordOfTheDay == null)
+        {
+            Calendar c = Calendar.getInstance();
+            Long seed = Long.parseLong(UtilityDictionary.getDate(c.getTimeInMillis()));
+            MainActivity.wordOfTheDay = UtilityDictionary.getRandomWord(seed, false);
+            MainActivity.IPAofTheDay = UtilityDictionary.getRandomWord(seed, true);
+        }
 
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_flag)
                         .setContentTitle("Say it! Reminder ")
                         //TODO AIUTO CARICAMENTO AVVIO SMARTPHONE DELLA PAROLA
-                        .setContentText("Hey! Here's your word of the day: ")
+                        .setContentText("Hey! Here's your word of the day: "+MainActivity.wordOfTheDay)
                         .setSound(alarmSound)
                         .setVibrate(new long[]{300, 300, 300, 300, 300})
                         .setAutoCancel(true).setWhen(when);

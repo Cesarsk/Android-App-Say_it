@@ -18,12 +18,13 @@ public class ShowTimer {
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
+    int secs = 0;
+    int mins = 0;
     TextView textView;
 
-    public long GetDuration()
+    public long GetDurationInSecs()
     {
-        Log.i("DEBUG",""+updatedTime);
-        return updatedTime;
+        return secs;
     }
 
     public ShowTimer(TextView timerTextView) {
@@ -56,8 +57,8 @@ public class ShowTimer {
 
             updatedTime = timeSwapBuff + timeInMilliseconds;
 
-            int secs = (int) (timeInMilliseconds / 1000);
-            int mins = secs / 60;
+            secs = (int) (timeInMilliseconds / 1000);
+            mins = secs / 60;
             secs = secs % 60;
             int hours = mins / 60;
             mins = mins % 60;

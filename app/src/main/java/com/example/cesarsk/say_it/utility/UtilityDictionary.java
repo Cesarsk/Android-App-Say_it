@@ -112,7 +112,7 @@ public class UtilityDictionary {
         IPAofTheDay = getRandomWord(seed, true);
     }
 
-    private static String getDate(long timeStamp) {
+    public static String getDate(long timeStamp) {
 
         try {
             DateFormat sdf = new SimpleDateFormat("yyyyMMdd");
