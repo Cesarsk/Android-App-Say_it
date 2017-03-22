@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -57,6 +59,8 @@ public class PlayActivity extends AppCompatActivity {
     private boolean favorite_flag = false;
     Context context = this;
     final int durationMillis = 500;
+    AlphaAnimation delete_button_anim, delete_button_anim_reverse;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,45 @@ public class PlayActivity extends AppCompatActivity {
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();
         history = new CharSequence[N];
+
+        delete_button_anim = new AlphaAnimation(1.0f, 0.0f);
+        delete_button_anim_reverse = new AlphaAnimation(0.0f, 1.0f);
+        delete_button_anim.setDuration(500);
+        delete_button_anim_reverse.setDuration(500);
+        delete_button_anim_reverse.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                delete_button.setEnabled(true);
+                delete_button.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        delete_button_anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                delete_button.setEnabled(false);
+                delete_button.setVisibility(INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         Typeface plainItalic = Typeface.createFromAsset(getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getAssets(), "fonts/GentiumPlus-R.ttf");
@@ -118,8 +161,7 @@ public class PlayActivity extends AppCompatActivity {
                             timer.StopTimer();
                             if (UtilityRecord.stopRecording(recorder, selected_word)) {
                                 recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
-                                delete_button.setVisibility(VISIBLE);
-                                delete_button.setEnabled(true);
+                                delete_button.startAnimation(delete_button_anim_reverse);
                                 recplay_button.setOnTouchListener(null);
                                 recplay_button.setOnClickListener(play_listener);
                                 TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
@@ -143,9 +185,7 @@ public class PlayActivity extends AppCompatActivity {
             Date date = new Date(millis);
             String result = formatter.format(date);
             timerTextView.setText(result);
-
-            delete_button.setEnabled(true);
-            delete_button.setVisibility(VISIBLE);
+            delete_button.startAnimation(delete_button_anim_reverse);
         } else {
             recplay_button.setBackground(getResources().getDrawable(R.drawable.circle_red, null));
             recplay_button.setOnTouchListener(rec_listener);
@@ -186,8 +226,7 @@ public class PlayActivity extends AppCompatActivity {
                 timer.ClearTimer();
                 //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
                 Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
-                delete_button.setEnabled(false);
-                delete_button.setVisibility(INVISIBLE);
+                delete_button.startAnimation(delete_button_anim);
                 recplay_button.setOnTouchListener(rec_listener);
                 recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
                 TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
