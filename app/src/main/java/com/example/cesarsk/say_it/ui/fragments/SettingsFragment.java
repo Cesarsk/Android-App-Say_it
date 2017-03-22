@@ -1,4 +1,4 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.ui.fragments;
 
 
 import android.app.AlertDialog;
@@ -9,8 +9,13 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
-import static com.example.cesarsk.say_it.Utility.rateUs;
-import static com.example.cesarsk.say_it.Utility.shareToMail;
+
+import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.settings.TimePreference;
+import com.example.cesarsk.say_it.utility.Utility;
+
+import static com.example.cesarsk.say_it.utility.Utility.rateUs;
+import static com.example.cesarsk.say_it.utility.Utility.shareToMail;
 
 
 /**

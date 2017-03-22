@@ -1,16 +1,12 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.ui;
 
-import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
@@ -31,22 +27,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.NativeExpressAdView;
-import com.google.android.gms.ads.VideoController;
-import com.google.android.gms.ads.VideoOptions;
+import com.example.cesarsk.say_it.NotificationReceiver;
+import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.fragments.FavoritesFragment;
+import com.example.cesarsk.say_it.ui.fragments.HistoryFragment;
+import com.example.cesarsk.say_it.ui.fragments.HomeFragment;
+import com.example.cesarsk.say_it.ui.fragments.RecordingsFragment;
+import com.example.cesarsk.say_it.utility.UtilityDictionary;
+import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
@@ -64,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private final int RECORDINGS_FRAGMENT_INDEX = 3;
 
     //Definizione variabile TTS
-    static TextToSpeech american_speaker_google;
+    public static TextToSpeech american_speaker_google;
     static TextToSpeech british_speaker_google;
     static Voice voice_american_female = new Voice("American", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
     static Voice voice_british_female = new Voice("British", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
@@ -87,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
     public static final ArrayList<String> WordList = new ArrayList<>();
     public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
     public static final ArrayList<String> Quotes = new ArrayList();
-    static String wordOfTheDay;
-    static String IPAofTheDay;
+    public static String wordOfTheDay;
+    public static String IPAofTheDay;
 
     //Bottom Bar variable
-    static BottomBar bottomBar;
+    public static BottomBar bottomBar;
 
     //EditText Searchbar variable
     EditText editText;
@@ -107,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Utility.savePrefs(this, FAVORITES, FAVORITES_PREFS_KEY);
-        Utility.savePrefs(this, HISTORY, HISTORY_PREFS_KEY);
+        UtilitySharedPrefs.savePrefs(this, FAVORITES, FAVORITES_PREFS_KEY);
+        UtilitySharedPrefs.savePrefs(this, HISTORY, HISTORY_PREFS_KEY);
     }
 
     @Override
@@ -137,14 +132,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Caricamento preferenze
-        Utility.loadFavs(this);
-        Utility.loadHist(this);
+        UtilitySharedPrefs.loadFavs(this);
+        UtilitySharedPrefs.loadHist(this);
 
         if(Wordlists_Map.isEmpty()) {
             //Caricamento dizionario (inclusa word of the day)
             try {
-                Utility.loadDictionary(this);
-                Utility.loadQuotes(this);
+                UtilityDictionary.loadDictionary(this);
+                UtilitySharedPrefs.loadQuotes(this);
                 scheduleNotification(12,12); //Invocazione notifica
             } catch (IOException e) {
                 e.printStackTrace();

@@ -1,35 +1,27 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.ui;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.SystemClock;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.utility.ShowTimer;
+import com.example.cesarsk.say_it.utility.UtilityRecord;
+import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -37,15 +29,10 @@ import com.google.android.gms.ads.MobileAds;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
-import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
-import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
-import static com.example.cesarsk.say_it.MainActivity.british_speaker_google;
-import static com.example.cesarsk.say_it.R.id.textView;
 
 public class PlayActivity extends AppCompatActivity {
 
@@ -108,25 +95,25 @@ public class PlayActivity extends AppCompatActivity {
         final View.OnClickListener play_listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mediaPlayer.isPlaying()) Utility.playRecording(mediaPlayer);
+                if (!mediaPlayer.isPlaying()) UtilityRecord.playRecording(mediaPlayer);
             }
         };
 
         final View.OnTouchListener rec_listener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                if (Utility.checkPermission(view.getContext())) {
+                if (UtilityRecord.checkRecordAudioPermissions(view.getContext())) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
                             timer.StartTimer();
-                            Utility.startRecording(recorder, output_formats, currentFormat, file_exts);
+                            UtilityRecord.startRecording(recorder, output_formats, currentFormat, file_exts);
                             break;
 
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
                             timer.StopTimer();
-                            if (Utility.stopRecording(recorder, selected_word)) {
+                            if (UtilityRecord.stopRecording(recorder, selected_word)) {
                                 recplay_button.setBackground(getDrawable(R.drawable.coloranimreverse));
                                 delete_button.setVisibility(VISIBLE);
                                 delete_button.setEnabled(true);
@@ -140,18 +127,18 @@ public class PlayActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Utility.requestPermission(view.getContext());
+                    UtilityRecord.requestRecordAudioPermissions(view.getContext());
                 }
                 return false;
             }
         };
 
-        if (Utility.checkFile(selected_word))
+        if (UtilityRecord.checkRecordingFile(selected_word))
 
         {
             recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranim, null));
             recplay_button.setOnClickListener(play_listener);
-            int millis = Utility.returnDurationRecording(mediaPlayer);
+            int millis = UtilityRecord.returnRecordingDuration(mediaPlayer);
             SimpleDateFormat formatter = new SimpleDateFormat("ss:SSS", Locale.UK);
             Date date = new Date(millis);
             String result = formatter.format(date);
@@ -205,7 +192,7 @@ public class PlayActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-                Utility.deleteRecording(v.getContext(), selected_word);
+                UtilityRecord.deleteRecording(v.getContext(), selected_word);
                 timer.ClearTimer();
                 //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
                 Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
@@ -217,7 +204,7 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        favorite_flag = Utility.checkFavs(this, selected_word);
+        favorite_flag = UtilitySharedPrefs.checkFavs(this, selected_word);
         if (favorite_flag)
             favorite_button.setColorFilter(
 
@@ -231,14 +218,14 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!favorite_flag) {
-                    Utility.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
+                    UtilitySharedPrefs.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
                     Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
                     favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
                 } else {
                     favorite_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
-                    Utility.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
+                    UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
                 }
             }
@@ -250,14 +237,14 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!slow_mode) {
-                    american_speaker_google.setSpeechRate((float) 0.30);
-                    british_speaker_google.setSpeechRate((float) 0.30);
+                    MainActivity.american_speaker_google.setSpeechRate((float) 0.30);
+                    MainActivity.british_speaker_google.setSpeechRate((float) 0.30);
                     slow_mode = !slow_mode;
                     Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
                     slow_button.setColorFilter(getResources().getColor(R.color.Yellow600));
                 } else {
-                    american_speaker_google.setSpeechRate((float) 0.90);
-                    british_speaker_google.setSpeechRate((float) 0.90);
+                    MainActivity.american_speaker_google.setSpeechRate((float) 0.90);
+                    MainActivity.british_speaker_google.setSpeechRate((float) 0.90);
                     Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
                     slow_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     slow_mode = !slow_mode;
@@ -290,8 +277,8 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!accent_flag)
-                    american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                else british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                    MainActivity.american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                else MainActivity.british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
             }
         });
     }

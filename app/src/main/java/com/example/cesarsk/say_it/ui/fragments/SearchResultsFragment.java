@@ -1,7 +1,6 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.ui.fragments;
 
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -10,11 +9,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.util.ArrayList;
+import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.adapters.SearchListAdapter;
 
 
 /**
@@ -34,7 +33,7 @@ public class SearchResultsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search_results, container, false);
 
         final ListView result_list = (ListView) view.findViewById(R.id.result_list_view);
-        final ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(view.getContext());
+        final SearchListAdapter adapter = new SearchListAdapter(view.getContext());
         result_list.setAdapter(adapter);
 
         EditText search_bar_edit_text = (EditText) getActivity().findViewById(R.id.search_bar_edit_text);
@@ -63,7 +62,7 @@ public class SearchResultsFragment extends Fragment {
         @Override
         protected Object doInBackground(Object[] objects) {
 
-            ResultsListCustomAdapter adapter = (ResultsListCustomAdapter) objects[0];
+            SearchListAdapter adapter = (SearchListAdapter) objects[0];
             CharSequence s = (CharSequence) objects[1];
 
             adapter.getFilter().filter(s);

@@ -11,7 +11,9 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
+
+import com.example.cesarsk.say_it.ui.MainActivity;
+import com.example.cesarsk.say_it.ui.PlayActivity;
 
 /**
  * Created by cesarsk on 08/03/17.

@@ -1,11 +1,9 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.ui.fragments;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.cesarsk.say_it.ui.PlayActivity;
+import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.utility.UtilityRecord;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-import static com.example.cesarsk.say_it.Utility.loadRecordings;
 
 
 /**
@@ -38,7 +37,7 @@ public class RecordingsFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_recordings, container, false);
 
-        ArrayList<String> sortedRecordingsList = new ArrayList<>(Utility.loadRecordings());
+        ArrayList<String> sortedRecordingsList = new ArrayList<>(UtilityRecord.loadRecordings());
         Collections.sort(sortedRecordingsList);
 
         final ListView listView = (ListView) view.findViewById(R.id.recordings_list);

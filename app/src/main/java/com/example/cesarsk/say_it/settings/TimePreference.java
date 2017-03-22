@@ -1,4 +1,4 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.settings;
 
 /**
  * Created by Andrea Croce on 16/03/2017.
