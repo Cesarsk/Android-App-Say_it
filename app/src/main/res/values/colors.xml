@@ -31,6 +31,7 @@
     <color name="Yellow500">#FFEB3B</color>
     <color name="Yellow600">#FDD835</color>
     <color name="Yellow50">#FFFDE7</color>
+    <color name="Red500">#F44336</color>
     <color name="Grey300">#E0E0E0</color>
     <color name="Grey100">#F5F5F5</color>
     <color name="Grey200">#EEEEEE</color>
@@ -48,5 +49,4 @@
     <!-- Play Activity Colors -->
     <color name="red_rec_button">#d50000</color>
     <color name="green_play_button">#10ff10</color>
-
 </resources>

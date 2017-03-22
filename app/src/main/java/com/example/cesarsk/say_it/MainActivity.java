@@ -69,14 +69,16 @@ public class MainActivity extends AppCompatActivity {
     static Voice voice_american_female = new Voice("American", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
     static Voice voice_british_female = new Voice("British", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
-    //Gestione preferiti e history
+    //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
+    public static Set<String> RECORDINGS = null;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
+    public final static String RECORDINGS_PREFS_KEY = "SAY.IT.RECORDINGS"; //Chiave che identifica il Set della lista dei Recordings
     public final static int REQUEST_CODE = 1;
 
     boolean doubleBackToExitPressedOnce = false;

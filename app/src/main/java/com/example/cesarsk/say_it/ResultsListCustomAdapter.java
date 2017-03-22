@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.StringDef;
-import android.support.annotation.WorkerThread;
 import android.support.v4.util.Pair;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
 
@@ -64,12 +60,12 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         if (convertView == null) {
 
             viewHolder = new SearchResultViewHolder();
-            convertView = inflater.inflate(R.layout.search_results_list_item, parent, false);
-            viewHolder.wordTextView = (TextView) convertView.findViewById(R.id.result_first_line);
-            viewHolder.ipaTextView = (TextView) convertView.findViewById(R.id.result_second_line);
-            viewHolder.quickPlayImgButton = (ImageButton) convertView.findViewById(R.id.quick_play_listbutton);
-            viewHolder.addToFavsImgButton = (ImageButton) convertView.findViewById(R.id.add_to_favs_button);
-            viewHolder.textLayout = (LinearLayout) convertView.findViewById(R.id.search_list_text_layout);
+            convertView = inflater.inflate(R.layout.list_item_generic, parent, false);
+            viewHolder.wordTextView = (TextView) convertView.findViewById(R.id.list_item_first_line);
+            viewHolder.ipaTextView = (TextView) convertView.findViewById(R.id.list_item_second_line);
+            viewHolder.quickPlayImgButton = (ImageButton) convertView.findViewById(R.id.list_item_quickplay);
+            viewHolder.addToFavsImgButton = (ImageButton) convertView.findViewById(R.id.list_item_addToFavs);
+            viewHolder.textLayout = (LinearLayout) convertView.findViewById(R.id.list_item_generic_layout);
 
             convertView.setTag(viewHolder);
         } else {

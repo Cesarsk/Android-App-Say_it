@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.util.Pair;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -53,5 +57,61 @@ public class RecordingsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.ViewHolder> {
+
+        private ArrayList<String> recordings;
+
+        public RecordingsAdapter(ArrayList<String> recordings_list) {
+            recordings = recordings_list;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            TextView wordTextView;
+            TextView IPATextView;
+            ImageButton QuickPlayBtn;
+            ImageButton DeleteRecording;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+                wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
+                IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
+                QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
+                DeleteRecording = (ImageButton) itemView.findViewById(R.id.list_item_deleteRecording);
+            }
+        }
+
+        @Override
+        public RecordingsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+            View view = inflater.inflate(R.layout.list_item_generic, parent, false);
+
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final RecordingsAdapter.ViewHolder holder, int position) {
+
+            /*
+            holder.wordTextView.setText(recordings.get(position).first);
+            holder.IPATextView.setText(recordings.get(position).second);
+            */
+
+            holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return recordings.size();
+        }
     }
 }
