@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Vibrator;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -105,6 +106,8 @@ public class PlayActivity extends AppCompatActivity {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
+                            Vibrator vibrator = (Vibrator)view.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                            vibrator.vibrate(50);
                             recplay_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
                             timer.StartTimer();
                             UtilityRecord.startRecording(recorder, output_formats, currentFormat, file_exts);
