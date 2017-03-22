@@ -64,7 +64,8 @@ public class ShowTimer {
             int milliseconds = (int) (updatedTime % 1000);
 
             //String timer = "" + String.format("%02d", hours) + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs);
-            String timer = "" + String.format("%02d", mins) + ":" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
+            //String timer = "" + String.format("%02d", mins) + ":" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
+            String timer = "" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
             textView.setText(timer);
             customHandler.postDelayed(this, 0);
         }

@@ -58,7 +58,6 @@ public class Utility {
     private static final String AUDIO_RECORDER_FOLDER = "Say it";
 
     public static boolean delete_recordings() {
-        //TODO DELETE ALL FILES IN THE FOLDER EXCEPT FOR .NOMEDIA FILE
         //load all recordings, needs to be used in order to build the HistoryFragment
         ArrayList<String> recordings = new ArrayList<>();
         String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
@@ -462,11 +461,23 @@ public class Utility {
         return false;
     }
 
-    public static void stopRecording(MediaRecorder recorder) {
+    public static boolean stopRecording(MediaRecorder recorder, String word) {
         if (recorder != null) {
-            recorder.stop();
+            try{
+                recorder.stop();
+            } catch(RuntimeException stopException){
+                //deleting file here
+                stopException.printStackTrace();
+                String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
+                File file = new File(path + "/" + word + ".aac");
+                file.delete();
+                recorder.reset();
+                return false;
+            }
             recorder.reset();
+            return true;
         }
+        return false;
     }
 
     public static int returnDurationRecording(MediaPlayer mediaPlayer) {
