@@ -113,55 +113,37 @@ public class PlayActivity extends AppCompatActivity {
         };
 
         final View.OnTouchListener rec_listener = new View.OnTouchListener() {
-            private int CLICK_ACTION_THRESHHOLD = 200;
-            private float startX;
-            private float startY;
-
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (Utility.checkPermission(view.getContext())) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
-                            startX = event.getX();
-                            startY = event.getY();
-                            Utility.startRecording(recorder, output_formats, currentFormat, file_exts, timer);
+                            timer.StartTimer();
+                            Utility.startRecording(recorder, output_formats, currentFormat, file_exts);
                             break;
 
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
-                            float endX = event.getX();
-                            float endY = event.getY();
-                            if (isAClick(startX, endX, startY, endY)) {
-                                //do something
+                            timer.StopTimer();
+                            Utility.stopRecording(recorder);
+                            if (timer.GetDuration() > 5000) {
+                                recplay_button.setBackground(getDrawable(R.drawable.coloranimreverse));
+                                delete_button.setVisibility(VISIBLE);
+                                delete_button.setEnabled(true);
+                                recplay_button.setOnTouchListener(null);
                                 recplay_button.setOnClickListener(play_listener);
-                            }
-                            Utility.stopRecording(recorder, timer);
-                            recplay_button.setBackground(getDrawable(R.drawable.coloranimreverse));
-                            delete_button.setVisibility(VISIBLE);
-                            delete_button.setEnabled(true);
-                            recplay_button.setOnTouchListener(null);
-                            TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
-                            transition.reverseTransition(durationMillis);
-                            break;
+                                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                                transition.reverseTransition(durationMillis);
+                                return true;
+                            } else return false;
                     }
                 } else {
                     Utility.requestPermission(view.getContext());
                 }
                 return false;
             }
-
-            private boolean isAClick(float startX, float endX, float startY, float endY) {
-                float differenceX = Math.abs(startX - endX);
-                float differenceY = Math.abs(startY - endY);
-                if (differenceX > CLICK_ACTION_THRESHHOLD/* =5 */ || differenceY > CLICK_ACTION_THRESHHOLD) {
-                    return false;
-                }
-                return true;
-            }
-
         };
-
 
 
         if (Utility.checkFile(selected_word)) {

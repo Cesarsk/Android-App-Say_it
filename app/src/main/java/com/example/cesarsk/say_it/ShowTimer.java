@@ -2,6 +2,7 @@ package com.example.cesarsk.say_it;
 
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -18,6 +19,12 @@ public class ShowTimer {
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
     TextView textView;
+
+    public long GetDuration()
+    {
+        Log.i("DEBUG",""+updatedTime);
+        return updatedTime;
+    }
 
     public ShowTimer(TextView timerTextView) {
         this.textView = timerTextView;

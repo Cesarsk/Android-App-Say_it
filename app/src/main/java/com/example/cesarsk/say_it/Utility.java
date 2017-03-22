@@ -441,7 +441,7 @@ public class Utility {
         return (file.getAbsolutePath() + "/" + selected_word + file_exts[currentFormat]);
     }
 
-    public static void startRecording(MediaRecorder recorder, int output_formats[], int currentFormat, String file_exts[], ShowTimer timer) {
+    public static boolean startRecording(MediaRecorder recorder, int output_formats[], int currentFormat, String file_exts[]) {
         try {
             recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             recorder.setOutputFormat(output_formats[currentFormat]);
@@ -451,20 +451,20 @@ public class Utility {
             recorder.setOutputFile(getFilename(file_exts, currentFormat));
             recorder.setOnErrorListener(errorListener);
             recorder.setOnInfoListener(infoListener);
-            timer.StartTimer();
             recorder.prepare();
             recorder.start();
+            return true;
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public static void stopRecording(MediaRecorder recorder, ShowTimer timer) {
-        if (null != recorder) {
+    public static void stopRecording(MediaRecorder recorder) {
+        if (recorder != null) {
             recorder.stop();
-            timer.StopTimer();
             recorder.reset();
         }
     }
