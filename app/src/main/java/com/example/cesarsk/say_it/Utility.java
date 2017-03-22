@@ -10,12 +10,15 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -55,7 +58,6 @@ public class Utility {
     private static final String AUDIO_RECORDER_FOLDER = "Say it";
 
     public static boolean delete_recordings() {
-        //TODO DELETE ALL FILES IN THE FOLDER EXCEPT FOR .NOMEDIA FILE
         //load all recordings, needs to be used in order to build the HistoryFragment
         ArrayList<String> recordings = new ArrayList<>();
         String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
@@ -100,7 +102,7 @@ public class Utility {
     public static void share(String word, String ipa, Context context) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Say It! just taught me that the word '"+word+"'"+" is pronounced "+ipa+" !!");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Say It! just taught me that the word '" + word + "'" + " is pronounced " + ipa + " !!");
         sendIntent.setType("text/plain");
         context.startActivity(sendIntent);
     }
@@ -183,13 +185,13 @@ public class Utility {
 
         ArrayList<Pair<String, String>> DeserializedFavs = new ArrayList<>();
         Gson gson = new Gson();
-        for(String element : new_favs){
+        for (String element : new_favs) {
             SayItPair pair = gson.fromJson(element, SayItPair.class);
             DeserializedFavs.add(pair);
         }
 
-        for(Pair<String, String> element : DeserializedFavs){
-            if(element.first.equals(word)){
+        for (Pair<String, String> element : DeserializedFavs) {
+            if (element.first.equals(word)) {
                 return true;
             }
         }
@@ -234,27 +236,27 @@ public class Utility {
 
     public static void loadQuotes(Activity activity) throws IOException {
 
-            //Getting Buffered Readers linked to the two txt files in the raw folder
-            BufferedReader quote_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.quotes)));
+        //Getting Buffered Readers linked to the two txt files in the raw folder
+        BufferedReader quote_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.quotes)));
 
-            //Temporary wordlist that stores the "current" element in the loop
-            ArrayList<String> temp_wordlist = new ArrayList<>();
+        //Temporary wordlist that stores the "current" element in the loop
+        ArrayList<String> temp_wordlist = new ArrayList<>();
 
-            //If the line is not the * character keep creating Pairs of values and store them into
-            //the temporary list. When the * is reached a sublist has been completed so it is stored
-            //in the Wordlist_Map that contains all the sublists.
-            String dictionary_line;
-            while (((dictionary_line = quote_line_reader.readLine()) != null)) {
+        //If the line is not the * character keep creating Pairs of values and store them into
+        //the temporary list. When the * is reached a sublist has been completed so it is stored
+        //in the Wordlist_Map that contains all the sublists.
+        String dictionary_line;
+        while (((dictionary_line = quote_line_reader.readLine()) != null)) {
 
-                if (!(dictionary_line.equalsIgnoreCase("*"))) {
-                    String current_word = new String(dictionary_line);
-                    temp_wordlist.add(current_word);
-                } else {
-                    MainActivity.Quotes.add(temp_wordlist.get(0));
-                    temp_wordlist = new ArrayList<>();
-                }
+            if (!(dictionary_line.equalsIgnoreCase("*"))) {
+                String current_word = new String(dictionary_line);
+                temp_wordlist.add(current_word);
+            } else {
+                MainActivity.Quotes.add(temp_wordlist.get(0));
+                temp_wordlist = new ArrayList<>();
             }
         }
+    }
 
     public static ArrayList<String> loadRecordings() {
         //load all recordings, needs to be used in order to build the HistoryFragment
@@ -331,17 +333,15 @@ public class Utility {
         Random rand = new Random(seed);
 
         //Creating a List from the WordList_Map values
-        ArrayList<ArrayList<Pair<String, String>>> MapValues =  new ArrayList<>(MainActivity.Wordlists_Map.values());
+        ArrayList<ArrayList<Pair<String, String>>> MapValues = new ArrayList<>(MainActivity.Wordlists_Map.values());
 
         //Getting a random sublist and then extracting a random word from it
         ArrayList<Pair<String, String>> random_list = MapValues.get(rand.nextInt(MapValues.size()));
         Pair<String, String> random_pair = random_list.get(rand.nextInt(random_list.size()));
 
-        if(ipa) {
+        if (ipa) {
             return random_pair.second;
-        }
-
-        else if(!ipa){
+        } else if (!ipa) {
             return random_pair.first;
         }
 
@@ -440,10 +440,8 @@ public class Utility {
         return (file.getAbsolutePath() + "/" + selected_word + file_exts[currentFormat]);
     }
 
-    public static void startRecording(MediaRecorder recorder, int output_formats[], int currentFormat, String file_exts[]) {
-        //TODO SE IL FILE GIA' ESISTE, CANCELLALO E REGISTRA NUOVAMENTE
+    public static boolean startRecording(MediaRecorder recorder, int output_formats[], int currentFormat, String file_exts[]) {
         try {
-
             recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             recorder.setOutputFormat(output_formats[currentFormat]);
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
@@ -452,22 +450,47 @@ public class Utility {
             recorder.setOutputFile(getFilename(file_exts, currentFormat));
             recorder.setOnErrorListener(errorListener);
             recorder.setOnInfoListener(infoListener);
-
-
             recorder.prepare();
             recorder.start();
+            return true;
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public static void stopRecording(MediaRecorder recorder) {
-        if (null != recorder) {
-            recorder.stop();
+    public static boolean stopRecording(MediaRecorder recorder, String word) {
+        if (recorder != null) {
+            try{
+                recorder.stop();
+            } catch(RuntimeException stopException){
+                //deleting file here
+                stopException.printStackTrace();
+                String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
+                File file = new File(path + "/" + word + ".aac");
+                file.delete();
+                recorder.reset();
+                return false;
+            }
             recorder.reset();
+            return true;
         }
+        return false;
+    }
+
+    public static int returnDurationRecording(MediaPlayer mediaPlayer) {
+        try {
+            mediaPlayer.stop();
+            Log.i("Say it!", "Playing recording: " + Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
+            mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
+            mediaPlayer.setDataSource(Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return mediaPlayer.getDuration();
     }
 
     public static void playRecording(MediaPlayer mediaPlayer) {
@@ -489,6 +512,15 @@ public class Utility {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void stopPlaying(MediaPlayer mediaPlayer) {
+        if(mediaPlayer != null)
+        {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 
