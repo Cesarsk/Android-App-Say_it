@@ -35,7 +35,6 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class PlayActivity extends AppCompatActivity {
-
     public final static String PLAY_WORD = "com.example.cesarsk.say_it.WORD";
     public final static String PLAY_IPA = "com.example.cesarsk.say_it.IPA";
     private static final String AUDIO_RECORDER_FILE_EXT_AAC = ".aac";
@@ -106,6 +105,7 @@ public class PlayActivity extends AppCompatActivity {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
+                            recplay_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
                             timer.StartTimer();
                             UtilityRecord.startRecording(recorder, output_formats, currentFormat, file_exts);
                             break;
@@ -114,19 +114,17 @@ public class PlayActivity extends AppCompatActivity {
                             Log.i("Say it!", "Stop Recording");
                             timer.StopTimer();
                             if (UtilityRecord.stopRecording(recorder, selected_word)) {
-                                recplay_button.setBackground(getDrawable(R.drawable.coloranimreverse));
+                                recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                                 delete_button.setVisibility(VISIBLE);
                                 delete_button.setEnabled(true);
                                 recplay_button.setOnTouchListener(null);
                                 recplay_button.setOnClickListener(play_listener);
                                 TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
-                                transition.reverseTransition(durationMillis);
+                                transition.startTransition(durationMillis);
                                 return true;
                             }
                     }
-                }
-                else
-                {
+                } else {
                     UtilityRecord.requestRecordAudioPermissions(view.getContext());
                 }
                 return false;
@@ -134,9 +132,8 @@ public class PlayActivity extends AppCompatActivity {
         };
 
         if (UtilityRecord.checkRecordingFile(selected_word))
-
         {
-            recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranim, null));
+            recplay_button.setBackground(getResources().getDrawable(R.drawable.circle_color_anim_green_to_red, null));
             recplay_button.setOnClickListener(play_listener);
             int millis = UtilityRecord.returnRecordingDuration(mediaPlayer);
             SimpleDateFormat formatter = new SimpleDateFormat("ss:SSS", Locale.UK);
@@ -146,35 +143,26 @@ public class PlayActivity extends AppCompatActivity {
 
             delete_button.setEnabled(true);
             delete_button.setVisibility(VISIBLE);
-        } else
-
-        {
-            recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranimreverse, null));
+        } else {
+            recplay_button.setBackground(getResources().getDrawable(R.drawable.circle_red, null));
             recplay_button.setOnTouchListener(rec_listener);
             delete_button.setEnabled(false);
             delete_button.setVisibility(INVISIBLE);
         }
 
-        remove_ad.setOnClickListener(new View.OnClickListener()
-
-        {
+        remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 
         //Gestione AD (TEST AD)
-        MobileAds.initialize(
-
-                getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        your_recordings.setOnClickListener(new View.OnClickListener()
-
-        {
+        your_recordings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Intent main_activity_intent = new Intent(v.getContext(), MainActivity.class);
@@ -188,7 +176,6 @@ public class PlayActivity extends AppCompatActivity {
         });
 
         delete_button.setOnClickListener(new View.OnClickListener()
-
         {
             @Override
             public void onClick(View v) {
@@ -199,18 +186,14 @@ public class PlayActivity extends AppCompatActivity {
                 delete_button.setEnabled(false);
                 delete_button.setVisibility(INVISIBLE);
                 recplay_button.setOnTouchListener(rec_listener);
+                recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
                 TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
-                transition.reverseTransition(durationMillis);
+                transition.startTransition(durationMillis);
             }
         });
 
         favorite_flag = UtilitySharedPrefs.checkFavs(this, selected_word);
-        if (favorite_flag)
-            favorite_button.setColorFilter(
-
-                    getResources().
-
-                            getColor(R.color.RudolphsNose));
+        if (favorite_flag) favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
 
         favorite_button.setOnClickListener(new View.OnClickListener()
 
@@ -278,7 +261,8 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!accent_flag)
                     MainActivity.american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                else MainActivity.british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                else
+                    MainActivity.british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
             }
         });
     }
