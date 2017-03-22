@@ -127,150 +127,176 @@ public class PlayActivity extends AppCompatActivity {
                             Log.i("Say it!", "Stop Recording");
                             timer.StopTimer();
                             Utility.stopRecording(recorder);
-                            if (timer.GetDuration() > 5000) {
-                                recplay_button.setBackground(getDrawable(R.drawable.coloranimreverse));
-                                delete_button.setVisibility(VISIBLE);
-                                delete_button.setEnabled(true);
-                                recplay_button.setOnTouchListener(null);
-                                recplay_button.setOnClickListener(play_listener);
-                                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
-                                transition.reverseTransition(durationMillis);
-                                return true;
-                            } else return false;
+                            recplay_button.setBackground(getDrawable(R.drawable.coloranimreverse));
+                            delete_button.setVisibility(VISIBLE);
+                            delete_button.setEnabled(true);
+                            recplay_button.setOnTouchListener(null);
+                            recplay_button.setOnClickListener(play_listener);
+                            TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                            transition.reverseTransition(durationMillis);
+                            return true;
                     }
-                } else {
-                    Utility.requestPermission(view.getContext());
                 }
+
+            {
+                Utility.requestPermission(view.getContext());
+            }
                 return false;
-            }
-        };
-
-
-        if (Utility.checkFile(selected_word)) {
-            recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranim, null));
-            recplay_button.setOnClickListener(play_listener);
-            int millis = Utility.returnDurationRecording(mediaPlayer);
-            SimpleDateFormat formatter = new SimpleDateFormat("mm:ss:SSS", Locale.UK);
-            Date date = new Date(millis);
-            String result = formatter.format(date);
-            timerTextView.setText(result);
-
-            delete_button.setEnabled(true);
-            delete_button.setVisibility(VISIBLE);
-        } else {
-            recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranimreverse, null));
-            recplay_button.setOnTouchListener(rec_listener);
-            delete_button.setEnabled(false);
-            delete_button.setVisibility(INVISIBLE);
         }
+    }
 
-        remove_ad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    ;
 
-            }
-        });
 
-        //Gestione AD (TEST AD)
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        if(Utility.checkFile(selected_word))
+
+    {
+        recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranim, null));
+        recplay_button.setOnClickListener(play_listener);
+        int millis = Utility.returnDurationRecording(mediaPlayer);
+        SimpleDateFormat formatter = new SimpleDateFormat("mm:ss:SSS", Locale.UK);
+        Date date = new Date(millis);
+        String result = formatter.format(date);
+        timerTextView.setText(result);
+
+        delete_button.setEnabled(true);
+        delete_button.setVisibility(VISIBLE);
+    } else
+
+    {
+        recplay_button.setBackground(getResources().getDrawable(R.drawable.coloranimreverse, null));
+        recplay_button.setOnTouchListener(rec_listener);
+        delete_button.setEnabled(false);
+        delete_button.setVisibility(INVISIBLE);
+    }
+
+        remove_ad.setOnClickListener(new View.OnClickListener()
+
+    {
+        @Override
+        public void onClick (View v){
+
+    }
+    });
+
+    //Gestione AD (TEST AD)
+        MobileAds.initialize(
+
+    getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
+    AdView mAdView = (AdView) findViewById(R.id.adView);
+    AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        your_recordings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent main_activity_intent = new Intent(v.getContext(), MainActivity.class);
-                Bundle b = new Bundle();
-                b.putInt("fragment_index", 3); //Your id
-                main_activity_intent.putExtras(b); //Put your id to your next Intent
-                main_activity_intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                v.getContext().startActivity(main_activity_intent);
-                finish(); //distruggiamo il play activity relativo alla parola
-            }
-        });
+        your_recordings.setOnClickListener(new View.OnClickListener()
 
-        delete_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utility.deleteRecording(v.getContext(), selected_word);
-                timer.ClearTimer();
-                //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
-                Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
-                delete_button.setEnabled(false);
-                delete_button.setVisibility(INVISIBLE);
-                recplay_button.setOnTouchListener(rec_listener);
-                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
-                transition.reverseTransition(durationMillis);
-            }
-        });
-
-        favorite_flag = Utility.checkFavs(this, selected_word);
-        if (favorite_flag)
-            favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
-
-        favorite_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!favorite_flag) {
-                    Utility.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
-                    favorite_flag = !favorite_flag;
-                    Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
-                    favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
-                } else {
-                    favorite_button.setColorFilter(getResources().getColor(R.color.primary_light));
-                    Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
-                    Utility.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
-                    favorite_flag = !favorite_flag;
-                }
-            }
-        });
-
-        slow_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!slow_mode) {
-                    american_speaker_google.setSpeechRate((float) 0.30);
-                    british_speaker_google.setSpeechRate((float) 0.30);
-                    slow_mode = !slow_mode;
-                    Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(getResources().getColor(R.color.Yellow600));
-                } else {
-                    american_speaker_google.setSpeechRate((float) 0.90);
-                    british_speaker_google.setSpeechRate((float) 0.90);
-                    Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(getResources().getColor(R.color.primary_light));
-                    slow_mode = !slow_mode;
-                }
-            }
-        });
-
-        accent_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!accent_flag) {
-                    // american_speaker_google.setVoice(voice_british_female);
-                    accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
-                    Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
-                    accent_flag = !accent_flag;
-                } else {
-                    // american_speaker_google.setVoice(voice_american_female);
-                    accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
-                    Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
-                    accent_flag = !accent_flag;
-                }
-            }
-        });
-
-        play_original_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!accent_flag)
-                    american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                else british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-            }
-        });
+    {
+        @Override
+        public void onClick (View v){
+        final Intent main_activity_intent = new Intent(v.getContext(), MainActivity.class);
+        Bundle b = new Bundle();
+        b.putInt("fragment_index", 3); //Your id
+        main_activity_intent.putExtras(b); //Put your id to your next Intent
+        main_activity_intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        v.getContext().startActivity(main_activity_intent);
+        finish(); //distruggiamo il play activity relativo alla parola
     }
+    });
+
+        delete_button.setOnClickListener(new View.OnClickListener()
+
+    {
+        @Override
+        public void onClick (View v){
+        Utility.deleteRecording(v.getContext(), selected_word);
+        timer.ClearTimer();
+        //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
+        Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
+        delete_button.setEnabled(false);
+        delete_button.setVisibility(INVISIBLE);
+        recplay_button.setOnTouchListener(rec_listener);
+        TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+        transition.reverseTransition(durationMillis);
+    }
+    });
+
+    favorite_flag =Utility.checkFavs(this,selected_word);
+        if(favorite_flag)
+            favorite_button.setColorFilter(
+
+    getResources().
+
+    getColor(R.color.RudolphsNose));
+
+        favorite_button.setOnClickListener(new View.OnClickListener()
+
+    {
+        @Override
+        public void onClick (View v){
+        if (!favorite_flag) {
+            Utility.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
+            favorite_flag = !favorite_flag;
+            Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
+            favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+        } else {
+            favorite_button.setColorFilter(getResources().getColor(R.color.primary_light));
+            Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
+            Utility.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
+            favorite_flag = !favorite_flag;
+        }
+    }
+    });
+
+        slow_button.setOnClickListener(new View.OnClickListener()
+
+    {
+        @Override
+        public void onClick (View v){
+        if (!slow_mode) {
+            american_speaker_google.setSpeechRate((float) 0.30);
+            british_speaker_google.setSpeechRate((float) 0.30);
+            slow_mode = !slow_mode;
+            Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
+            slow_button.setColorFilter(getResources().getColor(R.color.Yellow600));
+        } else {
+            american_speaker_google.setSpeechRate((float) 0.90);
+            british_speaker_google.setSpeechRate((float) 0.90);
+            Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
+            slow_button.setColorFilter(getResources().getColor(R.color.primary_light));
+            slow_mode = !slow_mode;
+        }
+    }
+    });
+
+        accent_button.setOnClickListener(new View.OnClickListener()
+
+    {
+        @Override
+        public void onClick (View v){
+        if (!accent_flag) {
+            // american_speaker_google.setVoice(voice_british_female);
+            accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
+            Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
+            accent_flag = !accent_flag;
+        } else {
+            // american_speaker_google.setVoice(voice_american_female);
+            accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
+            Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
+            accent_flag = !accent_flag;
+        }
+    }
+    });
+
+        play_original_button.setOnClickListener(new View.OnClickListener()
+
+    {
+        @Override
+        public void onClick (View v){
+        if (!accent_flag)
+            american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+        else british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+    }
+    });
+}
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
