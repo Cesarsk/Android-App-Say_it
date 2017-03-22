@@ -40,7 +40,7 @@
 
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
 
@@ -51,19 +51,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/Preference" />
         <activity
-            android:name=".PlayActivity"
+            android:name=".ui.PlayActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BlueYellowThemeNoActionBar" />
 
-        <activity android:name=".SearchActivity"
+        <activity android:name=".ui.SearchActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".ui.MainActivity">
         </activity>
     </application>
 

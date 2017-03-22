@@ -1,4 +1,4 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.ui.adapters;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -16,22 +16,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cesarsk.say_it.ui.MainActivity;
+import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.PlayActivity;
+import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
+
 import java.util.ArrayList;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-import static com.example.cesarsk.say_it.MainActivity.american_speaker_google;
+import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google;
 
 /**
  * Created by Claffo on 08/02/2017.
  */
 
-public class ResultsListCustomAdapter extends BaseAdapter implements Filterable {
+public class SearchListAdapter extends BaseAdapter implements Filterable {
 
     private Context context;
     private ArrayList<Pair<String, String>> results;
     private SearchResultsFilter resultsFilter;
 
-    public ResultsListCustomAdapter(Context context) {
+    public SearchListAdapter(Context context) {
         this.context = context;
         results = new ArrayList<>();
     }
@@ -84,7 +89,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
                 final Intent play_activity_intent = new Intent(context, PlayActivity.class);
                 play_activity_intent.putExtra(PlayActivity.PLAY_WORD, viewHolder.wordTextView.getText());
                 play_activity_intent.putExtra(PlayActivity.PLAY_IPA, viewHolder.ipaTextView.getText());
-                Utility.addHist(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
+                UtilitySharedPrefs.addHist(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                 context.startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
             }
         });
@@ -102,7 +107,7 @@ public class ResultsListCustomAdapter extends BaseAdapter implements Filterable 
         viewHolder.addToFavsImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utility.addFavs(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
+                UtilitySharedPrefs.addFavs(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                 Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
             }
         });

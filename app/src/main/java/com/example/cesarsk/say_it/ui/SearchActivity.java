@@ -1,4 +1,4 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.ui;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -19,11 +19,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.adapters.SearchListAdapter;
+
 import java.util.ArrayList;
 import java.util.Locale;
-
-import static android.R.attr.data;
-import static android.R.attr.visible;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -42,7 +42,7 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
         final ListView result_list = (ListView) findViewById(R.id.result_list_view);
-        final ResultsListCustomAdapter adapter = new ResultsListCustomAdapter(this);
+        final SearchListAdapter adapter = new SearchListAdapter(this);
 
         result_list.setAdapter(adapter);
         final ImageButton voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);

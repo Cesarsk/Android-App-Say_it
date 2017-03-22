@@ -1,7 +1,9 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.example.cesarsk.say_it.ui.fragments.SettingsFragment;
 
 public class SettingsActivity extends Activity  {
     @Override

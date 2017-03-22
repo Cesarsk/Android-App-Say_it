@@ -1,11 +1,12 @@
-package com.example.cesarsk.say_it;
+package com.example.cesarsk.say_it.ui.components;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Pair;
+
+import com.example.cesarsk.say_it.utility.UtilityDictionary;
 
 import java.util.Random;
 
@@ -15,10 +16,13 @@ import java.util.Random;
 
 public class FadingTextView extends android.support.v7.widget.AppCompatTextView {
 
+    //TODO Istanziare un array di FadingTextView e generarle nell'HomeFragment
+
     ObjectAnimator fade_animator;
     Random rand;
     android.support.v4.util.Pair<String, String> pair;
-    String word; String ipa;
+    public String word;
+    public String ipa;
     boolean repeated = true;
 
     public FadingTextView(Context context) {
@@ -39,7 +43,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
     private void animSetUp(){
         final FadingTextView current_instance = this;
         rand = new Random();
-        pair = Utility.getRandomWordWithIPA();
+        pair = UtilityDictionary.getRandomWordWithIPA();
         word = pair.first; ipa = pair.second;
         current_instance.setText(word);
         fade_animator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f);
@@ -68,7 +72,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
             @Override
             public void onAnimationRepeat(Animator animator) {
                 if(!repeated) {
-                    pair = Utility.getRandomWordWithIPA();
+                    pair = UtilityDictionary.getRandomWordWithIPA();
                     word = pair.first; ipa = pair.second;
                     current_instance.setText(pair.first);
                 }

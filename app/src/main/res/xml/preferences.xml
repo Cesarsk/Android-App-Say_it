@@ -11,7 +11,7 @@
             android:icon="@drawable/ic_voicemail">
 
             <PreferenceCategory android:title="Notification Settings">
-                <com.example.cesarsk.say_it.TimePreference
+                <com.example.cesarsk.say_it.settings.TimePreference
                     android:key="time_preference"
                     android:title="Set Notification Time"
                     android:icon="@drawable/ic_history"
