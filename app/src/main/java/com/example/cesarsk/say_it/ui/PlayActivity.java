@@ -1,5 +1,6 @@
 package com.example.cesarsk.say_it.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,7 +8,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Handler;
 import android.os.Vibrator;
+import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.utility.ShowTimer;
+import com.example.cesarsk.say_it.utility.Utility;
 import com.example.cesarsk.say_it.utility.UtilityRecord;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
@@ -40,6 +44,7 @@ import static android.view.View.VISIBLE;
 public class PlayActivity extends AppCompatActivity {
     public final static String PLAY_WORD = "com.example.cesarsk.say_it.WORD";
     public final static String PLAY_IPA = "com.example.cesarsk.say_it.IPA";
+    public static final long UNDO_TIMEOUT = 3000;
     private static final String AUDIO_RECORDER_FILE_EXT_AAC = ".aac";
     private static final String AUDIO_RECORDER_FOLDER = "Say it";
     private MediaRecorder recorder = null;
@@ -60,6 +65,9 @@ public class PlayActivity extends AppCompatActivity {
     Context context = this;
     final int durationMillis = 500;
     AlphaAnimation delete_button_anim, delete_button_anim_reverse;
+    Snackbar snackbar;
+    Handler handler = new Handler();
+    Runnable pendingRemovalRunnable;
 
 
     @Override
@@ -83,6 +91,8 @@ public class PlayActivity extends AppCompatActivity {
         final TextView timerTextView = (TextView) findViewById(R.id.recordingTimer);
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
+
+
 
         timer = new ShowTimer(timerTextView);
         recorder = new MediaRecorder();
@@ -159,6 +169,7 @@ public class PlayActivity extends AppCompatActivity {
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
                             timer.StopTimer();
+                            recplay_button.setBackground(getDrawable(R.drawable.circle_red));
                             if (UtilityRecord.stopRecording(recorder, selected_word)) {
                                 recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                                 delete_button.startAnimation(delete_button_anim_reverse);
@@ -199,6 +210,33 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
+        //Gestione Snackbar + UNDO
+        snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
+        final Context context = this;
+        pendingRemovalRunnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(UNDO_TIMEOUT + 100L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                UtilityRecord.deleteRecording(context, selected_word);
+            }
+        };
+        snackbar.setAction("UNDO", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handler.removeCallbacks(pendingRemovalRunnable);
+                timer.SetTimer(timer.getOld_time());
+                delete_button.startAnimation(delete_button_anim_reverse);
+                recplay_button.setOnClickListener(play_listener);
+                recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
+                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                transition.startTransition(durationMillis);
+            }
+        });
+
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -221,16 +259,17 @@ public class PlayActivity extends AppCompatActivity {
         delete_button.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
-                UtilityRecord.deleteRecording(v.getContext(), selected_word);
+            public void onClick(final View v) {
                 timer.ClearTimer();
-                //TODO CAMBIO ICONA CESTINO VUOTO CESTINO PIENO
-                Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
                 delete_button.startAnimation(delete_button_anim);
                 recplay_button.setOnTouchListener(rec_listener);
                 recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
                 TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
                 transition.startTransition(durationMillis);
+                snackbar.show();
+                handler.post(pendingRemovalRunnable);
+                //Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -328,5 +367,22 @@ public class PlayActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    public void animateRecordButton(ImageButton delete_button, Button recplay_button, View.OnTouchListener rec_listener, boolean green_to_red){
+
+        delete_button.startAnimation(delete_button_anim);
+        recplay_button.setOnTouchListener(rec_listener);
+
+        if(green_to_red){
+            recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
+        }
+
+        else{
+            recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
+        }
+
+        TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+        transition.startTransition(durationMillis);
     }
 }
