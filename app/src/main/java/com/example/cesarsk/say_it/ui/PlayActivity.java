@@ -1,6 +1,5 @@
 package com.example.cesarsk.say_it.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
@@ -26,13 +26,17 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.utility.ShowTimer;
-import com.example.cesarsk.say_it.utility.Utility;
 import com.example.cesarsk.say_it.utility.UtilityRecord;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -68,6 +72,7 @@ public class PlayActivity extends AppCompatActivity {
     Snackbar snackbar;
     Handler handler = new Handler();
     Runnable pendingRemovalRunnable;
+    byte[] temp_recording_bytes;
 
 
     @Override
@@ -170,7 +175,7 @@ public class PlayActivity extends AppCompatActivity {
                             Log.i("Say it!", "Stop Recording");
                             timer.StopTimer();
                             recplay_button.setBackground(getDrawable(R.drawable.circle_red));
-                            if (UtilityRecord.stopRecording(recorder, selected_word)) {
+                            if (UtilityRecord.stopRecording(context, recorder, selected_word)) {
                                 recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                                 delete_button.startAnimation(delete_button_anim_reverse);
                                 recplay_button.setOnTouchListener(null);
@@ -213,7 +218,7 @@ public class PlayActivity extends AppCompatActivity {
         //Gestione Snackbar + UNDO
         snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
         final Context context = this;
-        pendingRemovalRunnable = new Runnable() {
+        /*pendingRemovalRunnable = new Runnable() {
             @Override
             public void run() {
                 try {
@@ -223,13 +228,26 @@ public class PlayActivity extends AppCompatActivity {
                 }
                 UtilityRecord.deleteRecording(context, selected_word);
             }
-        };
+        };*/
         snackbar.setAction("UNDO", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handler.removeCallbacks(pendingRemovalRunnable);
+                //handler.removeCallbacks(pendingRemovalRunnable);
+                File recovered_file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecord.AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(recovered_file);
+                    outputStream.write(temp_recording_bytes);
+                    outputStream.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                UtilitySharedPrefs.addRecording(context, recovered_file.getAbsolutePath());
                 timer.SetTimer(timer.getOld_time());
                 delete_button.startAnimation(delete_button_anim_reverse);
+                recplay_button.setOnTouchListener(null);
                 recplay_button.setOnClickListener(play_listener);
                 recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                 TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
@@ -266,8 +284,10 @@ public class PlayActivity extends AppCompatActivity {
                 recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
                 TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
                 transition.startTransition(durationMillis);
+                temp_recording_bytes = UtilityRecord.getRecordingfromWord(context, selected_word);
+                UtilityRecord.deleteRecording(context, selected_word);
                 snackbar.show();
-                handler.post(pendingRemovalRunnable);
+                //handler.post(pendingRemovalRunnable);
                 //Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
 
             }
