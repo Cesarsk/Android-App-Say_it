@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -35,6 +36,7 @@ import java.util.HashMap;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google;
+import static com.example.cesarsk.say_it.ui.PlayActivity.UNDO_TIMEOUT;
 
 
 /**
@@ -43,6 +45,7 @@ import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google
 public class FavoritesFragment extends Fragment {
 
     ArrayList<Pair<String, String>> DeserializedFavs;
+    Snackbar snackbar;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -83,6 +86,7 @@ public class FavoritesFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
+        snackbar = Snackbar.make(view.findViewById(R.id.favorites_fragment_coordinator), "Removed Element from Favorites", (int) UNDO_TIMEOUT);
 
         final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
         recyclerView.setAdapter(adapter);
@@ -105,6 +109,7 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 adapter.addToPendingRemoval(viewHolder.getAdapterPosition());
+                snackbar.show();
             }
 
             @Override
@@ -145,6 +150,8 @@ public class FavoritesFragment extends Fragment {
 
         return view;
     }
+
+
 
     private class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder> {
 
@@ -189,6 +196,7 @@ public class FavoritesFragment extends Fragment {
             return new ViewHolder(view);
         }
 
+
         @Override
         public void onBindViewHolder(final FavoritesAdapter.ViewHolder holder, int position) {
 
@@ -200,9 +208,9 @@ public class FavoritesFragment extends Fragment {
                 holder.IPATextView.setVisibility(View.GONE);
                 holder.QuickPlayBtn.setVisibility(View.GONE);
                 holder.AddtoFavsBtn.setVisibility(View.GONE);
-                holder.UndoButton.setVisibility(View.VISIBLE);
-                holder.UndoButton.setOnClickListener(new View.OnClickListener() {
-                    //TODO UNDO Snackbar deve essere uguale? al codice dell'OnClick
+                //holder.UndoButton.setVisibility(View.VISIBLE);
+
+                snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Runnable pendingRemovalRunnable = pendingRunnables.get(current_item);
@@ -215,6 +223,7 @@ public class FavoritesFragment extends Fragment {
                         notifyItemChanged(favorites.indexOf(current_item));
                     }
                 });
+
             } else {
                 holder.wordTextView.setText(favorites.get(position).first);
                 holder.IPATextView.setText(favorites.get(position).second);
@@ -267,7 +276,8 @@ public class FavoritesFragment extends Fragment {
                         remove(favorites.indexOf(item));
                     }
                 };
-                handler.postDelayed(pendingRemovalRunnable, UNDO_TIMEOUT);
+                //TODO DA SISTEMARE, LO SWIPE DOVREBBE ANDAR VIA SUBITO E LASCIAR L'UTENTE DECIDERE SE UNDO SULLA SB
+                handler.postDelayed(pendingRemovalRunnable, UNDO_TIMEOUT-1500);
                 pendingRunnables.put(item, pendingRemovalRunnable);
             }
         }
@@ -281,7 +291,6 @@ public class FavoritesFragment extends Fragment {
             UtilitySharedPrefs.removeFavs(getActivity(), favorites.get(pos));
             favorites = loadDeserializedFavs(getActivity());
             notifyItemRemoved(pos);
-            Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
         }
 
         public void add(FavoritesAdapter.ViewHolder viewHolder) {

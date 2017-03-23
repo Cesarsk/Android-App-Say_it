@@ -97,8 +97,6 @@ public class PlayActivity extends AppCompatActivity {
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
 
-
-
         timer = new ShowTimer(timerTextView);
         recorder = new MediaRecorder();
         mediaPlayer = new MediaPlayer();
@@ -218,17 +216,7 @@ public class PlayActivity extends AppCompatActivity {
         //Gestione Snackbar + UNDO
         snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
         final Context context = this;
-        /*pendingRemovalRunnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(UNDO_TIMEOUT + 100L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                UtilityRecord.deleteRecording(context, selected_word);
-            }
-        };*/
+
         snackbar.setAction("UNDO", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
