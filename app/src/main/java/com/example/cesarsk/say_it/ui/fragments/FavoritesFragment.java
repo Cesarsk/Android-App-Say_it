@@ -202,6 +202,7 @@ public class FavoritesFragment extends Fragment {
                 holder.AddtoFavsBtn.setVisibility(View.GONE);
                 holder.UndoButton.setVisibility(View.VISIBLE);
                 holder.UndoButton.setOnClickListener(new View.OnClickListener() {
+                    //TODO UNDO Snackbar deve essere uguale? al codice dell'OnClick
                     @Override
                     public void onClick(View v) {
                         Runnable pendingRemovalRunnable = pendingRunnables.get(current_item);
