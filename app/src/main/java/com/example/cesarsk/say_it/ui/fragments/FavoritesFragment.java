@@ -1,8 +1,11 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -20,11 +23,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.utility.SayItPair;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.gson.Gson;
@@ -87,7 +92,7 @@ public class FavoritesFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
         snackbar = Snackbar.make(view.findViewById(R.id.favorites_fragment_coordinator), "Removed Element from Favorites", (int) FavoritesAdapter.UNDO_TIMEOUT);
 
-        final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
+        final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs, getActivity());
         recyclerView.setAdapter(adapter);
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -131,10 +136,12 @@ public class FavoritesFragment extends Fragment {
         private Handler handler = new Handler(); //Handler per gestire i Runnable per permettere l'UNDO con il Delay
         HashMap<Pair<String, String>, Runnable> pendingRunnables = new HashMap<>(); //HashMap che associa ad ogni elemento della lista un Runnable che aspetterà
         //3 secondi prima di cancellare l'elemento dalla lista.
+        Context context;
 
-        FavoritesAdapter(ArrayList<Pair<String, String>> favorites_list) {
+        FavoritesAdapter(ArrayList<Pair<String, String>> favorites_list, Context context) {
             favorites = favorites_list;
             pendingFavorites = new ArrayList<>();
+            this.context = context;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -144,6 +151,7 @@ public class FavoritesFragment extends Fragment {
             ImageButton QuickPlayBtn;
             ImageButton AddtoFavsBtn;
             TextView UndoButton;
+            LinearLayout textLayout;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -152,6 +160,7 @@ public class FavoritesFragment extends Fragment {
                 QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
                 AddtoFavsBtn = (ImageButton) itemView.findViewById(R.id.list_item_addToFavs);
                 UndoButton = (TextView) itemView.findViewById(R.id.undo_btn);
+                textLayout = (LinearLayout)itemView.findViewById((R.id.list_item_generic_layout));
             }
         }
 
@@ -178,6 +187,7 @@ public class FavoritesFragment extends Fragment {
                 holder.AddtoFavsBtn.setVisibility(View.GONE);
                 //holder.UndoButton.setVisibility(View.VISIBLE);
 
+
                 snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -195,6 +205,17 @@ public class FavoritesFragment extends Fragment {
             } else {
                 holder.wordTextView.setText(favorites.get(position).first);
                 holder.IPATextView.setText(favorites.get(position).second);
+
+                holder.textLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final Intent play_activity_intent = new Intent(context, PlayActivity.class);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, holder.wordTextView.getText());
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
+                        UtilitySharedPrefs.addHist(context, new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
+                        context.startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
+                    }
+                });
 
                 holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
