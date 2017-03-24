@@ -36,7 +36,6 @@ import java.util.HashMap;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google;
-import static com.example.cesarsk.say_it.ui.PlayActivity.UNDO_TIMEOUT;
 
 
 /**
@@ -86,20 +85,12 @@ public class FavoritesFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
-        snackbar = Snackbar.make(view.findViewById(R.id.favorites_fragment_coordinator), "Removed Element from Favorites", (int) UNDO_TIMEOUT);
+        snackbar = Snackbar.make(view.findViewById(R.id.favorites_fragment_coordinator), "Removed Element from Favorites", (int) FavoritesAdapter.UNDO_TIMEOUT);
 
         final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
         recyclerView.setAdapter(adapter);
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
-            Drawable background;
-            boolean initiated = false;
-
-            private void init(){
-                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
-                initiated = true;
-            }
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -119,28 +110,6 @@ public class FavoritesFragment extends Fragment {
                     return 0;
                 }
                 return super.getSwipeDirs(recyclerView, viewHolder);
-            }
-
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                View itemView = viewHolder.itemView;
-
-                // not sure why, but this method get's called for viewholder that are already swiped away
-                if (viewHolder.getAdapterPosition() == -1) {
-                    // not interested in those
-                    return;
-                }
-
-                if (!initiated) {
-                    init();
-                }
-
-                // draw red background
-                background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                background.draw(c);
-
-
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         });
         recyclerView.addItemDecoration(dividerItemDecoration);
@@ -203,7 +172,6 @@ public class FavoritesFragment extends Fragment {
             final Pair<String, String> current_item = favorites.get(position);
 
             if (pendingFavorites.contains(current_item)) {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.Red500));
                 holder.wordTextView.setVisibility(View.GONE);
                 holder.IPATextView.setVisibility(View.GONE);
                 holder.QuickPlayBtn.setVisibility(View.GONE);
@@ -277,7 +245,7 @@ public class FavoritesFragment extends Fragment {
                     }
                 };
                 //TODO DA SISTEMARE, LO SWIPE DOVREBBE ANDAR VIA SUBITO E LASCIAR L'UTENTE DECIDERE SE UNDO SULLA SB
-                handler.postDelayed(pendingRemovalRunnable, UNDO_TIMEOUT-1500);
+                handler.postDelayed(pendingRemovalRunnable, UNDO_TIMEOUT + 200);
                 pendingRunnables.put(item, pendingRemovalRunnable);
             }
         }
