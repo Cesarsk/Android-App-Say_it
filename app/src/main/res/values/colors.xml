@@ -50,4 +50,6 @@
     <color name="red_rec_button">#d50000</color>
     <color name="red_rec_pressed_button">#910000</color>
     <color name="green_play_button">#10ff10</color>
+    <color name="green_play_pressed_button">#0ba70b</color>
+
 </resources>
