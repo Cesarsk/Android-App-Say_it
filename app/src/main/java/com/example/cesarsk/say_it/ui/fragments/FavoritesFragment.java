@@ -114,7 +114,9 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
 
-                /*View itemView = viewHolder.itemView;
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                View itemView = viewHolder.itemView;
 
                 // not sure why, but this method get's called for viewholder that are already swiped away
                 if (viewHolder.getAdapterPosition() == -1) {
@@ -124,7 +126,6 @@ public class FavoritesFragment extends Fragment {
 
                 if (!initiated) {
                     init();
-                    //Disegna la X
                 }
 
                 // draw red background
@@ -141,21 +142,7 @@ public class FavoritesFragment extends Fragment {
                 int xMarkBottom = xMarkTop + intrinsicHeight;
                 DeletedIcon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
 
-                DeletedIcon.draw(c);*/
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                    // Get RecyclerView item from the ViewHolder
-                    View itemView = viewHolder.itemView;
-
-                    Paint p = new Paint();
-
-                    if (dX < 0) {
-                        p.setColor(ContextCompat.getColor(getActivity(), R.color.Red500));
-                        // Draw Rect with varying right side, equal to displacement dX
-                        c.drawRect((float) itemView.getRight() + dX, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom(), p);
-                    }
-                }
+                DeletedIcon.draw(c);
             }
         });
         recyclerView.addItemDecoration(dividerItemDecoration);
