@@ -10,11 +10,12 @@ How to do that? Practicing! **Practicing** is the best and the most natural way 
 Don't waste your time searching for ways to improve your skills, just do it!
 
 **Say It! will allow you to:**
-- *Listen to the correct pronunciation of a word (thanks to Google's Synthesizer) in Both American and British English;*
-- *Read the IPA (International Phonetic Alphabet) of the word you're looking for;*
-- *Record your pronunciation and listen to it every morning;*
+- *Listen to the correct pronunciation of a word (thanks to Google's Synthesizer) in Both American and British English*
+- *Read the IPA (International Phonetic Alphabet) of the word you're looking for*
+- *Record your pronunciation and compare it to the original one*
 - *Add to your favorite list the word you need to practice the most so you can easily retrieve it every day*
 - *Don't know which word you should practice? Practice our Word of the Day!*
+- *And many other features...*
 
 We're three Italian students trying to bring something new to people.
 
