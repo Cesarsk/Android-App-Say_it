@@ -1,5 +1,5 @@
 # Say It!
-Say It! is an Android App aimed to help people with their English Pronunciation.
+Say It! is a free Android App aimed to help people with their English Pronunciation.
 
 # Welcome to Say It!
 
@@ -20,6 +20,8 @@ We're three Italian students trying to bring something new to people.
 
 If you like our project, **star us**!
 If you want to help us, **contact us**!
-If you want to support us, **donate us**!
+If you want to support us, **donate us**! paypal.me/cesarsk
 
 Now let's not waste time and... Say It!
+
+Soon we'll update this README with screenshot of the application.
