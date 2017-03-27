@@ -24,6 +24,7 @@ import static com.example.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
  * Created by Claudio on 22/03/2017.
  */
 
+@SuppressWarnings("ALL")
 public class UtilityDictionary {
     public static String getRandomWord() {
 
