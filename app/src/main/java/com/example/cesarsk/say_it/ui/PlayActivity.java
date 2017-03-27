@@ -76,8 +76,10 @@ public class PlayActivity extends AppCompatActivity {
     Handler handler = new Handler();
     Runnable pendingRemovalRunnable;
     byte[] temp_recording_bytes;
-    private boolean isRecording;
+    private boolean isRecording = false;
     CountDownTimer countDownTimer;
+    CountDownTimer minDurationTimer;
+    private boolean isMinimumDurationReached = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +187,8 @@ public class PlayActivity extends AppCompatActivity {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
+                            isMinimumDurationReached = false;
+                            minDurationTimer.start();
                             isRecording = true;
                             vibrator.vibrate(50);
                             recplay_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
@@ -204,13 +208,21 @@ public class PlayActivity extends AppCompatActivity {
                             }
                             isRecording = false;
                             recplay_button.setBackground(getDrawable(R.drawable.circle_red));
-                            if (UtilityRecord.stopRecording(context, recorder, selected_word)) {
-                                recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
-                                delete_button.startAnimation(delete_button_anim_reverse);
-                                recplay_button.setOnTouchListener(null);
-                                recplay_button.setOnClickListener(play_listener);
-                                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
-                                transition.startTransition(durationMillis);
+                            if (isMinimumDurationReached) {
+                                if (UtilityRecord.stopRecording(context, recorder, selected_word)) {
+                                    recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
+                                    delete_button.startAnimation(delete_button_anim_reverse);
+                                    recplay_button.setOnTouchListener(null);
+                                    recplay_button.setOnClickListener(play_listener);
+                                    TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                                    transition.startTransition(durationMillis);
+                                    isMinimumDurationReached = false;
+                                    return true;
+                                }
+                            } else {
+                                vibrator.vibrate(50);
+                                Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
+                                timer.ClearTimer();
                                 return true;
                             }
                     }
@@ -218,6 +230,18 @@ public class PlayActivity extends AppCompatActivity {
                     UtilityRecord.requestRecordAudioPermissions(view.getContext());
                 }
                 return false;
+            }
+        };
+
+        minDurationTimer = new CountDownTimer(1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                isMinimumDurationReached = true;
             }
         };
 
