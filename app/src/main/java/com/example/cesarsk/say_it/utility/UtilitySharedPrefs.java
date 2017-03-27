@@ -119,7 +119,7 @@ public class UtilitySharedPrefs {
         return false;
     }
 
-    public static void addHist(Context context, Pair<String, String> pair) {
+    public static void addHist(Context context, SayItPair pair) {
         Set<String> new_hist = new TreeSet<>();
         loadHist(context);
         if (MainActivity.HISTORY != null) {
@@ -127,10 +127,24 @@ public class UtilitySharedPrefs {
                 new_hist.add(element);
             }
         }
-        //TODO INFINITI ELEMENTI NELLA HISTORY? NON VA BENE!!!
-        Calendar c = Calendar.getInstance();
+
+        ArrayList<SayItPair> DeserializedHistory = new ArrayList<>();
+
         Gson gson = new Gson();
-        String SerializedPair = gson.toJson(new SayItPair(pair.first, pair.second, c.getTime()));
+
+        for (String element : new_hist) {
+            SayItPair current_pair = gson.fromJson(element, SayItPair.class);
+            DeserializedHistory.add(current_pair);
+        }
+
+        //ciclo per evitare duplicati
+        for(int i=0; i<DeserializedHistory.size(); i++){
+            if(DeserializedHistory.get(i).first.equalsIgnoreCase(pair.first)){
+                new_hist.remove(gson.toJson(DeserializedHistory.get(i)));
+                new_hist.add(gson.toJson(pair));
+            }
+        }
+        String SerializedPair = gson.toJson(pair);
         new_hist.add(SerializedPair);
         savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
     }

@@ -1,8 +1,11 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -28,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.utility.SayItPair;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.gson.Gson;
@@ -101,15 +105,6 @@ public class FavoritesFragment extends Fragment {
                 adapter.setTemp_pos(viewHolder.getAdapterPosition());
                 snackbar.show();
             }
-
-            /*@Override
-            public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                int position = viewHolder.getAdapterPosition();
-                if (adapter.isPendingRemoval(position)) {
-                    return 0;
-                }
-                return super.getSwipeDirs(recyclerView, viewHolder);
-            }*/
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
@@ -331,6 +326,17 @@ public class FavoritesFragment extends Fragment {
                 public void onClick(View v) {
                     //Cliccando su Play Button nella search result tab riproduce play.
                     american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                }
+            });
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Intent play_activity_intent = new Intent(getActivity(), PlayActivity.class);
+                    play_activity_intent.putExtra(PlayActivity.PLAY_WORD, holder.wordTextView.getText());
+                    play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
+                    UtilitySharedPrefs.addHist(getActivity(), new SayItPair(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
+                    getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) getActivity()).toBundle());
                 }
             });
 
