@@ -20,12 +20,13 @@
         </PreferenceScreen>
 
         <ListPreference
+            android:key="default_accent"
+            android:title="Default Accent"
             android:icon="@drawable/ic_flag"
-            android:defaultValue="0"
             android:entries="@array/default_voice"
             android:entryValues="@array/default_voice_values"
-            android:key="default_accent"
-            android:title="Default Accent" />
+            android:defaultValue="0"
+             />
 
         <Preference
             android:icon="@drawable/ic_playlist_play"
