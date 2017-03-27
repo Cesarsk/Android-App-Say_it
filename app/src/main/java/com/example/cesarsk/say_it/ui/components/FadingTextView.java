@@ -23,17 +23,17 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
 
     public FadingTextView(Context context) {
         super(context);
-        animSetUp();
+        if(!isInEditMode()) animSetUp();
     }
 
     public FadingTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        animSetUp();
+        if(!isInEditMode()) animSetUp();
     }
 
     public FadingTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        animSetUp();
+        if(!isInEditMode()) animSetUp();
     }
 
     private void animSetUp(){
