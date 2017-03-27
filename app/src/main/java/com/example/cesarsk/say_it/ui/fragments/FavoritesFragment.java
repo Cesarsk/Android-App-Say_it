@@ -1,13 +1,19 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,11 +25,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.utility.SayItPair;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.gson.Gson;
@@ -43,9 +51,178 @@ import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google
 public class FavoritesFragment extends Fragment {
 
     ArrayList<Pair<String, String>> DeserializedFavs;
+    Snackbar snackbar;
 
     public FavoritesFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        final View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+
+        DeserializedFavs = loadDeserializedFavs(getActivity());
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.favorites_list);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
+        snackbar = Snackbar.make(view.findViewById(R.id.favorites_fragment_coordinator), "Removed Element from Favorites", (int) FavoritesAdapter.UNDO_TIMEOUT);
+
+
+        final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
+        recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            Drawable background;
+            Drawable DeletedIcon;
+            int DeletedIconMargin;
+            boolean initiated;
+
+            void init() {
+                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
+                DeletedIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_close_white_24dp);
+                DeletedIconMargin = (int) getActivity().getResources().getDimension(R.dimen.deleted_icon_margin);
+                initiated = true;
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                FavoritesAdapter.ViewHolder mviewHolder = (FavoritesAdapter.ViewHolder) viewHolder;
+                adapter.remove(viewHolder.getAdapterPosition());
+                String temp_first = mviewHolder.wordTextView.getText().toString();
+                String temp_second = mviewHolder.IPATextView.getText().toString();
+                adapter.setTemp_fav(new Pair<>(temp_first, temp_second));
+                adapter.setTemp_pos(viewHolder.getAdapterPosition());
+                snackbar.show();
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                View itemView = viewHolder.itemView;
+
+                // not sure why, but this method get's called for viewholder that are already swiped away
+                if (viewHolder.getAdapterPosition() == -1) {
+                    // not interested in those
+                    return;
+                }
+
+                if (!initiated) {
+                    init();
+                }
+
+                // draw red background
+                background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                background.draw(c);
+
+                int itemHeight = itemView.getBottom() - itemView.getTop();
+                int intrinsicWidth = DeletedIcon.getIntrinsicWidth();
+                int intrinsicHeight = DeletedIcon.getIntrinsicWidth();
+
+                int xMarkLeft = itemView.getRight() - DeletedIconMargin - intrinsicWidth;
+                int xMarkRight = itemView.getRight() - DeletedIconMargin;
+                int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+                int xMarkBottom = xMarkTop + intrinsicHeight;
+                DeletedIcon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+
+                DeletedIcon.draw(c);
+            }
+        });
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+            // we want to cache this and not allocate anything repeatedly in the onDraw method
+            Drawable background;
+            boolean initiated;
+
+            private void init() {
+                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
+                initiated = true;
+            }
+
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+
+                if (!initiated) {
+                    init();
+                }
+
+                // only if animation is in progress
+                if (parent.getItemAnimator().isRunning()) {
+
+                    // some items might be animating down and some items might be animating up to close the gap left by the removed item
+                    // this is not exclusive, both movement can be happening at the same time
+                    // to reproduce this leave just enough items so the first one and the last one would be just a little off screen
+                    // then remove one from the middle
+
+                    // find first child with translationY > 0
+                    // and last one with translationY < 0
+                    // we're after a rect that is not covered in recycler-view views at this point in time
+                    View lastViewComingDown = null;
+                    View firstViewComingUp = null;
+
+                    // this is fixed
+                    int left = 0;
+                    int right = parent.getWidth();
+
+                    // this we need to find out
+                    int top = 0;
+                    int bottom = 0;
+
+                    // find relevant translating views
+                    int childCount = parent.getLayoutManager().getChildCount();
+                    for (int i = 0; i < childCount; i++) {
+                        View child = parent.getLayoutManager().getChildAt(i);
+                        if (child.getTranslationY() < 0) {
+                            // view is coming down
+                            lastViewComingDown = child;
+                        } else if (child.getTranslationY() > 0) {
+                            // view is coming up
+                            if (firstViewComingUp == null) {
+                                firstViewComingUp = child;
+                            }
+                        }
+                    }
+
+                    if (lastViewComingDown != null && firstViewComingUp != null) {
+                        // views are coming down AND going up to fill the void
+                        top = lastViewComingDown.getBottom() + (int) lastViewComingDown.getTranslationY();
+                        bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
+                    } else if (lastViewComingDown != null) {
+                        // views are going down to fill the void
+                        top = lastViewComingDown.getBottom() + (int) lastViewComingDown.getTranslationY();
+                        bottom = lastViewComingDown.getBottom();
+                    } else if (firstViewComingUp != null) {
+                        // views are coming up to fill the void
+                        top = firstViewComingUp.getTop();
+                        bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
+                    }
+
+                    background.setBounds(left, top, right, bottom);
+                    background.draw(c);
+
+                }
+                super.onDraw(c, parent, state);
+            }
+
+        });
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(defaultItemAnimator);
+        touchHelper.attachToRecyclerView(recyclerView);
+
+        return view;
     }
 
     public static ArrayList<Pair<String, String>> loadDeserializedFavs(Context context) {
@@ -70,95 +247,42 @@ public class FavoritesFragment extends Fragment {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.fragment_favorites, container, false);
-
-        DeserializedFavs = loadDeserializedFavs(getActivity());
-
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.favorites_list);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
-
-        final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
-        recyclerView.setAdapter(adapter);
-
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
-            Drawable background;
-            boolean initiated = false;
-
-            private void init(){
-                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
-                initiated = true;
-            }
-
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                adapter.addToPendingRemoval(viewHolder.getAdapterPosition());
-            }
-
-            @Override
-            public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                int position = viewHolder.getAdapterPosition();
-                if (adapter.isPendingRemoval(position)) {
-                    return 0;
-                }
-                return super.getSwipeDirs(recyclerView, viewHolder);
-            }
-
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                View itemView = viewHolder.itemView;
-
-                // not sure why, but this method get's called for viewholder that are already swiped away
-                if (viewHolder.getAdapterPosition() == -1) {
-                    // not interested in those
-                    return;
-                }
-
-                if (!initiated) {
-                    init();
-                }
-
-                // draw red background
-                background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                background.draw(c);
-
-
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            }
-        });
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setItemAnimator(defaultItemAnimator);
-        touchHelper.attachToRecyclerView(recyclerView);
-
-        return view;
-    }
 
     private class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder> {
 
         public static final long UNDO_TIMEOUT = 3000; //Timeout prima che l'elemento venga cancellato definitivamente
 
         private ArrayList<Pair<String, String>> favorites;
-        private ArrayList<Pair<String, String>> pendingFavorites;
+
+        public Pair<String, String> getTemp_fav() {
+            return temp_fav;
+        }
+
+        private Pair<String, String> temp_fav;
+
+        public int getTemp_pos() {
+            return temp_pos;
+        }
+
+        public void setTemp_pos(int temp_pos) {
+            this.temp_pos = temp_pos;
+        }
+
+        private int temp_pos;
+
+        public void setTemp_fav(Pair<String, String> temp_fav) {
+            this.temp_fav = temp_fav;
+        }
+
+        /*private ArrayList<Pair<String, String>> pendingFavorites;
         private Handler handler = new Handler(); //Handler per gestire i Runnable per permettere l'UNDO con il Delay
         HashMap<Pair<String, String>, Runnable> pendingRunnables = new HashMap<>(); //HashMap che associa ad ogni elemento della lista un Runnable che aspetterà
-        //3 secondi prima di cancellare l'elemento dalla lista.
+        //3 secondi prima di cancellare l'elemento dalla lista.*/
 
         FavoritesAdapter(ArrayList<Pair<String, String>> favorites_list) {
             favorites = favorites_list;
-            pendingFavorites = new ArrayList<>();
+            //pendingFavorites = new ArrayList<>();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -167,7 +291,6 @@ public class FavoritesFragment extends Fragment {
             TextView IPATextView;
             ImageButton QuickPlayBtn;
             ImageButton AddtoFavsBtn;
-            TextView UndoButton;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -175,7 +298,6 @@ public class FavoritesFragment extends Fragment {
                 IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
                 QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
                 AddtoFavsBtn = (ImageButton) itemView.findViewById(R.id.list_item_addToFavs);
-                UndoButton = (TextView) itemView.findViewById(R.id.undo_btn);
             }
         }
 
@@ -189,61 +311,61 @@ public class FavoritesFragment extends Fragment {
             return new ViewHolder(view);
         }
 
+
         @Override
         public void onBindViewHolder(final FavoritesAdapter.ViewHolder holder, int position) {
 
             final Pair<String, String> current_item = favorites.get(position);
 
-            if (pendingFavorites.contains(current_item)) {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.Red500));
-                holder.wordTextView.setVisibility(View.GONE);
-                holder.IPATextView.setVisibility(View.GONE);
-                holder.QuickPlayBtn.setVisibility(View.GONE);
-                holder.AddtoFavsBtn.setVisibility(View.GONE);
-                holder.UndoButton.setVisibility(View.VISIBLE);
-                holder.UndoButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Runnable pendingRemovalRunnable = pendingRunnables.get(current_item);
-                        pendingRunnables.remove(current_item);
-                        if (pendingRemovalRunnable != null) {
-                            handler.removeCallbacks(pendingRemovalRunnable);
-                        }
-                        pendingFavorites.remove(current_item);
-                        // this will rebind the row in "normal" state
-                        notifyItemChanged(favorites.indexOf(current_item));
+
+            holder.wordTextView.setText(favorites.get(position).first);
+            holder.IPATextView.setText(favorites.get(position).second);
+
+            holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Cliccando su Play Button nella search result tab riproduce play.
+                    american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                }
+            });
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Intent play_activity_intent = new Intent(getActivity(), PlayActivity.class);
+                    play_activity_intent.putExtra(PlayActivity.PLAY_WORD, holder.wordTextView.getText());
+                    play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
+                    UtilitySharedPrefs.addHist(getActivity(), new SayItPair(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
+                    getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) getActivity()).toBundle());
+                }
+            });
+
+            final boolean favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), favorites.get(position).first);
+            if (favorite_flag)
+                holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
+
+            holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!favorite_flag) {
+                        add(holder);
                     }
-                });
-            } else {
-                holder.wordTextView.setText(favorites.get(position).first);
-                holder.IPATextView.setText(favorites.get(position).second);
 
-                holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //Cliccando su Play Button nella search result tab riproduce play.
-                        american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                    if (favorite_flag) {
+                        remove(holder.getAdapterPosition());
                     }
-                });
+                }
+            });
 
-                final boolean favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), favorites.get(position).first);
-                if (favorite_flag)
-                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!favorite_flag) {
-                            add(holder);
-                        }
-
-                        if (favorite_flag) {
-                            remove(holder.getAdapterPosition());
-                        }
-                    }
-                });
-            }
-
+                    UtilitySharedPrefs.addFavs(getActivity(), temp_fav);
+                    favorites = loadDeserializedFavs(getActivity());
+                    notifyItemInserted(favorites.indexOf(temp_fav));
+                }
+            });
         }
 
         @Override
@@ -251,7 +373,7 @@ public class FavoritesFragment extends Fragment {
             return favorites.size();
         }
 
-        public void addToPendingRemoval(int position){
+        /*public void addToPendingRemoval(int position){
             final Pair<String, String> item = favorites.get(position);
 
             if (!pendingFavorites.contains(item)) {
@@ -266,7 +388,8 @@ public class FavoritesFragment extends Fragment {
                         remove(favorites.indexOf(item));
                     }
                 };
-                handler.postDelayed(pendingRemovalRunnable, UNDO_TIMEOUT);
+                //TODO DA SISTEMARE, LO SWIPE DOVREBBE ANDAR VIA SUBITO E LASCIAR L'UTENTE DECIDERE SE UNDO SULLA SB
+                handler.postDelayed(pendingRemovalRunnable, UNDO_TIMEOUT + 200);
                 pendingRunnables.put(item, pendingRemovalRunnable);
             }
         }
@@ -274,18 +397,21 @@ public class FavoritesFragment extends Fragment {
 
         public boolean isPendingRemoval(int position) {
             return pendingFavorites.contains(favorites.get(position));
-        }
+        }*/
 
         public void remove(int pos) {
             UtilitySharedPrefs.removeFavs(getActivity(), favorites.get(pos));
             favorites = loadDeserializedFavs(getActivity());
             notifyItemRemoved(pos);
-            Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
         }
 
         public void add(FavoritesAdapter.ViewHolder viewHolder) {
             UtilitySharedPrefs.addFavs(getActivity(), new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.IPATextView.getText().toString()));
             Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+        }
+
+        public void recover_temp_fav(){
+
         }
 
         public ArrayList<Pair<String, String>> getFavorites() {

@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
+import android.support.v4.widget.NestedScrollView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +64,42 @@ public class HomeFragment extends Fragment {
 
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
+
+        final FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(getActivity(),SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        final NestedScrollView scroller = (NestedScrollView)view.findViewById(R.id.nested_scroll_view);
+        if (scroller != null) {
+            scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                    if (scrollY > oldScrollY) {
+                        //Log.i("DEBUG", "Scroll DOWN");
+                        fab.hide();
+                    }
+                    if (scrollY < oldScrollY) {
+                        //Log.i("DEBUG", "Scroll UP");
+                    }
+
+                    if (scrollY == 0) {
+                        //Log.i("DEBUG", "TOP SCROLL");
+                        fab.show();
+                    }
+
+                    if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                        //Log.i("DEBUG", "BOTTOM SCROLL");
+                    }
+                }
+            });
+        }
+
 
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
         wordOfTheDay = wordOfTheDay.substring(0,1).toUpperCase() + wordOfTheDay.substring(1);
@@ -223,35 +261,6 @@ public class HomeFragment extends Fragment {
         wotd_text_view9.setOnClickListener(random_word_listener);
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
-
-        FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent intent = new Intent(getActivity(),SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        /*
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-                if (dy > 0 ||dy<0 && fab.isShown())
-                    fab.hide();
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
-                if (newState == RecyclerView.SCROLL_STATE_IDLE){
-                    fab.show();
-                }
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-        */
 
         return view;
     }
