@@ -1,5 +1,6 @@
 # Say It!
 Say It! is an Android App aimed to help people with their English Pronunciation.
+We're three Italian students trying to bring something new to people.
 
 # Welcome to Say It!
 
@@ -16,8 +17,6 @@ Don't waste your time searching for ways to improve your skills, just do it!
 - *Add to your favorite list the word you need to practice the most so you can easily retrieve it every day*
 - *Don't know which word you should practice? Practice our Word of the Day!*
 - *And many other features...*
-
-We're three Italian students trying to bring something new to people.
 
 If you like our project, **star us**!
 If you want to help us, **contact us**!
