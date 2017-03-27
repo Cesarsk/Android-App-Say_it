@@ -35,19 +35,23 @@ public class NotificationAlarmService extends Service {
         Intent mIntent = new Intent(this, MainActivity.class);
         pendingIntent = PendingIntent.getActivity(this, intent.getIntExtra("notifId", 0), mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        //Loading word of the day in Notification in order to show on it.
         if(MainActivity.wordOfTheDay == null)
         {
             Calendar c = Calendar.getInstance();
             Long seed = Long.parseLong(UtilityDictionary.getDate(c.getTimeInMillis()));
             MainActivity.wordOfTheDay = UtilityDictionary.getRandomWord(seed, false);
             MainActivity.IPAofTheDay = UtilityDictionary.getRandomWord(seed, true);
+            PlayActivity.selected_word = MainActivity.wordOfTheDay;
+            PlayActivity.selected_ipa = MainActivity.IPAofTheDay;
         }
 
+        //Building our custom Notification
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        //TODO REPLACE IC_FLAG WITH ICON APP
                         .setSmallIcon(R.drawable.ic_flag)
                         .setContentTitle("Say it! Reminder ")
-                        //TODO AIUTO CARICAMENTO AVVIO SMARTPHONE DELLA PAROLA
                         .setContentText("Hey! Here's your word of the day: "+MainActivity.wordOfTheDay)
                         .setSound(alarmSound)
                         .setVibrate(new long[]{300, 300, 300, 300, 300})
