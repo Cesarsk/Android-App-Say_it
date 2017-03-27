@@ -4,7 +4,7 @@ We're three Italian students trying to bring something new to people.
 
 # Welcome to Say It!
 
-We're bringing you the best app to improve your English Pronunciation. We always asked to ourselves, as non-native speakers, how to improve our Pronunciation Skill in Both American and British English.
+We're bringing you the best app to improve your English Pronunciation. We always asked ourselves, as non-native speakers, how to improve our Pronunciation Skill in Both American and British English.
 
 How to do that? Practicing! **Practicing** is the best and the most natural way to improve your language skills.
 
