@@ -23,6 +23,8 @@ If you like our project, **star us**!
 If you want to help us, **contact us**!
 If you want to support us, **donate us**!
 
+PayPal: https://www.paypal.me/cesarsk
+
 We planned to add other languages in our application soon.
 
 Now let's not waste time and... Say It!
