@@ -22,6 +22,12 @@ public class ShowTimer {
     int mins = 0;
     TextView textView;
 
+    public String getOld_time() {
+        return old_time;
+    }
+
+    String old_time;
+
     public long GetDurationInSecs()
     {
         return secs;
@@ -29,6 +35,7 @@ public class ShowTimer {
 
     public ShowTimer(TextView timerTextView) {
         this.textView = timerTextView;
+        old_time = timerTextView.getText().toString();
     }
 
     public void StartTimer() {
@@ -43,6 +50,10 @@ public class ShowTimer {
 
     public void StartTimerWithDuration(int duration) {
 
+    }
+
+    public void SetTimer(String time){
+        textView.setText(time);
     }
 
     public void ClearTimer() {
@@ -66,8 +77,9 @@ public class ShowTimer {
 
             //String timer = "" + String.format("%02d", hours) + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs);
             //String timer = "" + String.format("%02d", mins) + ":" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
-            String timer = "" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
-            textView.setText(timer);
+            //String timer = "" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
+            old_time = "" + String.format("%02d", secs) + ":" + String.format("%03d", milliseconds);
+            textView.setText(old_time);
             customHandler.postDelayed(this, 0);
         }
 

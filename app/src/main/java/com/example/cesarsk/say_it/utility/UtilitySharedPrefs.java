@@ -3,6 +3,8 @@ package com.example.cesarsk.say_it.utility;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.widget.Toast;
 
@@ -11,6 +13,7 @@ import com.example.cesarsk.say_it.R;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -22,6 +25,8 @@ import java.util.TreeSet;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.cesarsk.say_it.ui.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.ui.MainActivity.HISTORY_PREFS_KEY;
+import static com.example.cesarsk.say_it.ui.MainActivity.RECORDINGS_PREFS_KEY;
+import static com.example.cesarsk.say_it.ui.PlayActivity.selected_word;
 
 /**
  * Created by Claudio on 22/03/2017.
@@ -64,6 +69,18 @@ public class UtilitySharedPrefs {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
+    public static void removeRecording(Context context, String recordingFilename){
+        Set<String> new_recs = new TreeSet<>();
+        loadRecordings(context);
+        if (MainActivity.RECORDINGS != null) {
+            for (String element : MainActivity.RECORDINGS) {
+                new_recs.add(element);
+            }
+        }
+        new_recs.remove(recordingFilename);
+        savePrefs(context, new_recs, MainActivity.RECORDINGS_PREFS_KEY);
+    }
+
     public static void removeHist(Context context, SayItPair pair) {
         Set<String> new_favs = new TreeSet<>();
         loadHist(context);
@@ -102,7 +119,7 @@ public class UtilitySharedPrefs {
         return false;
     }
 
-    public static void addHist(Context context, Pair<String, String> pair) {
+    public static void addHist(Context context, SayItPair pair) {
         Set<String> new_hist = new TreeSet<>();
         loadHist(context);
         if (MainActivity.HISTORY != null) {
@@ -110,17 +127,74 @@ public class UtilitySharedPrefs {
                 new_hist.add(element);
             }
         }
-        //TODO INFINITI ELEMENTI NELLA HISTORY? NON VA BENE!!!
-        Calendar c = Calendar.getInstance();
+
+        ArrayList<SayItPair> DeserializedHistory = new ArrayList<>();
+
         Gson gson = new Gson();
-        String SerializedPair = gson.toJson(new SayItPair(pair.first, pair.second, c.getTime()));
+
+        for (String element : new_hist) {
+            SayItPair current_pair = gson.fromJson(element, SayItPair.class);
+            DeserializedHistory.add(current_pair);
+        }
+
+        //ciclo per evitare duplicati
+        for(int i=0; i<DeserializedHistory.size(); i++){
+            if(DeserializedHistory.get(i).first.equalsIgnoreCase(pair.first)){
+                new_hist.remove(gson.toJson(DeserializedHistory.get(i)));
+                new_hist.add(gson.toJson(pair));
+            }
+        }
+        String SerializedPair = gson.toJson(pair);
         new_hist.add(SerializedPair);
         savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
+    }
+
+    public static void addRecording(Context context, String recordingFilename){
+        Set<String> new_recs = new TreeSet<>();
+        loadRecordings(context);
+        if (MainActivity.RECORDINGS != null) {
+            for (String element : MainActivity.RECORDINGS) {
+                new_recs.add(element);
+            }
+        }
+
+        new_recs.add(recordingFilename);
+        savePrefs(context, new_recs, MainActivity.RECORDINGS_PREFS_KEY);
+    }
+
+    public static boolean checkRecording(Context context, String word){
+        Set<String> new_recs = new TreeSet<>();
+        loadRecordings(context);
+        if (MainActivity.RECORDINGS != null) {
+            for (String element : MainActivity.RECORDINGS) {
+                new_recs.add(element);
+            }
+        }
+
+        String filename = Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecord.AUDIO_RECORDER_FOLDER + "/" + word + ".aac";
+
+        if(new_recs.contains(filename)) {
+
+            if (!(new File(filename).exists())) {
+                removeRecording(context, filename);
+                return false;
+            }
+
+            else
+                return true;
+        }
+
+        return false;
     }
 
     public static void loadFavs(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.FAVORITES = sharedPreferences.getStringSet(FAVORITES_PREFS_KEY, new TreeSet<String>());
+    }
+
+    public static void loadRecordings(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.RECORDINGS = sharedPreferences.getStringSet(RECORDINGS_PREFS_KEY, new TreeSet<String>());
     }
 
     public static void loadHist(Context context) {

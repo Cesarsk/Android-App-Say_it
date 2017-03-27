@@ -82,7 +82,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        //Check Voiche Search
+        //Check Voice Search
         if(getIntent().getBooleanExtra("VOICE_SEARCH_SELECTED", false)){
             promptSpeechInput();
         }
