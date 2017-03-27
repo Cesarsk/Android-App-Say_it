@@ -30,6 +30,7 @@ import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google
  * Created by Claffo on 08/02/2017.
  */
 
+@SuppressWarnings("ALL")
 public class SearchListAdapter extends BaseAdapter implements Filterable {
 
     private Context context;

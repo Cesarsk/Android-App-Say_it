@@ -9,6 +9,7 @@ import java.util.Date;
  * Created by Claudio on 10/03/2017.
  */
 
+@SuppressWarnings("ALL")
 public class SayItPair extends Pair<String, String> implements Serializable {
 
     private Date adding_time;

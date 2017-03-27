@@ -2,15 +2,13 @@ package com.example.cesarsk.say_it.utility;
 
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by cesarsk on 15/03/2017.
  */
 
+@SuppressWarnings("ALL")
 public class ShowTimer {
 
     private long startTime = 0L;

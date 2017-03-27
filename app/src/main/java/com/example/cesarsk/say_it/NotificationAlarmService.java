@@ -22,6 +22,7 @@ import java.util.Calendar;
  * Created by cesarsk on 08/03/17.
  */
 
+@SuppressWarnings("ALL")
 public class NotificationAlarmService extends Service {
     PendingIntent pendingIntent;
     long when = System.currentTimeMillis();

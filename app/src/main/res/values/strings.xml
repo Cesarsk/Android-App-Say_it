@@ -41,5 +41,8 @@
     <string name="tap_on_mic">Tap on mic to speak</string>
     <string name="speech_not_supported">Sorry! Your device doesn\\\'t support speech input</string>
     <string name="random_words_title">Try also these random words:</string>
+    <string name="search_bar_hint_icon_description">Search Bar Hint Icon</string>
+    <string name="voice_speech_icon_description">Voice Speech Icon</string>
+    <string name="delete_button_description">Delete your Recording</string>
 
 </resources>

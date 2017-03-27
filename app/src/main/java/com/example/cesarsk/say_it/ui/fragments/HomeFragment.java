@@ -60,51 +60,11 @@ public class HomeFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_home,
                 container, false);
 
-        //Gestione AD (TEST AD)
-    /*    MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        mAdView.bringToFront();
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest); */
-/*
-        mAdView = (NativeExpressAdView)view.findViewById(R.id.adViewCard);
-        mAdView.setVideoOptions(new VideoOptions.Builder()
-                .setStartMuted(true)
-                .build());
-
-        AdRequest request = new AdRequest.Builder()
-                .addTestDevice("f2e4f110")
-                .build();
-        mAdView.loadAd(request);
-
-        mVideoController = mAdView.getVideoController();
-        mVideoController.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
-            @Override
-            public void onVideoEnd() {
-                Log.d("AD DEBUG", "Video playback is finished.");
-                super.onVideoEnd();
-            }
-        });
-
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                if (mVideoController.hasVideoContent()) {
-                    Log.d("AD DEBUG", "Received an ad that contains a video asset.");
-                } else {
-                    Log.d("AD DEBUG", "Received an ad that does not contain a video asset.");
-                }
-            }
-        });
-
-        mAdView.loadAd(new AdRequest.Builder().build());
-
-*/
-
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
+        wordOfTheDay = wordOfTheDay.substring(0,1).toUpperCase() + wordOfTheDay.substring(1);
         wordOfTheDayTextView.setTypeface(plainRegular);
         wordOfTheDayTextView.setText(wordOfTheDay);
         final TextView IPATextView = (TextView) view.findViewById(R.id.ipa_wotd);

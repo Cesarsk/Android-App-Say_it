@@ -27,6 +27,7 @@ import static com.example.cesarsk.say_it.ui.MainActivity.HISTORY_PREFS_KEY;
  * Created by Claudio on 22/03/2017.
  */
 
+@SuppressWarnings("ALL")
 public class UtilitySharedPrefs {
     //Gestione Preferences
     public static void savePrefs(Context context, Set<String> set, String prefs_key) {

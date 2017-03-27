@@ -1,20 +1,14 @@
 package com.example.cesarsk.say_it;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.support.v7.app.NotificationCompat;
 
 /**
  * Created by cesarsk on 05/03/2017.
  */
 
+@SuppressWarnings("ALL")
 public class NotificationReceiver extends BroadcastReceiver {
 
     public static int REQUEST_CODE = 1;

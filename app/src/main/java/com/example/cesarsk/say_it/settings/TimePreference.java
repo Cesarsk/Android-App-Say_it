@@ -7,7 +7,6 @@ package com.example.cesarsk.say_it.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.DialogPreference;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
