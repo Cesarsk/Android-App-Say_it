@@ -93,6 +93,16 @@
                 android:tint="@color/primary_light" />
 
             <ImageButton
+                android:id="@+id/search_meaning_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_explore_black_24dp"
+                android:tint="@color/primary_light" />
+
+            <ImageButton
                 android:id="@+id/remove_ads_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

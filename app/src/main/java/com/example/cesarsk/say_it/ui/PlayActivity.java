@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
@@ -32,6 +33,7 @@ import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.formats.NativeAd;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -99,6 +101,7 @@ public class PlayActivity extends AppCompatActivity {
         final Button play_original_button = (Button) findViewById(R.id.play_original);
         final ImageButton your_recordings = (ImageButton) findViewById(R.id.recordings_button);
         final ImageButton remove_ad = (ImageButton) findViewById(R.id.remove_ads_button);
+        final ImageButton search_meaning = (ImageButton) findViewById(R.id.search_meaning_button);
         final TextView timerTextView = (TextView) findViewById(R.id.recordingTimer);
         final Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         selected_word = args.getString(PLAY_WORD);
@@ -154,7 +157,6 @@ public class PlayActivity extends AppCompatActivity {
         selected_ipa_view.setTypeface(plainItalic);
         selected_word_view.setText(selected_word);
         selected_ipa_view.setText(selected_ipa);
-
 
         final View.OnClickListener play_listener = new View.OnClickListener() {
             @Override
@@ -272,7 +274,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         };
 
-
         if (UtilityRecord.checkRecordingFile(selected_word)) {
             recplay_button.setBackground(getResources().getDrawable(R.drawable.circle_color_anim_green_to_red, null));
             recplay_button.setOnClickListener(play_listener);
@@ -292,6 +293,15 @@ public class PlayActivity extends AppCompatActivity {
         remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            }
+        });
+
+        search_meaning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("http://www.google.com/#q="+selected_word+"+meaning");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
             }
         });
 
