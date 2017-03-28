@@ -55,13 +55,10 @@
     <color name="Blue800">#1565C0</color>
     <color name="Blue900">#0D47A1</color>
 
-
-
-
     <!-- Play Activity Colors -->
     <color name="red_rec_button">#d50000</color>
     <color name="red_rec_pressed_button">#910000</color>
-    <color name="green_play_button">#10ff10</color>
-    <color name="green_play_pressed_button">#0ba70b</color>
+    <color name="green_play_button">#02ec02</color>
+    <color name="green_play_pressed_button">#00d900</color>
 
 </resources>
