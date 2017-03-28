@@ -35,7 +35,6 @@ import com.google.android.gms.ads.VideoController;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
-import static com.example.cesarsk.say_it.ui.MainActivity.british_speaker_google;
 import static com.example.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
 import static com.example.cesarsk.say_it.utility.UtilitySharedPrefs.getRandomQuote;
 
@@ -161,15 +160,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO CHECK DEFAULT ACCENT
-                if(SettingsFragment.getIndex() == 0) {
+                if(SettingsFragment.getIndex_default_accent() == 0) {
                     MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
                     MainActivity.american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
-                    Log.i("DEFAULT - QUICK PLAY", String.valueOf(SettingsFragment.getIndex()));
+                    Log.i("DEFAULT - QUICK PLAY", String.valueOf(SettingsFragment.getIndex_default_accent()));
                 }
-                else if(SettingsFragment.getIndex() == 1) {
+                else if(SettingsFragment.getIndex_default_accent() == 1) {
                     MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
                     MainActivity.british_speaker_google.speak(wordOfTheDay,QUEUE_FLUSH,null,null);
-                    Log.i("DEFAULT - QUICK PLAY", String.valueOf(SettingsFragment.getIndex()));
+                    Log.i("DEFAULT - QUICK PLAY", String.valueOf(SettingsFragment.getIndex_default_accent()));
                 }
                 PreferenceManager.getDefaultSharedPreferences(getActivity());
             }

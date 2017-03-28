@@ -10,6 +10,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.settings.TimePreference;
 import com.example.cesarsk.say_it.utility.Utility;
@@ -22,7 +23,8 @@ import static com.example.cesarsk.say_it.utility.Utility.shareToMail;
  */
 public class SettingsFragment extends PreferenceFragment {
     private String emails[] = {"luca.cesarano1@gmail.com"};
-    static private int index = 0;
+    static private int index_default_accent = 0;
+    static private int index_notification_rate = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,50 +63,62 @@ public class SettingsFragment extends PreferenceFragment {
         delete_recordings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("Delete Recordings")
-                            .setMessage("Are you sure you want to delete all recordings?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Utility.delete_recordings();
-                                    Toast.makeText(getActivity(), "Recordings deleted!", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //do nothing
-                                }
-                            })
-                            .show();
-                    return true;
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Delete Recordings")
+                        .setMessage("Are you sure you want to delete all recordings?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Utility.delete_recordings();
+                                Toast.makeText(getActivity(), "Recordings deleted!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //do nothing
+                            }
+                        })
+                        .show();
+                return true;
             }
         });
 
         final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
+        final ListPreference notification_rate = (ListPreference) getPreferenceManager().findPreference("default_notification_rate");
         default_accent.setSummary(default_accent.getEntry());
+        Log.i("Say It!", notification_rate.getValue());
         //final CharSequence choice = default_accent.getEntry();
-       // Log.i("DEFAULT = AMERICAN", (String) choice);
+        // Log.i("DEFAULT = AMERICAN", (String) choice);
+
+        notification_rate.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String new_value = newValue.toString();
+                index_notification_rate = notification_rate.findIndexOfValue(new_value);
+                CharSequence[] entries = notification_rate.getEntries();
+                return true;
+            }
+        });
 
         default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String new_value = newValue.toString();
-                index = default_accent.findIndexOfValue(new_value);
+                index_default_accent = default_accent.findIndexOfValue(new_value);
                 CharSequence[] entries = default_accent.getEntries();
 
-                if(getIndex() == 0) {
+                if (getIndex_default_accent() == 0) {
                     default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
-                    Toast.makeText(getActivity(),String.valueOf(entries[index]),Toast.LENGTH_SHORT).show();
-                    //Log.i("DEFAULT", String.valueOf(entries[index]));
-                }
-                else if (getIndex() == 1){
-                    Toast.makeText(getActivity(),String.valueOf(entries[index]),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
+                    //Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
+                } else if (getIndex_default_accent() == 1) {
+                    Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
                     default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
-                   // Log.i("DEFAULT", String.valueOf(entries[index]));
+                    // Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
                 }
-            return true;
+                return true;
             }
         });
+
 
         TimePreference timePreference = (TimePreference) getPreferenceManager().findPreference("time_preference");
         timePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -115,12 +129,12 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    public static int getIndex() {
-        return index;
+    public static int getIndex_default_accent() {
+        return index_default_accent;
     }
-
+    
     public static int setIndex(int index) {
-        SettingsFragment.index = index;
+        SettingsFragment.index_default_accent = index;
         return index;
     }
 }

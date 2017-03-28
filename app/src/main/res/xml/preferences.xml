@@ -16,6 +16,16 @@
                     android:title="Set Notification Time"
                     android:icon="@drawable/ic_history"
                     />
+
+                <ListPreference
+                    android:key="default_notification_rate"
+                    android:title="Set Notification Rate"
+                    android:summary="Set how often you want to receive our notifications"
+                    android:icon="@drawable/ic_flag"
+                    android:entries="@array/default_notification_rate"
+                    android:entryValues="@array/default_notification_rate_values"
+                    android:defaultValue="2"
+                    />
             </PreferenceCategory>
         </PreferenceScreen>
 

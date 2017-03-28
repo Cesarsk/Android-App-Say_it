@@ -7,7 +7,9 @@ import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -33,6 +35,8 @@ import com.example.cesarsk.say_it.ui.fragments.FavoritesFragment;
 import com.example.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.example.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.example.cesarsk.say_it.ui.fragments.RecordingsFragment;
+import com.example.cesarsk.say_it.ui.fragments.SettingsFragment;
+import com.example.cesarsk.say_it.utility.Utility;
 import com.example.cesarsk.say_it.utility.UtilityDictionary;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.roughike.bottombar.BottomBar;
@@ -68,12 +72,15 @@ public class MainActivity extends AppCompatActivity {
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
     public static Set<String> RECORDINGS = null;
+    public static String NOTIFICATION_RATE = null;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
     public final static String RECORDINGS_PREFS_KEY = "SAY.IT.RECORDINGS"; //Chiave che identifica il Set della lista dei Recordings
+    public final static String SETTINGS_PREFS_KEY = "SAY.IT.SETTINGS"; //Chiave che identifica il Set della lista dei Recordings
+
     public final static int REQUEST_CODE = 1;
 
     boolean doubleBackToExitPressedOnce = false;
@@ -130,8 +137,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //Caricamento preferenze
+        UtilitySharedPrefs.loadPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
 
@@ -140,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
-                scheduleNotification(12,12); //Invocazione notifica
+                scheduleNotification(12, 12, Integer.parseInt(NOTIFICATION_RATE));
+                Log.i("SAY iT!",""+SettingsFragment.getIndex_notification_rate());//Invocazione notifica
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -281,29 +290,40 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void scheduleNotification(int hour, int minute){
+    private void scheduleNotification(int hour, int minute, int mode){
+        //mode can assume those values:
+        //0 NotificationOff
+        //1 NotificationWeekly
+        //2 NotificationDaily
+        if(mode==0);//Do nothing
+        else if(mode==1||mode==2){
+            Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+            notificationIntent.putExtra("notifId", notifId);
 
-        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra("notifId", notifId);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifId, notificationIntent, 0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifId, notificationIntent, 0);
 
 // Set the alarm to start at approximately at a time
-        DatePicker datePicker = new DatePicker(this);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-        //if(calendar.getTime().compareTo(new Date()) < 0) calendar.add(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        if (calendar.getTimeInMillis() < System.currentTimeMillis()) calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+            DatePicker datePicker = new DatePicker(this);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            if(mode==1) {
+                //set weekly notification
+                if (calendar.getTimeInMillis() < System.currentTimeMillis()) calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY*7);
+            } else if(mode==2)
+            {
+                //set daily notification
+                if (calendar.getTimeInMillis() < System.currentTimeMillis()) calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
+            }
+            AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 // With setInexactRepeating(), you have to use one of the AlarmManager interval
 // constants--in this case, AlarmManager.INTERVAL_DAY.
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
-
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
     }
 
     @Override
