@@ -60,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
     //Definizione variabile TTS
     public static TextToSpeech american_speaker_google;
-    static TextToSpeech british_speaker_google;
-    static Voice voice_american_female = new Voice("American", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
-    static Voice voice_british_female = new Voice("British", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static TextToSpeech british_speaker_google;
+    public static Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
     //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;

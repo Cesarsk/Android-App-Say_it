@@ -283,7 +283,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!accent_flag) {
-                    // american_speaker_google.setVoice(voice_british_female);
+                    //american_speaker_google.setVoice(voice_british_female);
                     accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;

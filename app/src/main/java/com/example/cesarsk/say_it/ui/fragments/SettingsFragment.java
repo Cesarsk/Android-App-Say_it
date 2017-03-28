@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 import android.widget.Toast;
-
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.settings.TimePreference;
 import com.example.cesarsk.say_it.utility.Utility;
@@ -17,17 +17,18 @@ import com.example.cesarsk.say_it.utility.Utility;
 import static com.example.cesarsk.say_it.utility.Utility.rateUs;
 import static com.example.cesarsk.say_it.utility.Utility.shareToMail;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends PreferenceFragment {
     private String emails[] = {"luca.cesarano1@gmail.com"};
+    static private int index = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
         rate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -80,7 +81,6 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
         final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
-
         default_accent.setSummary(default_accent.getEntry());
         //final CharSequence choice = default_accent.getEntry();
        // Log.i("DEFAULT = AMERICAN", (String) choice);
@@ -89,15 +89,15 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String new_value = newValue.toString();
-                int index = default_accent.findIndexOfValue(new_value);
+                index = default_accent.findIndexOfValue(new_value);
                 CharSequence[] entries = default_accent.getEntries();
 
-                if(index == 0) {
+                if(getIndex() == 0) {
                     default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
                     Toast.makeText(getActivity(),String.valueOf(entries[index]),Toast.LENGTH_SHORT).show();
                     //Log.i("DEFAULT", String.valueOf(entries[index]));
                 }
-                else if (index == 1){
+                else if (getIndex() == 1){
                     Toast.makeText(getActivity(),String.valueOf(entries[index]),Toast.LENGTH_SHORT).show();
                     default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
                    // Log.i("DEFAULT", String.valueOf(entries[index]));
@@ -114,5 +114,13 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
     }
-}
 
+    public static int getIndex() {
+        return index;
+    }
+
+    public static int setIndex(int index) {
+        SettingsFragment.index = index;
+        return index;
+    }
+}
