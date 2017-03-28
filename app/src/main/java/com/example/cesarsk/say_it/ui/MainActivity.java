@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     public static Set<String> HISTORY = null;
     public static Set<String> RECORDINGS = null;
     public static String NOTIFICATION_RATE = null;
+    public static String DEFAULT_ACCENT = null;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
@@ -149,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
                 scheduleNotification(12, 12, Integer.parseInt(NOTIFICATION_RATE));
-                Log.i("SAY iT!",""+SettingsFragment.getIndex_notification_rate());//Invocazione notifica
             } catch (IOException e) {
                 e.printStackTrace();
             }

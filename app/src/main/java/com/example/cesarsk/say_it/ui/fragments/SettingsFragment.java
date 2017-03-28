@@ -10,9 +10,9 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.settings.TimePreference;
+import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.utility.Utility;
 
 import static com.example.cesarsk.say_it.utility.Utility.rateUs;
@@ -82,22 +82,24 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
+
         final ListPreference notification_rate = (ListPreference) getPreferenceManager().findPreference("default_notification_rate");
-        default_accent.setSummary(default_accent.getEntry());
-        Log.i("Say It!", notification_rate.getValue());
+                Log.i("Say It!", notification_rate.getValue());
         //final CharSequence choice = default_accent.getEntry();
         // Log.i("DEFAULT = AMERICAN", (String) choice);
-
         notification_rate.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String new_value = newValue.toString();
                 index_notification_rate = notification_rate.findIndexOfValue(new_value);
-                CharSequence[] entries = notification_rate.getEntries();
                 return true;
             }
         });
+
+        final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
+        default_accent.setSummary(default_accent.getEntry());
+        final CharSequence choice = default_accent.getValue();
+        Log.i("DEFAULT LANGUAGE SETTED", (String) choice);
 
         default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -106,19 +108,20 @@ public class SettingsFragment extends PreferenceFragment {
                 index_default_accent = default_accent.findIndexOfValue(new_value);
                 CharSequence[] entries = default_accent.getEntries();
 
-                if (getIndex_default_accent() == 0) {
+                if (MainActivity.DEFAULT_ACCENT.equals("0")) {
+                    MainActivity.DEFAULT_ACCENT = new_value;
                     default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
                     Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
-                    //Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
-                } else if (getIndex_default_accent() == 1) {
-                    Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
+                    Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
+                } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
+                    MainActivity.DEFAULT_ACCENT = new_value;
                     default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
-                    // Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
+                    Toast.makeText(getActivity(),String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
+                    Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
                 }
                 return true;
             }
         });
-
 
         TimePreference timePreference = (TimePreference) getPreferenceManager().findPreference("time_preference");
         timePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -132,7 +135,7 @@ public class SettingsFragment extends PreferenceFragment {
     public static int getIndex_default_accent() {
         return index_default_accent;
     }
-    
+
     public static int setIndex(int index) {
         SettingsFragment.index_default_accent = index;
         return index;

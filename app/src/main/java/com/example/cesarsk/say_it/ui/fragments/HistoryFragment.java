@@ -16,6 +16,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google;
 
 
 /**
@@ -213,8 +213,16 @@ public class HistoryFragment extends Fragment {
                 holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Cliccando su Play Button nella search result tab riproduce play.
-                        american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                        if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                            MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
+                            MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                            Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                        }
+                        else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                            MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
+                            MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
+                            Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                        }
                     }
                 });
 

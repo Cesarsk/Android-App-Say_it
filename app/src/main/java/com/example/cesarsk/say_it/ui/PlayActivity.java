@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.fragments.SettingsFragment;
 import com.example.cesarsk.say_it.utility.ShowTimer;
 import com.example.cesarsk.say_it.utility.UtilityRecord;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -83,6 +84,16 @@ public class PlayActivity extends AppCompatActivity {
         final TextView timerTextView = (TextView) findViewById(R.id.recordingTimer);
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
+
+
+        if(MainActivity.DEFAULT_ACCENT.equals("0")){
+            accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
+            accent_flag = false;
+        }
+        else if(MainActivity.DEFAULT_ACCENT.equals("1")){
+            accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
+            accent_flag = true;
+        }
 
         timer = new ShowTimer(timerTextView);
         recorder = new MediaRecorder();
@@ -277,33 +288,29 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        accent_button.setOnClickListener(new View.OnClickListener()
-
-        {
+        accent_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!accent_flag) {
-                    //american_speaker_google.setVoice(voice_british_female);
                     accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 } else {
-                    // american_speaker_google.setVoice(voice_american_female);
                     accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 }
             }
+
         });
 
-        play_original_button.setOnClickListener(new View.OnClickListener()
-
-        {
+        play_original_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!accent_flag)
+                if (!accent_flag) {
                     MainActivity.american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                else
+                }
+                else if (accent_flag)
                     MainActivity.british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
             }
         });

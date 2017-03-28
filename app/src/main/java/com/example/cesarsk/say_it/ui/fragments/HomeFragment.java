@@ -160,17 +160,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO CHECK DEFAULT ACCENT
-                if(SettingsFragment.getIndex_default_accent() == 0) {
-                    MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
+                Log.i("PRIMA DEL RAMO IF", MainActivity.DEFAULT_ACCENT);
+                if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                    //MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
                     MainActivity.american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
-                    Log.i("DEFAULT - QUICK PLAY", String.valueOf(SettingsFragment.getIndex_default_accent()));
+                    Log.i("DEFAULT - QUICK PLAY", MainActivity.DEFAULT_ACCENT);
                 }
-                else if(SettingsFragment.getIndex_default_accent() == 1) {
-                    MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
+                else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                    //MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
                     MainActivity.british_speaker_google.speak(wordOfTheDay,QUEUE_FLUSH,null,null);
-                    Log.i("DEFAULT - QUICK PLAY", String.valueOf(SettingsFragment.getIndex_default_accent()));
+                    Log.i("DEFAULT - QUICK PLAY", MainActivity.DEFAULT_ACCENT);
                 }
-                PreferenceManager.getDefaultSharedPreferences(getActivity());
+                //PreferenceManager.getDefaultSharedPreferences(getActivity());
             }
         });
 
