@@ -57,7 +57,6 @@ public class UtilityDictionary {
     }
 
     public static String getRandomWord(long seed, boolean ipa) {
-
         Random rand = new Random(seed);
 
         //Creating a List from the WordList_Map values
@@ -122,6 +121,19 @@ public class UtilityDictionary {
         } catch (Exception ex) {
             return "xx";
         }
+    }
+
+    public static String getDailyRandomQuote() {
+        Calendar c = Calendar.getInstance();
+        Long seed = Long.parseLong(getDate(c.getTimeInMillis()));
+        Random rand = new Random(seed);
+
+        //Creating a List from the WordList_Map values
+        ArrayList<String> quotes = new ArrayList<>(MainActivity.Quotes);
+
+        //Getting a random sublist and then extracting a random word from it
+        String random_quote = quotes.get(rand.nextInt(quotes.size()));
+        return random_quote;
     }
 
 }

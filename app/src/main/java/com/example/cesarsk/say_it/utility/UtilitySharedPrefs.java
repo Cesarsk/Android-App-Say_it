@@ -238,15 +238,4 @@ public class UtilitySharedPrefs {
         }
     }
 
-    public static String getRandomQuote() {
-
-        Random rand = new Random();
-
-        //Creating a List from the WordList_Map values
-        ArrayList<String> quotes = new ArrayList<>(MainActivity.Quotes);
-
-        //Getting a random sublist and then extracting a random word from it
-        String random_quote = quotes.get(rand.nextInt(quotes.size()));
-        return random_quote;
-    }
 }
