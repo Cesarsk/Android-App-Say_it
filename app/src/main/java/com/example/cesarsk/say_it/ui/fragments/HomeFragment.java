@@ -14,7 +14,6 @@ import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,13 +33,11 @@ import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.VideoController;
 
-import org.w3c.dom.Text;
-
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
 import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
-import static com.example.cesarsk.say_it.utility.UtilitySharedPrefs.getRandomQuote;
+import static com.example.cesarsk.say_it.utility.UtilityDictionary.getDailyRandomQuote;
 
 
 /*
@@ -173,7 +170,7 @@ public class HomeFragment extends Fragment {
         });
 
         final TextView random_quote = (TextView)view.findViewById(R.id.random_quote);
-        random_quote.setText(getRandomQuote());
+        random_quote.setText(getDailyRandomQuote());
 
         final TextView view_full_history = (TextView)view.findViewById(R.id.view_full_history);
         view_full_history.setText("Full History");
