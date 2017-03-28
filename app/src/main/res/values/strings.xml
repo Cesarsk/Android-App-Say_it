@@ -44,5 +44,6 @@
     <string name="search_bar_hint_icon_description">Search Bar Hint Icon</string>
     <string name="voice_speech_icon_description">Voice Speech Icon</string>
     <string name="delete_button_description">Delete your Recording</string>
+    <string name="card_your_stats">Your stats:</string>
 
 </resources>

@@ -29,9 +29,12 @@ import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.components.FadingTextView;
 import com.example.cesarsk.say_it.ui.SettingsActivity;
 import com.example.cesarsk.say_it.utility.Utility;
+import com.example.cesarsk.say_it.utility.UtilityDictionary;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.VideoController;
+
+import org.w3c.dom.Text;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
@@ -189,7 +192,30 @@ public class HomeFragment extends Fragment {
         final FadingTextView wotd_text_view7 = (FadingTextView)view.findViewById(R.id.seventh_wotd); wotd_text_view7.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view8 = (FadingTextView)view.findViewById(R.id.eighth_wotd); wotd_text_view8.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view9 = (FadingTextView)view.findViewById(R.id.ninth_wotd); wotd_text_view9.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final TextView stats_item1 = (TextView)view.findViewById(R.id.card_stats_item1);
+        final TextView stats_item2 = (TextView)view.findViewById(R.id.card_stats_item2);
 
+        //TODO DA RIMUOVERE, SOLO DI PROVA
+        final TextView history_card_word1 = (TextView)view.findViewById(R.id.history_card_word1);
+        final TextView history_card_word2 = (TextView)view.findViewById(R.id.history_card_word2);
+        final TextView history_card_word3 = (TextView)view.findViewById(R.id.history_card_word3);
+        final TextView history_card_ipa1 = (TextView)view.findViewById(R.id.history_card_ipa1);
+        final TextView history_card_ipa2 = (TextView)view.findViewById(R.id.history_card_ipa2);
+        final TextView history_card_ipa3 = (TextView)view.findViewById(R.id.history_card_ipa3);
+        Pair<String, String> history_pair1 = UtilityDictionary.getRandomWordWithIPA();
+        Pair<String, String> history_pair2 = UtilityDictionary.getRandomWordWithIPA();
+        Pair<String, String> history_pair3 = UtilityDictionary.getRandomWordWithIPA();
+        history_card_word1.setText(history_pair1.first);
+        history_card_ipa1.setText(history_pair1.second);
+        history_card_word2.setText(history_pair2.first);
+        history_card_ipa2.setText(history_pair2.second);
+        history_card_word3.setText(history_pair3.first);
+        history_card_ipa3.setText(history_pair3.second);
+        //RIMUOVERE FIN QUI
+
+        //Setup our Stats
+        stats_item1.setText("You've \uD83C\uDFB5 "+" words so far!");
+        stats_item2.setText("You've ♥ "+MainActivity.FAVORITES.size()+" words so far!");
 
         View.OnClickListener random_word_listener = new View.OnClickListener() {
             @Override
