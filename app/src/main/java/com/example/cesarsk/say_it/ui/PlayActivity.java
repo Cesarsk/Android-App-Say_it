@@ -223,6 +223,7 @@ public class PlayActivity extends AppCompatActivity {
                                 vibrator.vibrate(50);
                                 Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
                                 timer.ClearTimer();
+                                UtilityRecord.deleteRecording(context, selected_word);
                                 return true;
                             }
                     }
@@ -254,6 +255,7 @@ public class PlayActivity extends AppCompatActivity {
                 if (isRecording) {
                     timer.StopTimer();
                     Toast.makeText(context, "Maximum length duration reached.", Toast.LENGTH_SHORT).show();
+                    vibrator.vibrate(50);
                     recplay_button.setBackground(getDrawable(R.drawable.circle_red));
                     if (UtilityRecord.stopRecording(context, recorder, selected_word)) {
                         recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
