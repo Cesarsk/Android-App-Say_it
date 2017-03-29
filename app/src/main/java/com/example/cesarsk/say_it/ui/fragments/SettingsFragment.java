@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -21,7 +22,7 @@ import static com.example.cesarsk.say_it.utility.Utility.shareToMail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragment{
     private String emails[] = {"luca.cesarano1@gmail.com"};
     static private int index_default_accent = 0;
     static private int index_notification_rate = 0;
@@ -120,14 +121,6 @@ public class SettingsFragment extends PreferenceFragment {
                     Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
                 }
                 return true;
-            }
-        });
-
-        TimePreference timePreference = (TimePreference) getPreferenceManager().findPreference("time_preference");
-        timePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                return false;
             }
         });
     }

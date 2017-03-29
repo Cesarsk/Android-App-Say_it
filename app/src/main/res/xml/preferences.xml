@@ -2,29 +2,31 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="first_preference_screen">
 
-    <PreferenceCategory android:title="General">
+    <PreferenceCategory android:title="General"
+        android:key="general_category"
+        android:layout="@layout/title_settings_layout">
 
         <PreferenceScreen
             android:key="button_notification"
             android:persistent="false"
-            android:title="Notification"
-            android:icon="@drawable/ic_voicemail">
+            android:title="Notification">
 
-            <PreferenceCategory android:title="Notification Settings">
+            <PreferenceCategory android:title="Notification Settings"
+                android:layout="@layout/title_settings_layout">
                 <com.example.cesarsk.say_it.settings.TimePreference
                     android:key="time_preference"
                     android:title="Set Notification Time"
-                    android:icon="@drawable/ic_history"
+                    android:layout="@layout/summary_settings_layout"
                     />
 
                 <ListPreference
                     android:key="default_notification_rate"
                     android:title="Set Notification Rate"
                     android:summary="Set how often you want to receive our notifications"
-                    android:icon="@drawable/ic_flag"
                     android:entries="@array/default_notification_rate"
                     android:entryValues="@array/default_notification_rate_values"
                     android:defaultValue="2"
+                    android:layout="@layout/summary_settings_layout"
                     />
             </PreferenceCategory>
         </PreferenceScreen>
@@ -32,34 +34,31 @@
         <ListPreference
             android:key="default_accent"
             android:title="Default Accent"
-            android:icon="@drawable/ic_flag"
             android:entries="@array/default_voice"
             android:entryValues="@array/default_voice_values"
             android:defaultValue="0"
+            android:layout="@layout/summary_settings_layout"
              />
 
         <Preference
-            android:icon="@drawable/ic_playlist_play"
             android:key="delete_recordings"
             android:title="Delete Recordings"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Assistance">
+        android:title="Assistance"
+        android:layout="@layout/title_settings_layout">
 
         <Preference
-            android:icon="@drawable/ic_reply"
             android:key="contact_us"
             android:title="Contact Us" />
 
         <Preference
-            android:icon="@drawable/ic_favorite"
             android:key="rate_us"
             android:title="Rate Us" />
 
         <Preference
-            android:icon="@drawable/ic_info_black_24dp"
             android:key="bug_report"
             android:title="Bug Report" />
 

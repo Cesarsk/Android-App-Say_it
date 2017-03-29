@@ -5,6 +5,7 @@ package com.example.cesarsk.say_it.settings;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.DialogPreference;
 import android.preference.Preference;
@@ -13,6 +14,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.example.cesarsk.say_it.ui.SettingsActivity;
 
 public class TimePreference extends DialogPreference implements
         TimePicker.OnTimeChangedListener {
@@ -27,14 +31,6 @@ public class TimePreference extends DialogPreference implements
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         defaultValue = prefs.getString(getKey(), defaultValue);
         setSummary(getFormattedSummary());
-
-        /*setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference pref, Object value) {
-                //pref.setSummary(getFormattedSummary((String) value));
-                return true;
-            }
-        });*/
     }
 
     @Override
@@ -55,14 +51,13 @@ public class TimePreference extends DialogPreference implements
 
     @Override
     public void onTimeChanged(TimePicker view, int hour, int minute) {
-
-        persistString(String.format("%02d:%02d",hour , minute));
+        setSummary(getFormattedSummary());
+        persistString(String.format("%02d", hour) + ":" + String.format("%02d", minute));
     }
 
     @Override
     public void setDefaultValue(Object defaultValue) {
         super.setDefaultValue(defaultValue);
-
         if (!(defaultValue instanceof String)) {
             return;
         }
@@ -79,7 +74,6 @@ public class TimePreference extends DialogPreference implements
         if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
             return -1;
         }
-
         return Integer.valueOf(time.split(":")[0]);
     }
 
@@ -88,13 +82,30 @@ public class TimePreference extends DialogPreference implements
         if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
             return -1;
         }
-
         return Integer.valueOf(time.split(":")[1]);
     }
 
+    private String get_hour(){
+        String time = getPersistedString(this.defaultValue);
+        if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
+            return null;
+        }
+        String hour = time.split(":")[0];
+        return hour;
+    }
+
+    private String get_minute(){
+        String time = getPersistedString(this.defaultValue);
+        if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
+            return null;
+        }
+        String minute = time.split(":")[1];
+        return minute;
+    }
+
     public String getFormattedSummary() {
-        int h = getHour();
-        int m = getMinute();
-        return h+ ":" + m;
+        String h = get_hour();
+        String m = get_minute();
+        return h+":"+m;
     }
 }
