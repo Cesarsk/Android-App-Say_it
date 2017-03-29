@@ -9,7 +9,9 @@ import android.preference.DialogPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.settings.TimePreference;
@@ -22,9 +24,10 @@ import static com.example.cesarsk.say_it.utility.Utility.shareToMail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends PreferenceFragment{
+public class SettingsFragment extends PreferenceFragment {
     private String emails[] = {"luca.cesarano1@gmail.com"};
     static private int index_default_accent = 0;
+    //DO NOT REMOVE THIS
     static private int index_notification_rate = 0;
 
     @Override
@@ -56,6 +59,15 @@ public class SettingsFragment extends PreferenceFragment{
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 shareToMail(emails, "[CONTACT US - SAY IT!]", getActivity());
+                return false;
+            }
+        });
+
+        final Preference donate_us = getPreferenceManager().findPreference("donate_us");
+        donate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://www.paypal.me/cesarsk");
                 return false;
             }
         });

@@ -33,6 +33,13 @@ public class Utility {
         return true;
     }
 
+    public static void openURL(Context context, String url)
+    {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity(intent);
+    }
+
     //Method used for BUG_REPORT and CONTACT_US Modules
     public static void shareToMail(String[] email, String subject, Context context) {
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
