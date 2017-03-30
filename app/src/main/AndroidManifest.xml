@@ -9,10 +9,10 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <!-- permission required to use Alarm Manager -->
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.QUICKBOOT_POWERON"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -21,9 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/BlueYellowThemeNoActionBar">
 
-        <service android:name=".NotificationAlarmService"
+        <service
+            android:name=".NotificationAlarmService"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="NOTIFICATION_SERVICE" />
             </intent-filter>
@@ -39,7 +40,6 @@
         </receiver>
 
 
-
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTask"
@@ -51,21 +51,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/Preference" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Preference">
+        </activity>
+
         <activity
             android:name=".ui.PlayActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BlueYellowThemeNoActionBar" />
 
-        <activity android:name=".ui.SearchActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.MainActivity">
-        </activity>
+        <activity
+            android:name=".ui.SearchActivity"
+            android:parentActivityName=".ui.MainActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

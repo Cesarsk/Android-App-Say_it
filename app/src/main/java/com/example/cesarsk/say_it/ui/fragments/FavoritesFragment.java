@@ -21,6 +21,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -317,17 +318,25 @@ public class FavoritesFragment extends Fragment {
 
             final Pair<String, String> current_item = favorites.get(position);
 
+                holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Cliccando su Play Button nella search result tab riproduce play.
+                        if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                            MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
+                            MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                            Log.i("DEFAULT - FAVORITES", MainActivity.DEFAULT_ACCENT);
+                        }
+                        else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                            MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
+                            MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
+                            Log.i("DEFAULT - FAVORITES", MainActivity.DEFAULT_ACCENT);
+                        }
+                    }
+                });
 
             holder.wordTextView.setText(favorites.get(position).first);
             holder.IPATextView.setText(favorites.get(position).second);
-
-            holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Cliccando su Play Button nella search result tab riproduce play.
-                    american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                }
-            });
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

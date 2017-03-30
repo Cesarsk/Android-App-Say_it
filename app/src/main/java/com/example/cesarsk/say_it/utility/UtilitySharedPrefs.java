@@ -3,9 +3,11 @@ package com.example.cesarsk.say_it.utility;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
@@ -201,8 +203,18 @@ public class UtilitySharedPrefs {
     public static void loadHist(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.HISTORY = sharedPreferences.getStringSet(HISTORY_PREFS_KEY, new TreeSet<String>());
-
     }
+
+    public static void loadPrefs(Context context)
+    {
+        //Caricamento preferenze
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        MainActivity.DEFAULT_NOTIFICATION_RATE = prefs.getString("default_notification_rate", MainActivity.SETTINGS_PREFS_KEY);
+        MainActivity.DEFAULT_ACCENT = prefs.getString("default_accent",MainActivity.SETTINGS_PREFS_KEY);
+        //Log.i("SETTINGS: ", ""+Integer.parseInt(MainActivity.NOTIFICATION_RATE));
+        Log.i("DEFAULT ACCENT: ", ""+Integer.parseInt(MainActivity.DEFAULT_ACCENT));
+    }
+
 
     public static void deletePreferences(Context context) {
         //TODO AGGIUNGERE IN IMPOSTAZIONI

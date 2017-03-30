@@ -5,6 +5,7 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.util.Pair;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,11 @@ import android.widget.Toast;
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.PlayActivity;
+
+import com.example.cesarsk.say_it.ui.fragments.SettingsFragment;
+
 import com.example.cesarsk.say_it.utility.SayItPair;
+
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.ArrayList;
@@ -102,7 +107,16 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
             @Override
             public void onClick(View v) {
                 //Cliccando su Play Button nella search result tab riproduce play.
-                american_speaker_google.speak(viewHolder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                    MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
+                    MainActivity.american_speaker_google.speak(viewHolder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                    Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
+                }
+                else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                    MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
+                    MainActivity.british_speaker_google.speak(viewHolder.wordTextView.getText(),QUEUE_FLUSH,null,null);
+                    Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
+                }
             }
         });
 

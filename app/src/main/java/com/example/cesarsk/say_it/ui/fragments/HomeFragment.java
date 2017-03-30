@@ -11,9 +11,12 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
+import android.util.Log;
 import android.support.v4.widget.NestedScrollView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +38,6 @@ import com.google.android.gms.ads.VideoController;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
-import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google;
 import static com.example.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
 import static com.example.cesarsk.say_it.utility.UtilityDictionary.getDailyRandomQuote;
 
@@ -157,7 +159,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO CHECK DEFAULT ACCENT
-                american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
+                Log.i("PRIMA DEL RAMO IF", MainActivity.DEFAULT_ACCENT);
+                if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                    //MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
+                    MainActivity.american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
+                    Log.i("DEFAULT - QUICK PLAY", MainActivity.DEFAULT_ACCENT);
+                }
+                else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                    //MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
+                    MainActivity.british_speaker_google.speak(wordOfTheDay,QUEUE_FLUSH,null,null);
+                    Log.i("DEFAULT - QUICK PLAY", MainActivity.DEFAULT_ACCENT);
+                }
+                //PreferenceManager.getDefaultSharedPreferences(getActivity());
             }
         });
 
