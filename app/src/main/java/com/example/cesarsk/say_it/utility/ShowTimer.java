@@ -26,7 +26,7 @@ public class ShowTimer {
 
     String old_time;
 
-    public long GetDurationInSecs()
+    public long getDurationInSecs()
     {
         return secs;
     }
@@ -36,25 +36,21 @@ public class ShowTimer {
         old_time = timerTextView.getText().toString();
     }
 
-    public void StartTimer() {
+    public void startTimer() {
         startTime = SystemClock.uptimeMillis();
         customHandler.postDelayed(updateTimerThread, 0);
     }
 
-    public void StopTimer() {
+    public void stopTimer() {
         timeSwapBuff += timeInMilliseconds;
         customHandler.removeCallbacks(updateTimerThread);
     }
 
-    public void StartTimerWithDuration(int duration) {
-
-    }
-
-    public void SetTimer(String time){
+    public void setTimer(String time){
         textView.setText(time);
     }
 
-    public void ClearTimer() {
+    public void clearTimer() {
         textView.setText("");
     }
 
@@ -63,9 +59,7 @@ public class ShowTimer {
         public void run() {
 
             timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-
             updatedTime = timeSwapBuff + timeInMilliseconds;
-
             secs = (int) (timeInMilliseconds / 1000);
             mins = secs / 60;
             secs = secs % 60;
@@ -82,6 +76,4 @@ public class ShowTimer {
         }
 
     };
-
-
 }

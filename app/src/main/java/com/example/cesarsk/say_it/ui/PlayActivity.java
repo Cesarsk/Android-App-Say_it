@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
@@ -27,25 +26,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cesarsk.say_it.R;
-import com.example.cesarsk.say_it.ui.fragments.SettingsFragment;
 import com.example.cesarsk.say_it.utility.ShowTimer;
+import com.example.cesarsk.say_it.utility.Utility;
 import com.example.cesarsk.say_it.utility.UtilityRecord;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.formats.NativeAd;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static android.view.View.INVISIBLE;
@@ -205,7 +200,7 @@ public class PlayActivity extends AppCompatActivity {
                             isRecording = true;
                             vibrator.vibrate(50);
                             recplay_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
-                            timer.StartTimer();
+                            timer.startTimer();
                             UtilityRecord.startRecording(recorder, output_formats, currentFormat, file_exts);
                             if (countDownTimer != null) {
                                 countDownTimer.cancel();
@@ -215,7 +210,7 @@ public class PlayActivity extends AppCompatActivity {
 
                         case MotionEvent.ACTION_UP:
                             Log.i("Say it!", "Stop Recording");
-                            timer.StopTimer();
+                            timer.stopTimer();
                             if (countDownTimer != null) {
                                 countDownTimer.cancel();
                             }
@@ -235,7 +230,7 @@ public class PlayActivity extends AppCompatActivity {
                             } else {
                                 vibrator.vibrate(50);
                                 Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
-                                timer.ClearTimer();
+                                timer.clearTimer();
                                 UtilityRecord.deleteRecording(context, selected_word);
                                 return true;
                             }
@@ -266,7 +261,7 @@ public class PlayActivity extends AppCompatActivity {
 
             public void onFinish() {
                 if (isRecording) {
-                    timer.StopTimer();
+                    timer.stopTimer();
                     Toast.makeText(context, "Maximum length duration reached.", Toast.LENGTH_SHORT).show();
                     vibrator.vibrate(50);
                     recplay_button.setBackground(getDrawable(R.drawable.circle_red));
@@ -310,9 +305,7 @@ public class PlayActivity extends AppCompatActivity {
         search_meaning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("http://www.google.com/#q="+selected_word+"+meaning");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
+                Utility.searchMeaning(context, selected_word);
             }
         });
 
@@ -336,7 +329,7 @@ public class PlayActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 UtilitySharedPrefs.addRecording(context, recovered_file.getAbsolutePath());
-                timer.SetTimer(timer.getOld_time());
+                timer.setTimer(timer.getOld_time());
                 delete_button.startAnimation(delete_button_anim_reverse);
                 recplay_button.setOnTouchListener(null);
                 recplay_button.setOnClickListener(play_listener);
@@ -368,7 +361,7 @@ public class PlayActivity extends AppCompatActivity {
         delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                timer.ClearTimer();
+                timer.clearTimer();
                 delete_button.startAnimation(delete_button_anim);
                 recplay_button.setOnTouchListener(rec_listener);
                 recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));

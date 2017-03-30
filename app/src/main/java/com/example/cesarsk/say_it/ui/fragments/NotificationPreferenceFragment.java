@@ -14,7 +14,7 @@ import com.example.cesarsk.say_it.R;
 public class NotificationPreferenceFragment extends PreferenceFragment {
 
     public static final int NESTED_SCREEN_1_KEY = 1;
-    static private int index_notification_rate = 0; //DO NOT REMOVE THIS
+    static private int index_notification_rate = 2; //DO NOT REMOVE THIS
     private static final String TAG_KEY = "button_notification";
 
     public static NotificationPreferenceFragment newInstance(int key) {

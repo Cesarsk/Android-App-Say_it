@@ -323,12 +323,10 @@ public class FavoritesFragment extends Fragment {
                     public void onClick(View v) {
                         //Cliccando su Play Button nella search result tab riproduce play.
                         if(MainActivity.DEFAULT_ACCENT.equals("0")) {
-                            MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
                             MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
                             Log.i("DEFAULT - FAVORITES", MainActivity.DEFAULT_ACCENT);
                         }
                         else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
-                            MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
                             MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
                             Log.i("DEFAULT - FAVORITES", MainActivity.DEFAULT_ACCENT);
                         }
