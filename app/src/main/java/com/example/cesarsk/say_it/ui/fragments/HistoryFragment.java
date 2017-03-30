@@ -252,15 +252,10 @@ public class HistoryFragment extends Fragment {
 
 
         private ArrayList<SayItPair> history;
-        /*private ArrayList<SayItPair> pendingElements;
-        private Handler handler = new Handler(); //Handler per gestire i Runnable per permettere l'UNDO con il Delay
-        HashMap<Pair<String, String>, Runnable> pendingRunnables = new HashMap<>(); //HashMap che associa ad ogni elemento della lista un Runnable che aspetterà
-        //3 secondi prima di cancellare l'elemento dalla lista.*/
 
         public HistoryAdapter(ArrayList<SayItPair> history_list) {
 
             history = history_list;
-            //pendingElements = new ArrayList<>();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -351,7 +346,7 @@ public class HistoryFragment extends Fragment {
             return history.size();
         }
 
-        public void remove(int pos) {
+        void remove(int pos) {
             temp_hist = history.get(pos);
             temp_pos = pos;
             temp_adding_time = temp_hist.getAdding_time();

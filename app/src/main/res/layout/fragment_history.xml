@@ -1,29 +1,27 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/history_fragment_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/history_fragment_coordinator">
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:layout_height="match_parent">
 
-    <!--
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/history_list"
-        android:textColor="@color/primary_text"
-        android:divider="@color/divider"
-        android:dividerHeight="1.5px"/> -->
-
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/history_list"
-        android:scrollbars="vertical"/>
+        android:animateLayoutChanges="true">
 
-</RelativeLayout>
+        <!--
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/history_list"
+            android:textColor="@color/primary_text"
+            android:divider="@color/divider"
+            android:dividerHeight="1.5px"/> -->
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/history_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

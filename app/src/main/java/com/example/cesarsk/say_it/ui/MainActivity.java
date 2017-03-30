@@ -37,10 +37,12 @@ import com.example.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.example.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.example.cesarsk.say_it.ui.fragments.RecordingsFragment;
 import com.example.cesarsk.say_it.utility.UtilityDictionary;
+import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
-    public static Set<String> RECORDINGS = null;
+    public static ArrayList<File> RECORDINGS = null;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
     public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
-    public static final ArrayList<String> Quotes = new ArrayList();
+    public static final ArrayList<String> Quotes = new ArrayList<>();
     public static String wordOfTheDay;
     public static String IPAofTheDay;
 
@@ -137,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         //Caricamento preferenze
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
+        RECORDINGS = UtilityRecordings.loadRecordingsfromStorage();
 
         if(Wordlists_Map.isEmpty()) {
             //Caricamento dizionario (inclusa word of the day)

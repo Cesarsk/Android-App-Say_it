@@ -13,7 +13,6 @@
     <string name="QuickPlayContentDescription">Play Word</string>
     <string name="ShareContentDescription">Share Word</string>
 
-
     <string name="say_it_button">SAY IT!</string>
     <string name="not_found_error">Word not found!</string>
     <string name="empty_field_error">You have to write something!</string>

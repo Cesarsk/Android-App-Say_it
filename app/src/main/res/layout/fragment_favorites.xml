@@ -1,27 +1,25 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/favorites_fragment_coordinator"
     android:layout_width="match_parent"
-    android:id="@+id/favorites_fragment_coordinator">
+    android:layout_height="match_parent">
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
-
-    <!--
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/favorites_list"
-        android:divider="@color/divider"
-        android:dividerHeight="1.5px"/> -->
-
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/favorites_list"/>
+        android:animateLayoutChanges="true">
 
-</RelativeLayout>
+        <!--
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/favorites_list"
+            android:divider="@color/divider"
+            android:dividerHeight="1.5px"/> -->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/favorites_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -2,9 +2,19 @@ package com.example.cesarsk.say_it.ui.fragments;
 
 
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +24,31 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.R;
-import com.example.cesarsk.say_it.utility.UtilityRecord;
+import com.example.cesarsk.say_it.utility.Utility;
+import com.example.cesarsk.say_it.utility.UtilityRecordings;
+import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class RecordingsFragment extends Fragment {
+
+    Snackbar snackbar;
 
     public RecordingsFragment() {
     }
@@ -37,46 +60,188 @@ public class RecordingsFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_recordings, container, false);
 
-        ArrayList<String> sortedRecordingsList = new ArrayList<>(UtilityRecord.loadRecordings());
-        Collections.sort(sortedRecordingsList);
+        //TODO CAMBIARE TUTTA LA ACQUISIZIONE DEI RECORDINGS ELIMINANDO LE SHAREDPREFS
+        ArrayList<File> recordings = UtilityRecordings.loadRecordingsfromStorage();
+        Collections.sort(recordings);
 
-        final ListView listView = (ListView) view.findViewById(R.id.recordings_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, sortedRecordingsList);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recordings_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        snackbar = Snackbar.make(view.findViewById(R.id.recordings_fragment_coordinator), "Deleted Recording", (int) RecordingsAdapter.UNDO_TIMEOUT);
+
+        final RecordingsAdapter adapter = new RecordingsAdapter(recordings);
+        recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            Drawable background;
+            Drawable DeletedIcon;
+            int DeletedIconMargin;
+            boolean initiated;
+
+            void init() {
+                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
+                DeletedIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_close_white_24dp);
+                DeletedIconMargin = (int) getActivity().getResources().getDimension(R.dimen.deleted_icon_margin);
+                initiated = true;
+            }
+
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
-            {
-                final Intent play_activity_intent = new Intent(getActivity(), PlayActivity.class);
-                String selectedFromList = ((String)listView.getItemAtPosition(position));
-                play_activity_intent.putExtra(PlayActivity.PLAY_WORD, selectedFromList);
-                getActivity().startActivity(play_activity_intent);
-                //Utility.addHist(getActivity(), selectedFromList);
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                adapter.remove(viewHolder.getAdapterPosition());
+                snackbar.show();
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                View itemView = viewHolder.itemView;
+
+                // not sure why, but this method get's called for viewholder that are already swiped away
+                if (viewHolder.getAdapterPosition() == -1) {
+                    // not interested in those
+                    return;
+                }
+
+                if (!initiated) {
+                    init();
+                }
+
+                // draw red background
+                background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                background.draw(c);
+
+                int itemHeight = itemView.getBottom() - itemView.getTop();
+                int intrinsicWidth = DeletedIcon.getIntrinsicWidth();
+                int intrinsicHeight = DeletedIcon.getIntrinsicWidth();
+
+                int xMarkLeft = itemView.getRight() - DeletedIconMargin - intrinsicWidth;
+                int xMarkRight = itemView.getRight() - DeletedIconMargin;
+                int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+                int xMarkBottom = xMarkTop + intrinsicHeight;
+                DeletedIcon.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+
+                DeletedIcon.draw(c);
             }
         });
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+            // we want to cache this and not allocate anything repeatedly in the onDraw method
+            Drawable background;
+            boolean initiated;
+
+            private void init() {
+                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
+                initiated = true;
+            }
+
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+
+                if (!initiated) {
+                    init();
+                }
+
+                // only if animation is in progress
+                if (parent.getItemAnimator().isRunning()) {
+
+                    // some items might be animating down and some items might be animating up to close the gap left by the removed item
+                    // this is not exclusive, both movement can be happening at the same time
+                    // to reproduce this leave just enough items so the first one and the last one would be just a little off screen
+                    // then remove one from the middle
+
+                    // find first child with translationY > 0
+                    // and last one with translationY < 0
+                    // we're after a rect that is not covered in recycler-view views at this point in time
+                    View lastViewComingDown = null;
+                    View firstViewComingUp = null;
+
+                    // this is fixed
+                    int left = 0;
+                    int right = parent.getWidth();
+
+                    // this we need to find out
+                    int top = 0;
+                    int bottom = 0;
+
+                    // find relevant translating views
+                    int childCount = parent.getLayoutManager().getChildCount();
+                    for (int i = 0; i < childCount; i++) {
+                        View child = parent.getLayoutManager().getChildAt(i);
+                        if (child.getTranslationY() < 0) {
+                            // view is coming down
+                            lastViewComingDown = child;
+                        } else if (child.getTranslationY() > 0) {
+                            // view is coming up
+                            if (firstViewComingUp == null) {
+                                firstViewComingUp = child;
+                            }
+                        }
+                    }
+
+                    if (lastViewComingDown != null && firstViewComingUp != null) {
+                        // views are coming down AND going up to fill the void
+                        top = lastViewComingDown.getBottom() + (int) lastViewComingDown.getTranslationY();
+                        bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
+                    } else if (lastViewComingDown != null) {
+                        // views are going down to fill the void
+                        top = lastViewComingDown.getBottom() + (int) lastViewComingDown.getTranslationY();
+                        bottom = lastViewComingDown.getBottom();
+                    } else if (firstViewComingUp != null) {
+                        // views are coming up to fill the void
+                        top = firstViewComingUp.getTop();
+                        bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
+                    }
+
+                    background.setBounds(left, top, right, bottom);
+                    background.draw(c);
+
+                }
+                super.onDraw(c, parent, state);
+            }
+
+        });
+        touchHelper.attachToRecyclerView(recyclerView);
 
         return view;
     }
 
     private class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.ViewHolder> {
+        static final long UNDO_TIMEOUT = 3000;
 
-        private ArrayList<String> recordings;
+        private ArrayList<File> recordings;
+        private SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getDateTimeInstance();
+        private MediaPlayer mediaPlayer = new MediaPlayer();
 
-        public RecordingsAdapter(ArrayList<String> recordings_list) {
+        private File temp_rec_file;
+        private byte[] temp_rec_bytes;
+
+        RecordingsAdapter(ArrayList<File> recordings_list) {
             recordings = recordings_list;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
             TextView wordTextView;
-            TextView IPATextView;
+            TextView RecordingTimeTextView;
             ImageButton QuickPlayBtn;
             ImageButton DeleteRecording;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
-                IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
+                RecordingTimeTextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
                 QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
                 DeleteRecording = (ImageButton) itemView.findViewById(R.id.list_item_deleteRecording);
             }
@@ -87,30 +252,82 @@ public class RecordingsFragment extends Fragment {
 
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-            View view = inflater.inflate(R.layout.list_item_generic, parent, false);
+            View view = inflater.inflate(R.layout.list_item_recordings, parent, false);
 
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final RecordingsAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(RecordingsAdapter.ViewHolder holder, int position) {
 
-            /*
-            holder.wordTextView.setText(recordings.get(position).first);
-            holder.IPATextView.setText(recordings.get(position).second);
-            */
+            final String recordingName = recordings.get(position).getName();
+            Date recordingDate = new Date(recordings.get(position).lastModified());
+            String RecordingTimeText = "Recorded: " + dateFormat.format(recordingDate);
+
+            holder.wordTextView.setText(recordingName);
+            holder.RecordingTimeTextView.setText(RecordingTimeText);
 
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
+                    UtilityRecordings.playRecording(mediaPlayer, recordingName);
+                }
+            });
+
+            holder.DeleteRecording.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
                 }
             });
+
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FileOutputStream outputStream = null;
+                    try {
+                        outputStream = new FileOutputStream(temp_rec_file);
+                        outputStream.write(temp_rec_bytes);
+                        outputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    //UtilitySharedPrefs.addRecording(getActivity(), temp_rec);
+                    //UtilitySharedPrefs.loadRecordings(getActivity());
+                    recordings = UtilityRecordings.loadRecordingsfromStorage();
+                    Collections.sort(recordings);
+                    //createFileList();
+                    notifyItemInserted(recordings.indexOf(temp_rec_file));
+                }
+            });
+
         }
 
         @Override
         public int getItemCount() {
             return recordings.size();
         }
+
+        public void remove(int pos){
+            temp_rec_file = recordings.get(pos);
+            temp_rec_bytes = UtilityRecordings.getRecordingBytesfromFile(getActivity(), recordings.get(pos));
+
+            //UtilitySharedPrefs.removeRecording(getActivity(), recordings.get(pos).getAbsolutePath());
+            recordings.get(pos).delete();
+            recordings.remove(pos);
+            //UtilitySharedPrefs.loadRecordings(getActivity());
+            recordings = UtilityRecordings.loadRecordingsfromStorage();
+            Collections.sort(recordings);
+            //createFileList();
+            notifyItemRemoved(pos);
+        }
+
+        /*private void createFileList(){
+            for(int i = 0; i<recordings.size(); i++){
+                File current_recording = new File(recordings.get(i));
+                recordings_files.add(current_recording);
+            }
+        }*/
     }
 }

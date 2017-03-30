@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.widget.Toast;
 
@@ -17,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
@@ -26,7 +25,6 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.example.cesarsk.say_it.ui.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.ui.MainActivity.HISTORY_PREFS_KEY;
 import static com.example.cesarsk.say_it.ui.MainActivity.RECORDINGS_PREFS_KEY;
-import static com.example.cesarsk.say_it.ui.PlayActivity.selected_word;
 
 /**
  * Created by Claudio on 22/03/2017.
@@ -69,7 +67,7 @@ public class UtilitySharedPrefs {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
-    public static void removeRecording(Context context, String recordingFilename){
+    /*public static void removeRecording(Context context, String recordingFilename){
         Set<String> new_recs = new TreeSet<>();
         loadRecordings(context);
         if (MainActivity.RECORDINGS != null) {
@@ -79,7 +77,7 @@ public class UtilitySharedPrefs {
         }
         new_recs.remove(recordingFilename);
         savePrefs(context, new_recs, MainActivity.RECORDINGS_PREFS_KEY);
-    }
+    }*/
 
     public static void removeHist(Context context, SayItPair pair) {
         Set<String> new_favs = new TreeSet<>();
@@ -149,7 +147,7 @@ public class UtilitySharedPrefs {
         savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
     }
 
-    public static void addRecording(Context context, String recordingFilename){
+    /*public static void addRecording(Context context, String recordingFilename){
         Set<String> new_recs = new TreeSet<>();
         loadRecordings(context);
         if (MainActivity.RECORDINGS != null) {
@@ -160,9 +158,9 @@ public class UtilitySharedPrefs {
 
         new_recs.add(recordingFilename);
         savePrefs(context, new_recs, MainActivity.RECORDINGS_PREFS_KEY);
-    }
+    }*/
 
-    public static boolean checkRecording(Context context, String word){
+    /*public static boolean checkRecording(Context context, String word){
         Set<String> new_recs = new TreeSet<>();
         loadRecordings(context);
         if (MainActivity.RECORDINGS != null) {
@@ -171,7 +169,7 @@ public class UtilitySharedPrefs {
             }
         }
 
-        String filename = Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecord.AUDIO_RECORDER_FOLDER + "/" + word + ".aac";
+        String filename = Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecordings.AUDIO_RECORDER_FOLDER + "/" + word + ".aac";
 
         if(new_recs.contains(filename)) {
 
@@ -185,17 +183,17 @@ public class UtilitySharedPrefs {
         }
 
         return false;
-    }
+    }*/
 
     public static void loadFavs(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.FAVORITES = sharedPreferences.getStringSet(FAVORITES_PREFS_KEY, new TreeSet<String>());
     }
 
-    public static void loadRecordings(Context context){
+    /*public static void loadRecordings(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.RECORDINGS = sharedPreferences.getStringSet(RECORDINGS_PREFS_KEY, new TreeSet<String>());
-    }
+    }*/
 
     public static void loadHist(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);

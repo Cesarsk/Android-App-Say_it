@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.utility.ShowTimer;
-import com.example.cesarsk.say_it.utility.UtilityRecord;
+import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -37,12 +37,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static android.view.View.INVISIBLE;
@@ -160,7 +157,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!mediaPlayer.isPlaying()) {
-                    UtilityRecord.playRecording(mediaPlayer);
+                    UtilityRecordings.playRecording(mediaPlayer);
                     recplay_button.setBackground(getDrawable(R.drawable.circle_green_pressed));
                     vibrator.vibrate(50);
                     Log.i("SAY IT!", "" + mediaPlayer.getDuration());
@@ -183,7 +180,7 @@ public class PlayActivity extends AppCompatActivity {
         final View.OnTouchListener rec_listener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                if (UtilityRecord.checkRecordAudioPermissions(view.getContext())) {
+                if (UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
@@ -193,7 +190,7 @@ public class PlayActivity extends AppCompatActivity {
                             vibrator.vibrate(50);
                             recplay_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
                             timer.StartTimer();
-                            UtilityRecord.startRecording(recorder, output_formats, currentFormat, file_exts);
+                            UtilityRecordings.startRecording(recorder, output_formats, currentFormat, file_exts);
                             if (countDownTimer != null) {
                                 countDownTimer.cancel();
                                 countDownTimer.start();
@@ -209,7 +206,7 @@ public class PlayActivity extends AppCompatActivity {
                             isRecording = false;
                             recplay_button.setBackground(getDrawable(R.drawable.circle_red));
                             if (isMinimumDurationReached) {
-                                if (UtilityRecord.stopRecording(context, recorder, selected_word)) {
+                                if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
                                     recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                                     delete_button.startAnimation(delete_button_anim_reverse);
                                     recplay_button.setOnTouchListener(null);
@@ -227,7 +224,7 @@ public class PlayActivity extends AppCompatActivity {
                             }
                     }
                 } else {
-                    UtilityRecord.requestRecordAudioPermissions(view.getContext());
+                    UtilityRecordings.requestRecordAudioPermissions(view.getContext());
                 }
                 return false;
             }
@@ -255,7 +252,7 @@ public class PlayActivity extends AppCompatActivity {
                     timer.StopTimer();
                     Toast.makeText(context, "Maximum length duration reached.", Toast.LENGTH_SHORT).show();
                     recplay_button.setBackground(getDrawable(R.drawable.circle_red));
-                    if (UtilityRecord.stopRecording(context, recorder, selected_word)) {
+                    if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
                         recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                         delete_button.startAnimation(delete_button_anim_reverse);
                         recplay_button.setOnTouchListener(null);
@@ -271,10 +268,10 @@ public class PlayActivity extends AppCompatActivity {
         };
 
 
-        if (UtilityRecord.checkRecordingFile(selected_word)) {
+        if (UtilityRecordings.checkRecordingFile(selected_word)) {
             recplay_button.setBackground(getResources().getDrawable(R.drawable.circle_color_anim_green_to_red, null));
             recplay_button.setOnClickListener(play_listener);
-            int millis = UtilityRecord.returnRecordingDuration(mediaPlayer);
+            int millis = UtilityRecordings.returnRecordingDuration(mediaPlayer);
             SimpleDateFormat formatter = new SimpleDateFormat("ss:SSS", Locale.UK);
             Date date = new Date(millis);
             String result = formatter.format(date);
@@ -301,18 +298,16 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //handler.removeCallbacks(pendingRemovalRunnable);
-                File recovered_file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecord.AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
+                File recovered_file = new File(UtilityRecordings.RECORDINGS_PATH + selected_word + ".aac");
                 FileOutputStream outputStream = null;
                 try {
                     outputStream = new FileOutputStream(recovered_file);
                     outputStream.write(temp_recording_bytes);
                     outputStream.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                UtilitySharedPrefs.addRecording(context, recovered_file.getAbsolutePath());
+                //UtilitySharedPrefs.addRecording(context, recovered_file.getAbsolutePath());
                 timer.SetTimer(timer.getOld_time());
                 delete_button.startAnimation(delete_button_anim_reverse);
                 recplay_button.setOnTouchListener(null);
@@ -351,8 +346,8 @@ public class PlayActivity extends AppCompatActivity {
                 recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
                 TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
                 transition.startTransition(durationMillis);
-                temp_recording_bytes = UtilityRecord.getRecordingfromWord(context, selected_word);
-                UtilityRecord.deleteRecording(context, selected_word);
+                temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(context, new File(UtilityRecordings.RECORDINGS_PATH + selected_word + ".aac"));
+                UtilityRecordings.deleteRecording(context, selected_word);
                 snackbar.show();
                 //handler.post(pendingRemovalRunnable);
                 //Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
