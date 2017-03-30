@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * Created by cesarsk on 17/02/2017.
  */
 
+@SuppressWarnings("ALL")
 public class Utility {
 
     public static boolean delete_recordings() {

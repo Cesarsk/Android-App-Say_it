@@ -11,6 +11,9 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -21,7 +24,7 @@ import static com.example.cesarsk.say_it.ui.PlayActivity.selected_word;
 
 public class UtilityRecord{
 
-    static final String AUDIO_RECORDER_FOLDER = "Say it";
+    public static final String AUDIO_RECORDER_FOLDER = "Say it";
 
     private static MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
         @Override
@@ -46,6 +49,7 @@ public class UtilityRecord{
             for (int i = 0; i < files.length; i++) {
                 if (files[i].getName().equals(word + ".aac")) {
                     files[i].delete();
+                    UtilitySharedPrefs.removeRecording(context, files[i].getAbsolutePath());
                 }
             }
         }
@@ -132,15 +136,15 @@ public class UtilityRecord{
         return false;
     }
 
-    public static boolean stopRecording(MediaRecorder recorder, String word) {
+    public static boolean stopRecording(Context context, MediaRecorder recorder, String word) {
         if (recorder != null) {
+            String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
+            File file = new File(path + "/" + word + ".aac");
             try{
                 recorder.stop();
+                UtilitySharedPrefs.addRecording(context, file.getAbsolutePath());
             } catch(RuntimeException stopException){
                 //deleting file here
-                stopException.printStackTrace();
-                String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
-                File file = new File(path + "/" + word + ".aac");
                 file.delete();
                 recorder.reset();
                 return false;
@@ -164,9 +168,30 @@ public class UtilityRecord{
         return mediaPlayer.getDuration();
     }
 
+    public static byte[] getRecordingfromWord(Context context, String word){
+
+        if(UtilitySharedPrefs.checkRecording(context, word)){
+            byte[] bytes = new byte[0];
+            File file =  new File(Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecord.AUDIO_RECORDER_FOLDER + "/" + word + ".aac");
+            try {
+                FileInputStream inputStream = new FileInputStream(file);
+                bytes = new byte[(int)file.length()];
+                inputStream.read(bytes);
+                inputStream.close();
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bytes;
+        }
+
+        return null;
+    }
+
     public static void playRecording(MediaPlayer mediaPlayer) {
         try {
-            //TODO CHECK IF RECORDING ALREADY EXISTS. IF DOES NOT, DO NOT PLAY.
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
                 Log.i("Say it!", "Playing recording: " + Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");

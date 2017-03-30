@@ -10,6 +10,7 @@ import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google
  * Created by Claudio on 22/03/2017.
  */
 
+@SuppressWarnings("ALL")
 public class UtilityTTS {
     public static void pronounceWord(CharSequence word, float pitch, float speechRate, Voice accent) {
         //manual pronunciation of a word, never used.

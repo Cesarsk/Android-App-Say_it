@@ -61,6 +61,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         preference.setOnPreferenceClickListener(this);
 
         Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
+
         rate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

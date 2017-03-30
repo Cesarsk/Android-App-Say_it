@@ -15,6 +15,8 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
 import android.util.Log;
+import android.support.v4.widget.NestedScrollView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.components.FadingTextView;
 import com.example.cesarsk.say_it.ui.SettingsActivity;
 import com.example.cesarsk.say_it.utility.Utility;
+import com.example.cesarsk.say_it.utility.UtilityDictionary;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.VideoController;
@@ -36,7 +39,7 @@ import com.google.android.gms.ads.VideoController;
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
 import static com.example.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
-import static com.example.cesarsk.say_it.utility.UtilitySharedPrefs.getRandomQuote;
+import static com.example.cesarsk.say_it.utility.UtilityDictionary.getDailyRandomQuote;
 
 
 /*
@@ -61,51 +64,47 @@ public class HomeFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_home,
                 container, false);
 
-        //Gestione AD (TEST AD)
-    /*    MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        mAdView.bringToFront();
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest); */
-/*
-        mAdView = (NativeExpressAdView)view.findViewById(R.id.adViewCard);
-        mAdView.setVideoOptions(new VideoOptions.Builder()
-                .setStartMuted(true)
-                .build());
-
-        AdRequest request = new AdRequest.Builder()
-                .addTestDevice("f2e4f110")
-                .build();
-        mAdView.loadAd(request);
-
-        mVideoController = mAdView.getVideoController();
-        mVideoController.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
-            @Override
-            public void onVideoEnd() {
-                Log.d("AD DEBUG", "Video playback is finished.");
-                super.onVideoEnd();
-            }
-        });
-
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                if (mVideoController.hasVideoContent()) {
-                    Log.d("AD DEBUG", "Received an ad that contains a video asset.");
-                } else {
-                    Log.d("AD DEBUG", "Received an ad that does not contain a video asset.");
-                }
-            }
-        });
-
-        mAdView.loadAd(new AdRequest.Builder().build());
-
-*/
-
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
+        final FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(getActivity(),SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        final NestedScrollView scroller = (NestedScrollView)view.findViewById(R.id.nested_scroll_view);
+        if (scroller != null) {
+            scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                    if (scrollY > oldScrollY) {
+                        //Log.i("DEBUG", "Scroll DOWN");
+                        fab.hide();
+                    }
+                    if (scrollY < oldScrollY) {
+                        //Log.i("DEBUG", "Scroll UP");
+                    }
+
+                    if (scrollY == 0) {
+                        //Log.i("DEBUG", "TOP SCROLL");
+                        fab.show();
+                    }
+
+                    if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                        //Log.i("DEBUG", "BOTTOM SCROLL");
+                    }
+                }
+            });
+        }
+
+
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
+        wordOfTheDay = wordOfTheDay.substring(0,1).toUpperCase() + wordOfTheDay.substring(1);
         wordOfTheDayTextView.setTypeface(plainRegular);
         wordOfTheDayTextView.setText(wordOfTheDay);
         final TextView IPATextView = (TextView) view.findViewById(R.id.ipa_wotd);
@@ -184,7 +183,7 @@ public class HomeFragment extends Fragment {
         });
 
         final TextView random_quote = (TextView)view.findViewById(R.id.random_quote);
-        random_quote.setText(getRandomQuote());
+        random_quote.setText(getDailyRandomQuote());
 
         final TextView view_full_history = (TextView)view.findViewById(R.id.view_full_history);
         view_full_history.setText("Full History");
@@ -203,7 +202,30 @@ public class HomeFragment extends Fragment {
         final FadingTextView wotd_text_view7 = (FadingTextView)view.findViewById(R.id.seventh_wotd); wotd_text_view7.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view8 = (FadingTextView)view.findViewById(R.id.eighth_wotd); wotd_text_view8.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view9 = (FadingTextView)view.findViewById(R.id.ninth_wotd); wotd_text_view9.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final TextView stats_item1 = (TextView)view.findViewById(R.id.card_stats_item1);
+        final TextView stats_item2 = (TextView)view.findViewById(R.id.card_stats_item2);
 
+        //TODO DA RIMUOVERE, SOLO DI PROVA
+        final TextView history_card_word1 = (TextView)view.findViewById(R.id.history_card_word1);
+        final TextView history_card_word2 = (TextView)view.findViewById(R.id.history_card_word2);
+        final TextView history_card_word3 = (TextView)view.findViewById(R.id.history_card_word3);
+        final TextView history_card_ipa1 = (TextView)view.findViewById(R.id.history_card_ipa1);
+        final TextView history_card_ipa2 = (TextView)view.findViewById(R.id.history_card_ipa2);
+        final TextView history_card_ipa3 = (TextView)view.findViewById(R.id.history_card_ipa3);
+        Pair<String, String> history_pair1 = UtilityDictionary.getRandomWordWithIPA();
+        Pair<String, String> history_pair2 = UtilityDictionary.getRandomWordWithIPA();
+        Pair<String, String> history_pair3 = UtilityDictionary.getRandomWordWithIPA();
+        history_card_word1.setText(history_pair1.first);
+        history_card_ipa1.setText(history_pair1.second);
+        history_card_word2.setText(history_pair2.first);
+        history_card_ipa2.setText(history_pair2.second);
+        history_card_word3.setText(history_pair3.first);
+        history_card_ipa3.setText(history_pair3.second);
+        //RIMUOVERE FIN QUI
+
+        //Setup our Stats
+        stats_item1.setText("You've \uD83C\uDFB5 "+" words so far!");
+        stats_item2.setText("You've ♥ "+MainActivity.FAVORITES.size()+" words so far!");
 
         View.OnClickListener random_word_listener = new View.OnClickListener() {
             @Override
@@ -275,35 +297,6 @@ public class HomeFragment extends Fragment {
         wotd_text_view9.setOnClickListener(random_word_listener);
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
-
-        FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Intent intent = new Intent(getActivity(),SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        /*
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-                if (dy > 0 ||dy<0 && fab.isShown())
-                    fab.hide();
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
-                if (newState == RecyclerView.SCROLL_STATE_IDLE){
-                    fab.show();
-                }
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-        */
 
         return view;
     }

@@ -20,10 +20,15 @@ import android.widget.Toast;
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.PlayActivity;
+
 import com.example.cesarsk.say_it.ui.fragments.SettingsFragment;
+
+import com.example.cesarsk.say_it.utility.SayItPair;
+
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google;
@@ -32,6 +37,7 @@ import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google
  * Created by Claffo on 08/02/2017.
  */
 
+@SuppressWarnings("ALL")
 public class SearchListAdapter extends BaseAdapter implements Filterable {
 
     private Context context;
@@ -91,7 +97,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                 final Intent play_activity_intent = new Intent(context, PlayActivity.class);
                 play_activity_intent.putExtra(PlayActivity.PLAY_WORD, viewHolder.wordTextView.getText());
                 play_activity_intent.putExtra(PlayActivity.PLAY_IPA, viewHolder.ipaTextView.getText());
-                UtilitySharedPrefs.addHist(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
+                UtilitySharedPrefs.addHist(context, new SayItPair(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString(), Calendar.getInstance().getTime()));
                 context.startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
             }
         });
