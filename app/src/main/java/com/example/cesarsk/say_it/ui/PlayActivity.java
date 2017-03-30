@@ -104,11 +104,10 @@ public class PlayActivity extends AppCompatActivity {
         selected_ipa = args.getString(PLAY_IPA);
 
 
-        if(MainActivity.DEFAULT_ACCENT.equals("0")){
+        if (MainActivity.DEFAULT_ACCENT.equals("0")) {
             accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
             accent_flag = false;
-        }
-        else if(MainActivity.DEFAULT_ACCENT.equals("1")){
+        } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
             accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
             accent_flag = true;
         }
@@ -441,9 +440,11 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!accent_flag) {
                     MainActivity.american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                }
-                else if (accent_flag)
+                    vibrator.vibrate(50);
+                } else if (accent_flag) {
                     MainActivity.british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                    vibrator.vibrate(50);
+                }
             }
         });
     }
