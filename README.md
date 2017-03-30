@@ -27,3 +27,9 @@ PayPal: https://www.paypal.me/cesarsk
 We planned to add other languages in our application soon.
 
 Now let's not waste time and... Say It!
+
+# License:
+See License.md file
+
+# Open Source Licenses:
+See Notice.md file
