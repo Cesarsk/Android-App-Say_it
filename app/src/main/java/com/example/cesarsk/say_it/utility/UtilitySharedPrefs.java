@@ -134,7 +134,7 @@ public class UtilitySharedPrefs {
     {
         //Caricamento preferenze
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        MainActivity.NOTIFICATION_RATE = prefs.getString("default_notification_rate", MainActivity.SETTINGS_PREFS_KEY);
+        MainActivity.DEFAULT_NOTIFICATION_RATE = prefs.getString("default_notification_rate", MainActivity.SETTINGS_PREFS_KEY);
         MainActivity.DEFAULT_ACCENT = prefs.getString("default_accent",MainActivity.SETTINGS_PREFS_KEY);
         //Log.i("SETTINGS: ", ""+Integer.parseInt(MainActivity.NOTIFICATION_RATE));
         Log.i("DEFAULT ACCENT: ", ""+Integer.parseInt(MainActivity.DEFAULT_ACCENT));

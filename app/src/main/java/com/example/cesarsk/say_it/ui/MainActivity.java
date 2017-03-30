@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
     public static Set<String> RECORDINGS = null;
-    public static String NOTIFICATION_RATE = null;
+    public static String DEFAULT_NOTIFICATION_RATE = "2";
     public static String DEFAULT_ACCENT = null;
 
     //Gestione Preferenze
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
-                scheduleNotification(12, 12, Integer.parseInt(NOTIFICATION_RATE));
+                scheduleNotification(12, 12, DEFAULT_NOTIFICATION_RATE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -274,7 +274,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //TODO SE INSERITA COME DEFAULT LA LINGUA, NEL QUICK PLAY DEV'ESSERE RIPRODOTTA QUELLA, RISOLVERE!
         british_speaker_google = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -290,7 +289,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void scheduleNotification(int hour, int minute, int mode){
+    private void scheduleNotification(int hour, int minute, String modeString){
+        int mode = 0;
+        Log.i("DEBUG: ","modeString:"+modeString+"\nmode:"+mode);
+        try
+        {
+            mode = Integer.parseInt(modeString);
+            Log.i("DEBUG: ","TRY modeString:"+modeString+"\nmode:"+mode);
+        }
+        catch(NumberFormatException e)
+        {
+            mode = 2;
+            Log.i("DEBUG: ","Exception");
+        }
         //mode can assume those values:
         //0 NotificationOff
         //1 NotificationWeekly

@@ -2,124 +2,93 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="first_preference_screen">
 
-    <PreferenceCategory android:title="General"
+    <PreferenceCategory
         android:key="general_category"
-        android:layout="@xml/categories_settings_layout">
-
-        <PreferenceScreen
-            android:key="button_notification"
-            android:persistent="false"
-            android:title="Notification"
-            android:summary="Enter notification settings"
-            android:layout="@xml/voices_settings_layout"
-            >
-
-            <PreferenceCategory android:title="Notification Settings"
-                android:layout="@xml/categories_settings_layout">
-
-                <com.example.cesarsk.say_it.settings.TimePreference
-                    android:key="time_preference"
-                    android:title="Set Notification Time"
-                    android:summary="Set when you want to receive our notifications"
-                    android:layout="@xml/voices_settings_layout"
-                    />
-
-                <ListPreference
-                    android:key="default_notification_rate"
-                    android:title="Set Notification Rate"
-                    android:summary="Set how often you want to receive our notifications"
-                    android:entries="@array/default_notification_rate"
-                    android:entryValues="@array/default_notification_rate_values"
-                    android:defaultValue="2"
-                    android:layout="@xml/voices_settings_layout"
-                    />
-            </PreferenceCategory>
-        </PreferenceScreen>
+        android:layout="@xml/categories_settings_layout"
+        android:title="General">
 
         <ListPreference
-            android:key="default_accent"
-            android:title="Default Accent"
-            android:summary="Set default accent within the app"
+            android:defaultValue="0"
             android:entries="@array/default_voice"
             android:entryValues="@array/default_voice_values"
-            android:defaultValue="0"
+            android:key="default_accent"
             android:layout="@xml/voices_settings_layout"
-             />
+            android:summary="Set default accent within the app"
+            android:title="Default Accent" />
+
+        <Preference
+            android:key="button_notification"
+            android:persistent="false"
+            android:title="Notification Settings"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Enter Notification Settings"
+            />
 
         <Preference
             android:key="delete_recordings"
-            android:summary="Delete all your recordings, you can't undo this operation!"
-            android:title="Delete Recordings"
             android:layout="@xml/voices_settings_layout"
-            />
+            android:summary="Delete all your recordings, you can't undo this operation!"
+            android:title="Delete Recordings" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Help"
-        android:layout="@xml/categories_settings_layout">
+        android:layout="@xml/categories_settings_layout"
+        android:title="Help">
 
         <Preference
             android:key="contact_us"
-            android:summary="Send us a message"
-            android:title="Contact Us"
             android:layout="@xml/voices_settings_layout"
-            />
+            android:summary="Send us a message"
+            android:title="Contact Us" />
 
         <Preference
             android:key="rate_us"
-            android:summary="If you like this app, rate us to help us growing"
-            android:title="Rate Us!"
             android:layout="@xml/voices_settings_layout"
-            />
+            android:summary="If you like this app, rate us to grow"
+            android:title="Rate Us!" />
 
         <Preference
             android:key="bug_report"
-            android:summary="Found anything strange? Tell us!"
-            android:title="Bug Report"
             android:layout="@xml/voices_settings_layout"
-            />
+            android:summary="Found something strange? Tell us!"
+            android:title="Bug Report" />
 
         <Preference
             android:key="donate_us"
-            android:summary="Support our effort with a little donation ❤"
-            android:title="Donate us!"
             android:layout="@xml/voices_settings_layout"
-            />
+            android:summary="Support our effort with a little donation ❤"
+            android:title="Donate us!" />
 
         <Preference
             android:key="remove_ads"
-            android:summary="Remove ads from this app"
-            android:title="Remove ads!"
             android:layout="@xml/voices_settings_layout"
-            />
+            android:summary="Remove ads from this app"
+            android:title="Remove ads!" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="About"
-        android:layout="@xml/categories_settings_layout">
+        android:layout="@xml/categories_settings_layout"
+        android:title="About">
 
         <Preference
             android:key="open_source_licenses"
-            android:summary="License details for open source software"
-            android:title="Open source licenses"
             android:layout="@xml/voices_settings_layout"
-            />
+            android:summary="License details for open source software"
+            android:title="Open source licenses" />
 
         <Preference
             android:key="app_version"
-            android:summary="Version: 1.0"
-            android:title="Say It! version"
             android:layout="@xml/voices_settings_layout"
-            />
+            android:summary="Version: 1.0"
+            android:title="Say It! version" />
 
         <Preference
             android:key="acknowledgements"
-            android:summary="Special thanks to..."
-            android:title="Acknowledgements"
             android:layout="@xml/voices_settings_layout"
-            />
+            android:summary="Special thanks to..."
+            android:title="Acknowledgements" />
 
     </PreferenceCategory>
 

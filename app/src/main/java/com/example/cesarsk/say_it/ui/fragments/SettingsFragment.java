@@ -1,20 +1,18 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 import com.example.cesarsk.say_it.R;
-import com.example.cesarsk.say_it.settings.TimePreference;
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.utility.Utility;
 
@@ -24,17 +22,43 @@ import static com.example.cesarsk.say_it.utility.Utility.shareToMail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
     private String emails[] = {"luca.cesarano1@gmail.com"};
     static private int index_default_accent = 0;
-    //DO NOT REMOVE THIS
-    static private int index_notification_rate = 0;
+    private Callback mCallback;
+    private static final String KEY_1 = "button_notification";
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
+        } else {
+            throw new IllegalStateException("Owner must implement URLCallback interface");
+        }
+    }
+
+    public interface Callback {
+        public void onNestedPreferenceSelected(int key);
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        // here you should use the same keys as you used in the xml-file
+        if (preference.getKey().equals(KEY_1)) {
+            mCallback.onNestedPreferenceSelected(NotificationPreferenceFragment.NESTED_SCREEN_1_KEY);
+        }
+        return false;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        // add listeners for non-default actions
+        Preference preference = findPreference(KEY_1);
+        preference.setOnPreferenceClickListener(this);
 
         Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
         rate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -44,6 +68,7 @@ public class SettingsFragment extends PreferenceFragment {
                 return false;
             }
         });
+
 
         Preference contact_us = getPreferenceManager().findPreference("contact_us");
         contact_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -91,20 +116,6 @@ public class SettingsFragment extends PreferenceFragment {
                             }
                         })
                         .show();
-                return true;
-            }
-        });
-
-
-        final ListPreference notification_rate = (ListPreference) getPreferenceManager().findPreference("default_notification_rate");
-                Log.i("Say It!", notification_rate.getValue());
-        //final CharSequence choice = default_accent.getEntry();
-        // Log.i("DEFAULT = AMERICAN", (String) choice);
-        notification_rate.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String new_value = newValue.toString();
-                index_notification_rate = notification_rate.findIndexOfValue(new_value);
                 return true;
             }
         });
