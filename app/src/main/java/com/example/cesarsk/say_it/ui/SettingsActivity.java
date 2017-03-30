@@ -3,12 +3,9 @@ package com.example.cesarsk.say_it.ui;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
-import android.view.Gravity;
 
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.fragments.NotificationPreferenceFragment;
@@ -50,11 +47,12 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
         } else {
             getFragmentManager().popBackStack();
         }
+        setTitle("Settings");
     }
 
     @Override
     public void onNestedPreferenceSelected(int key) {
         getFragmentManager().beginTransaction().replace(R.id.contentSettings, NotificationPreferenceFragment.newInstance(key), TAG_NESTED).addToBackStack(TAG_NESTED).commit();
+        setTitle("Notification Settings");
     }
-
 }

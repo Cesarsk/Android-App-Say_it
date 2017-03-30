@@ -5,7 +5,6 @@ package com.example.cesarsk.say_it.settings;
  */
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
@@ -13,9 +12,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
-import android.widget.Toast;
-
-import com.example.cesarsk.say_it.ui.SettingsActivity;
 
 public class TimePreference extends DialogPreference implements
         TimePicker.OnTimeChangedListener {
