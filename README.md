@@ -30,7 +30,7 @@ Now let's not waste time and... Say It!
 
 # License:
 Say It! Application for Android
-Copyright (c) 2016 Cesarsk (https://github.com/Cesarsk/Say_it).
+Copyright (c) 2017 Cesarsk (https://github.com/Cesarsk/Say_it).
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
