@@ -53,6 +53,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
