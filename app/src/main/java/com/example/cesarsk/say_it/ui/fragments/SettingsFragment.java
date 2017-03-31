@@ -1,9 +1,11 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -11,6 +13,7 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.widget.Toast;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.FileTextActivity;
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.utility.Utility;
 
@@ -150,6 +153,19 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
                 }
                 return true;
+            }
+        });
+
+        Preference acknowledgements = getPreferenceManager().findPreference("acknowledgements");
+        acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
+                Bundle args = new Bundle();
+                args.putString(FileTextActivity.PREFERENCE, "acknowledgements");
+                preference_intent.putExtras(args);
+                startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                return false;
             }
         });
     }

@@ -62,7 +62,7 @@
             android:name=".ui.SearchActivity"
             android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.LicenseActivity"></activity>
+        <activity android:name=".ui.FileTextActivity"></activity>
     </application>
 
 </manifest>

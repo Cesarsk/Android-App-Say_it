@@ -10,49 +10,57 @@ import com.example.cesarsk.say_it.utility.UtilityDictionary;
 
 import java.io.IOException;
 
-public class LicenseActivity extends Activity {
-    public final static String LICENSE = "com.example.cesarsk.say_it.LICENSE";
+public class FileTextActivity extends Activity {
+    public final static String PREFERENCE = "com.example.cesarsk.say_it.PREFERENCE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_license);
+        setContentView(R.layout.activity_file_text);
 
         final TextView selected_license_text_view = (TextView) findViewById(R.id.text_view);
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
-        String selected_license = args.getString(LICENSE);
-        if(selected_license.equals("bottom_bar")){
+        String selected_preference = args.getString(PREFERENCE);
+        if(selected_preference.equals("bottom_bar")){
             try {
                 selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.bottombar_license));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if(selected_license.equals("easy_rating_dialog")){
+        if(selected_preference.equals("easy_rating_dialog")){
             try {
                 selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.easy_rating_dialog));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if(selected_license.equals("material_show_case")){
+        if(selected_preference.equals("material_show_case")){
             try {
                 selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.material_show_case_license));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if(selected_license.equals("gson")){
+        if(selected_preference.equals("gson")){
             try {
                 selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.gson_license));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if(selected_license.equals("wordlist")){
+        if(selected_preference.equals("wordlist")){
             try {
                 selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.wordlist_license));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(selected_preference.equals("acknowledgements")){
+            try {
+                selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.acknowledgements));
             } catch (IOException e) {
                 e.printStackTrace();
             }
