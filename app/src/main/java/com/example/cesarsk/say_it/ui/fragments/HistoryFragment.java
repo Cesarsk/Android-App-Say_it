@@ -1,13 +1,17 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -26,7 +30,9 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.SettingsActivity;
 import com.example.cesarsk.say_it.utility.SayItPair;
+import com.example.cesarsk.say_it.utility.Utility;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.gson.Gson;
 
@@ -341,10 +347,32 @@ public class HistoryFragment extends Fragment {
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     UtilitySharedPrefs.addHist(getActivity(), temp_hist);
                     history = loadDeserializedHistory(getActivity());
                     notifyItemInserted(history.indexOf(temp_hist));
+                }
+            });
+
+            final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Clear History")
+                            .setMessage("Are you sure you want to clear your History?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //TODO CLAFFOLO DELETE HISTORY
+                                    Toast.makeText(getActivity(), "History Cleared!", Toast.LENGTH_SHORT).show();
+
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing
+                                }
+                            })
+                            .show();
                 }
             });
 
