@@ -91,12 +91,7 @@ public class FavoritesFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                FavoritesAdapter.ViewHolder mviewHolder = (FavoritesAdapter.ViewHolder) viewHolder;
                 adapter.remove(viewHolder.getAdapterPosition());
-                String temp_first = mviewHolder.wordTextView.getText().toString();
-                String temp_second = mviewHolder.IPATextView.getText().toString();
-                adapter.setTemp_fav(new Pair<>(temp_first, temp_second));
-                adapter.setTemp_pos(viewHolder.getAdapterPosition());
                 snackbar.show();
             }
 
@@ -317,11 +312,11 @@ public class FavoritesFragment extends Fragment {
                         //Cliccando su Play Button nella search result tab riproduce play.
                         if(MainActivity.DEFAULT_ACCENT.equals("0")) {
                             MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                            Log.i("DEFAULT - FAVORITES", MainActivity.DEFAULT_ACCENT);
+                            
                         }
                         else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
                             MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
-                            Log.i("DEFAULT - FAVORITES", MainActivity.DEFAULT_ACCENT);
+                            
                         }
                     }
                 });
@@ -373,33 +368,11 @@ public class FavoritesFragment extends Fragment {
             return favorites.size();
         }
 
-        /*public void addToPendingRemoval(int position){
-            final Pair<String, String> item = favorites.get(position);
+        void remove(int pos) {
 
-            if (!pendingFavorites.contains(item)) {
-                pendingFavorites.add(item);
-                //Si notifica l'adapter in modo tale da ridisegnare la view
-                notifyItemChanged(position);
+            temp_fav = favorites.get(pos);
+            temp_pos = pos;
 
-                //Creazione del Runnable per l'attesa di 3 secondi
-                Runnable pendingRemovalRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        remove(favorites.indexOf(item));
-                    }
-                };
-                //TODO DA SISTEMARE, LO SWIPE DOVREBBE ANDAR VIA SUBITO E LASCIAR L'UTENTE DECIDERE SE UNDO SULLA SB
-                handler.postDelayed(pendingRemovalRunnable, UNDO_TIMEOUT + 200);
-                pendingRunnables.put(item, pendingRemovalRunnable);
-            }
-        }
-
-
-        public boolean isPendingRemoval(int position) {
-            return pendingFavorites.contains(favorites.get(position));
-        }*/
-
-        public void remove(int pos) {
             UtilitySharedPrefs.removeFavs(getActivity(), favorites.get(pos));
             favorites = loadDeserializedFavs(getActivity());
             notifyItemRemoved(pos);

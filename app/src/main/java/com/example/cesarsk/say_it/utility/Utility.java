@@ -22,7 +22,7 @@ public class Utility {
     public static boolean delete_recordings() {
         //load all recordings, needs to be used in order to build the HistoryFragment
         ArrayList<String> recordings = new ArrayList<>();
-        String path = Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecord.AUDIO_RECORDER_FOLDER;
+        String path = Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecordings.AUDIO_RECORDER_FOLDER;
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();

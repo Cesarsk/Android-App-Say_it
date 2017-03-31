@@ -1,21 +1,27 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recordings_fragment_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.cesarsk.say_it.ui.fragments.FavoritesFragment">
+    android:layout_height="match_parent">
 
-    <!--
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/recordings_list"
-        android:textColor="@color/primary_text"
-        android:divider="@color/divider"
-        android:dividerHeight="1.5px"/> -->
-
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recordings_list"/>
+        tools:context="com.example.cesarsk.say_it.ui.fragments.FavoritesFragment">
 
-</RelativeLayout>
+        <!--
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/recordings_list"
+            android:textColor="@color/primary_text"
+            android:divider="@color/divider"
+            android:dividerHeight="1.5px"/> -->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recordings_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

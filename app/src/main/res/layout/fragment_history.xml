@@ -10,14 +10,14 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/history_list"
-        android:scrollbars="vertical"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/history_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
 
-</RelativeLayout>
-
+    </RelativeLayout>
+  
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floating_button"
         android:layout_width="wrap_content"
@@ -29,5 +29,4 @@
         app:layout_anchor="@id/relative_history_fragment"
         app:layout_anchorGravity="bottom|right|end">
     </android.support.design.widget.FloatingActionButton>
-
 </android.support.design.widget.CoordinatorLayout>

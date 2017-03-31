@@ -35,11 +35,13 @@ import com.example.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.example.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.example.cesarsk.say_it.ui.fragments.RecordingsFragment;
 import com.example.cesarsk.say_it.utility.UtilityDictionary;
+import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
     public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
-    public static final ArrayList<String> Quotes = new ArrayList();
+    public static final ArrayList<String> Quotes = new ArrayList<>();
     public static String wordOfTheDay;
     public static String IPAofTheDay;
 
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         UtilitySharedPrefs.loadPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
+        RECORDINGS = UtilityRecordings.loadRecordingsfromStorage();
 
         if(Wordlists_Map.isEmpty()) {
             //Caricamento dizionario (inclusa word of the day)
