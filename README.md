@@ -44,7 +44,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-See License.md file for further explanations.
+See LICENSE.md file for further explanations.
 
 # Open Source Licenses:
-See Notice.md file
+See NOTICE.md file
