@@ -465,7 +465,7 @@ public class PlayActivity extends AppCompatActivity {
         config.setDelay(50); // 50ms between each showcase views
         config.setShapePadding(15);
         config.setRenderOverNavigationBar(true);
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "user3");
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "utente");
         sequence.setConfig(config);
 
         sequence.addSequenceItem(multibutton,
@@ -475,7 +475,7 @@ public class PlayActivity extends AppCompatActivity {
         sequence.addSequenceItem(accent_button,
                 "Want to switch accent? PRESS this one!", Utility.underlineText("[SERIOUSLY, I'VE GOT THIS!]").toString());
         sequence.addSequenceItem(slow_button,
-                "Okok.. this is the last one. If you want to slower the word, use the SLOW BUTTON", Utility.underlineText("[...I will]").toString());
+                "Okay... this is the last one. If you want to slower the word, use the SLOW BUTTON.", Utility.underlineText("[...I will]").toString());
 
         sequence.start();
     }
