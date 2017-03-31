@@ -33,6 +33,7 @@ import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.SettingsActivity;
 import com.example.cesarsk.say_it.utility.SayItPair;
 import com.example.cesarsk.say_it.utility.Utility;
+import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.gson.Gson;
 
@@ -348,7 +349,7 @@ public class HistoryFragment extends Fragment {
                 }
             });
 
-            final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button);
+            final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button_history);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -357,7 +358,7 @@ public class HistoryFragment extends Fragment {
                             .setMessage("Are you sure you want to clear your History?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    //TODO CLAFFOLO DELETE HISTORY
+                                    UtilitySharedPrefs.clearHistory(getActivity());
                                     Toast.makeText(getActivity(), "History Cleared!", Toast.LENGTH_SHORT).show();
 
                                 }

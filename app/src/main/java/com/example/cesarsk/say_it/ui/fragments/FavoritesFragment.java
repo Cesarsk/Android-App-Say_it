@@ -355,7 +355,6 @@ public class FavoritesFragment extends Fragment {
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     UtilitySharedPrefs.addFavs(getActivity(), temp_fav);
                     favorites = loadDeserializedFavs(getActivity());
                     notifyItemInserted(favorites.indexOf(temp_fav));

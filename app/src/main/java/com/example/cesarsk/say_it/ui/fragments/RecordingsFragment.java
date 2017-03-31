@@ -1,6 +1,8 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
@@ -8,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.ui.PlayActivity;
@@ -292,6 +296,28 @@ public class RecordingsFragment extends Fragment {
                     recordings = UtilityRecordings.loadRecordingsfromStorage();
                     Collections.sort(recordings);
                     notifyItemInserted(recordings.indexOf(temp_rec_file));
+                }
+            });
+
+            final FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.floating_button_recordings);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Delete Recordings")
+                            .setMessage("Are you sure you want to delete your recordings?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Utility.delete_recordings();
+                                    Toast.makeText(getActivity(), "Recordings Deleted!", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing
+                                }
+                            })
+                            .show();
                 }
             });
 

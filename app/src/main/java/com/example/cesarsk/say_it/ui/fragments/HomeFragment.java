@@ -31,6 +31,7 @@ import com.example.cesarsk.say_it.ui.components.FadingTextView;
 import com.example.cesarsk.say_it.ui.SettingsActivity;
 import com.example.cesarsk.say_it.utility.Utility;
 import com.example.cesarsk.say_it.utility.UtilityDictionary;
+import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.VideoController;
@@ -65,12 +66,10 @@ public class HomeFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_home,
                 container, false);
 
-
-
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
-        final FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button);
+        final FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button_home);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -227,7 +226,8 @@ public class HomeFragment extends Fragment {
         //RIMUOVERE FIN QUI
 
         //Setup our Stats
-        stats_item1.setText("You've \uD83C\uDFB5 "+" words so far!");
+        UtilityRecordings.updateRecordings();
+        stats_item1.setText("You've \uD83C\uDFB5 "+MainActivity.RECORDINGS.size()+" words so far!");
         stats_item2.setText("You've ♥ "+MainActivity.FAVORITES.size()+" words so far!");
 
         View.OnClickListener random_word_listener = new View.OnClickListener() {
