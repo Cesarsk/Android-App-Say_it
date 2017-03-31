@@ -20,6 +20,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 
 
 /**
@@ -281,8 +284,15 @@ public class RecordingsFragment extends Fragment {
 
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    UtilityRecordings.playRecording(getActivity(), mediaPlayer, recordingName + ".aac");
+                public void onClick(View v) {
+                    if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                        MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                        Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                    }
+                    else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                        MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
+                        Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                    }
                 }
             });
 

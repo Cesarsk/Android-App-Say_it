@@ -455,9 +455,6 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private void startTutorialPlayActivity(Button multibutton, Button play_original_button, ImageButton accent_button, ImageButton slow_button) {
-        //Showcase Test
-
-        // sequence example
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(50); // 50ms between each showcase views
         config.setShapePadding(15);
@@ -473,7 +470,6 @@ public class PlayActivity extends AppCompatActivity {
                 "Want to switch accent? PRESS this one!", Utility.underlineText("[SERIOUSLY, I'VE GOT THIS!]").toString());
         sequence.addSequenceItem(slow_button,
                 "Okay... this is the last one. If you want to slower the word, use the SLOW BUTTON.", Utility.underlineText("[...I will]").toString());
-
         sequence.start();
     }
 
