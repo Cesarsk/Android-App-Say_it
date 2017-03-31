@@ -221,7 +221,6 @@ public class RecordingsFragment extends Fragment {
         static final long UNDO_TIMEOUT = 3000;
 
         private ArrayList<File> recordings;
-        private SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getDateTimeInstance();
         private MediaPlayer mediaPlayer = new MediaPlayer();
 
         private File temp_rec_file;
@@ -234,14 +233,12 @@ public class RecordingsFragment extends Fragment {
         class ViewHolder extends RecyclerView.ViewHolder {
 
             TextView wordTextView;
-            TextView RecordingTimeTextView;
             ImageButton QuickPlayBtn;
             ImageButton DeleteRecording;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
-                RecordingTimeTextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
                 QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
                 DeleteRecording = (ImageButton) itemView.findViewById(R.id.list_item_deleteRecording);
             }
@@ -260,12 +257,10 @@ public class RecordingsFragment extends Fragment {
         @Override
         public void onBindViewHolder(RecordingsAdapter.ViewHolder holder, int position) {
 
-            final String recordingName = recordings.get(position).getName();
-            Date recordingDate = new Date(recordings.get(position).lastModified());
-            String RecordingTimeText = "Recorded: " + dateFormat.format(recordingDate);
+            final String recordingName = (recordings.get(position).getName()).substring(0, recordings.get(position).getName().lastIndexOf('.'));
+
 
             holder.wordTextView.setText(recordingName);
-            holder.RecordingTimeTextView.setText(RecordingTimeText);
 
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -26,16 +26,6 @@
             android:textColor="@color/primary_text"
             android:text="@string/PLACEHOLDER" />
 
-        <TextView
-            android:id="@+id/list_item_second_line"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/secondary_text"
-            android:text="@string/PLACEHOLDER" />
-
     </LinearLayout>
 
     <ImageButton

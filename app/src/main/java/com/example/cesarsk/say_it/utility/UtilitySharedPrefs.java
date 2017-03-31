@@ -67,6 +67,10 @@ public class UtilitySharedPrefs {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
+    public static void clearHistory(Context context){
+        savePrefs(context, new TreeSet<String>(), MainActivity.FAVORITES_PREFS_KEY);
+    }
+
     /*public static void removeRecording(Context context, String recordingFilename){
         Set<String> new_recs = new TreeSet<>();
         loadRecordings(context);
