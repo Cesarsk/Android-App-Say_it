@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
-    public static Set<String> RECORDINGS = null;
+    public static ArrayList<File> RECORDINGS = null;
     public static String DEFAULT_NOTIFICATION_RATE = "2";
     public static String DEFAULT_ACCENT = null;
 

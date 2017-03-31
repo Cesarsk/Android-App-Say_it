@@ -237,7 +237,7 @@ public class PlayActivity extends AppCompatActivity {
                                 vibrator.vibrate(50);
                                 Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
                                 timer.clearTimer();
-                                UtilityRecord.deleteRecording(context, selected_word);
+                                UtilityRecordings.deleteRecording(context, selected_word);
                                 return true;
                             }
                     }
@@ -334,7 +334,7 @@ public class PlayActivity extends AppCompatActivity {
                 }
 
                 //UtilitySharedPrefs.addRecording(context, recovered_file.getAbsolutePath());
-                timer.SetTimer(timer.getOld_time());
+                timer.setTimer(timer.getOld_time());
                 delete_button.startAnimation(delete_button_anim_reverse);
                 multibutton.setOnTouchListener(null);
                 multibutton.setOnClickListener(play_listener);
