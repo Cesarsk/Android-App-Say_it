@@ -50,8 +50,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 
@@ -163,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         UtilitySharedPrefs.loadPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
-        RECORDINGS = UtilityRecordings.loadRecordingsfromStorage();
+        RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
 
         if(Wordlists_Map.isEmpty()) {
             //Caricamento dizionario (inclusa word of the day)

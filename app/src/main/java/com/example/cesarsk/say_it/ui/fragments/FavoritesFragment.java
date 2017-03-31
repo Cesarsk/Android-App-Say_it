@@ -45,10 +45,20 @@ import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 public class FavoritesFragment extends Fragment {
 
     ArrayList<Pair<String, String>> DeserializedFavs;
+    RecyclerView recyclerView;
     Snackbar snackbar;
 
     public FavoritesFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(recyclerView != null){
+            FavoritesAdapter adapter = (FavoritesAdapter) recyclerView.getAdapter();
+            adapter.setFavorites(loadDeserializedFavs(getActivity()));
+        }
     }
 
     @Override
@@ -59,7 +69,7 @@ public class FavoritesFragment extends Fragment {
 
         DeserializedFavs = loadDeserializedFavs(getActivity());
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.favorites_list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.favorites_list);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
@@ -392,6 +402,7 @@ public class FavoritesFragment extends Fragment {
 
         public void setFavorites(ArrayList<Pair<String, String>> favorites) {
             this.favorites = favorites;
+            notifyDataSetChanged();
         }
     }
 }

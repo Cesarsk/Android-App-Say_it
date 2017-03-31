@@ -1,6 +1,8 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,30 +23,23 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
-import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.PlayActivity;
+import com.example.cesarsk.say_it.utility.SayItPair;
 import com.example.cesarsk.say_it.utility.Utility;
 import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 
 
 /**
@@ -53,10 +48,20 @@ import java.util.Date;
 public class RecordingsFragment extends Fragment {
 
     Snackbar snackbar;
+    RecyclerView recyclerView;
 
     public RecordingsFragment() {
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(recyclerView != null){
+            UtilityRecordings.updateRecordings(getActivity());
+            RecordingsAdapter adapter = (RecordingsAdapter) recyclerView.getAdapter();
+            adapter.setRecordings(MainActivity.RECORDINGS);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,12 +69,11 @@ public class RecordingsFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_recordings, container, false);
 
-        //TODO CAMBIARE TUTTA LA ACQUISIZIONE DEI RECORDINGS ELIMINANDO LE SHAREDPREFS
-        UtilityRecordings.updateRecordings();
+        UtilityRecordings.updateRecordings(getActivity());
         ArrayList<File> recordings = MainActivity.RECORDINGS;
         Collections.sort(recordings);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recordings_list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recordings_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -225,6 +229,15 @@ public class RecordingsFragment extends Fragment {
     private class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.ViewHolder> {
         static final long UNDO_TIMEOUT = 3000;
 
+        public ArrayList<File> getRecordings() {
+            return recordings;
+        }
+
+        public void setRecordings(ArrayList<File> recordings) {
+            this.recordings = recordings;
+            notifyDataSetChanged();
+        }
+
         private ArrayList<File> recordings;
         private MediaPlayer mediaPlayer = new MediaPlayer();
 
@@ -259,7 +272,7 @@ public class RecordingsFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(RecordingsAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final RecordingsAdapter.ViewHolder holder, int position) {
 
             final String recordingName = (recordings.get(position).getName()).substring(0, recordings.get(position).getName().lastIndexOf('.'));
 
@@ -269,7 +282,7 @@ public class RecordingsFragment extends Fragment {
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    UtilityRecordings.playRecording(mediaPlayer, recordingName + ".aac");
+                    UtilityRecordings.playRecording(getActivity(), mediaPlayer, recordingName + ".aac");
                 }
             });
 
@@ -285,7 +298,7 @@ public class RecordingsFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    recordings = UtilityRecordings.loadRecordingsfromStorage();
+                    recordings = UtilityRecordings.loadRecordingsfromStorage(getActivity());
                     Collections.sort(recordings);
                     notifyItemInserted(recordings.indexOf(temp_rec_file));
                 }
@@ -300,7 +313,9 @@ public class RecordingsFragment extends Fragment {
                             .setMessage("Are you sure you want to delete your recordings?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Utility.delete_recordings();
+                                    Utility.delete_recordings(getActivity());
+                                    UtilityRecordings.updateRecordings(getActivity());
+                                    setRecordings(MainActivity.RECORDINGS);
                                     Toast.makeText(getActivity(), "Recordings Deleted!", Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -322,13 +337,13 @@ public class RecordingsFragment extends Fragment {
 
         public void remove(int pos){
             temp_rec_file = recordings.get(pos);
-            temp_rec_bytes = UtilityRecordings.getRecordingBytesfromFile(getActivity(), recordings.get(pos));
+            temp_rec_bytes = UtilityRecordings.getRecordingBytesfromFile(recordings.get(pos));
 
             //UtilitySharedPrefs.removeRecording(getActivity(), recordings.get(pos).getAbsolutePath());
             recordings.get(pos).delete();
             recordings.remove(pos);
             //UtilitySharedPrefs.loadRecordings(getActivity());
-            recordings = UtilityRecordings.loadRecordingsfromStorage();
+            recordings = UtilityRecordings.loadRecordingsfromStorage(getActivity());
             Collections.sort(recordings);
             //createFileList();
             notifyItemRemoved(pos);
