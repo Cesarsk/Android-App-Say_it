@@ -40,7 +40,7 @@
     <color name="primary">@color/Blue700</color>
     <color name="primary_dark">@color/Blue800</color>
     <color name="primary_light">#BBDEFB</color>
-    <color name="accent">#FFEB3B</color>
+    <color name="accent">#FFCF1E</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
