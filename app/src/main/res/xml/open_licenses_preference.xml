@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Open source licenses"
+    android:layout="@xml/voices_settings_layout">
+
+    <Preference
+        android:key="number_1"
+        android:layout="@xml/voices_settings_layout"
+        android:title="NUMERO 1" />
+
+    <Preference
+        android:key="number_2"
+        android:layout="@xml/voices_settings_layout"
+        android:title="NUMERO 2"/>
+
+    <Preference
+        android:key="number_3"
+        android:layout="@xml/voices_settings_layout"
+        android:title="NUMERO 3"        />
+
+    <Preference
+        android:key="number_4"
+        android:layout="@xml/voices_settings_layout"
+        android:title="NUMERO 4"        />
+</PreferenceScreen>

@@ -32,6 +32,7 @@ public class NotificationPreferenceFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         checkPreferenceResource();
 
+        /*
         final ListPreference notification_rate = (ListPreference) getPreferenceManager().findPreference("default_notification_rate");
         //final CharSequence choice = default_accent.getEntry();
         // Log.i("DEFAULT = AMERICAN", (String) choice);
@@ -42,7 +43,7 @@ public class NotificationPreferenceFragment extends PreferenceFragment {
                 index_notification_rate = notification_rate.findIndexOfValue(new_value);
                 return true;
             }
-        });
+        });*/
     }
 
     private void checkPreferenceResource() {

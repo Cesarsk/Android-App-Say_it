@@ -25,6 +25,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     static private int index_default_accent = 0;
     private Callback mCallback;
     private static final String KEY_1 = "button_notification";
+    private static final String KEY_2 = "open_source_licenses";
+
 
     @Override
     public void onAttach(Context context) {
@@ -46,6 +48,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         if (preference.getKey().equals(KEY_1)) {
             mCallback.onNestedPreferenceSelected(NotificationPreferenceFragment.NESTED_SCREEN_1_KEY);
         }
+
+        if(preference.getKey().equals(KEY_2)){
+            mCallback.onNestedPreferenceSelected(OpenLicencesFragment.NESTED_SCREEN_2_KEY);
+        }
         return false;
     }
 
@@ -57,6 +63,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         // add listeners for non-default actions
         Preference preference = findPreference(KEY_1);
         preference.setOnPreferenceClickListener(this);
+
+        Preference open_source_licenses = findPreference(KEY_2);
+        open_source_licenses.setOnPreferenceClickListener(this);
 
         Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
 

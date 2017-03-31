@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.fragments.NotificationPreferenceFragment;
+import com.example.cesarsk.say_it.ui.fragments.OpenLicencesFragment;
 import com.example.cesarsk.say_it.ui.fragments.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity implements SettingsFragment.Callback {
@@ -47,12 +47,13 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
         } else {
             getFragmentManager().popBackStack();
         }
-        setTitle("Settings");
     }
 
     @Override
     public void onNestedPreferenceSelected(int key) {
         getFragmentManager().beginTransaction().replace(R.id.contentSettings, NotificationPreferenceFragment.newInstance(key), TAG_NESTED).addToBackStack(TAG_NESTED).commit();
-        setTitle("Notification Settings");
+        getFragmentManager().beginTransaction().replace(R.id.contentSettings, OpenLicencesFragment.newInstance(key), "button_notification").addToBackStack("button_notification").commit();
+        //if(getTitle().equals("Settings"))  setTitle("Notification Settings");
     }
+
 }
