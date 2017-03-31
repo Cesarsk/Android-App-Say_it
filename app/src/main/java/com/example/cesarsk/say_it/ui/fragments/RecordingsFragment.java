@@ -245,7 +245,6 @@ public class RecordingsFragment extends Fragment {
                 super(itemView);
                 wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
                 QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
-                DeleteRecording = (ImageButton) itemView.findViewById(R.id.list_item_deleteRecording);
             }
         }
 
@@ -271,13 +270,6 @@ public class RecordingsFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     UtilityRecordings.playRecording(mediaPlayer, recordingName + ".aac");
-                }
-            });
-
-            holder.DeleteRecording.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
                 }
             });
 

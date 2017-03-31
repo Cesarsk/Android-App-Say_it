@@ -277,7 +277,6 @@ public class HistoryFragment extends Fragment {
                 IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
                 QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
                 AddtoFavsBtn = (ImageButton) itemView.findViewById(R.id.list_item_addToFavs);
-                DeleteFromHistoryBtn = (ImageButton) itemView.findViewById(R.id.list_item_removeFromHistory);
             }
         }
 
@@ -329,14 +328,6 @@ public class HistoryFragment extends Fragment {
                         Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                         holder.AddtoFavsBtn.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
                     }
-                }
-            });
-
-            holder.DeleteFromHistoryBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = holder.getAdapterPosition();
-                    remove(pos);
                 }
             });
 

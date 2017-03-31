@@ -2,9 +2,9 @@
 <LinearLayout
     android:id="@+id/list_item_recordings_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:paddingTop="4dp"
+    android:padding="8dp"
     android:descendantFocusability="blocksDescendants"
     android:background="?attr/selectableItemBackground">
 
@@ -38,17 +38,5 @@
         android:paddingEnd="16dp"
         android:backgroundTint="@color/Grey100"
         android:tint="@color/primary_dark"/>
-
-    <ImageButton
-        android:id="@+id/list_item_deleteRecording"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:backgroundTint="@color/Grey100"
-        android:src="@drawable/ic_delete_black_24dp"
-        android:tint="@color/primary_dark"
-        android:contentDescription="@string/delete_button_description"/>
 
 </LinearLayout>
