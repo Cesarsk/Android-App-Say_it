@@ -4,27 +4,21 @@
 
     <Preference
         android:key="number_1"
-        android:title="BottomBar library"
-        android:layout="@xml/voices_settings_layout"/>
+        android:title="BottomBar library"/>
 
     <Preference
         android:key="number_2"
-        android:title="Easy Rating Dialog"
-        android:layout="@xml/voices_settings_layout"/>
+        android:title="Easy Rating Dialog" />
 
     <Preference
         android:key="number_3"
-        android:title="MaterialShowCase"
-        android:layout="@xml/voices_settings_layout"/>
+        android:title="MaterialShowCase" />
 
     <Preference
         android:key="number_4"
-        android:title="Gson"
-        android:layout="@xml/voices_settings_layout"/>
+        android:title="Gson" />
 
     <Preference
         android:key="number_5"
-        android:title="Wordlist"
-        android:layout="@xml/voices_settings_layout"/>
-
+        android:title="Wordlist" />
 </PreferenceScreen>

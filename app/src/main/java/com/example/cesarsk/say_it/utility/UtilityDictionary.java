@@ -1,7 +1,10 @@
 package com.example.cesarsk.say_it.utility;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.util.Pair;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
@@ -134,6 +137,30 @@ public class UtilityDictionary {
         //Getting a random sublist and then extracting a random word from it
         String random_quote = quotes.get(rand.nextInt(quotes.size()));
         return random_quote;
+    }
+
+    public static StringBuilder load_textfile(Context context) throws IOException {
+//Get the text file
+        StringBuilder text = new StringBuilder();
+        BufferedReader reader = null;
+
+        try {
+            reader = new BufferedReader(
+                    new InputStreamReader(context.getResources().openRawResource(R.raw.bottombar_license)));
+
+            // do reading, usually loop until end of file reading
+            String mLine;
+            while ((mLine = reader.readLine()) != null) {
+                text.append(mLine);
+                text.append('\n');
+            }
+            reader.close();
+        } catch (IOException e) {
+            Toast.makeText(context, "Error reading file!", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
+        return text;
     }
 
 }

@@ -1,11 +1,27 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.LicenseActivity;
+import com.example.cesarsk.say_it.ui.MainActivity;
+import com.example.cesarsk.say_it.ui.PlayActivity;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Created by Mamma on 30/03/2017.
@@ -44,13 +60,16 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                     return true;
                 }
             });
-        }
-        else if(selected_fragment_layout == 2)
-        {
+        } else if (selected_fragment_layout == 2) {
             Preference number_one = getPreferenceManager().findPreference("number_1");
             number_one.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    final Intent bottom_bar_intent = new Intent(getActivity(), LicenseActivity.class);
+                    Bundle args = new Bundle();
+                    args.putString(LicenseActivity.LICENSE, "bottom_bar");
+                    bottom_bar_intent.putExtras(args);
+                    startActivity(bottom_bar_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                     return false;
                 }
             });
@@ -59,6 +78,11 @@ public class NestedPreferenceFragment extends PreferenceFragment {
             number_two.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    final Intent bottom_bar_intent = new Intent(getActivity(), LicenseActivity.class);
+                    Bundle args = new Bundle();
+                    args.putString(LicenseActivity.LICENSE, "easy_rating_dialog");
+                    bottom_bar_intent.putExtras(args);
+                    startActivity(bottom_bar_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                     return false;
                 }
             });
@@ -67,6 +91,11 @@ public class NestedPreferenceFragment extends PreferenceFragment {
             number_three.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    final Intent bottom_bar_intent = new Intent(getActivity(), LicenseActivity.class);
+                    Bundle args = new Bundle();
+                    args.putString(LicenseActivity.LICENSE, "material_show_case");
+                    bottom_bar_intent.putExtras(args);
+                    startActivity(bottom_bar_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                     return false;
                 }
             });
@@ -75,6 +104,11 @@ public class NestedPreferenceFragment extends PreferenceFragment {
             number_four.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    final Intent bottom_bar_intent = new Intent(getActivity(), LicenseActivity.class);
+                    Bundle args = new Bundle();
+                    args.putString(LicenseActivity.LICENSE, "gson");
+                    bottom_bar_intent.putExtras(args);
+                    startActivity(bottom_bar_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                     return false;
                 }
             });
@@ -83,6 +117,11 @@ public class NestedPreferenceFragment extends PreferenceFragment {
             number_five.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    final Intent bottom_bar_intent = new Intent(getActivity(), LicenseActivity.class);
+                    Bundle args = new Bundle();
+                    args.putString(LicenseActivity.LICENSE, "wordlist");
+                    bottom_bar_intent.putExtras(args);
+                    startActivity(bottom_bar_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                     return false;
                 }
             });
@@ -105,5 +144,4 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                 return 0;
         }
     }
-
 }
