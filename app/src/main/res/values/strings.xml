@@ -58,4 +58,12 @@
     <string name="delete_button_description">Delete your Recording</string>
     <string name="card_your_stats">Your stats:</string>
 
+    <!-- Strings related to Rate Dialog -->
+    <string name="erd_title">Rate this app!</string>
+    <string name="erd_message">Hi! If you like this app, take a second to rate it and help us to grow, thank you! ❤</string>
+    <string name="erd_no_thanks">No, thanks.</string>
+    <string name="erd_remind_me_later">Remind me later.</string>
+    <string name="erd_rate_now">Rate now.</string>
+
+
 </resources>

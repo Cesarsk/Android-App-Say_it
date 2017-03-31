@@ -36,6 +36,7 @@ import com.example.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.example.cesarsk.say_it.ui.fragments.RecordingsFragment;
 import com.example.cesarsk.say_it.utility.UtilityDictionary;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -103,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
     //Notification id
     final int notifId = 1;
 
+    //Rate Dialog
+    EasyRatingDialog easyRatingDialog;
 
     final FragmentManager fragmentManager = getFragmentManager();
 
@@ -134,9 +137,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart()
+    {
+        super.onStart();
+        easyRatingDialog.onStart();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        easyRatingDialog.showIfNeeded();
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        easyRatingDialog = new EasyRatingDialog(this);
+
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //Caricamento preferenze
         UtilitySharedPrefs.loadPrefs(this);
