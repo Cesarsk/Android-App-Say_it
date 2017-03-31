@@ -1,22 +1,14 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/history_fragment_coordinator">
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative_history_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
-
-    <!--
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/history_list"
-        android:textColor="@color/primary_text"
-        android:divider="@color/divider"
-        android:dividerHeight="1.5px"/> -->
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -25,5 +17,17 @@
         android:scrollbars="vertical"/>
 
 </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        android:src="@drawable/ic_delete_forever_black_24dp"
+        android:tint="@color/white"
+        app:layout_anchor="@id/relative_history_fragment"
+        app:layout_anchorGravity="bottom|right|end">
+    </android.support.design.widget.FloatingActionButton>
 
 </android.support.design.widget.CoordinatorLayout>
