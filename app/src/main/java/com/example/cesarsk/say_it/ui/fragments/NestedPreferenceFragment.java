@@ -8,7 +8,7 @@ import android.os.Bundle;
 import com.example.cesarsk.say_it.R;
 
 /**
- * Created by lucac on 30/03/2017.
+ * Created by Mamma on 30/03/2017.
  */
 
 public class NestedPreferenceFragment extends PreferenceFragment {
@@ -17,6 +17,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
     public static final int NESTED_SCREEN_2_KEY = 2;
     static private int index_notification_rate = 2; //DO NOT REMOVE THIS
     private static final String TAG_KEY = "NESTED_KEY";
+    public static int selected_fragment_layout;
 
     public static NestedPreferenceFragment newInstance(int key) {
         NestedPreferenceFragment fragment = new NestedPreferenceFragment();
@@ -31,7 +32,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        int selected_fragment_layout = checkPreferenceResource();
+        selected_fragment_layout = checkPreferenceResource();
 
         if (selected_fragment_layout == 1) {
             final ListPreference notification_rate = (ListPreference) getPreferenceManager().findPreference("default_notification_rate");
@@ -72,6 +73,14 @@ public class NestedPreferenceFragment extends PreferenceFragment {
 
             Preference number_four = getPreferenceManager().findPreference("number_4");
             number_four.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    return false;
+                }
+            });
+
+            Preference number_five = getPreferenceManager().findPreference("number_5");
+            number_five.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     return false;
