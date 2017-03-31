@@ -24,35 +24,35 @@ public class LicenseActivity extends Activity {
         String selected_license = args.getString(LICENSE);
         if(selected_license.equals("bottom_bar")){
             try {
-                selected_license_text_view.setText(UtilityDictionary.load_textfile(this));
+                selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.bottombar_license));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         if(selected_license.equals("easy_rating_dialog")){
             try {
-                selected_license_text_view.setText(UtilityDictionary.load_textfile(this));
+                selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.easy_rating_dialog));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         if(selected_license.equals("material_show_case")){
             try {
-                selected_license_text_view.setText(UtilityDictionary.load_textfile(this));
+                selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.material_show_case_license));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         if(selected_license.equals("gson")){
             try {
-                selected_license_text_view.setText(UtilityDictionary.load_textfile(this));
+                selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.gson_license));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         if(selected_license.equals("wordlist")){
             try {
-                selected_license_text_view.setText(UtilityDictionary.load_textfile(this));
+                selected_license_text_view.setText(UtilityDictionary.load_textfile(this,R.raw.wordlist_license));
             } catch (IOException e) {
                 e.printStackTrace();
             }

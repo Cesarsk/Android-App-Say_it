@@ -139,16 +139,14 @@ public class UtilityDictionary {
         return random_quote;
     }
 
-    public static StringBuilder load_textfile(Context context) throws IOException {
-//Get the text file
+    public static StringBuilder load_textfile(Context context,int resFile) throws IOException {
         StringBuilder text = new StringBuilder();
         BufferedReader reader = null;
 
         try {
             reader = new BufferedReader(
-                    new InputStreamReader(context.getResources().openRawResource(R.raw.bottombar_license)));
+                    new InputStreamReader(context.getResources().openRawResource(resFile)));
 
-            // do reading, usually loop until end of file reading
             String mLine;
             while ((mLine = reader.readLine()) != null) {
                 text.append(mLine);
