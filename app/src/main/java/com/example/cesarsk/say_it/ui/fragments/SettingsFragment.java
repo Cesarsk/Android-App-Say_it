@@ -1,9 +1,11 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -11,6 +13,7 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.widget.Toast;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.FileTextActivity;
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.utility.Utility;
 
@@ -25,6 +28,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     static private int index_default_accent = 0;
     private Callback mCallback;
     private static final String KEY_1 = "button_notification";
+    private static final String KEY_2 = "open_source_licenses";
+
 
     @Override
     public void onAttach(Context context) {
@@ -44,7 +49,11 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     public boolean onPreferenceClick(Preference preference) {
         // here you should use the same keys as you used in the xml-file
         if (preference.getKey().equals(KEY_1)) {
-            mCallback.onNestedPreferenceSelected(NotificationPreferenceFragment.NESTED_SCREEN_1_KEY);
+            mCallback.onNestedPreferenceSelected(NestedPreferenceFragment.NESTED_SCREEN_1_KEY);
+        }
+
+        if(preference.getKey().equals(KEY_2)){
+            mCallback.onNestedPreferenceSelected(NestedPreferenceFragment.NESTED_SCREEN_2_KEY);
         }
         return false;
     }
@@ -58,8 +67,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         Preference preference = findPreference(KEY_1);
         preference.setOnPreferenceClickListener(this);
 
-        Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
+        Preference open_source_licenses = findPreference(KEY_2);
+        open_source_licenses.setOnPreferenceClickListener(this);
 
+        Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
         rate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -67,7 +78,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 return false;
             }
         });
-
 
         Preference contact_us = getPreferenceManager().findPreference("contact_us");
         contact_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -145,14 +155,18 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 return true;
             }
         });
-    }
 
-    public static int getIndex_default_accent() {
-        return index_default_accent;
-    }
-
-    public static int setIndex(int index) {
-        SettingsFragment.index_default_accent = index;
-        return index;
+        Preference acknowledgements = getPreferenceManager().findPreference("acknowledgements");
+        acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
+                Bundle args = new Bundle();
+                args.putString(FileTextActivity.PREFERENCE, "acknowledgements");
+                preference_intent.putExtras(args);
+                startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                return false;
+            }
+        });
     }
 }

@@ -74,6 +74,7 @@
 
         <Preference
             android:key="open_source_licenses"
+            android:persistent="false"
             android:layout="@xml/voices_settings_layout"
             android:summary="License details for open source software"
             android:title="Open source licenses" />

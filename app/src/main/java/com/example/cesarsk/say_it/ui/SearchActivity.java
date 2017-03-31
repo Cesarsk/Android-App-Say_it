@@ -130,7 +130,6 @@ public class SearchActivity extends AppCompatActivity {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     editText.setText(result.get(0));
-                    //TODO AVVIARE ATTIVITA' CON TESTO RESULT.GET(0)
                 }
                 break;
             }
