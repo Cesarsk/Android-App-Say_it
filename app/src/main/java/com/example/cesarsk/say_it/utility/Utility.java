@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 
 import java.io.File;
@@ -32,6 +34,12 @@ public class Utility {
             }
         }
         return true;
+    }
+
+    public static CharSequence underlineText(CharSequence text) {
+        SpannableString content = new SpannableString(text);
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        return content;
     }
 
     public static void searchMeaning(Context context, String word)

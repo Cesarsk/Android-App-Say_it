@@ -35,6 +35,8 @@ import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.VideoController;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
 import static com.example.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
@@ -62,6 +64,8 @@ public class HomeFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_home,
                 container, false);
+
+
 
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
