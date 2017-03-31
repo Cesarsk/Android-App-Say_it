@@ -13,12 +13,11 @@
     <string name="QuickPlayContentDescription">Play Word</string>
     <string name="ShareContentDescription">Share Word</string>
 
-
     <string name="say_it_button">SAY IT!</string>
     <string name="not_found_error">Word not found!</string>
     <string name="empty_field_error">You have to write something!</string>
     <string name="app_name">Say It!</string>
-    <string name="search_hint">Search hint</string>
+    <string name="search_hint">Search for a word</string>
     <string name="banner_id">ca-app-pub-9284620118215899
     </string>
 
@@ -57,5 +56,13 @@
     <string name="voice_speech_icon_description">Voice Speech Icon</string>
     <string name="delete_button_description">Delete your Recording</string>
     <string name="card_your_stats">Your stats:</string>
+
+    <!-- Strings related to Rate Dialog -->
+    <string name="erd_title">Rate this app!</string>
+    <string name="erd_message">Hi! If you like this app, take a second to rate it and help us to grow, thank you! ❤</string>
+    <string name="erd_no_thanks">No, thanks.</string>
+    <string name="erd_remind_me_later">Remind me later.</string>
+    <string name="erd_rate_now">Rate now.</string>
+
 
 </resources>

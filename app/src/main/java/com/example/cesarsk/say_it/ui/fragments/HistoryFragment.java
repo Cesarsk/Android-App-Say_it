@@ -1,13 +1,17 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -26,7 +30,10 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.SettingsActivity;
 import com.example.cesarsk.say_it.utility.SayItPair;
+import com.example.cesarsk.say_it.utility.Utility;
+import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.gson.Gson;
 
@@ -250,15 +257,10 @@ public class HistoryFragment extends Fragment {
 
 
         private ArrayList<SayItPair> history;
-        /*private ArrayList<SayItPair> pendingElements;
-        private Handler handler = new Handler(); //Handler per gestire i Runnable per permettere l'UNDO con il Delay
-        HashMap<Pair<String, String>, Runnable> pendingRunnables = new HashMap<>(); //HashMap che associa ad ogni elemento della lista un Runnable che aspetterà
-        //3 secondi prima di cancellare l'elemento dalla lista.*/
 
         public HistoryAdapter(ArrayList<SayItPair> history_list) {
 
             history = history_list;
-            //pendingElements = new ArrayList<>();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -341,10 +343,32 @@ public class HistoryFragment extends Fragment {
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     UtilitySharedPrefs.addHist(getActivity(), temp_hist);
                     history = loadDeserializedHistory(getActivity());
                     notifyItemInserted(history.indexOf(temp_hist));
+                }
+            });
+
+            final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button_history);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Clear History")
+                            .setMessage("Are you sure you want to clear your History?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    UtilitySharedPrefs.clearHistory(getActivity());
+                                    Toast.makeText(getActivity(), "History Cleared!", Toast.LENGTH_SHORT).show();
+
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing
+                                }
+                            })
+                            .show();
                 }
             });
 
@@ -355,7 +379,7 @@ public class HistoryFragment extends Fragment {
             return history.size();
         }
 
-        public void remove(int pos) {
+        void remove(int pos) {
             temp_hist = history.get(pos);
             temp_pos = pos;
             temp_adding_time = temp_hist.getAdding_time();

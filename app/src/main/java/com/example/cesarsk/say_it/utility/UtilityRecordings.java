@@ -10,10 +10,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.example.cesarsk.say_it.ui.MainActivity;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,9 +23,10 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.example.cesarsk.say_it.ui.PlayActivity.RequestPermissionCode;
 import static com.example.cesarsk.say_it.ui.PlayActivity.selected_word;
 
-public class UtilityRecord{
+public class UtilityRecordings {
 
     public static final String AUDIO_RECORDER_FOLDER = "Say it";
+    public static final String RECORDINGS_PATH = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/";
 
     private static MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
         @Override
@@ -49,14 +51,13 @@ public class UtilityRecord{
             for (int i = 0; i < files.length; i++) {
                 if (files[i].getName().equals(word + ".aac")) {
                     files[i].delete();
-                    UtilitySharedPrefs.removeRecording(context, files[i].getAbsolutePath());
+                    //UtilitySharedPrefs.removeRecording(context, files[i].getAbsolutePath());
                 }
             }
         }
     }
 
     public static ArrayList<String> loadRecordings() {
-        //load all recordings, needs to be used in order to build the HistoryFragment
         ArrayList<String> recordings = new ArrayList<>();
         String path = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER;
         Log.d("Files", "Path: " + path);
@@ -69,6 +70,25 @@ public class UtilityRecord{
                     recordings.add(files[i].getName().substring(0, files[i].getName().lastIndexOf(".")));
             }
         }
+        return recordings;
+    }
+
+    public static ArrayList<File> loadRecordingsfromStorage(){
+        ArrayList<File> recordings = new ArrayList<>();
+
+        File dir = new File(RECORDINGS_PATH);
+
+        if(dir.isDirectory()){
+            File[] files = dir.listFiles();
+            if(files != null && files.length != 0){
+                for(int i = 0; i < files.length; i++){
+                    if(files[i].getName().substring(files[i].getName().lastIndexOf('.')).equalsIgnoreCase(".aac")){
+                        recordings.add(files[i]);
+                    }
+                }
+            }
+        }
+
         return recordings;
     }
 
@@ -142,7 +162,7 @@ public class UtilityRecord{
             File file = new File(path + "/" + word + ".aac");
             try{
                 recorder.stop();
-                UtilitySharedPrefs.addRecording(context, file.getAbsolutePath());
+                //UtilitySharedPrefs.addRecording(context, file.getAbsolutePath());
             } catch(RuntimeException stopException){
                 //deleting file here
                 file.delete();
@@ -168,26 +188,58 @@ public class UtilityRecord{
         return mediaPlayer.getDuration();
     }
 
-    public static byte[] getRecordingfromWord(Context context, String word){
+    public static byte[] getRecordingBytesfromWord(Context context, String word){
 
-        if(UtilitySharedPrefs.checkRecording(context, word)){
             byte[] bytes = new byte[0];
-            File file =  new File(Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecord.AUDIO_RECORDER_FOLDER + "/" + word + ".aac");
+            File file =  new File(Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecordings.AUDIO_RECORDER_FOLDER + "/" + word + ".aac");
             try {
                 FileInputStream inputStream = new FileInputStream(file);
                 bytes = new byte[(int)file.length()];
                 inputStream.read(bytes);
                 inputStream.close();
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return bytes;
+    }
+
+    public static byte[] getRecordingBytesfromFile(Context context, File file){
+
+        byte[] bytes = new byte[0];
+        try {
+            FileInputStream inputStream = new FileInputStream(file);
+            bytes = new byte[(int)file.length()];
+            inputStream.read(bytes);
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        return null;
+        return bytes;
+    }
+
+    public static void playRecording(MediaPlayer mediaPlayer, String recordingName){
+        try {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+                mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
+                mediaPlayer.setDataSource(RECORDINGS_PATH + recordingName);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } else {
+                mediaPlayer.reset(); //Before a setDataSource call, you need to reset MP obj.
+                mediaPlayer.setDataSource(RECORDINGS_PATH + recordingName);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateRecordings(){
+        MainActivity.RECORDINGS = loadRecordingsfromStorage();
     }
 
     public static void playRecording(MediaPlayer mediaPlayer) {

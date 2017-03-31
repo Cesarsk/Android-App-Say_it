@@ -15,6 +15,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,8 +29,8 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.utility.ShowTimer;
+import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.Utility;
-import com.example.cesarsk.say_it.utility.UtilityRecord;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -41,6 +43,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static android.view.View.INVISIBLE;
@@ -87,7 +92,7 @@ public class PlayActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
 
-        final Button recplay_button = (Button) findViewById(R.id.recplay_button);
+        final Button multibutton = (Button) findViewById(R.id.recplay_button);
         final TextView selected_word_view = (TextView) findViewById(R.id.selected_word);
         final TextView selected_ipa_view = (TextView) findViewById(R.id.selected_word_ipa);
         final ImageButton delete_button = (ImageButton) findViewById(R.id.delete_button);
@@ -167,8 +172,8 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!mediaPlayer.isPlaying()) {
-                    UtilityRecord.playRecording(mediaPlayer);
-                    recplay_button.setBackground(getDrawable(R.drawable.circle_green_pressed));
+                    UtilityRecordings.playRecording(mediaPlayer);
+                    multibutton.setBackground(getDrawable(R.drawable.circle_green_pressed));
                     vibrator.vibrate(50);
                     Log.i("SAY IT!", "" + mediaPlayer.getDuration());
                     new CountDownTimer(mediaPlayer.getDuration(), 1000) {
@@ -180,7 +185,7 @@ public class PlayActivity extends AppCompatActivity {
 
                         @Override
                         public void onFinish() {
-                            recplay_button.setBackground(getDrawable(R.drawable.circle_green));
+                            multibutton.setBackground(getDrawable(R.drawable.circle_green));
                         }
                     }.start();
                 }
@@ -190,7 +195,7 @@ public class PlayActivity extends AppCompatActivity {
         final View.OnTouchListener rec_listener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                if (UtilityRecord.checkRecordAudioPermissions(view.getContext())) {
+                if (UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
@@ -198,9 +203,11 @@ public class PlayActivity extends AppCompatActivity {
                             minDurationTimer.start();
                             isRecording = true;
                             vibrator.vibrate(50);
-                            recplay_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
+                        
+                            multibutton.setBackground(getDrawable(R.drawable.circle_red_pressed));
                             timer.startTimer();
-                            UtilityRecord.startRecording(recorder, output_formats, currentFormat, file_exts);
+                            UtilityRecordings.startRecording(recorder, output_formats, currentFormat, file_exts);
+
                             if (countDownTimer != null) {
                                 countDownTimer.cancel();
                                 countDownTimer.start();
@@ -214,14 +221,14 @@ public class PlayActivity extends AppCompatActivity {
                                 countDownTimer.cancel();
                             }
                             isRecording = false;
-                            recplay_button.setBackground(getDrawable(R.drawable.circle_red));
+                            multibutton.setBackground(getDrawable(R.drawable.circle_red));
                             if (isMinimumDurationReached) {
-                                if (UtilityRecord.stopRecording(context, recorder, selected_word)) {
-                                    recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
+                                if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
+                                    multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                                     delete_button.startAnimation(delete_button_anim_reverse);
-                                    recplay_button.setOnTouchListener(null);
-                                    recplay_button.setOnClickListener(play_listener);
-                                    TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                                    multibutton.setOnTouchListener(null);
+                                    multibutton.setOnClickListener(play_listener);
+                                    TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
                                     transition.startTransition(durationMillis);
                                     isMinimumDurationReached = false;
                                     return true;
@@ -230,12 +237,12 @@ public class PlayActivity extends AppCompatActivity {
                                 vibrator.vibrate(50);
                                 Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
                                 timer.clearTimer();
-                                UtilityRecord.deleteRecording(context, selected_word);
+                                UtilityRecordings.deleteRecording(context, selected_word);
                                 return true;
                             }
                     }
                 } else {
-                    UtilityRecord.requestRecordAudioPermissions(view.getContext());
+                    UtilityRecordings.requestRecordAudioPermissions(view.getContext());
                 }
                 return false;
             }
@@ -263,13 +270,13 @@ public class PlayActivity extends AppCompatActivity {
                     timer.stopTimer();
                     Toast.makeText(context, "Maximum length duration reached.", Toast.LENGTH_SHORT).show();
                     vibrator.vibrate(50);
-                    recplay_button.setBackground(getDrawable(R.drawable.circle_red));
-                    if (UtilityRecord.stopRecording(context, recorder, selected_word)) {
-                        recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
+                    multibutton.setBackground(getDrawable(R.drawable.circle_red));
+                    if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
+                        multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                         delete_button.startAnimation(delete_button_anim_reverse);
-                        recplay_button.setOnTouchListener(null);
-                        recplay_button.setOnClickListener(play_listener);
-                        TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                        multibutton.setOnTouchListener(null);
+                        multibutton.setOnClickListener(play_listener);
+                        TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
                         transition.startTransition(durationMillis);
                         vibrator.vibrate(50);
                         return;
@@ -279,18 +286,18 @@ public class PlayActivity extends AppCompatActivity {
             }
         };
 
-        if (UtilityRecord.checkRecordingFile(selected_word)) {
-            recplay_button.setBackground(getResources().getDrawable(R.drawable.circle_color_anim_green_to_red, null));
-            recplay_button.setOnClickListener(play_listener);
-            int millis = UtilityRecord.returnRecordingDuration(mediaPlayer);
+        if (UtilityRecordings.checkRecordingFile(selected_word)) {
+            multibutton.setBackground(getResources().getDrawable(R.drawable.circle_color_anim_green_to_red, null));
+            multibutton.setOnClickListener(play_listener);
+            int millis = UtilityRecordings.returnRecordingDuration(mediaPlayer);
             SimpleDateFormat formatter = new SimpleDateFormat("ss:SSS", Locale.UK);
             Date date = new Date(millis);
             String result = formatter.format(date);
             timerTextView.setText(result);
             delete_button.startAnimation(delete_button_anim_reverse);
         } else {
-            recplay_button.setBackground(getResources().getDrawable(R.drawable.circle_red, null));
-            recplay_button.setOnTouchListener(rec_listener);
+            multibutton.setBackground(getResources().getDrawable(R.drawable.circle_red, null));
+            multibutton.setOnTouchListener(rec_listener);
             delete_button.setEnabled(false);
             delete_button.setVisibility(INVISIBLE);
         }
@@ -316,24 +323,23 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //handler.removeCallbacks(pendingRemovalRunnable);
-                File recovered_file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecord.AUDIO_RECORDER_FOLDER + "/" + selected_word + ".aac");
+                File recovered_file = new File(UtilityRecordings.RECORDINGS_PATH + selected_word + ".aac");
                 FileOutputStream outputStream = null;
                 try {
                     outputStream = new FileOutputStream(recovered_file);
                     outputStream.write(temp_recording_bytes);
                     outputStream.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                UtilitySharedPrefs.addRecording(context, recovered_file.getAbsolutePath());
+
+                //UtilitySharedPrefs.addRecording(context, recovered_file.getAbsolutePath());
                 timer.setTimer(timer.getOld_time());
                 delete_button.startAnimation(delete_button_anim_reverse);
-                recplay_button.setOnTouchListener(null);
-                recplay_button.setOnClickListener(play_listener);
-                recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
-                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                multibutton.setOnTouchListener(null);
+                multibutton.setOnClickListener(play_listener);
+                multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
+                TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
                 transition.startTransition(durationMillis);
             }
         });
@@ -362,12 +368,12 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(final View v) {
                 timer.clearTimer();
                 delete_button.startAnimation(delete_button_anim);
-                recplay_button.setOnTouchListener(rec_listener);
-                recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
-                TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
+                multibutton.setOnTouchListener(rec_listener);
+                multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
+                TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
                 transition.startTransition(durationMillis);
-                temp_recording_bytes = UtilityRecord.getRecordingfromWord(context, selected_word);
-                UtilityRecord.deleteRecording(context, selected_word);
+                temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(context, new File(UtilityRecordings.RECORDINGS_PATH + selected_word + ".aac"));
+                UtilityRecordings.deleteRecording(context, selected_word);
                 snackbar.show();
                 //handler.post(pendingRemovalRunnable);
                 //Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
@@ -447,6 +453,31 @@ public class PlayActivity extends AppCompatActivity {
                 }
             }
         });
+
+        startTutorialPlayActivity(multibutton, play_original_button, accent_button, slow_button);
+    }
+
+    private void startTutorialPlayActivity(Button multibutton, Button play_original_button, ImageButton accent_button, ImageButton slow_button) {
+        //Showcase Test
+
+        // sequence example
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(50); // 50ms between each showcase views
+        config.setShapePadding(15);
+        config.setRenderOverNavigationBar(true);
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "utente");
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(multibutton,
+                "HOLD this button to record a word. Release and PRESS it to listen to your recording.", "[DISMISS]");
+        sequence.addSequenceItem(play_original_button,
+                "PRESS this button to listen to the original pronunciation.", Utility.underlineText("[GO AWAY!]").toString());
+        sequence.addSequenceItem(accent_button,
+                "Want to switch accent? PRESS this one!", Utility.underlineText("[SERIOUSLY, I'VE GOT THIS!]").toString());
+        sequence.addSequenceItem(slow_button,
+                "Okay... this is the last one. If you want to slower the word, use the SLOW BUTTON.", Utility.underlineText("[...I will]").toString());
+
+        sequence.start();
     }
 
     @Override
@@ -468,20 +499,5 @@ public class PlayActivity extends AppCompatActivity {
                 }
                 break;
         }
-    }
-
-    public void animateRecordButton(ImageButton delete_button, Button recplay_button, View.OnTouchListener rec_listener, boolean green_to_red) {
-
-        delete_button.startAnimation(delete_button_anim);
-        recplay_button.setOnTouchListener(rec_listener);
-
-        if (green_to_red) {
-            recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
-        } else {
-            recplay_button.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
-        }
-
-        TransitionDrawable transition = (TransitionDrawable) recplay_button.getBackground();
-        transition.startTransition(durationMillis);
     }
 }

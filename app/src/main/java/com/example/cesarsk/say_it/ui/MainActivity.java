@@ -35,10 +35,13 @@ import com.example.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.example.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.example.cesarsk.say_it.ui.fragments.RecordingsFragment;
 import com.example.cesarsk.say_it.utility.UtilityDictionary;
+import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -46,6 +49,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
+
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -68,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
-    public static Set<String> RECORDINGS = null;
+    public static ArrayList<File> RECORDINGS = null;
     public static String DEFAULT_NOTIFICATION_RATE = "2";
     public static String DEFAULT_ACCENT = null;
 
@@ -86,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
     public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
-    public static final ArrayList<String> Quotes = new ArrayList();
+    public static final ArrayList<String> Quotes = new ArrayList<>();
     public static String wordOfTheDay;
     public static String IPAofTheDay;
 
@@ -101,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
     //Notification id
     final int notifId = 1;
 
+    //Rate Dialog
+    EasyRatingDialog easyRatingDialog;
 
     final FragmentManager fragmentManager = getFragmentManager();
 
@@ -132,14 +139,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart()
+    {
+        super.onStart();
+        easyRatingDialog.onStart();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        easyRatingDialog.showIfNeeded();
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        easyRatingDialog = new EasyRatingDialog(this);
+
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //Caricamento preferenze
         UtilitySharedPrefs.loadPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
+        RECORDINGS = UtilityRecordings.loadRecordingsfromStorage();
 
         if(Wordlists_Map.isEmpty()) {
             //Caricamento dizionario (inclusa word of the day)

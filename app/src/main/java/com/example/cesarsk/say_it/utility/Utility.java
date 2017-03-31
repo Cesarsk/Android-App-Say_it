@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 
 import java.io.File;
@@ -20,7 +22,7 @@ public class Utility {
     public static boolean delete_recordings() {
         //load all recordings, needs to be used in order to build the HistoryFragment
         ArrayList<String> recordings = new ArrayList<>();
-        String path = Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecord.AUDIO_RECORDER_FOLDER;
+        String path = Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecordings.AUDIO_RECORDER_FOLDER;
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();
@@ -32,6 +34,12 @@ public class Utility {
             }
         }
         return true;
+    }
+
+    public static CharSequence underlineText(CharSequence text) {
+        SpannableString content = new SpannableString(text);
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        return content;
     }
 
     public static void searchMeaning(Context context, String word)
