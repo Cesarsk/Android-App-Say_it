@@ -61,7 +61,8 @@ public class RecordingsFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_recordings, container, false);
 
         //TODO CAMBIARE TUTTA LA ACQUISIZIONE DEI RECORDINGS ELIMINANDO LE SHAREDPREFS
-        ArrayList<File> recordings = UtilityRecordings.loadRecordingsfromStorage();
+        UtilityRecordings.updateRecordings();
+        ArrayList<File> recordings = MainActivity.RECORDINGS;
         Collections.sort(recordings);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recordings_list);
@@ -288,11 +289,8 @@ public class RecordingsFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    //UtilitySharedPrefs.addRecording(getActivity(), temp_rec);
-                    //UtilitySharedPrefs.loadRecordings(getActivity());
                     recordings = UtilityRecordings.loadRecordingsfromStorage();
                     Collections.sort(recordings);
-                    //createFileList();
                     notifyItemInserted(recordings.indexOf(temp_rec_file));
                 }
             });

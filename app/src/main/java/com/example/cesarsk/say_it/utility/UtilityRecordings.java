@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.example.cesarsk.say_it.ui.MainActivity;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -234,6 +236,10 @@ public class UtilityRecordings {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void updateRecordings(){
+        MainActivity.RECORDINGS = loadRecordingsfromStorage();
     }
 
     public static void playRecording(MediaPlayer mediaPlayer) {
