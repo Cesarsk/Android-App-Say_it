@@ -1,14 +1,17 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -17,6 +20,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +30,9 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.SettingsActivity;
 import com.example.cesarsk.say_it.utility.SayItPair;
+import com.example.cesarsk.say_it.utility.Utility;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.gson.Gson;
 
@@ -34,10 +40,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google;
 
 
 /**
@@ -289,16 +293,22 @@ public class HistoryFragment extends Fragment {
         @Override
         public void onBindViewHolder(final HistoryAdapter.ViewHolder holder, int position) {
 
+                holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                            MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                            Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                        }
+                        else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                            MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
+                            Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                        }
+                    }
+                });
+          
             holder.wordTextView.setText(history.get(position).first);
             holder.IPATextView.setText(history.get(position).second);
-
-            holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Cliccando su Play Button nella search result tab riproduce play.
-                    american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                }
-            });
 
             final boolean favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first);
             if (favorite_flag)
@@ -332,10 +342,32 @@ public class HistoryFragment extends Fragment {
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     UtilitySharedPrefs.addHist(getActivity(), temp_hist);
                     history = loadDeserializedHistory(getActivity());
                     notifyItemInserted(history.indexOf(temp_hist));
+                }
+            });
+
+            final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Clear History")
+                            .setMessage("Are you sure you want to clear your History?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //TODO CLAFFOLO DELETE HISTORY
+                                    Toast.makeText(getActivity(), "History Cleared!", Toast.LENGTH_SHORT).show();
+
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing
+                                }
+                            })
+                            .show();
                 }
             });
 

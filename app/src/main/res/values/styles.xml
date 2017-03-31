@@ -24,6 +24,7 @@
         <item name="android:textColorSecondary">@color/secondary_text</item>
     </style>
 
+
     <style name="BlueYellowEditText" parent="Base.V7.Widget.AppCompat.EditText">
         <item name="background">@color/primary_dark</item>
         <item name="android:backgroundTint">@color/primary_dark</item>

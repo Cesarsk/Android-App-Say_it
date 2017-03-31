@@ -1,0 +1,25 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Notification"
+    android:layout="@xml/voices_settings_layout">
+
+    <PreferenceCategory
+        android:layout="@xml/categories_settings_layout"
+        android:title="Notification Settings">
+
+        <com.example.cesarsk.say_it.settings.TimePreference
+            android:key="time_preference"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Set when you want to receive our notifications"
+            android:title="Set Notification time" />
+
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/default_notification_rate"
+            android:entryValues="@array/default_notification_rate_values"
+            android:key="default_notification_rate"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Set how often you want to receive our notifications"
+            android:title="Set Notification rate" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 
 import java.io.File;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
  * Created by cesarsk on 17/02/2017.
  */
 
+@SuppressWarnings("ALL")
 public class Utility {
 
     public static boolean delete_recordings() {
@@ -31,6 +34,26 @@ public class Utility {
             }
         }
         return true;
+    }
+
+    public static CharSequence underlineText(CharSequence text) {
+        SpannableString content = new SpannableString(text);
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        return content;
+    }
+
+    public static void searchMeaning(Context context, String word)
+    {
+        Uri uri = Uri.parse("http://www.google.com/#q="+word+"+meaning");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity(intent);
+    }
+
+    public static void openURL(Context context, String url)
+    {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity(intent);
     }
 
     //Method used for BUG_REPORT and CONTACT_US Modules

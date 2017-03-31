@@ -8,13 +8,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +21,6 @@ import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,6 +37,7 @@ import com.example.cesarsk.say_it.ui.fragments.RecordingsFragment;
 import com.example.cesarsk.say_it.utility.UtilityDictionary;
 import com.example.cesarsk.say_it.utility.UtilityRecordings;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -50,6 +49,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
+
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -65,20 +66,24 @@ public class MainActivity extends AppCompatActivity {
 
     //Definizione variabile TTS
     public static TextToSpeech american_speaker_google;
-    static TextToSpeech british_speaker_google;
-    static Voice voice_american_female = new Voice("American", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
-    static Voice voice_british_female = new Voice("British", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static TextToSpeech british_speaker_google;
+    public static Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
     //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
-    public static ArrayList<File> RECORDINGS = null;
+    public static Set<String> RECORDINGS = null;
+    public static String DEFAULT_NOTIFICATION_RATE = "2";
+    public static String DEFAULT_ACCENT = null;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
     public final static String RECORDINGS_PREFS_KEY = "SAY.IT.RECORDINGS"; //Chiave che identifica il Set della lista dei Recordings
+    public final static String SETTINGS_PREFS_KEY = "SAY.IT.SETTINGS"; //Chiave che identifica il Set della lista dei Recordings
+
     public final static int REQUEST_CODE = 1;
 
     boolean doubleBackToExitPressedOnce = false;
@@ -101,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
     //Notification id
     final int notifId = 1;
 
+    //Rate Dialog
+    EasyRatingDialog easyRatingDialog;
 
     final FragmentManager fragmentManager = getFragmentManager();
 
@@ -132,11 +139,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart()
+    {
+        super.onStart();
+        easyRatingDialog.onStart();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        easyRatingDialog.showIfNeeded();
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        easyRatingDialog = new EasyRatingDialog(this);
 
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //Caricamento preferenze
+        UtilitySharedPrefs.loadPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
         RECORDINGS = UtilityRecordings.loadRecordingsfromStorage();
@@ -146,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
-                scheduleNotification(12,12); //Invocazione notifica
+                scheduleNotification(12, 12, DEFAULT_NOTIFICATION_RATE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -272,7 +296,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //TODO SE INSERITA COME DEFAULT LA LINGUA, NEL QUICK PLAY DEV'ESSERE RIPRODOTTA QUELLA, RISOLVERE!
         british_speaker_google = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -288,29 +311,52 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void scheduleNotification(int hour, int minute){
+    private void scheduleNotification(int hour, int minute, String modeString){
+        int mode = 0;
+        Log.i("DEBUG: ","modeString:"+modeString+"\nmode:"+mode);
+        try
+        {
+            mode = Integer.parseInt(modeString);
+            Log.i("DEBUG: ","TRY modeString:"+modeString+"\nmode:"+mode);
+        }
+        catch(NumberFormatException e)
+        {
+            mode = 2;
+            Log.i("DEBUG: ","Exception");
+        }
+        //mode can assume those values:
+        //0 NotificationOff
+        //1 NotificationWeekly
+        //2 NotificationDaily
+        if(mode==0);//Do nothing
+        else if(mode==1||mode==2){
+            Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+            notificationIntent.putExtra("notifId", notifId);
 
-        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra("notifId", notifId);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifId, notificationIntent, 0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifId, notificationIntent, 0);
 
 // Set the alarm to start at approximately at a time
-        DatePicker datePicker = new DatePicker(this);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-        //if(calendar.getTime().compareTo(new Date()) < 0) calendar.add(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        if (calendar.getTimeInMillis() < System.currentTimeMillis()) calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+            DatePicker datePicker = new DatePicker(this);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            if(mode==1) {
+                //set weekly notification
+                if (calendar.getTimeInMillis() < System.currentTimeMillis()) calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY*7);
+            } else if(mode==2)
+            {
+                //set daily notification
+                if (calendar.getTimeInMillis() < System.currentTimeMillis()) calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
+            }
+            AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 // With setInexactRepeating(), you have to use one of the AlarmManager interval
 // constants--in this case, AlarmManager.INTERVAL_DAY.
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
-
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
     }
 
     @Override

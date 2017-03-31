@@ -17,7 +17,7 @@
     <string name="not_found_error">Word not found!</string>
     <string name="empty_field_error">You have to write something!</string>
     <string name="app_name">Say It!</string>
-    <string name="search_hint">Search hint</string>
+    <string name="search_hint">Search for a word</string>
     <string name="banner_id">ca-app-pub-9284620118215899
     </string>
 
@@ -31,6 +31,18 @@
         <item>1</item>
     </string-array>
 
+    <string-array name="default_notification_rate">
+        <item>Off</item>
+        <item>Weekly (Word of the Week)</item>
+        <item>Daily (Word of the Day)</item>
+    </string-array>
+
+    <string-array name="default_notification_rate_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
@@ -40,5 +52,17 @@
     <string name="tap_on_mic">Tap on mic to speak</string>
     <string name="speech_not_supported">Sorry! Your device doesn\\\'t support speech input</string>
     <string name="random_words_title">Try also these random words:</string>
+    <string name="search_bar_hint_icon_description">Search Bar Hint Icon</string>
+    <string name="voice_speech_icon_description">Voice Speech Icon</string>
+    <string name="delete_button_description">Delete your Recording</string>
+    <string name="card_your_stats">Your stats:</string>
+
+    <!-- Strings related to Rate Dialog -->
+    <string name="erd_title">Rate this app!</string>
+    <string name="erd_message">Hi! If you like this app, take a second to rate it and help us to grow, thank you! ❤</string>
+    <string name="erd_no_thanks">No, thanks.</string>
+    <string name="erd_remind_me_later">Remind me later.</string>
+    <string name="erd_rate_now">Rate now.</string>
+
 
 </resources>

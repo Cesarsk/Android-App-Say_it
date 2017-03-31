@@ -24,7 +24,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_search_blue_yellow"
-                android:background="@color/primary_dark" />
+                android:background="@color/primary_dark"
+                android:contentDescription="@string/search_bar_hint_icon_description" />
 
             <EditText
                 android:id="@+id/search_bar_edit_text"
@@ -45,7 +46,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_mic_blue_yellow"
-                android:background="@color/primary_dark"/>
+                android:background="@color/primary_dark"
+                android:contentDescription="@string/voice_speech_icon_description"/>
 
         </LinearLayout>
 
@@ -62,16 +64,6 @@
         app:bb_activeTabAlpha="1"
         android:visibility="visible"
         app:bb_showShadow="false"/>
-
-
-    <com.google.android.gms.ads.AdView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/adView"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        android:layout_above="@+id/bottomBar"
-        />
 
     <ImageView
         android:id="@+id/imageview_logo"

@@ -7,12 +7,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -21,11 +18,11 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,11 +36,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-import static com.example.cesarsk.say_it.ui.MainActivity.american_speaker_google;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -312,16 +306,23 @@ public class FavoritesFragment extends Fragment {
 
             final Pair<String, String> current_item = favorites.get(position);
 
+                holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Cliccando su Play Button nella search result tab riproduce play.
+                        if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                            MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                            
+                        }
+                        else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                            MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
+                            
+                        }
+                    }
+                });
+
             holder.wordTextView.setText(favorites.get(position).first);
             holder.IPATextView.setText(favorites.get(position).second);
-
-            holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Cliccando su Play Button nella search result tab riproduce play.
-                    american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                }
-            });
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

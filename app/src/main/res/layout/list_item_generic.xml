@@ -2,9 +2,9 @@
 <LinearLayout
     android:id="@+id/list_item_generic_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:paddingTop="4dp"
+    android:padding="8dp"
     android:descendantFocusability="blocksDescendants"
     android:background="?attr/selectableItemBackground">
 
