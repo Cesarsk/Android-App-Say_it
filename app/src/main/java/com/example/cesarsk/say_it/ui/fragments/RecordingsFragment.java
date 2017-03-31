@@ -265,7 +265,7 @@ public class RecordingsFragment extends Fragment {
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    UtilityRecordings.playRecording(mediaPlayer, recordingName);
+                    UtilityRecordings.playRecording(mediaPlayer, recordingName + ".aac");
                 }
             });
 
