@@ -115,7 +115,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                         .setMessage("Are you sure you want to delete all recordings?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                Utility.delete_recordings();
+                                Utility.delete_recordings(getActivity());
                                 Toast.makeText(getActivity(), "Recordings deleted!", Toast.LENGTH_SHORT).show();
                             }
                         })

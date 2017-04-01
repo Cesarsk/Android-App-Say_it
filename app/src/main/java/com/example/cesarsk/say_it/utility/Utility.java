@@ -19,16 +19,11 @@ import java.util.ArrayList;
 @SuppressWarnings("ALL")
 public class Utility {
 
-    public static boolean delete_recordings() {
-        //load all recordings, needs to be used in order to build the HistoryFragment
-        ArrayList<String> recordings = new ArrayList<>();
-        String path = Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecordings.AUDIO_RECORDER_FOLDER;
-        Log.d("Files", "Path: " + path);
-        File directory = new File(path);
-        File[] files = directory.listFiles();
+    public static boolean delete_recordings(Context context) {
+        File dir = new File(context.getFilesDir().getAbsolutePath());
+        File[] files = dir.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
-                Log.d("Files", "FileName:" + files[i].getName());
                 if (!files[i].getName().equals(".nomedia"))
                     files[i].delete();
             }

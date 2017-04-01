@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -57,6 +58,24 @@ public class UtilitySharedPrefs {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
+    public static ArrayList<SayItPair> getRecentHistory(Context context, int items){
+
+        ArrayList<SayItPair> recentHistory = new ArrayList<>();
+        ArrayList<SayItPair> DeserializedHistory = HistoryFragment.loadDeserializedHistory(context);
+
+        if(DeserializedHistory != null && !DeserializedHistory.isEmpty()) {
+            if(recentHistory.size() >= items) {
+                recentHistory = new ArrayList<>(DeserializedHistory.subList(0, items));
+            }
+
+            else{
+                return DeserializedHistory;
+            }
+        }
+
+        return recentHistory;
+    }
+
     public static void removeFavs(Context context, Pair<String, String> pair) {
         Set<String> new_favs = new TreeSet<>();
         loadFavs(context);
@@ -71,7 +90,8 @@ public class UtilitySharedPrefs {
     }
 
     public static void clearHistory(Context context){
-        savePrefs(context, new TreeSet<String>(), MainActivity.FAVORITES_PREFS_KEY);
+        savePrefs(context, new TreeSet<String>(), MainActivity.HISTORY_PREFS_KEY);
+        loadHist(context); //refreshing the view
     }
 
     /*public static void removeRecording(Context context, String recordingFilename){

@@ -8,15 +8,12 @@ import android.graphics.drawable.TransitionDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,14 +34,12 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
@@ -172,7 +167,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!mediaPlayer.isPlaying()) {
-                    UtilityRecordings.playRecording(mediaPlayer);
+                    UtilityRecordings.playRecording(context, mediaPlayer, selected_word + ".aac");
                     multibutton.setBackground(getDrawable(R.drawable.circle_green_pressed));
                     vibrator.vibrate(50);
                     Log.i("SAY IT!", "" + mediaPlayer.getDuration());
@@ -206,7 +201,7 @@ public class PlayActivity extends AppCompatActivity {
                         
                             multibutton.setBackground(getDrawable(R.drawable.circle_red_pressed));
                             timer.startTimer();
-                            UtilityRecordings.startRecording(recorder, output_formats, currentFormat, file_exts);
+                            UtilityRecordings.startRecording(context, recorder, selected_word);
 
                             if (countDownTimer != null) {
                                 countDownTimer.cancel();
@@ -222,8 +217,8 @@ public class PlayActivity extends AppCompatActivity {
                             }
                             isRecording = false;
                             multibutton.setBackground(getDrawable(R.drawable.circle_red));
-                            if (isMinimumDurationReached) {
-                                if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
+                            if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
+                                if (isMinimumDurationReached) {
                                     multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                                     delete_button.startAnimation(delete_button_anim_reverse);
                                     multibutton.setOnTouchListener(null);
@@ -237,7 +232,8 @@ public class PlayActivity extends AppCompatActivity {
                                 vibrator.vibrate(50);
                                 Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
                                 timer.clearTimer();
-                                UtilityRecordings.deleteRecording(context, selected_word);
+                                String filename = context.getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac";
+                                UtilityRecordings.deleteRecording(context, new File(filename));
                                 return true;
                             }
                     }
@@ -286,10 +282,10 @@ public class PlayActivity extends AppCompatActivity {
             }
         };
 
-        if (UtilityRecordings.checkRecordingFile(selected_word)) {
+        if (UtilityRecordings.checkRecordingFile(context, selected_word)) {
             multibutton.setBackground(getResources().getDrawable(R.drawable.circle_color_anim_green_to_red, null));
             multibutton.setOnClickListener(play_listener);
-            int millis = UtilityRecordings.returnRecordingDuration(mediaPlayer);
+            int millis = UtilityRecordings.getRecordingDuration(context, mediaPlayer, selected_word);
             SimpleDateFormat formatter = new SimpleDateFormat("ss:SSS", Locale.UK);
             Date date = new Date(millis);
             String result = formatter.format(date);
@@ -372,12 +368,12 @@ public class PlayActivity extends AppCompatActivity {
                 multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
                 TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
                 transition.startTransition(durationMillis);
-                temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(context, new File(UtilityRecordings.RECORDINGS_PATH + selected_word + ".aac"));
-                UtilityRecordings.deleteRecording(context, selected_word);
+                String filename = context.getFilesDir().getAbsolutePath() + selected_word + ".aac";
+                File recording_file = new File(filename);
+                temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(recording_file);
+                //UtilityRecordings.deleteRecording(context, selected_word);
+                UtilityRecordings.deleteRecording(context, recording_file);
                 snackbar.show();
-                //handler.post(pendingRemovalRunnable);
-                //Toast.makeText(PlayActivity.this, "Deleted Recording", Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -458,9 +454,6 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private void startTutorialPlayActivity(Button multibutton, Button play_original_button, ImageButton accent_button, ImageButton slow_button) {
-        //Showcase Test
-
-        // sequence example
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(50); // 50ms between each showcase views
         config.setShapePadding(15);
@@ -476,7 +469,6 @@ public class PlayActivity extends AppCompatActivity {
                 "Want to switch accent? PRESS this one!", Utility.underlineText("[SERIOUSLY, I'VE GOT THIS!]").toString());
         sequence.addSequenceItem(slow_button,
                 "Okay... this is the last one. If you want to slower the word, use the SLOW BUTTON.", Utility.underlineText("[...I will]").toString());
-
         sequence.start();
     }
 

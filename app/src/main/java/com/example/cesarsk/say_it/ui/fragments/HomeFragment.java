@@ -12,15 +12,19 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.support.v4.widget.NestedScrollView;
 
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.app.FragmentManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.components.FadingTextView;
 import com.example.cesarsk.say_it.ui.SettingsActivity;
+import com.example.cesarsk.say_it.utility.SayItPair;
 import com.example.cesarsk.say_it.utility.Utility;
 import com.example.cesarsk.say_it.utility.UtilityDictionary;
 import com.example.cesarsk.say_it.utility.UtilityRecordings;
@@ -36,7 +41,7 @@ import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.VideoController;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import java.util.ArrayList;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.example.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
@@ -207,26 +212,49 @@ public class HomeFragment extends Fragment {
         final TextView stats_item1 = (TextView)view.findViewById(R.id.card_stats_item1);
         final TextView stats_item2 = (TextView)view.findViewById(R.id.card_stats_item2);
 
-        //TODO DA RIMUOVERE, SOLO DI PROVA
-        final TextView history_card_word1 = (TextView)view.findViewById(R.id.history_card_word1);
-        final TextView history_card_word2 = (TextView)view.findViewById(R.id.history_card_word2);
-        final TextView history_card_word3 = (TextView)view.findViewById(R.id.history_card_word3);
-        final TextView history_card_ipa1 = (TextView)view.findViewById(R.id.history_card_ipa1);
-        final TextView history_card_ipa2 = (TextView)view.findViewById(R.id.history_card_ipa2);
-        final TextView history_card_ipa3 = (TextView)view.findViewById(R.id.history_card_ipa3);
-        Pair<String, String> history_pair1 = UtilityDictionary.getRandomWordWithIPA();
-        Pair<String, String> history_pair2 = UtilityDictionary.getRandomWordWithIPA();
-        Pair<String, String> history_pair3 = UtilityDictionary.getRandomWordWithIPA();
-        history_card_word1.setText(history_pair1.first);
-        history_card_ipa1.setText(history_pair1.second);
-        history_card_word2.setText(history_pair2.first);
-        history_card_ipa2.setText(history_pair2.second);
-        history_card_word3.setText(history_pair3.first);
-        history_card_ipa3.setText(history_pair3.second);
-        //RIMUOVERE FIN QUI
+        ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), 3);
+        LinearLayout recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        float scale = getResources().getDisplayMetrics().density;
+
+        if(recentHistory != null && !(recentHistory.isEmpty())) {
+            for (int i = 0; i < recentHistory.size(); i++) {
+                LinearLayout current_LL = new LinearLayout(getActivity());
+                recentHistoryLinearLayout.addView(current_LL);
+                current_LL.setLayoutParams(layoutParams);
+                TextView wordTextView = new TextView(getActivity());
+                wordTextView.setLayoutParams(layoutParams);
+                wordTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
+                wordTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                wordTextView.setTypeface(Typeface.DEFAULT_BOLD);
+                wordTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (16 * scale + 0.5f), 0);
+                wordTextView.setText(recentHistory.get(i).first);
+                current_LL.addView(wordTextView);
+                TextView ipaTextView = new TextView(getActivity());
+                ipaTextView.setLayoutParams(layoutParams);
+                ipaTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                ipaTextView.setPaddingRelative((int) (16 * scale + 0.5f), 0, (int) (8 * scale + 0.5f), 0);
+                ipaTextView.setText(recentHistory.get(i).second);
+                current_LL.addView(ipaTextView);
+            }
+        }
+
+        else{
+            LinearLayout norecent_LL = new LinearLayout(getActivity());
+            recentHistoryLinearLayout.addView(norecent_LL);
+            norecent_LL.setLayoutParams(layoutParams);
+            TextView norecentTextView = new TextView(getActivity());
+            norecentTextView.setLayoutParams(layoutParams);
+            norecentTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
+            norecentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            norecentTextView.setTypeface(Typeface.DEFAULT_BOLD);
+            norecentTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (16 * scale + 0.5f), 0);
+            norecentTextView.setText(R.string.NoRecent_Text);
+            norecent_LL.addView(norecentTextView);
+        }
 
         //Setup our Stats
-        UtilityRecordings.updateRecordings();
+        UtilityRecordings.updateRecordings(getActivity());
         stats_item1.setText("You've \uD83C\uDFB5 "+MainActivity.RECORDINGS.size()+" words so far!");
         stats_item2.setText("You've ♥ "+MainActivity.FAVORITES.size()+" words so far!");
 

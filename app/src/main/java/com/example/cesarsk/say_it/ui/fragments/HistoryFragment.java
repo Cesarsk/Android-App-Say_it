@@ -1,6 +1,8 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -30,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
+import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.ui.SettingsActivity;
 import com.example.cesarsk.say_it.utility.SayItPair;
 import com.example.cesarsk.say_it.utility.Utility;
@@ -51,10 +54,21 @@ import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 public class HistoryFragment extends Fragment {
 
     private ArrayList<SayItPair> DeserializedHistory;
+    RecyclerView recyclerView;
     Snackbar snackbar;
 
     public HistoryFragment() {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(recyclerView != null) {
+            //TODO risettare la lista dell'adapter QUI con un metodo di Update (loadDeserializedHistory)
+            HistoryAdapter adapter = (HistoryAdapter) recyclerView.getAdapter();
+            adapter.setHistory(loadDeserializedHistory(getActivity()));
+        }
     }
 
     @Nullable
@@ -66,7 +80,7 @@ public class HistoryFragment extends Fragment {
         DeserializedHistory = loadDeserializedHistory(getActivity());
 
         snackbar = Snackbar.make(view.findViewById(R.id.history_fragment_coordinator), "Removed Element from Favorites", (int) HistoryAdapter.UNDO_TIMEOUT);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.history_list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.history_list);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
@@ -231,6 +245,7 @@ public class HistoryFragment extends Fragment {
 
         public void setHistory(ArrayList<SayItPair> history) {
             this.history = history;
+            notifyDataSetChanged();
         }
 
         public Pair<String, String> getTemp_hist() {
@@ -269,7 +284,6 @@ public class HistoryFragment extends Fragment {
             TextView IPATextView;
             ImageButton QuickPlayBtn;
             ImageButton AddtoFavsBtn;
-            ImageButton DeleteFromHistoryBtn;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -277,7 +291,6 @@ public class HistoryFragment extends Fragment {
                 IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
                 QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
                 AddtoFavsBtn = (ImageButton) itemView.findViewById(R.id.list_item_addToFavs);
-                DeleteFromHistoryBtn = (ImageButton) itemView.findViewById(R.id.list_item_removeFromHistory);
             }
         }
 
@@ -307,9 +320,20 @@ public class HistoryFragment extends Fragment {
                         }
                     }
                 });
-          
+
             holder.wordTextView.setText(history.get(position).first);
             holder.IPATextView.setText(history.get(position).second);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Intent play_activity_intent = new Intent(getActivity(), PlayActivity.class);
+                    play_activity_intent.putExtra(PlayActivity.PLAY_WORD, holder.wordTextView.getText());
+                    play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
+                    UtilitySharedPrefs.addHist(getActivity(), new SayItPair(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
+                    getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                }
+            });
 
             final boolean favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first);
             if (favorite_flag)
@@ -332,14 +356,6 @@ public class HistoryFragment extends Fragment {
                 }
             });
 
-            holder.DeleteFromHistoryBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = holder.getAdapterPosition();
-                    remove(pos);
-                }
-            });
-
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -359,6 +375,7 @@ public class HistoryFragment extends Fragment {
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     UtilitySharedPrefs.clearHistory(getActivity());
+                                    setHistory(loadDeserializedHistory(getActivity()));
                                     Toast.makeText(getActivity(), "History Cleared!", Toast.LENGTH_SHORT).show();
 
                                 }
