@@ -217,8 +217,8 @@ public class PlayActivity extends AppCompatActivity {
                             }
                             isRecording = false;
                             multibutton.setBackground(getDrawable(R.drawable.circle_red));
-                            if (isMinimumDurationReached) {
-                                if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
+                            if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
+                                if (isMinimumDurationReached) {
                                     multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                                     delete_button.startAnimation(delete_button_anim_reverse);
                                     multibutton.setOnTouchListener(null);
@@ -232,8 +232,7 @@ public class PlayActivity extends AppCompatActivity {
                                 vibrator.vibrate(50);
                                 Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
                                 timer.clearTimer();
-                                String filename = context.getFilesDir().getAbsolutePath() + selected_word + ".aac";
-                                //UtilityRecordings.deleteRecording(context, selected_word);
+                                String filename = context.getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac";
                                 UtilityRecordings.deleteRecording(context, new File(filename));
                                 return true;
                             }
