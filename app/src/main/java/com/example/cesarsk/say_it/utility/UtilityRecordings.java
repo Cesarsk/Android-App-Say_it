@@ -85,6 +85,7 @@ public class UtilityRecordings {
     }
 
     public static boolean startRecording(Context context, MediaRecorder recorder, String word){
+        recorder.reset();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
