@@ -9,17 +9,20 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,6 +82,8 @@ public class PlayActivity extends AppCompatActivity {
     CountDownTimer countDownTimer;
     CountDownTimer minDurationTimer;
     private boolean isMinimumDurationReached = false;
+    Button multibutton;
+    Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +93,7 @@ public class PlayActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
 
-        final Button multibutton = (Button) findViewById(R.id.recplay_button);
+        multibutton = (Button) findViewById(R.id.recplay_button);
         final TextView selected_word_view = (TextView) findViewById(R.id.selected_word);
         final TextView selected_ipa_view = (TextView) findViewById(R.id.selected_word_ipa);
         final ImageButton delete_button = (ImageButton) findViewById(R.id.delete_button);
@@ -100,7 +105,7 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton remove_ad = (ImageButton) findViewById(R.id.remove_ads_button);
         final ImageButton search_meaning = (ImageButton) findViewById(R.id.search_meaning_button);
         final TextView timerTextView = (TextView) findViewById(R.id.recordingTimer);
-        final Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
 
@@ -112,6 +117,9 @@ public class PlayActivity extends AppCompatActivity {
             accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
             accent_flag = true;
         }
+
+        final Chronometer chronometer = (Chronometer) findViewById(R.id.recording_timer);
+        chronometer.setBase(SystemClock.elapsedRealtime());
 
         timer = new ShowTimer(timerTextView);
         recorder = new MediaRecorder();
@@ -187,14 +195,32 @@ public class PlayActivity extends AppCompatActivity {
             }
         };
 
+        final GestureDetector gestureDetector = new GestureDetector(context, new SimpleTapListener());
+
         final View.OnTouchListener rec_listener = new View.OnTouchListener() {
+
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                if (UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            Log.i("Say it!", "Start Recording");
-                            if (countDownTimer != null) {
+
+                if(gestureDetector.onTouchEvent(event)){
+                    if (!mediaPlayer.isPlaying()) {
+                        UtilityRecordings.playRecording(context, mediaPlayer, selected_word + ".aac");
+                        multibutton.setBackground(getDrawable(R.drawable.circle_green_pressed));
+                        vibrator.vibrate(50);
+                        Log.i("SAY IT!", "" + mediaPlayer.getDuration());
+
+                    }
+
+                    return true;
+                }
+
+                else {
+                    if (UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                Log.i("Say it!", "Start Recording");
+
+                            /*if (countDownTimer != null) {
                                 countDownTimer.cancel();
                                 countDownTimer.start();
                             }
@@ -203,31 +229,53 @@ public class PlayActivity extends AppCompatActivity {
                                 isMinimumDurationReached = false;
                                 minDurationTimer.cancel();
                                 minDurationTimer.start();
-                            }
-                            isRecording = true;
-                            vibrator.vibrate(50);
+                            }*/
+                                isRecording = true;
+                                vibrator.vibrate(50);
 
-                            multibutton.setBackground(getDrawable(R.drawable.circle_red_pressed));
-                            timer.startTimer();
-                            UtilityRecordings.startRecording(context, recorder, selected_word);
+                                multibutton.setBackground(getDrawable(R.drawable.circle_red_pressed));
+                                //timer.startTimer();
+                                chronometer.setBase(SystemClock.elapsedRealtime());
+                                chronometer.start();
+                                UtilityRecordings.startRecording(context, recorder, selected_word);
+                                return true;
 
-                            return true;
-
-                        case MotionEvent.ACTION_UP:
-                            Log.i("Say it!", "Stop Recording");
-                            timer.stopTimer();
+                            case MotionEvent.ACTION_UP:
+                                Log.i("Say it!", "Stop Recording");
+                            /*timer.stopTimer();
                             if (countDownTimer != null) {
                                 countDownTimer.cancel();
                             }
 
                             if (minDurationTimer != null) {
                                 minDurationTimer.cancel();
-                            }
+                            }*/
 
-                            isRecording = false;
-                            multibutton.setBackground(getDrawable(R.drawable.circle_red));
-                            if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
-                                if (isMinimumDurationReached) {
+                                isRecording = false;
+                                multibutton.setBackground(getDrawable(R.drawable.circle_red));
+                                chronometer.stop();
+
+                                if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
+
+                                    multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
+                                    delete_button.startAnimation(delete_button_anim_reverse);
+                                    multibutton.setOnTouchListener(null);
+                                    multibutton.setOnClickListener(play_listener);
+                                    TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
+                                    transition.startTransition(durationMillis);
+
+                                    String counted_time = chronometer.getText().toString();
+
+                                    //TODO da racchiudere in un metodo "checkDuration"
+                                    String[] time_units = counted_time.split(":");
+                                    int seconds = Integer.parseInt(time_units[1]);
+                                    if (seconds < 1) {
+                                        Toast.makeText(context, "Minimum not reached!", Toast.LENGTH_SHORT).show();
+                                        UtilityRecordings.deleteRecording(context, selected_word + ".aac");
+                                    }
+                                    return true;
+
+                                /*if (isMinimumDurationReached) {
                                     multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
                                     delete_button.startAnimation(delete_button_anim_reverse);
                                     multibutton.setOnTouchListener(null);
@@ -243,12 +291,13 @@ public class PlayActivity extends AppCompatActivity {
                                     String filename = context.getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac";
                                     UtilityRecordings.deleteRecording(context, new File(filename));
                                     return true;
+                                }*/
                                 }
-                            }
+                        }
+                    } else {
+                        UtilityRecordings.requestRecordAudioPermissions(view.getContext());
+                        return false;
                     }
-                } else {
-                    UtilityRecordings.requestRecordAudioPermissions(view.getContext());
-                    return true;
                 }
                 return false;
             }
@@ -382,7 +431,7 @@ public class PlayActivity extends AppCompatActivity {
                 File recording_file = new File(filename);
                 temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(recording_file);
                 //UtilityRecordings.deleteRecording(context, selected_word);
-                UtilityRecordings.deleteRecording(context, recording_file);
+                UtilityRecordings.deleteRecording(context, filename);
                 snackbar.show();
             }
         });
@@ -498,6 +547,13 @@ public class PlayActivity extends AppCompatActivity {
                     }
                 }
                 break;
+        }
+    }
+
+    private class SimpleTapListener extends GestureDetector.SimpleOnGestureListener{
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return true;
         }
     }
 }

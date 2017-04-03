@@ -41,7 +41,9 @@ public class UtilityRecordings {
         }
     };
 
-    public static boolean deleteRecording(Context context, File file) {
+    public static boolean deleteRecording(Context context, String filename) {
+
+        File file = new File(context.getFilesDir().getAbsolutePath() + "/" + filename);
 
         if (file.delete()) {
             updateRecordings(context);
