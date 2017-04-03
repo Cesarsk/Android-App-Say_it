@@ -125,7 +125,8 @@
                 android:layout_marginRight="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_delete_black_24dp"
-                android:tint="@color/primary_light" />
+                android:tint="@color/primary_light"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -134,42 +135,49 @@
             android:layout_height="match_parent"
             android:layout_below="@id/buttons_bar">
 
-            <Button
-                android:id="@+id/recplay_button"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/circle_color_anim_red_to_green" />
-
-            <Chronometer
-                android:id="@+id/recording_timer"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_above="@id/recplay_button"
-                android:textSize="32sp"
-                android:layout_marginBottom="16dp" />
+                android:layout_centerInParent="true">
 
-            <TextView
-                android:id="@+id/recordingTimer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="29dp"
-                android:textSize="48sp" />
+                <Button
+                    android:id="@+id/rec_button"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/circle_red" />
 
-            <Button
-                android:id="@+id/play_original"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_alignBottom="@id/recplay_button"
-                android:layout_alignEnd="@id/recplay_button"
-                android:layout_marginBottom="-18dp"
-                android:layout_marginEnd="-30dp"
-                android:background="@drawable/circle_red"
-                android:backgroundTint="@color/accent"
-                android:scaleType="center" />
+                <Button
+                    android:id="@+id/play_button"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/circle_green"
+                    android:scaleX="0"
+                    android:scaleY="0"
+                    android:visibility="gone"/>
+
+                <Chronometer
+                    android:id="@+id/recording_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="32sp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="180dp"/>
+
+                <Button
+                    android:id="@+id/play_original"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_below="@id/rec_button"
+                    android:layout_alignEnd="@id/rec_button"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="-28dp"
+                    android:background="@drawable/circle_red"
+                    android:backgroundTint="@color/accent" />
+
+            </RelativeLayout>
+
         </RelativeLayout>
 
     </RelativeLayout>
