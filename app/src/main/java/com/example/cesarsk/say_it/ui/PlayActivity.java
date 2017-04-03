@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
@@ -198,7 +199,7 @@ public class PlayActivity extends AppCompatActivity {
                             minDurationTimer.start();
                             isRecording = true;
                             vibrator.vibrate(50);
-                        
+
                             multibutton.setBackground(getDrawable(R.drawable.circle_red_pressed));
                             timer.startTimer();
                             UtilityRecordings.startRecording(context, recorder, selected_word);
@@ -227,18 +228,19 @@ public class PlayActivity extends AppCompatActivity {
                                     transition.startTransition(durationMillis);
                                     isMinimumDurationReached = false;
                                     return true;
+                                } else {
+                                    vibrator.vibrate(50);
+                                    Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
+                                    timer.clearTimer();
+                                    String filename = context.getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac";
+                                    UtilityRecordings.deleteRecording(context, new File(filename));
+                                    return true;
                                 }
-                            } else {
-                                vibrator.vibrate(50);
-                                Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
-                                timer.clearTimer();
-                                String filename = context.getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac";
-                                UtilityRecordings.deleteRecording(context, new File(filename));
-                                return true;
                             }
                     }
                 } else {
                     UtilityRecordings.requestRecordAudioPermissions(view.getContext());
+                    return true;
                 }
                 return false;
             }
@@ -478,12 +480,10 @@ public class PlayActivity extends AppCompatActivity {
         switch (requestCode) {
             case RequestPermissionCode:
                 if (grantResults.length > 0) {
-                    boolean StoragePermission = grantResults[0] ==
-                            PackageManager.PERMISSION_GRANTED;
-                    boolean RecordPermission = grantResults[1] ==
+                    boolean RecordPermission = grantResults[0] ==
                             PackageManager.PERMISSION_GRANTED;
 
-                    if (StoragePermission && RecordPermission) {
+                    if (RecordPermission) {
                         Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
