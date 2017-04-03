@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.app.FragmentManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -108,7 +109,6 @@ public class HomeFragment extends Fragment {
                 }
             });
         }
-
 
         final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
         wordOfTheDay = wordOfTheDay.substring(0,1).toUpperCase() + wordOfTheDay.substring(1);
@@ -216,8 +216,10 @@ public class HomeFragment extends Fragment {
         LinearLayout recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         float scale = getResources().getDisplayMetrics().density;
+        final RelativeLayout recent_search = (RelativeLayout)view.findViewById(R.id.Recent_Search);
 
         if(recentHistory != null && !(recentHistory.isEmpty())) {
+            recent_search.setVisibility(View.VISIBLE);
             for (int i = 0; i < recentHistory.size(); i++) {
                 LinearLayout current_LL = new LinearLayout(getActivity());
                 recentHistoryLinearLayout.addView(current_LL);

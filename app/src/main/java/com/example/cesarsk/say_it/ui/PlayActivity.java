@@ -173,7 +173,6 @@ public class PlayActivity extends AppCompatActivity {
                     vibrator.vibrate(50);
                     Log.i("SAY IT!", "" + mediaPlayer.getDuration());
                     new CountDownTimer(mediaPlayer.getDuration(), 1000) {
-
                         @Override
                         public void onTick(long millisUntilFinished) {
 
@@ -195,8 +194,16 @@ public class PlayActivity extends AppCompatActivity {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             Log.i("Say it!", "Start Recording");
-                            isMinimumDurationReached = false;
-                            minDurationTimer.start();
+                            if (countDownTimer != null) {
+                                countDownTimer.cancel();
+                                countDownTimer.start();
+                            }
+
+                            if (minDurationTimer != null) {
+                                isMinimumDurationReached = false;
+                                minDurationTimer.cancel();
+                                minDurationTimer.start();
+                            }
                             isRecording = true;
                             vibrator.vibrate(50);
 
@@ -204,10 +211,6 @@ public class PlayActivity extends AppCompatActivity {
                             timer.startTimer();
                             UtilityRecordings.startRecording(context, recorder, selected_word);
 
-                            if (countDownTimer != null) {
-                                countDownTimer.cancel();
-                                countDownTimer.start();
-                            }
                             return true;
 
                         case MotionEvent.ACTION_UP:
@@ -216,6 +219,12 @@ public class PlayActivity extends AppCompatActivity {
                             if (countDownTimer != null) {
                                 countDownTimer.cancel();
                             }
+
+                            if (minDurationTimer != null) {
+                                minDurationTimer.cancel();
+                                isMinimumDurationReached = false;
+                            }
+
                             isRecording = false;
                             multibutton.setBackground(getDrawable(R.drawable.circle_red));
                             if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
