@@ -222,7 +222,6 @@ public class PlayActivity extends AppCompatActivity {
 
                             if (minDurationTimer != null) {
                                 minDurationTimer.cancel();
-                                isMinimumDurationReached = false;
                             }
 
                             isRecording = false;
