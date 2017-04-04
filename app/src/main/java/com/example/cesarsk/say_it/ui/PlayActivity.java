@@ -137,9 +137,9 @@ public class PlayActivity extends AppCompatActivity {
         rec_button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-
                 if (UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
                     switch (motionEvent.getAction()) {
+
                         case MotionEvent.ACTION_DOWN:
                             vibrator.vibrate(100);
                             rec_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
@@ -427,10 +427,10 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!accent_flag) {
                     MainActivity.american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                    vibrator.vibrate(50);
+                    vibrator.vibrate(100);
                 } else if (accent_flag) {
                     MainActivity.british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                    vibrator.vibrate(50);
+                    vibrator.vibrate(100);
                 }
             }
         });
@@ -442,7 +442,6 @@ public class PlayActivity extends AppCompatActivity {
 
         String[] time_units = time.split(":");
         int seconds = Integer.parseInt(time_units[1]);
-
         if (seconds < 1) {
             Toast.makeText(context, "Minimum not reached!", Toast.LENGTH_SHORT).show();
             UtilityRecordings.deleteRecording(context, selected_word + ".aac");
@@ -486,13 +485,6 @@ public class PlayActivity extends AppCompatActivity {
                     }
                 }
                 break;
-        }
-    }
-
-    private class SimpleTapListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return true;
         }
     }
 }
