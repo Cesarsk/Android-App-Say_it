@@ -122,15 +122,27 @@ public class UtilityRecordings {
         return false;
     }
 
-    public static int getRecordingDuration(Context context, MediaPlayer mediaPlayer, String word){
-        mediaPlayer.reset();
-        try {
-            mediaPlayer.setDataSource(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static long getRecordingDuration(Context context, MediaPlayer mediaPlayer, String word){
+
+        File file = new File(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
+        long duration = 0;
+
+        if(mediaPlayer == null){
+            mediaPlayer = new MediaPlayer();
         }
 
-        return mediaPlayer.getDuration();
+        if(file.exists()){
+            mediaPlayer.reset();
+            try {
+                mediaPlayer.setDataSource(file.getAbsolutePath());
+                mediaPlayer.prepare();
+                duration = (long) mediaPlayer.getDuration();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return duration;
     }
 
     public static byte[] getRecordingBytesfromFile(File file) {

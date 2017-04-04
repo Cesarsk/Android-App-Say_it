@@ -116,6 +116,8 @@ public class PlayActivity extends AppCompatActivity {
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
 
+        recorder = new MediaRecorder();
+        mediaPlayer = new MediaPlayer();
 
         if (MainActivity.DEFAULT_ACCENT.equals("0")) {
             accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
@@ -186,8 +188,18 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        recorder = new MediaRecorder();
-        mediaPlayer = new MediaPlayer();
+        if(UtilityRecordings.checkRecordingFile(this, selected_word)){
+            rec_button.setVisibility(View.INVISIBLE);
+            play_button.setScaleX(1);
+            play_button.setScaleY(1);
+            play_button.setVisibility(VISIBLE);
+            delete_button.setVisibility(VISIBLE);
+            Long duration = UtilityRecordings.getRecordingDuration(this, mediaPlayer, selected_word);
+            @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+            String durationText = dateFormat.format(new Date(duration));
+            chronometer.setText(durationText);
+        }
+
         history = new CharSequence[N];
 
         delete_button_anim = new AlphaAnimation(1.0f, 0.0f);
@@ -235,14 +247,6 @@ public class PlayActivity extends AppCompatActivity {
         selected_ipa_view.setTypeface(plainItalic);
         selected_word_view.setText(selected_word);
         selected_ipa_view.setText(selected_ipa);
-
-        if(UtilityRecordings.checkRecordingFile(this, selected_word)){
-            rec_button.setVisibility(View.INVISIBLE);
-            play_button.setVisibility(VISIBLE);
-            play_button.setScaleX(1);
-            play_button.setScaleY(1);
-            delete_button.setVisibility(VISIBLE);
-        }
 
         remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
