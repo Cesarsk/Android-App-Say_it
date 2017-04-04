@@ -90,6 +90,8 @@ public class PlayActivity extends AppCompatActivity {
     private boolean isMinimumDurationReached = false;
     Button rec_button;
     Vibrator vibrator;
+    TransitionDrawable green_animation;
+    private long scaleAnimationDuration = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,48 +138,110 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                if(UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
+                if (UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
                     switch (motionEvent.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-
-                            vibrator.vibrate(50);
+                            vibrator.vibrate(100);
                             rec_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
-                            rec_button.animate().setDuration(200).setInterpolator(new OvershootInterpolator()).scaleX(0.8f).scaleY(0.8f);
+                            //Scale animation
+                            rec_button.animate().setDuration(scaleAnimationDuration).setInterpolator(new OvershootInterpolator()).scaleX(0.8f).scaleY(0.8f);
                             chronometer.setBase(SystemClock.elapsedRealtime());
                             chronometer.start();
                             UtilityRecordings.startRecording(context, recorder, selected_word);
                             return true;
 
                         case MotionEvent.ACTION_UP:
-                            vibrator.vibrate(50);
+                            vibrator.vibrate(100);
                             rec_button.setBackground(getDrawable(R.drawable.circle_red));
                             chronometer.stop();
                             UtilityRecordings.stopRecording(view.getContext(), recorder, selected_word);
 
-                            if(checkDuration(chronometer.getText().toString())){
+                            if (checkDuration(chronometer.getText().toString())) {
                                 play_button.setVisibility(VISIBLE);
-                                rec_button.animate().setDuration(100).scaleX(1).scaleY(1);
-                                rec_button.animate().setDuration(100).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                                //Button reverse animation to NORMAL RED
+                                rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                                //START OVERSHOOT ANIMATION
+                                rec_button.animate().setDuration(scaleAnimationDuration+400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                                     @Override
                                     public void run() {
                                         rec_button.setVisibility(View.INVISIBLE);
-                                        play_button.animate().setDuration(300).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                                        play_button.animate().setDuration(scaleAnimationDuration+400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
                                         delete_button.setAlpha(0f);
                                         delete_button.setVisibility(VISIBLE);
-                                        delete_button.animate().setDuration(300).alpha(1);
+                                        delete_button.animate().setDuration(scaleAnimationDuration).alpha(1);
                                     }
                                 });
-                            }
-                            else{
-                                rec_button.animate().setDuration(100).scaleX(1).scaleY(1);
-                                rec_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
+                            } else {
+                                rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                                rec_button.setBackground(getDrawable(R.drawable.circle_red));
                                 UtilityRecordings.deleteRecording(view.getContext(), selected_word + ".aac");
                             }
                             return false;
                     }
                 }
-
                 return false;
+            }
+        });
+
+        //TODO
+        //Gestione Snackbar + UNDO
+        snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
+        final Context context = this;
+
+        snackbar.setAction("UNDO", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File recovered_file = new File(view.getContext().getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac");
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(recovered_file);
+                    outputStream.write(temp_recording_bytes);
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                delete_button.setAlpha(0f);
+                delete_button.setVisibility(VISIBLE);
+                delete_button.animate().setDuration(300).alpha(1);
+                play_button.setScaleX(0);
+                play_button.setScaleY(0);
+                play_button.setVisibility(VISIBLE);
+                rec_button.animate().setDuration(scaleAnimationDuration+400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        rec_button.setVisibility(View.INVISIBLE);
+                        play_button.animate().setDuration(scaleAnimationDuration+400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                    }
+                });
+            }
+        });
+
+        delete_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                delete_button.animate().setDuration(scaleAnimationDuration).alpha(0).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        delete_button.setVisibility(View.GONE);
+                    }
+                });
+                rec_button.setScaleY(0);
+                rec_button.setScaleX(0);
+                rec_button.setVisibility(VISIBLE);
+                play_button.animate().setDuration(scaleAnimationDuration+400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        play_button.setVisibility(View.INVISIBLE);
+                        rec_button.animate().setDuration(scaleAnimationDuration+400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                    }
+                });
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                String filename = context.getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac";
+                File recording_file = new File(filename);
+                temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(recording_file);
+                UtilityRecordings.deleteRecording(context, recording_file.getName());
+                snackbar.show();
             }
         });
 
@@ -185,10 +249,29 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 UtilityRecordings.playRecording(view.getContext(), mediaPlayer, selected_word + ".aac");
+                //START GREEN-to-GREEN-PRESSED ANIMATION
+                play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_green_pressed));
+                green_animation = (TransitionDrawable) play_button.getBackground();
+                green_animation.startTransition(durationMillis);
+                play_button.animate().setDuration(durationMillis).scaleX(0.85f).scaleY(0.85f);
+                new CountDownTimer(mediaPlayer.getDuration(), 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_pressed_to_green));
+                        green_animation = (TransitionDrawable) play_button.getBackground();
+                        green_animation.startTransition(durationMillis);
+                        play_button.animate().setDuration(durationMillis).scaleX(1).scaleY(1);
+                    }
+                }.start();
             }
         });
 
-        if(UtilityRecordings.checkRecordingFile(this, selected_word)){
+        if (UtilityRecordings.checkRecordingFile(this, selected_word)) {
             rec_button.setVisibility(View.INVISIBLE);
             play_button.setScaleX(1);
             play_button.setScaleY(1);
@@ -199,8 +282,6 @@ public class PlayActivity extends AppCompatActivity {
             String durationText = dateFormat.format(new Date(duration));
             chronometer.setText(durationText);
         }
-
-        history = new CharSequence[N];
 
         delete_button_anim = new AlphaAnimation(1.0f, 0.0f);
         delete_button_anim_reverse = new AlphaAnimation(0.0f, 1.0f);
@@ -223,6 +304,7 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         });
+
         delete_button_anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -261,41 +343,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        //TODO
-        //Gestione Snackbar + UNDO
-        snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
-        final Context context = this;
-
-        snackbar.setAction("UNDO", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                File recovered_file = new File(view.getContext().getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac");
-                FileOutputStream outputStream = null;
-                try {
-                    outputStream = new FileOutputStream(recovered_file);
-                    outputStream.write(temp_recording_bytes);
-                    outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                delete_button.setAlpha(0f);
-                delete_button.setVisibility(VISIBLE);
-                delete_button.animate().setDuration(300).alpha(1);
-                play_button.setScaleX(0);
-                play_button.setScaleY(0);
-                play_button.setVisibility(VISIBLE);
-                rec_button.animate().setDuration(100).scaleX(0).scaleY(0).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        rec_button.setVisibility(View.INVISIBLE);
-                        play_button.animate().setDuration(300).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
-                    }
-                });
-
-            }
-        });
-
         //Gestione AD (TEST AD)
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -312,34 +359,6 @@ public class PlayActivity extends AppCompatActivity {
                 main_activity_intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 v.getContext().startActivity(main_activity_intent);
                 finish(); //distruggiamo il play activity relativo alla parola
-            }
-        });
-
-
-        delete_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                delete_button.animate().setDuration(300).alpha(0).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        delete_button.setVisibility(View.GONE);
-                    }
-                });
-                rec_button.setScaleY(0);
-                rec_button.setScaleX(0);
-                rec_button.setVisibility(VISIBLE);
-                play_button.animate().setDuration(100).scaleX(0).scaleY(0).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        play_button.setVisibility(View.INVISIBLE);
-                        rec_button.animate().setDuration(300).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
-                    }
-                });
-                String filename = context.getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac";
-                File recording_file = new File(filename);
-                temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(recording_file);
-                UtilityRecordings.deleteRecording(context, recording_file.getName());
-                snackbar.show();
             }
         });
 
@@ -419,7 +438,7 @@ public class PlayActivity extends AppCompatActivity {
         startTutorialPlayActivity(rec_button, play_original_button, accent_button, slow_button);
     }
 
-    private boolean checkDuration(String time){
+    private boolean checkDuration(String time) {
 
         String[] time_units = time.split(":");
         int seconds = Integer.parseInt(time_units[1]);
@@ -470,7 +489,7 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
-    private class SimpleTapListener extends GestureDetector.SimpleOnGestureListener{
+    private class SimpleTapListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             return true;

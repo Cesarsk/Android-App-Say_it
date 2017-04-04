@@ -126,7 +126,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_delete_black_24dp"
                 android:tint="@color/primary_light"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -135,10 +135,13 @@
             android:layout_height="match_parent"
             android:layout_below="@id/buttons_bar">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <Chronometer
+                android:id="@+id/recording_timer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:textSize="32sp" />
 
                 <Button
                     android:id="@+id/rec_button"
@@ -155,28 +158,18 @@
                     android:background="@drawable/circle_green"
                     android:scaleX="0"
                     android:scaleY="0"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
-                <Chronometer
-                    android:id="@+id/recording_timer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="32sp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="180dp"/>
 
                 <Button
                     android:id="@+id/play_original"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_below="@id/rec_button"
                     android:layout_alignEnd="@id/rec_button"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="-28dp"
+                    android:layout_below="@id/rec_button"
+                    android:layout_marginEnd="-40dp"
                     android:background="@drawable/circle_red"
                     android:backgroundTint="@color/accent" />
-
-            </RelativeLayout>
 
         </RelativeLayout>
 
