@@ -64,7 +64,7 @@ public class UtilitySharedPrefs {
         ArrayList<SayItPair> DeserializedHistory = HistoryFragment.loadDeserializedHistory(context);
 
         if(DeserializedHistory != null && !DeserializedHistory.isEmpty()) {
-            if(recentHistory.size() >= items) {
+            if(DeserializedHistory.size() >= items) {
                 recentHistory = new ArrayList<>(DeserializedHistory.subList(0, items));
             }
 

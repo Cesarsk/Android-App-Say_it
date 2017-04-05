@@ -55,6 +55,7 @@ import static com.example.cesarsk.say_it.utility.UtilityDictionary.getDailyRando
  */
 public class HomeFragment extends Fragment {
 
+    public static int RECENT_HISTORY_CARD_ROW_LIMIT = 5;
     private boolean favorite_flag = false;
 
     //Gestione ADs
@@ -212,7 +213,7 @@ public class HomeFragment extends Fragment {
         final TextView stats_item1 = (TextView)view.findViewById(R.id.card_stats_item1);
         final TextView stats_item2 = (TextView)view.findViewById(R.id.card_stats_item2);
 
-        ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), 3);
+        ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
         LinearLayout recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         float scale = getResources().getDisplayMetrics().density;
