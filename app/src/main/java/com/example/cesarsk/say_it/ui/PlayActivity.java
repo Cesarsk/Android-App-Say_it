@@ -1,5 +1,8 @@
 package com.example.cesarsk.say_it.ui;
 
+import android.animation.Animator;
+import android.animation.TimeInterpolator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,17 +12,22 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +44,7 @@ import com.google.android.gms.ads.MobileAds;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -79,6 +88,11 @@ public class PlayActivity extends AppCompatActivity {
     CountDownTimer countDownTimer;
     CountDownTimer minDurationTimer;
     private boolean isMinimumDurationReached = false;
+    Button rec_button;
+    Vibrator vibrator;
+    TransitionDrawable green_animation;
+    private long scaleAnimationDuration = 200;
+    boolean maxDurationReached = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +102,8 @@ public class PlayActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
 
-        final Button multibutton = (Button) findViewById(R.id.recplay_button);
+        rec_button = (Button) findViewById(R.id.rec_button);
+        final Button play_button = (Button) findViewById(R.id.play_button);
         final TextView selected_word_view = (TextView) findViewById(R.id.selected_word);
         final TextView selected_ipa_view = (TextView) findViewById(R.id.selected_word_ipa);
         final ImageButton delete_button = (ImageButton) findViewById(R.id.delete_button);
@@ -99,11 +114,55 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton your_recordings = (ImageButton) findViewById(R.id.recordings_button);
         final ImageButton remove_ad = (ImageButton) findViewById(R.id.remove_ads_button);
         final ImageButton search_meaning = (ImageButton) findViewById(R.id.search_meaning_button);
-        final TextView timerTextView = (TextView) findViewById(R.id.recordingTimer);
-        final Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+        //final TextView timerTextView = (TextView) findViewById(R.id.recordingTimer);
+        vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
 
+        //Setting Up Chronometer
+        final Chronometer chronometer = (Chronometer) findViewById(R.id.recording_timer);
+        chronometer.setBase(SystemClock.elapsedRealtime());
+
+        //Setting Up Recorder/Player
+        recorder = new MediaRecorder();
+        recorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+            @Override
+            public void onInfo(MediaRecorder mediaRecorder, int what, int extra) {
+
+                if(what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED){
+                    maxDurationReached = true;
+                    vibrator.vibrate(100);
+                    rec_button.setBackground(getDrawable(R.drawable.circle_red));
+                    chronometer.stop();
+
+                    UtilityRecordings.stopRecording(context, recorder, selected_word);
+
+                    if (checkDuration(chronometer.getText().toString())) {
+                        play_button.setVisibility(VISIBLE);
+                        //Button reverse animation to NORMAL RED
+                        rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                        //START OVERSHOOT ANIMATION
+                        rec_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                rec_button.setVisibility(View.INVISIBLE);
+                                play_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                                delete_button.setAlpha(0f);
+                                delete_button.setVisibility(VISIBLE);
+                                delete_button.animate().setDuration(scaleAnimationDuration).alpha(1);
+                            }
+                        });
+                    } else {
+                        rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                        rec_button.setBackground(getDrawable(R.drawable.circle_red));
+                        UtilityRecordings.deleteRecording(context, selected_word + ".aac");
+                    }
+                    Toast.makeText(context, "Maximum duration reached!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        mediaPlayer = new MediaPlayer();
 
         if (MainActivity.DEFAULT_ACCENT.equals("0")) {
             accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
@@ -113,10 +172,168 @@ public class PlayActivity extends AppCompatActivity {
             accent_flag = true;
         }
 
-        timer = new ShowTimer(timerTextView);
-        recorder = new MediaRecorder();
-        mediaPlayer = new MediaPlayer();
-        history = new CharSequence[N];
+        //Setting Up Record/Play Buttons
+        rec_button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
+                    switch (motionEvent.getAction()) {
+
+                        case MotionEvent.ACTION_DOWN:
+                            vibrator.vibrate(100);
+                            rec_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
+                            //Scale animation
+                            rec_button.animate().setDuration(scaleAnimationDuration).setInterpolator(new OvershootInterpolator()).scaleX(0.8f).scaleY(0.8f);
+                            chronometer.setBase(SystemClock.elapsedRealtime());
+                            chronometer.start();
+                            UtilityRecordings.startRecording(context, recorder, selected_word);
+                            return true;
+
+                        case MotionEvent.ACTION_UP:
+                            if(!maxDurationReached) {
+                                vibrator.vibrate(100);
+                                rec_button.setBackground(getDrawable(R.drawable.circle_red));
+                                chronometer.stop();
+
+                                UtilityRecordings.stopRecording(view.getContext(), recorder, selected_word);
+
+                                if (checkDuration(chronometer.getText().toString())) {
+                                    play_button.setVisibility(VISIBLE);
+                                    //Button reverse animation to NORMAL RED
+                                    rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                                    //START OVERSHOOT ANIMATION
+                                    rec_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            rec_button.setVisibility(View.INVISIBLE);
+                                            play_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                                            delete_button.setAlpha(0f);
+                                            delete_button.setVisibility(VISIBLE);
+                                            delete_button.animate().setDuration(scaleAnimationDuration).alpha(1);
+                                        }
+                                    });
+                                } else {
+                                    rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                                    rec_button.setBackground(getDrawable(R.drawable.circle_red));
+                                    UtilityRecordings.deleteRecording(view.getContext(), selected_word + ".aac");
+                                }
+                                return false;
+                            }
+                    }
+                }
+
+                else{
+                    UtilityRecordings.requestRecordAudioPermissions(context);
+                }
+                return false;
+            }
+        });
+
+        //TODO
+        //Gestione Snackbar + UNDO
+        snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
+        final Context context = this;
+
+        snackbar.setAction("UNDO", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                File recovered_file = new File(view.getContext().getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac");
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(recovered_file);
+                    outputStream.write(temp_recording_bytes);
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Long duration = UtilityRecordings.getRecordingDuration(view.getContext(), mediaPlayer, selected_word);
+                @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+                String durationText = dateFormat.format(new Date(duration));
+                chronometer.setText(durationText);
+
+                delete_button.setAlpha(0f);
+                delete_button.setVisibility(VISIBLE);
+                delete_button.animate().setDuration(300).alpha(1);
+                play_button.setScaleX(0);
+                play_button.setScaleY(0);
+                play_button.setVisibility(VISIBLE);
+                rec_button.animate().setDuration(scaleAnimationDuration+400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        rec_button.setVisibility(View.INVISIBLE);
+                        play_button.animate().setDuration(scaleAnimationDuration+400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                    }
+                });
+            }
+        });
+
+        delete_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                delete_button.animate().setDuration(scaleAnimationDuration).alpha(0).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        delete_button.setVisibility(View.GONE);
+                    }
+                });
+                rec_button.setScaleY(0);
+                rec_button.setScaleX(0);
+                rec_button.setVisibility(VISIBLE);
+                play_button.animate().setDuration(scaleAnimationDuration+400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        play_button.setVisibility(View.INVISIBLE);
+                        rec_button.animate().setDuration(scaleAnimationDuration+400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                    }
+                });
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                String filename = context.getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac";
+                File recording_file = new File(filename);
+                temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(recording_file);
+                UtilityRecordings.deleteRecording(context, recording_file.getName());
+                snackbar.show();
+            }
+        });
+
+        play_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UtilityRecordings.playRecording(view.getContext(), mediaPlayer, selected_word + ".aac");
+                //START GREEN-to-GREEN-PRESSED ANIMATION
+                play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_green_pressed));
+                green_animation = (TransitionDrawable) play_button.getBackground();
+                green_animation.startTransition(durationMillis);
+                play_button.animate().setDuration(durationMillis).scaleX(0.85f).scaleY(0.85f);
+                new CountDownTimer(mediaPlayer.getDuration(), 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_pressed_to_green));
+                        green_animation = (TransitionDrawable) play_button.getBackground();
+                        green_animation.startTransition(durationMillis);
+                        play_button.animate().setDuration(durationMillis).scaleX(1).scaleY(1);
+                    }
+                }.start();
+            }
+        });
+
+        if (UtilityRecordings.checkRecordingFile(this, selected_word)) {
+            rec_button.setVisibility(View.INVISIBLE);
+            play_button.setScaleX(1);
+            play_button.setScaleY(1);
+            play_button.setVisibility(VISIBLE);
+            delete_button.setVisibility(VISIBLE);
+            Long duration = UtilityRecordings.getRecordingDuration(this, mediaPlayer, selected_word);
+            @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+            String durationText = dateFormat.format(new Date(duration));
+            chronometer.setText(durationText);
+        }
 
         delete_button_anim = new AlphaAnimation(1.0f, 0.0f);
         delete_button_anim_reverse = new AlphaAnimation(0.0f, 1.0f);
@@ -139,6 +356,7 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         });
+
         delete_button_anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -164,150 +382,6 @@ public class PlayActivity extends AppCompatActivity {
         selected_word_view.setText(selected_word);
         selected_ipa_view.setText(selected_ipa);
 
-        final View.OnClickListener play_listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mediaPlayer.isPlaying()) {
-                    UtilityRecordings.playRecording(context, mediaPlayer, selected_word + ".aac");
-                    multibutton.setBackground(getDrawable(R.drawable.circle_green_pressed));
-                    vibrator.vibrate(50);
-                    Log.i("SAY IT!", "" + mediaPlayer.getDuration());
-                    new CountDownTimer(mediaPlayer.getDuration(), 1000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            multibutton.setBackground(getDrawable(R.drawable.circle_green));
-                        }
-                    }.start();
-                }
-            }
-        };
-
-        final View.OnTouchListener rec_listener = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            Log.i("Say it!", "Start Recording");
-                            if (countDownTimer != null) {
-                                countDownTimer.cancel();
-                                countDownTimer.start();
-                            }
-
-                            if (minDurationTimer != null) {
-                                isMinimumDurationReached = false;
-                                minDurationTimer.cancel();
-                                minDurationTimer.start();
-                            }
-                            isRecording = true;
-                            vibrator.vibrate(50);
-
-                            multibutton.setBackground(getDrawable(R.drawable.circle_red_pressed));
-                            timer.startTimer();
-                            UtilityRecordings.startRecording(context, recorder, selected_word);
-
-                            return true;
-
-                        case MotionEvent.ACTION_UP:
-                            Log.i("Say it!", "Stop Recording");
-                            timer.stopTimer();
-                            if (countDownTimer != null) {
-                                countDownTimer.cancel();
-                            }
-
-                            if (minDurationTimer != null) {
-                                minDurationTimer.cancel();
-                            }
-
-                            isRecording = false;
-                            multibutton.setBackground(getDrawable(R.drawable.circle_red));
-                            if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
-                                if (isMinimumDurationReached) {
-                                    multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
-                                    delete_button.startAnimation(delete_button_anim_reverse);
-                                    multibutton.setOnTouchListener(null);
-                                    multibutton.setOnClickListener(play_listener);
-                                    TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
-                                    transition.startTransition(durationMillis);
-                                    isMinimumDurationReached = false;
-                                    return true;
-                                } else {
-                                    vibrator.vibrate(50);
-                                    Toast.makeText(context, "Minimum duration not reached.", Toast.LENGTH_SHORT).show();
-                                    timer.clearTimer();
-                                    String filename = context.getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac";
-                                    UtilityRecordings.deleteRecording(context, new File(filename));
-                                    return true;
-                                }
-                            }
-                    }
-                } else {
-                    UtilityRecordings.requestRecordAudioPermissions(view.getContext());
-                    return true;
-                }
-                return false;
-            }
-        };
-
-        minDurationTimer = new CountDownTimer(1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                isMinimumDurationReached = true;
-            }
-        };
-
-        countDownTimer = new CountDownTimer(10000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-            }
-
-            public void onFinish() {
-                if (isRecording) {
-                    timer.stopTimer();
-                    Toast.makeText(context, "Maximum length duration reached.", Toast.LENGTH_SHORT).show();
-                    vibrator.vibrate(50);
-                    multibutton.setBackground(getDrawable(R.drawable.circle_red));
-                    if (UtilityRecordings.stopRecording(context, recorder, selected_word)) {
-                        multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
-                        delete_button.startAnimation(delete_button_anim_reverse);
-                        multibutton.setOnTouchListener(null);
-                        multibutton.setOnClickListener(play_listener);
-                        TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
-                        transition.startTransition(durationMillis);
-                        vibrator.vibrate(50);
-                        return;
-                    }
-                    return;
-                }
-            }
-        };
-
-        if (UtilityRecordings.checkRecordingFile(context, selected_word)) {
-            multibutton.setBackground(getResources().getDrawable(R.drawable.circle_color_anim_green_to_red, null));
-            multibutton.setOnClickListener(play_listener);
-            int millis = UtilityRecordings.getRecordingDuration(context, mediaPlayer, selected_word);
-            SimpleDateFormat formatter = new SimpleDateFormat("ss:SSS", Locale.UK);
-            Date date = new Date(millis);
-            String result = formatter.format(date);
-            timerTextView.setText(result);
-            delete_button.startAnimation(delete_button_anim_reverse);
-        } else {
-            multibutton.setBackground(getResources().getDrawable(R.drawable.circle_red, null));
-            multibutton.setOnTouchListener(rec_listener);
-            delete_button.setEnabled(false);
-            delete_button.setVisibility(INVISIBLE);
-        }
-
         remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -318,35 +392,6 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Utility.searchMeaning(context, selected_word);
-            }
-        });
-
-        //Gestione Snackbar + UNDO
-        snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
-        final Context context = this;
-
-        snackbar.setAction("UNDO", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //handler.removeCallbacks(pendingRemovalRunnable);
-                File recovered_file = new File(UtilityRecordings.RECORDINGS_PATH + selected_word + ".aac");
-                FileOutputStream outputStream = null;
-                try {
-                    outputStream = new FileOutputStream(recovered_file);
-                    outputStream.write(temp_recording_bytes);
-                    outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                //UtilitySharedPrefs.addRecording(context, recovered_file.getAbsolutePath());
-                timer.setTimer(timer.getOld_time());
-                delete_button.startAnimation(delete_button_anim_reverse);
-                multibutton.setOnTouchListener(null);
-                multibutton.setOnClickListener(play_listener);
-                multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_red_to_green));
-                TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
-                transition.startTransition(durationMillis);
             }
         });
 
@@ -366,24 +411,6 @@ public class PlayActivity extends AppCompatActivity {
                 main_activity_intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 v.getContext().startActivity(main_activity_intent);
                 finish(); //distruggiamo il play activity relativo alla parola
-            }
-        });
-
-        delete_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                timer.clearTimer();
-                delete_button.startAnimation(delete_button_anim);
-                multibutton.setOnTouchListener(rec_listener);
-                multibutton.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_red));
-                TransitionDrawable transition = (TransitionDrawable) multibutton.getBackground();
-                transition.startTransition(durationMillis);
-                String filename = context.getFilesDir().getAbsolutePath() + selected_word + ".aac";
-                File recording_file = new File(filename);
-                temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(recording_file);
-                //UtilityRecordings.deleteRecording(context, selected_word);
-                UtilityRecordings.deleteRecording(context, recording_file);
-                snackbar.show();
             }
         });
 
@@ -452,15 +479,27 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!accent_flag) {
                     MainActivity.american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                    vibrator.vibrate(50);
+                    vibrator.vibrate(100);
                 } else if (accent_flag) {
                     MainActivity.british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                    vibrator.vibrate(50);
+                    vibrator.vibrate(100);
                 }
             }
         });
 
-        startTutorialPlayActivity(multibutton, play_original_button, accent_button, slow_button);
+        startTutorialPlayActivity(rec_button, play_original_button, accent_button, slow_button);
+    }
+
+    private boolean checkDuration(String time) {
+
+        String[] time_units = time.split(":");
+        int seconds = Integer.parseInt(time_units[1]);
+        if (seconds < 1) {
+            Toast.makeText(context, "Minimum not reached!", Toast.LENGTH_SHORT).show();
+            UtilityRecordings.deleteRecording(context, selected_word + ".aac");
+            return false;
+        }
+        return true;
     }
 
     private void startTutorialPlayActivity(Button multibutton, Button play_original_button, ImageButton accent_button, ImageButton slow_button) {

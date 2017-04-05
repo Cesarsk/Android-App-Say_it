@@ -6,11 +6,13 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.MainActivity;
 
 import java.io.File;
@@ -20,6 +22,8 @@ import java.util.ArrayList;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.example.cesarsk.say_it.R.id.chronometer;
+import static com.example.cesarsk.say_it.R.id.rec_button;
 import static com.example.cesarsk.say_it.ui.PlayActivity.RequestPermissionCode;
 import static com.example.cesarsk.say_it.ui.PlayActivity.selected_word;
 
@@ -28,20 +32,10 @@ public class UtilityRecordings {
     public static final String AUDIO_RECORDER_FOLDER = "Say it";
     public static final String RECORDINGS_PATH = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/";
 
-    private static MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
-        @Override
-        public void onError(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!", "Error: " + what + ", " + extra);
-        }
-    };
-    private static MediaRecorder.OnInfoListener infoListener = new MediaRecorder.OnInfoListener() {
-        @Override
-        public void onInfo(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!", "Warning: " + what + ", " + extra);
-        }
-    };
 
-    public static boolean deleteRecording(Context context, File file) {
+    public static boolean deleteRecording(Context context, String filename) {
+
+        File file = new File(context.getFilesDir().getAbsolutePath() + "/" + filename);
 
         if (file.delete()) {
             updateRecordings(context);
@@ -89,11 +83,10 @@ public class UtilityRecordings {
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
+        recorder.setMaxDuration(10000);
         recorder.setAudioEncodingBitRate(16);
         recorder.setAudioSamplingRate(44100);
         recorder.setOutputFile(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
-        recorder.setOnErrorListener(errorListener);
-        recorder.setOnInfoListener(infoListener);
         try {
             recorder.prepare();
         } catch (IOException e) {
@@ -120,15 +113,27 @@ public class UtilityRecordings {
         return false;
     }
 
-    public static int getRecordingDuration(Context context, MediaPlayer mediaPlayer, String word){
-        mediaPlayer.reset();
-        try {
-            mediaPlayer.setDataSource(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static long getRecordingDuration(Context context, MediaPlayer mediaPlayer, String word){
+
+        File file = new File(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
+        long duration = 0;
+
+        if(mediaPlayer == null){
+            mediaPlayer = new MediaPlayer();
         }
 
-        return mediaPlayer.getDuration();
+        if(file.exists()){
+            mediaPlayer.reset();
+            try {
+                mediaPlayer.setDataSource(file.getAbsolutePath());
+                mediaPlayer.prepare();
+                duration = (long) mediaPlayer.getDuration();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return duration;
     }
 
     public static byte[] getRecordingBytesfromFile(File file) {
