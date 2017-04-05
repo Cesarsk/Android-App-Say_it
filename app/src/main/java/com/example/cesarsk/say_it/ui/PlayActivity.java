@@ -92,6 +92,7 @@ public class PlayActivity extends AppCompatActivity {
     Vibrator vibrator;
     TransitionDrawable green_animation;
     private long scaleAnimationDuration = 200;
+    boolean maxDurationReached = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +119,49 @@ public class PlayActivity extends AppCompatActivity {
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
 
+        //Setting Up Chronometer
+        final Chronometer chronometer = (Chronometer) findViewById(R.id.recording_timer);
+        chronometer.setBase(SystemClock.elapsedRealtime());
+
+        //Setting Up Recorder/Player
         recorder = new MediaRecorder();
+        recorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+            @Override
+            public void onInfo(MediaRecorder mediaRecorder, int what, int extra) {
+
+                if(what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED){
+                    maxDurationReached = true;
+                    vibrator.vibrate(100);
+                    rec_button.setBackground(getDrawable(R.drawable.circle_red));
+                    chronometer.stop();
+
+                    UtilityRecordings.stopRecording(context, recorder, selected_word);
+
+                    if (checkDuration(chronometer.getText().toString())) {
+                        play_button.setVisibility(VISIBLE);
+                        //Button reverse animation to NORMAL RED
+                        rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                        //START OVERSHOOT ANIMATION
+                        rec_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                rec_button.setVisibility(View.INVISIBLE);
+                                play_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                                delete_button.setAlpha(0f);
+                                delete_button.setVisibility(VISIBLE);
+                                delete_button.animate().setDuration(scaleAnimationDuration).alpha(1);
+                            }
+                        });
+                    } else {
+                        rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                        rec_button.setBackground(getDrawable(R.drawable.circle_red));
+                        UtilityRecordings.deleteRecording(context, selected_word + ".aac");
+                    }
+                    Toast.makeText(context, "Maximum duration reached!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
         mediaPlayer = new MediaPlayer();
 
         if (MainActivity.DEFAULT_ACCENT.equals("0")) {
@@ -128,10 +171,6 @@ public class PlayActivity extends AppCompatActivity {
             accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
             accent_flag = true;
         }
-
-        //Setting Up Chronometer
-        final Chronometer chronometer = (Chronometer) findViewById(R.id.recording_timer);
-        chronometer.setBase(SystemClock.elapsedRealtime());
 
         //Setting Up Record/Play Buttons
         rec_button.setOnTouchListener(new View.OnTouchListener() {
@@ -151,33 +190,40 @@ public class PlayActivity extends AppCompatActivity {
                             return true;
 
                         case MotionEvent.ACTION_UP:
-                            vibrator.vibrate(100);
-                            rec_button.setBackground(getDrawable(R.drawable.circle_red));
-                            chronometer.stop();
-                            UtilityRecordings.stopRecording(view.getContext(), recorder, selected_word);
-
-                            if (checkDuration(chronometer.getText().toString())) {
-                                play_button.setVisibility(VISIBLE);
-                                //Button reverse animation to NORMAL RED
-                                rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
-                                //START OVERSHOOT ANIMATION
-                                rec_button.animate().setDuration(scaleAnimationDuration+400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        rec_button.setVisibility(View.INVISIBLE);
-                                        play_button.animate().setDuration(scaleAnimationDuration+400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
-                                        delete_button.setAlpha(0f);
-                                        delete_button.setVisibility(VISIBLE);
-                                        delete_button.animate().setDuration(scaleAnimationDuration).alpha(1);
-                                    }
-                                });
-                            } else {
-                                rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                            if(!maxDurationReached) {
+                                vibrator.vibrate(100);
                                 rec_button.setBackground(getDrawable(R.drawable.circle_red));
-                                UtilityRecordings.deleteRecording(view.getContext(), selected_word + ".aac");
+                                chronometer.stop();
+
+                                UtilityRecordings.stopRecording(view.getContext(), recorder, selected_word);
+
+                                if (checkDuration(chronometer.getText().toString())) {
+                                    play_button.setVisibility(VISIBLE);
+                                    //Button reverse animation to NORMAL RED
+                                    rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                                    //START OVERSHOOT ANIMATION
+                                    rec_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            rec_button.setVisibility(View.INVISIBLE);
+                                            play_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                                            delete_button.setAlpha(0f);
+                                            delete_button.setVisibility(VISIBLE);
+                                            delete_button.animate().setDuration(scaleAnimationDuration).alpha(1);
+                                        }
+                                    });
+                                } else {
+                                    rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
+                                    rec_button.setBackground(getDrawable(R.drawable.circle_red));
+                                    UtilityRecordings.deleteRecording(view.getContext(), selected_word + ".aac");
+                                }
+                                return false;
                             }
-                            return false;
                     }
+                }
+
+                else{
+                    UtilityRecordings.requestRecordAudioPermissions(context);
                 }
                 return false;
             }
@@ -191,6 +237,7 @@ public class PlayActivity extends AppCompatActivity {
         snackbar.setAction("UNDO", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 File recovered_file = new File(view.getContext().getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac");
                 FileOutputStream outputStream = null;
                 try {
@@ -200,6 +247,11 @@ public class PlayActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                Long duration = UtilityRecordings.getRecordingDuration(view.getContext(), mediaPlayer, selected_word);
+                @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+                String durationText = dateFormat.format(new Date(duration));
+                chronometer.setText(durationText);
 
                 delete_button.setAlpha(0f);
                 delete_button.setVisibility(VISIBLE);

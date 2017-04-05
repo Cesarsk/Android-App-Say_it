@@ -32,19 +32,6 @@ public class UtilityRecordings {
     public static final String AUDIO_RECORDER_FOLDER = "Say it";
     public static final String RECORDINGS_PATH = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/";
 
-    private static MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
-        @Override
-        public void onError(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!", "Error: " + what + ", " + extra);
-        }
-    };
-
-    private static MediaRecorder.OnInfoListener infoListener = new MediaRecorder.OnInfoListener() {
-        @Override
-        public void onInfo(MediaRecorder mr, int what, int extra) {
-            Log.i("Say it!", "Warning: " + what + ", " + extra);
-        }
-    };
 
     public static boolean deleteRecording(Context context, String filename) {
 
@@ -100,8 +87,6 @@ public class UtilityRecordings {
         recorder.setAudioEncodingBitRate(16);
         recorder.setAudioSamplingRate(44100);
         recorder.setOutputFile(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
-        recorder.setOnErrorListener(errorListener);
-        recorder.setOnInfoListener(infoListener);
         try {
             recorder.prepare();
         } catch (IOException e) {
