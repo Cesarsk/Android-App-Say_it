@@ -51,7 +51,7 @@ public class NotificationAlarmService extends Service {
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                         //TODO REPLACE IC_FLAG WITH ICON APP
-                        .setSmallIcon(R.drawable.ic_flag)
+                        .setSmallIcon(R.drawable.ic_notification_icon)
                         .setContentTitle("Say it! Reminder ")
                         .setContentText("Hey! Here's your word of the day: "+MainActivity.wordOfTheDay)
                         .setSound(alarmSound)
