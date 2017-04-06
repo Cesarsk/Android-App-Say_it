@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="Notification"
-    android:layout="@xml/voices_settings_layout">
+    android:layout="@xml/voices_settings_layout"
+    android:title="Notification">
 
     <PreferenceCategory
         android:layout="@xml/categories_settings_layout"
@@ -14,7 +14,7 @@
 
         <ListPreference
             android:defaultValue="2"
-            android:entries="@array/default_notification_rate"
+            android:entries="@array/default_notification_rate_entries"
             android:entryValues="@array/default_notification_rate_values"
             android:key="default_notification_rate"
             android:layout="@xml/voices_settings_layout"

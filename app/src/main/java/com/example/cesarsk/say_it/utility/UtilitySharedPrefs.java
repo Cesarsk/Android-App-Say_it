@@ -3,12 +3,14 @@ package com.example.cesarsk.say_it.utility;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.os.Environment;
 import android.support.v4.util.Pair;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.cesarsk.say_it.settings.TimePreference;
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.fragments.HistoryFragment;
@@ -18,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -231,10 +234,10 @@ public class UtilitySharedPrefs {
     {
         //Caricamento preferenze
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        MainActivity.DEFAULT_ACCENT = prefs.getString("default_accent", MainActivity.SETTINGS_PREFS_KEY);
         MainActivity.DEFAULT_NOTIFICATION_RATE = prefs.getString("default_notification_rate", MainActivity.SETTINGS_PREFS_KEY);
-        MainActivity.DEFAULT_ACCENT = prefs.getString("default_accent",MainActivity.SETTINGS_PREFS_KEY);
-        //Log.i("SETTINGS: ", ""+Integer.parseInt(MainActivity.NOTIFICATION_RATE));
-        Log.i("DEFAULT ACCENT: ", ""+Integer.parseInt(MainActivity.DEFAULT_ACCENT));
+        MainActivity.DEFAULT_NOTIFICATION_HOUR = prefs.getString("default_notification_hour", MainActivity.SETTINGS_PREFS_KEY);
+        MainActivity.DEFAULT_NOTIFICATION_MINUTE = prefs.getString("default_notification_minute", MainActivity.SETTINGS_PREFS_KEY);
     }
 
 
@@ -245,7 +248,7 @@ public class UtilitySharedPrefs {
         SharedPreferences.Editor editor = settings.edit();
         editor.clear();
         editor.apply();
-        Toast.makeText(context, "Deleted preferences!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Preferences deleted!", Toast.LENGTH_SHORT).show();
     }
 
     public static void loadQuotes(Activity activity) throws IOException {

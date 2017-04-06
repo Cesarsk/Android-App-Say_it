@@ -32,7 +32,7 @@
         <item>1</item>
     </string-array>
 
-    <string-array name="default_notification_rate">
+    <string-array name="default_notification_rate_entries">
         <item>Off</item>
         <item>Weekly (Word of the Week)</item>
         <item>Daily (Word of the Day)</item>

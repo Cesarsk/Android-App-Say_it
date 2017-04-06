@@ -72,8 +72,10 @@ public class MainActivity extends AppCompatActivity {
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
     public static ArrayList<File> RECORDINGS = null;
-    public static String DEFAULT_NOTIFICATION_RATE = "2";
+    public static String DEFAULT_NOTIFICATION_RATE = null;
     public static String DEFAULT_ACCENT = null;
+    public static String DEFAULT_NOTIFICATION_HOUR = null;
+    public static String DEFAULT_NOTIFICATION_MINUTE = null;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
@@ -168,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
-                scheduleNotification(12, 12, DEFAULT_NOTIFICATION_RATE);
+                scheduleNotification(18, 02, DEFAULT_NOTIFICATION_RATE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -211,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
         transaction.commit();
-
 
         bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX); //Default: Home

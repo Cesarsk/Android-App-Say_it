@@ -19,9 +19,11 @@ public class TimePreference extends DialogPreference implements
     private static final String VALIDATION_EXPRESSION = "[0-2]*[0-9]:[0-5]*[0-9]";
 
     private String defaultValue = "12:00";
+    Context context;
 
     public TimePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         setPersistent(true);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         defaultValue = prefs.getString(getKey(), defaultValue);
@@ -48,6 +50,11 @@ public class TimePreference extends DialogPreference implements
     public void onTimeChanged(TimePicker view, int hour, int minute) {
         setSummary(getFormattedSummary());
         persistString(String.format("%02d", hour) + ":" + String.format("%02d", minute));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("default_notification_hour", hour);
+        editor.putInt("default_notification_minute", minute);
+        editor.apply();
     }
 
     @Override

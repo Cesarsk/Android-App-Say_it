@@ -258,7 +258,7 @@ public class HomeFragment extends Fragment {
 
         //Setup our Stats
         UtilityRecordings.updateRecordings(getActivity());
-        stats_item1.setText("You've \uD83C\uDFB5 "+MainActivity.RECORDINGS.size()+" words so far!");
+        stats_item1.setText("You've \uD83C\uDF99 "+MainActivity.RECORDINGS.size()+" words so far!");
         stats_item2.setText("You've ♥ "+MainActivity.FAVORITES.size()+" words so far!");
 
         View.OnClickListener random_word_listener = new View.OnClickListener() {
