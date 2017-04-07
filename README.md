@@ -28,9 +28,9 @@ We planned to add other languages in our application soon.
 
 Now let's not waste time and... Say It!
 
-# Screenshot:
+# Screenshots:
 
-![HomeFragment](https://raw.github.com/Cesarsk/Say_it/tree/master/screenshots/homefragment.png)
+![HomeFragment](https://raw.github.com/Cesarsk/Say_it/blob/master/screenshots/homefragment.png)
 ![PlayActivity](https://raw.github.com/Cesarsk/Say_it/tree/master/screenshots/playactivity.png)
 
 # License:
