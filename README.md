@@ -31,7 +31,7 @@ Now let's not waste time and... Say It!
 # Screenshots:
 
 ![HomeFragment](https://github.com/Cesarsk/Say_it/blob/master/screenshots/homefragment.png)
-![PlayActivity](https://raw.github.com/Cesarsk/Say_it/tree/master/screenshots/playactivity.png)
+![PlayActivity](https://github.com/Cesarsk/Say_it/blob/master/screenshots/playactivity.png)
 
 # License:
 Say It! Application for Android
