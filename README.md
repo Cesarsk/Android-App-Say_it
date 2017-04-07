@@ -30,7 +30,7 @@ Now let's not waste time and... Say It!
 
 # Screenshots:
 
-![HomeFragment](https://raw.github.com/Cesarsk/Say_it/blob/master/screenshots/homefragment.png)
+![HomeFragment](https://github.com/Cesarsk/Say_it/blob/master/screenshots/homefragment.png)
 ![PlayActivity](https://raw.github.com/Cesarsk/Say_it/tree/master/screenshots/playactivity.png)
 
 # License:
