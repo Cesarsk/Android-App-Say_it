@@ -30,8 +30,8 @@ Now let's not waste time and... Say It!
 
 # Screenshot:
 
-![PlayActivity](https://raw.github.com/Cesarsk/Say_it/tree/master/screenshots/screenshot1.png)
-![HomeFragment](https://raw.github.com/Cesarsk/Say_it/tree/master/screenshots/screenshot2.png)
+![HomeFragment](https://raw.github.com/Cesarsk/Say_it/tree/master/screenshots/homefragment.png)
+![PlayActivity](https://raw.github.com/Cesarsk/Say_it/tree/master/screenshots/playactivity.png)
 
 # License:
 Say It! Application for Android
