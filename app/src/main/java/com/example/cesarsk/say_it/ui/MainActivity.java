@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
-                scheduleNotification(18, 02, DEFAULT_NOTIFICATION_RATE);
+                scheduleNotification(22, 00, DEFAULT_NOTIFICATION_RATE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
