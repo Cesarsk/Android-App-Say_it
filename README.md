@@ -30,7 +30,7 @@ Now let's not waste time and... Say It!
 
 # Screenshot:
 
-![alt tag](http://imgur.com/a/6vbV8)
+![alt tag](http://imgur.com/wzuLKtl)
 
 # License:
 Say It! Application for Android
