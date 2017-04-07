@@ -28,6 +28,10 @@ We planned to add other languages in our application soon.
 
 Now let's not waste time and... Say It!
 
+# Screenshot:
+
+![alt tag](http://imgur.com/a/6vbV8)
+
 # License:
 Say It! Application for Android
 Copyright (c) 2017 Cesarsk (https://github.com/Cesarsk/Say_it).
