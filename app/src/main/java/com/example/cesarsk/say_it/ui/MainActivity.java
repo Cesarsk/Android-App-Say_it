@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
+        transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
         transaction.commit();
 
         bottomBar = (BottomBar) findViewById(R.id.bottomBar);

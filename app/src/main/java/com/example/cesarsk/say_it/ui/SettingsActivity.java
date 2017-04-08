@@ -33,7 +33,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
         //TODO ANIMATION fragment.setEnterTransition(new Slide(Gravity.RIGHT));
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.contentSettings, fragment)
+                    .replace(R.id.contentSettings, fragment)
                     .commit();
         }
     }

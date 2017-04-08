@@ -1,5 +1,7 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -31,16 +33,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private static final String KEY_2 = "open_source_licenses";
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof Callback) {
-            mCallback = (Callback) context;
-        } else {
-            throw new IllegalStateException("Owner must implement URLCallback interface");
-        }
-    }
-
     public interface Callback {
         public void onNestedPreferenceSelected(int key);
     }
@@ -62,6 +54,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        Context context = getActivity();
+
+        if (context instanceof Callback) {
+            mCallback = (Callback) context ;
+        } else {
+            throw new IllegalStateException("Owner must implement URLCallback interface");
+        }
 
         // add listeners for non-default actions
         Preference preference = findPreference(KEY_1);
