@@ -100,6 +100,8 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ---
 
-Flaticon / Freepik licenses (https://profile.flaticon.com/license/free)
+Flaticon / Freepik licenses 
+(https://profile.flaticon.com/license/free)
+(https://profile.freepik.com/license/free)
 
 ---
