@@ -93,6 +93,7 @@ public class PlayActivity extends AppCompatActivity {
     TransitionDrawable green_animation;
     private long scaleAnimationDuration = 200;
     boolean maxDurationReached = false;
+    public static String id_showcase = "utente";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -507,7 +508,8 @@ public class PlayActivity extends AppCompatActivity {
         config.setDelay(50); // 50ms between each showcase views
         config.setShapePadding(15);
         config.setRenderOverNavigationBar(true);
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "utente");
+        MaterialShowcaseSequence sequence;
+        sequence = new MaterialShowcaseSequence(this, id_showcase);
         sequence.setConfig(config);
 
         sequence.addSequenceItem(multibutton,

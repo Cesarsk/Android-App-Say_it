@@ -17,8 +17,12 @@ import android.widget.Toast;
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.FileTextActivity;
 import com.example.cesarsk.say_it.ui.MainActivity;
+import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.utility.Utility;
 
+import java.util.Random;
+
+import static android.R.attr.max;
 import static com.example.cesarsk.say_it.utility.Utility.rateUs;
 import static com.example.cesarsk.say_it.utility.Utility.shareToMail;
 
@@ -102,6 +106,36 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Utility.openURL(getActivity(), "https://www.paypal.me/cesarsk");
+                return false;
+            }
+        });
+
+        final Preference about_us = getPreferenceManager().findPreference("about_us");
+        about_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com");
+                return false;
+            }
+        });
+
+        final Preference github = getPreferenceManager().findPreference("github");
+        github.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://github.com/Cesarsk/Say_it");
+                return false;
+            }
+        });
+
+        final Preference reset_tutorial = getPreferenceManager().findPreference("reset_showcase");
+        reset_tutorial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Random rand = new Random();
+                int randomNum = rand.nextInt((10000 - 10) + 1) + 10; //(max - min) + 1 + min
+                PlayActivity.id_showcase = ""+randomNum;
+                Toast.makeText(getActivity(), "Tutorial has been reset", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });

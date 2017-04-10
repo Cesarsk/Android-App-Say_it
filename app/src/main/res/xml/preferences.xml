@@ -30,6 +30,12 @@
             android:summary="Delete all your recordings, you can't undo this operation!"
             android:title="Delete Recordings" />
 
+        <Preference
+            android:key="reset_showcase"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Reset tutorial"
+            android:title="Reset Tutorial" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -73,6 +79,18 @@
         android:title="About">
 
         <Preference
+            android:key="about_us"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Who's behind this project?"
+            android:title="About Us" />
+
+        <Preference
+            android:key="github"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Visit our Github"
+            android:title="Github" />
+
+        <Preference
             android:key="open_source_licenses"
             android:persistent="false"
             android:layout="@xml/voices_settings_layout"
@@ -80,16 +98,16 @@
             android:title="Open source licenses" />
 
         <Preference
-            android:key="app_version"
-            android:layout="@xml/voices_settings_layout"
-            android:summary="Version: 1.0"
-            android:title="Say It! version" />
-
-        <Preference
             android:key="acknowledgements"
             android:layout="@xml/voices_settings_layout"
             android:summary="Special thanks to..."
             android:title="Acknowledgements" />
+
+        <Preference
+            android:key="app_version"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Version: 1.0"
+            android:title="Say It! version" />
 
     </PreferenceCategory>
 

@@ -21,4 +21,12 @@
     <Preference
         android:key="number_5"
         android:title="Wordlist" />
+
+    <Preference
+        android:key="number_6"
+        android:title="Freepik"/>
+
+    <Preference
+        android:key="number_7"
+        android:title="Flaticon" />
 </PreferenceScreen>
