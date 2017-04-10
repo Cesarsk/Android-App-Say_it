@@ -82,7 +82,10 @@ public class MainActivity extends AppCompatActivity {
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
     public final static String RECORDINGS_PREFS_KEY = "SAY.IT.RECORDINGS"; //Chiave che identifica il Set della lista dei Recordings
-    public final static String SETTINGS_PREFS_KEY = "SAY.IT.SETTINGS"; //Chiave che identifica il Set della lista dei Recordings
+    public final static String DEFAULT_ACCENT_KEY = "SAY.IT.DEFAULT.ACCENT"; //Chiave che identifica il DEFAULT ACCENT
+    public final static String DEFAULT_NOTIFICATION_RATE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.RATE";
+    public final static String DEFAULT_NOTIFICATION_HOUR_KEY = "SAY.IT.DEFAULT.NOTIFICATION.HOUR";
+    public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
 
     public final static int REQUEST_CODE = 1;
 
@@ -158,9 +161,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         easyRatingDialog = new EasyRatingDialog(this);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //Caricamento preferenze
-        UtilitySharedPrefs.loadPrefs(this);
+        UtilitySharedPrefs.loadSettingsPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
         RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
@@ -170,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
-                scheduleNotification(22, 00, DEFAULT_NOTIFICATION_RATE);
+                scheduleNotification(Integer.parseInt(DEFAULT_NOTIFICATION_HOUR), Integer.parseInt(DEFAULT_NOTIFICATION_MINUTE), DEFAULT_NOTIFICATION_RATE);
             } catch (IOException e) {
                 e.printStackTrace();
             }

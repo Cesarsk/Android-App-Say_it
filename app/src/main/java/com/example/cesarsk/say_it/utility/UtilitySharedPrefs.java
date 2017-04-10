@@ -28,6 +28,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.example.cesarsk.say_it.ui.MainActivity.DEFAULT_ACCENT_KEY;
+import static com.example.cesarsk.say_it.ui.MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY;
+import static com.example.cesarsk.say_it.ui.MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY;
+import static com.example.cesarsk.say_it.ui.MainActivity.DEFAULT_NOTIFICATION_RATE_KEY;
 import static com.example.cesarsk.say_it.ui.MainActivity.FAVORITES_PREFS_KEY;
 import static com.example.cesarsk.say_it.ui.MainActivity.HISTORY_PREFS_KEY;
 import static com.example.cesarsk.say_it.ui.MainActivity.RECORDINGS_PREFS_KEY;
@@ -44,6 +48,22 @@ public class UtilitySharedPrefs {
         SharedPreferences.Editor editor = settings.edit();
 
         editor.putStringSet(prefs_key, set);
+        editor.apply();
+    }
+
+    public static void savePrefs(Context context, String value, String prefs_key){
+        SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString(prefs_key, value);
+        editor.apply();
+    }
+
+    public static void savePrefs(Context context, int value, String prefs_key){
+        SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putInt(prefs_key, value);
         editor.apply();
     }
 
@@ -230,14 +250,14 @@ public class UtilitySharedPrefs {
         MainActivity.HISTORY = sharedPreferences.getStringSet(HISTORY_PREFS_KEY, new TreeSet<String>());
     }
 
-    public static void loadPrefs(Context context)
+    public static void loadSettingsPrefs(Context context)
     {
         //Caricamento preferenze
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        MainActivity.DEFAULT_ACCENT = prefs.getString("default_accent", MainActivity.SETTINGS_PREFS_KEY);
-        MainActivity.DEFAULT_NOTIFICATION_RATE = prefs.getString("default_notification_rate", MainActivity.SETTINGS_PREFS_KEY);
-        MainActivity.DEFAULT_NOTIFICATION_HOUR = prefs.getString("default_notification_hour", MainActivity.SETTINGS_PREFS_KEY);
-        MainActivity.DEFAULT_NOTIFICATION_MINUTE = prefs.getString("default_notification_minute", MainActivity.SETTINGS_PREFS_KEY);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.DEFAULT_ACCENT = sharedPreferences.getString(DEFAULT_ACCENT_KEY, "0");
+        MainActivity.DEFAULT_NOTIFICATION_RATE = sharedPreferences.getString(DEFAULT_NOTIFICATION_RATE_KEY, "2");
+        MainActivity.DEFAULT_NOTIFICATION_HOUR = sharedPreferences.getString(DEFAULT_NOTIFICATION_HOUR_KEY, "12");
+        MainActivity.DEFAULT_NOTIFICATION_MINUTE = sharedPreferences.getString(DEFAULT_NOTIFICATION_MINUTE_KEY, "00");
     }
 
 

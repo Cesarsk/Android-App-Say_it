@@ -1,7 +1,5 @@
 package com.example.cesarsk.say_it.ui.fragments;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -14,11 +12,13 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.FileTextActivity;
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.utility.Utility;
+import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.Random;
 
@@ -48,7 +48,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             mCallback.onNestedPreferenceSelected(NestedPreferenceFragment.NESTED_SCREEN_1_KEY);
         }
 
-        if(preference.getKey().equals(KEY_2)){
+        if (preference.getKey().equals(KEY_2)) {
             mCallback.onNestedPreferenceSelected(NestedPreferenceFragment.NESTED_SCREEN_2_KEY);
         }
         return false;
@@ -62,7 +62,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         Context context = getActivity();
 
         if (context instanceof Callback) {
-            mCallback = (Callback) context ;
+            mCallback = (Callback) context;
         } else {
             throw new IllegalStateException("Owner must implement URLCallback interface");
         }
@@ -175,32 +175,27 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 index_default_accent = default_accent.findIndexOfValue(new_value);
                 CharSequence[] entries = default_accent.getEntries();
 
-                if (MainActivity.DEFAULT_ACCENT.equals("0")) {
-                    MainActivity.DEFAULT_ACCENT = new_value;
-                    default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
-                    Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
-                    Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
-                } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
-                    MainActivity.DEFAULT_ACCENT = new_value;
-                    default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
-                    Toast.makeText(getActivity(),String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
-                    Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
-                }
+                UtilitySharedPrefs.savePrefs(getActivity(), new_value, MainActivity.DEFAULT_ACCENT_KEY);
+                default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
+                Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
+                Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
                 return true;
-            }
-        });
+        }
+    });
 
         Preference acknowledgements = getPreferenceManager().findPreference("acknowledgements");
-        acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
-                Bundle args = new Bundle();
-                args.putString(FileTextActivity.PREFERENCE, "acknowledgements");
-                preference_intent.putExtras(args);
-                startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
-                return false;
-            }
-        });
+        acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+
+    {
+        @Override
+        public boolean onPreferenceClick (Preference preference){
+        final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
+        Bundle args = new Bundle();
+        args.putString(FileTextActivity.PREFERENCE, "acknowledgements");
+        preference_intent.putExtras(args);
+        startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+        return false;
     }
+    });
+}
 }

@@ -7,27 +7,29 @@ package com.example.cesarsk.say_it.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.DialogPreference;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
+
+import com.example.cesarsk.say_it.ui.MainActivity;
+import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 public class TimePreference extends DialogPreference implements
         TimePicker.OnTimeChangedListener {
 
     private static final String VALIDATION_EXPRESSION = "[0-2]*[0-9]:[0-5]*[0-9]";
 
-    private String defaultValue = "12:00";
+    private String defaultValue;
     Context context;
 
     public TimePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         setPersistent(true);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        defaultValue = prefs.getString(getKey(), defaultValue);
-        setSummary(getFormattedSummary());
+        UtilitySharedPrefs.loadSettingsPrefs(context);
+        defaultValue = getTimeFromSharedPrefs();
+        setSummary(getTimeFromSharedPrefs());
     }
 
     @Override
@@ -36,10 +38,9 @@ public class TimePreference extends DialogPreference implements
         time_picker.setIs24HourView(true);
         time_picker.setOnTimeChangedListener(this);
 
-        Log.d("TimePicker","Current default ="+getPersistedString(this.defaultValue));
-
         int h = getHour();
         int m = getMinute();
+        //TODO Solve deprecated method issue
         if (h >= 0 && h < 24)  time_picker.setCurrentHour(h);
         if ( m >= 0 && m < 60) time_picker.setCurrentMinute(m);
 
@@ -48,13 +49,12 @@ public class TimePreference extends DialogPreference implements
 
     @Override
     public void onTimeChanged(TimePicker view, int hour, int minute) {
-        setSummary(getFormattedSummary());
-        persistString(String.format("%02d", hour) + ":" + String.format("%02d", minute));
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("default_notification_hour", hour);
-        editor.putInt("default_notification_minute", minute);
-        editor.apply();
+        //persistString(String.format("%02d", hour) + ":" + String.format("%02d", minute));
+        String formatted_hour = String.format("%02d", hour);
+        String formatted_minute = String.format("%02d", minute);
+        UtilitySharedPrefs.savePrefs(view.getContext(), formatted_hour, MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY);
+        UtilitySharedPrefs.savePrefs(view.getContext(), formatted_minute, MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY);
+        setSummary(getTimeFromSharedPrefs());
     }
 
     @Override
@@ -72,7 +72,7 @@ public class TimePreference extends DialogPreference implements
     }
 
     private int getHour() {
-        String time = getPersistedString(this.defaultValue);
+        String time = getTimeFromSharedPrefs();
         if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
             return -1;
         }
@@ -80,7 +80,7 @@ public class TimePreference extends DialogPreference implements
     }
 
     private int getMinute() {
-        String time = getPersistedString(this.defaultValue);
+        String time = getTimeFromSharedPrefs();
         if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
             return -1;
         }
@@ -92,8 +92,7 @@ public class TimePreference extends DialogPreference implements
         if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
             return null;
         }
-        String hour = time.split(":")[0];
-        return hour;
+        return time.split(":")[0];
     }
 
     private String get_minute(){
@@ -101,13 +100,19 @@ public class TimePreference extends DialogPreference implements
         if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
             return null;
         }
-        String minute = time.split(":")[1];
-        return minute;
+        return time.split(":")[1];
     }
 
-    public String getFormattedSummary() {
-        String h = get_hour();
-        String m = get_minute();
-        return h+":"+m;
+    private String getTimeUnitfromSharedPrefs(String prefs_key){
+        UtilitySharedPrefs.loadSettingsPrefs(context);
+        SharedPreferences prefs = context.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(prefs_key, "00");
+
+    }
+
+    private String getTimeFromSharedPrefs() {
+        String hour = getTimeUnitfromSharedPrefs(MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY);
+        String minute = getTimeUnitfromSharedPrefs(MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY);
+        return hour + ":" + minute;
     }
 }
