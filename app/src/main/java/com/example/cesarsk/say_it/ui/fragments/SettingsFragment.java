@@ -59,7 +59,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        Context context = getActivity();
+        final Context context = getActivity();
 
         if (context instanceof Callback) {
             mCallback = (Callback) context;
@@ -178,6 +178,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 UtilitySharedPrefs.savePrefs(getActivity(), new_value, MainActivity.DEFAULT_ACCENT_KEY);
                 default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
                 Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
+                UtilitySharedPrefs.loadSettingsPrefs(context);
                 Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
                 return true;
         }

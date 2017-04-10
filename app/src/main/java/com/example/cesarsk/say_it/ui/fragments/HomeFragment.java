@@ -166,17 +166,11 @@ public class HomeFragment extends Fragment {
         quick_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO CHECK DEFAULT ACCENT
-                Log.i("PRIMA DEL RAMO IF", MainActivity.DEFAULT_ACCENT);
                 if(MainActivity.DEFAULT_ACCENT.equals("0")) {
-                    //MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
                     MainActivity.american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
-                    Log.i("DEFAULT - QUICK PLAY", MainActivity.DEFAULT_ACCENT);
                 }
                 else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
-                    //MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
                     MainActivity.british_speaker_google.speak(wordOfTheDay,QUEUE_FLUSH,null,null);
-                    Log.i("DEFAULT - QUICK PLAY", MainActivity.DEFAULT_ACCENT);
                 }
                 //PreferenceManager.getDefaultSharedPreferences(getActivity());
             }
