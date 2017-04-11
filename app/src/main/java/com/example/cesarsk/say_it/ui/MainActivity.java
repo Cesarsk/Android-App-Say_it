@@ -173,7 +173,10 @@ public class MainActivity extends AppCompatActivity {
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
-                scheduleNotification(Integer.parseInt(DEFAULT_NOTIFICATION_HOUR), Integer.parseInt(DEFAULT_NOTIFICATION_MINUTE), DEFAULT_NOTIFICATION_RATE);
+                int parsedHour = Integer.parseInt(DEFAULT_NOTIFICATION_HOUR);
+                int parsedMinute = Integer.parseInt(DEFAULT_NOTIFICATION_MINUTE);
+                //scheduleNotification(Integer.parseInt(DEFAULT_NOTIFICATION_HOUR), Integer.parseInt(DEFAULT_NOTIFICATION_MINUTE), DEFAULT_NOTIFICATION_RATE);
+                scheduleNotification(parsedHour, parsedMinute, DEFAULT_NOTIFICATION_RATE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -355,9 +358,9 @@ public class MainActivity extends AppCompatActivity {
             AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 // With setInexactRepeating(), you have to use one of the AlarmManager interval
 // constants--in this case, AlarmManager.INTERVAL_DAY.
-
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.cancel(pendingIntent);
+            Toast.makeText(this, "Cancel eseguita!", Toast.LENGTH_SHORT).show();
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
     }
 
