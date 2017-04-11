@@ -28,12 +28,6 @@ We planned to add other languages in our application soon.
 
 Now let's not waste time and... Say It!
 
-# Screenshots:
-
-![HomeFragment](https://github.com/Cesarsk/Say_it/blob/master/screenshots/screener_home_fragment.png)
-![PlayActivity1](https://github.com/Cesarsk/Say_it/blob/master/screenshots/screener_play_activity.png)
-![PlayActivity2](https://github.com/Cesarsk/Say_it/blob/master/screenshots/screener_play_activity2.png)
-
 # License:
 Say It! Application for Android
 Copyright (c) 2017 Cesarsk (https://github.com/Cesarsk/Say_it).
@@ -54,3 +48,9 @@ See LICENSE.md file for further explanations.
 
 # Open Source Licenses:
 See NOTICE.md file
+
+
+# Screenshots:
+![HomeFragment](https://github.com/Cesarsk/Say_it/blob/master/screenshots/screener_home_fragment.png)
+![PlayActivity1](https://github.com/Cesarsk/Say_it/blob/master/screenshots/screener_play_activity.png)
+![PlayActivity2](https://github.com/Cesarsk/Say_it/blob/master/screenshots/screener_play_activity2.png)
