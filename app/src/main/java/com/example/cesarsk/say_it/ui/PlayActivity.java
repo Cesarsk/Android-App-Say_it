@@ -513,13 +513,13 @@ public class PlayActivity extends AppCompatActivity {
         sequence.setConfig(config);
 
         sequence.addSequenceItem(multibutton,
-                "HOLD this button to record a word. Release and PRESS it to listen to your recording.", "[DISMISS]");
+                getString(R.string.showcase_str_1), getString(R.string.showcase_str_btn_1));
         sequence.addSequenceItem(play_original_button,
-                "PRESS this button to listen to the original pronunciation.", Utility.underlineText("[GO AWAY!]").toString());
+                getString(R.string.showcase_str_2), Utility.underlineText(getString(R.string.showcase_str_btn_2)).toString());
         sequence.addSequenceItem(accent_button,
-                "Want to switch accent? PRESS this one!", Utility.underlineText("[SERIOUSLY, I'VE GOT THIS!]").toString());
+                getString(R.string.showcase_str_3), Utility.underlineText(getString(R.string.showcase_str_btn_3)).toString());
         sequence.addSequenceItem(slow_button,
-                "Okay... this is the last one. If you want to slower the word, use the SLOW BUTTON.", Utility.underlineText("[...I will]").toString());
+                getString(R.string.showcase_str_4), Utility.underlineText(getString(R.string.showcase_str_btn_4)).toString());
         sequence.start();
     }
 

@@ -60,10 +60,19 @@
 
     <!-- Strings related to Rate Dialog -->
     <string name="erd_title">Rate this app!</string>
-    <string name="erd_message">Hi! If you like this app, take a second to rate it and help us to grow, thank you! ❤</string>
+    <string name="erd_message">Hi! If you like this app, take a second to rate it and help us grow, thank you! ❤</string>
     <string name="erd_no_thanks">No, thanks.</string>
     <string name="erd_remind_me_later">Remind me later.</string>
     <string name="erd_rate_now">Rate now.</string>
 
+    <!-- showcase tutorial strings -->
+    <string name="showcase_str_1">HOLD this button to record a word. Release and PRESS it to listen to your recording.</string>
+    <string name="showcase_str_2">PRESS this button to listen to the original pronunciation.</string>
+    <string name="showcase_str_3">Want to switch the accent? PRESS this one!</string>
+    <string name="showcase_str_4">Is the pronunciation too quick? Use the SLOW BUTTON.</string>
+    <string name="showcase_str_btn_1">[DISMISS]</string>
+    <string name="showcase_str_btn_2">[GO AWAY!]</string>
+    <string name="showcase_str_btn_3">[SERIOUSLY, I\'VE GOT THIS!]</string>
+    <string name="showcase_str_btn_4">[...I will]</string>
 
 </resources>
