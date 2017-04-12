@@ -23,8 +23,8 @@
     </string>
 
     <string-array name="default_voice">
-        <item>American Language</item>
-        <item>British Language</item>
+        <item>American English</item>
+        <item>British English</item>
     </string-array>
 
     <string-array name="default_voice_values">
