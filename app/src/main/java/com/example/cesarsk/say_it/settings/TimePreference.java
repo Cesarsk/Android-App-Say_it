@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
 
+import com.example.cesarsk.say_it.NotificationReceiver;
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 
@@ -55,6 +56,7 @@ public class TimePreference extends DialogPreference implements
         UtilitySharedPrefs.savePrefs(view.getContext(), formatted_hour, MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY);
         UtilitySharedPrefs.savePrefs(view.getContext(), formatted_minute, MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY);
         setSummary(getTimeFromSharedPrefs());
+        NotificationReceiver.scheduleNotification(view.getContext(), hour, minute, MainActivity.DEFAULT_NOTIFICATION_RATE);
     }
 
     @Override
@@ -111,6 +113,7 @@ public class TimePreference extends DialogPreference implements
     }
 
     private String getTimeFromSharedPrefs() {
+        UtilitySharedPrefs.loadSettingsPrefs(context);
         String hour = getTimeUnitfromSharedPrefs(MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY);
         String minute = getTimeUnitfromSharedPrefs(MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY);
         return hour + ":" + minute;

@@ -29,8 +29,8 @@
             </intent-filter>
         </service>
 
-        <!-- permission required to use NotificationReceiver -->
-        <receiver android:name=".NotificationReceiver">
+        <!-- permission required to use NotificationBootReceiver -->
+        <receiver android:name=".NotificationBootReceiver">
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -56,13 +56,19 @@
             android:theme="@style/Preference" />
         <activity
             android:name=".ui.PlayActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BlueYellowThemeNoActionBar" />
         <activity
             android:name=".ui.SearchActivity"
             android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.FileTextActivity"></activity>
+        <activity android:name=".ui.FileTextActivity" />
+
+        <receiver
+            android:name=".NotificationReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
     </application>
 
 </manifest>
