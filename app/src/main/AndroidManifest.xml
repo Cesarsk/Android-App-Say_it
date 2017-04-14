@@ -18,7 +18,8 @@
         android:icon="@mipmap/ic_say_it"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/BlueYellowThemeNoActionBar">
+        android:theme="@style/BlueYellowThemeNoActionBar"
+        >
 
         <activity
             android:name="com.cesarsk.say_it.ui.MainActivity"
