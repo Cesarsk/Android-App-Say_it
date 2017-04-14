@@ -8,7 +8,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -28,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.cesarsk.say_it.NotificationBootReceiver;
 import com.example.cesarsk.say_it.NotificationReceiver;
 import com.example.cesarsk.say_it.R;
 import com.example.cesarsk.say_it.ui.fragments.FavoritesFragment;
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton voice_search_button;
 
     //Notification id
-    final int notifId = 1;
+    public static final int notifId = 150;
 
     //Rate Dialog
     EasyRatingDialog easyRatingDialog;
@@ -175,8 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 UtilitySharedPrefs.loadQuotes(this);
                 int parsedHour = Integer.parseInt(DEFAULT_NOTIFICATION_HOUR);
                 int parsedMinute = Integer.parseInt(DEFAULT_NOTIFICATION_MINUTE);
-                //scheduleNotification(Integer.parseInt(DEFAULT_NOTIFICATION_HOUR), Integer.parseInt(DEFAULT_NOTIFICATION_MINUTE), DEFAULT_NOTIFICATION_RATE);
-                scheduleNotification(parsedHour, parsedMinute, DEFAULT_NOTIFICATION_RATE);
+                NotificationReceiver.scheduleNotification(this,parsedHour, parsedMinute, DEFAULT_NOTIFICATION_RATE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -314,54 +313,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("error", "Initilization Failed!");
             }
         });
-    }
-
-    private void scheduleNotification(int hour, int minute, String modeString){
-        int mode = 0;
-        Log.i("DEBUG: ","modeString:"+modeString+"\nmode:"+mode);
-        try
-        {
-            mode = Integer.parseInt(modeString);
-            Log.i("DEBUG: ","TRY modeString:"+modeString+"\nmode:"+mode);
-        }
-        catch(NumberFormatException e)
-        {
-            mode = 2;
-            Log.i("DEBUG: ","Exception");
-        }
-        //mode can assume those values:
-        //0 NotificationOff
-        //1 NotificationWeekly
-        //2 NotificationDaily
-        if(mode==0);//Do nothing
-        else if(mode==1||mode==2){
-            Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-            notificationIntent.putExtra("notifId", notifId);
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notifId, notificationIntent, 0);
-
-// Set the alarm to start at approximately at a time
-            DatePicker datePicker = new DatePicker(this);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
-            calendar.set(Calendar.HOUR_OF_DAY, hour);
-            calendar.set(Calendar.MINUTE, minute);
-            if(mode==1) {
-                //set weekly notification
-                if (calendar.getTimeInMillis() < System.currentTimeMillis()) calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY*7);
-            } else if(mode==2)
-            {
-                //set daily notification
-                if (calendar.getTimeInMillis() < System.currentTimeMillis()) calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
-            }
-            AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-// With setInexactRepeating(), you have to use one of the AlarmManager interval
-// constants--in this case, AlarmManager.INTERVAL_DAY.
-            alarmManager.cancel(pendingIntent);
-            Toast.makeText(this, "Cancel eseguita!", Toast.LENGTH_SHORT).show();
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
     }
 
     @Override

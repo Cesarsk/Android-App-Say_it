@@ -78,11 +78,11 @@ public class UtilityDictionary {
         return null;
     }
 
-    public static void loadDictionary(Activity activity) throws IOException {
+    public static void loadDictionary(Context context) throws IOException {
 
         //Getting Buffered Readers linked to the two txt files in the raw folder
-        BufferedReader dictionary_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.dictionary_utf8)));
-        BufferedReader ipa_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.ipa_utf16le), Charset.forName("UTF-16LE")));
+        BufferedReader dictionary_line_reader = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(R.raw.dictionary_utf8)));
+        BufferedReader ipa_line_reader = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(R.raw.ipa_utf16le), Charset.forName("UTF-16LE")));
 
         //Temporary wordlist that stores the "current" element in the loop
         ArrayList<Pair<String, String>> temp_wordlist = new ArrayList<>();
