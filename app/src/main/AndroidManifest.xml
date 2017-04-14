@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cesarsk.say_it">
+    package="com.cesarsk.say_it">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -21,7 +21,7 @@
         android:theme="@style/BlueYellowThemeNoActionBar">
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.cesarsk.say_it.ui.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -31,28 +31,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name="com.cesarsk.say_it.ui.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName="com.cesarsk.say_it.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Preference" />
         <activity
-            android:name=".ui.PlayActivity"
-            android:parentActivityName=".ui.MainActivity"
+            android:name="com.cesarsk.say_it.ui.PlayActivity"
+            android:parentActivityName="com.cesarsk.say_it.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BlueYellowThemeNoActionBar" />
         <activity
-            android:name=".ui.SearchActivity"
-            android:parentActivityName=".ui.MainActivity"
+            android:name="com.cesarsk.say_it.ui.SearchActivity"
+            android:parentActivityName="com.cesarsk.say_it.ui.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.FileTextActivity" />
+        <activity android:name="com.cesarsk.say_it.ui.FileTextActivity" />
 
         <receiver
-            android:name=".NotificationReceiver"
+            android:name="com.cesarsk.say_it.NotificationReceiver"
             android:enabled="true" />
 
         <receiver
-            android:name=".NotificationBootReceiver"
+            android:name="com.cesarsk.say_it.NotificationBootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
