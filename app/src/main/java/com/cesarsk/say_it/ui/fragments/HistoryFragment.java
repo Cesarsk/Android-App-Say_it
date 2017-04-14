@@ -308,11 +308,11 @@ public class HistoryFragment extends Fragment {
                     public void onClick(View v) {
                         if(MainActivity.DEFAULT_ACCENT.equals("0")) {
                             MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                            Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                            //Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
                         }
                         else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
                             MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
-                            Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                            //Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
                         }
                     }
                 });

@@ -111,32 +111,6 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                     return false;
                 }
             });
-
-            Preference number_six = getPreferenceManager().findPreference("number_6");
-            number_six.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
-                    Bundle args = new Bundle();
-                    args.putString(FileTextActivity.PREFERENCE, "freepik");
-                    preference_intent.putExtras(args);
-                    startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
-                    return false;
-                }
-            });
-
-            Preference number_seven = getPreferenceManager().findPreference("number_7");
-            number_seven.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
-                    Bundle args = new Bundle();
-                    args.putString(FileTextActivity.PREFERENCE, "flaticon");
-                    preference_intent.putExtras(args);
-                    startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
-                    return false;
-                }
-            });
         }
     }
 
