@@ -114,9 +114,6 @@ public class NotificationReceiver extends BroadcastReceiver {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, notificationPendingIntent);
         }
 
-        //TODO remove Toast
-        Toast.makeText(context, "Alarm Set", Toast.LENGTH_SHORT).show();
-
         pm.setComponentEnabledSetting(receiver,
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
