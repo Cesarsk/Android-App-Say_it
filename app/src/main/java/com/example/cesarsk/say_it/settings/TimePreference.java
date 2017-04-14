@@ -16,8 +16,12 @@ import com.example.cesarsk.say_it.NotificationReceiver;
 import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.utility.UtilitySharedPrefs;
 
+import java.util.Locale;
+
 public class TimePreference extends DialogPreference implements
         TimePicker.OnTimeChangedListener {
+
+    //TODO Probabilmente da rifare tutto il TimePickerDialog
 
     private static final String VALIDATION_EXPRESSION = "[0-2]*[0-9]:[0-5]*[0-9]";
 
@@ -51,8 +55,8 @@ public class TimePreference extends DialogPreference implements
     @Override
     public void onTimeChanged(TimePicker view, int hour, int minute) {
         //persistString(String.format("%02d", hour) + ":" + String.format("%02d", minute));
-        String formatted_hour = String.format("%02d", hour);
-        String formatted_minute = String.format("%02d", minute);
+        String formatted_hour = String.format(Locale.getDefault(),"%02d", hour);
+        String formatted_minute = String.format(Locale.getDefault(), "%02d", minute);
         UtilitySharedPrefs.savePrefs(view.getContext(), formatted_hour, MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY);
         UtilitySharedPrefs.savePrefs(view.getContext(), formatted_minute, MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY);
         setSummary(getTimeFromSharedPrefs());
@@ -114,8 +118,8 @@ public class TimePreference extends DialogPreference implements
 
     private String getTimeFromSharedPrefs() {
         UtilitySharedPrefs.loadSettingsPrefs(context);
-        String hour = getTimeUnitfromSharedPrefs(MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY);
-        String minute = getTimeUnitfromSharedPrefs(MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY);
+        String hour = MainActivity.DEFAULT_NOTIFICATION_HOUR;
+        String minute = MainActivity.DEFAULT_NOTIFICATION_MINUTE;
         return hour + ":" + minute;
     }
 }

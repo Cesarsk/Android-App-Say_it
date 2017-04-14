@@ -1,5 +1,6 @@
 package com.example.cesarsk.say_it;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,6 +19,7 @@ import com.example.cesarsk.say_it.ui.MainActivity;
 import com.example.cesarsk.say_it.ui.PlayActivity;
 import com.example.cesarsk.say_it.utility.UtilityDictionary;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 public class NotificationReceiver extends BroadcastReceiver {
@@ -26,20 +28,19 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        PendingIntent notificationPendingIntent = PendingIntent.getBroadcast(context, MainActivity.notifId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Loading word of the day in Notification in order to show on it.
         if (MainActivity.wordOfTheDay == null) {
-            Calendar c = Calendar.getInstance();
-            Long seed = Long.parseLong(UtilityDictionary.getDate(c.getTimeInMillis()));
-            MainActivity.wordOfTheDay = UtilityDictionary.getRandomWord(seed, false);
-            MainActivity.IPAofTheDay = UtilityDictionary.getRandomWord(seed, true);
+            try {
+                UtilityDictionary.loadDictionary(context);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             PlayActivity.selected_word = MainActivity.wordOfTheDay;
             PlayActivity.selected_ipa = MainActivity.IPAofTheDay;
         }
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        long when = System.currentTimeMillis();
 
         //Building our custom Notification
         NotificationCompat.Builder mBuilder =
@@ -49,23 +50,14 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setContentText("Hey! Here's your word of the day: " + MainActivity.wordOfTheDay)
                         .setSound(alarmSound)
                         .setVibrate(new long[]{300, 300, 300, 300, 300})
-                        .setAutoCancel(true).setWhen(when);
+                        .setAutoCancel(true);
 
-
-        // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, PlayActivity.class);
         resultIntent.putExtra(PlayActivity.PLAY_WORD, MainActivity.wordOfTheDay);
         resultIntent.putExtra(PlayActivity.PLAY_IPA, MainActivity.IPAofTheDay);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        // The stack builder object will contain an artificial back stack for the
-        // started Activity. This ensures that navigating backward from the Activity leads out of
-        // your application to the Home screen.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        // Adds the back stack for the Intent (but not the Intent itself)
-
-        //TODO Stacking activities on Notification. Shouldn't this add MainActivity as previous activity of PlayActivity?
         stackBuilder.addParentStack(PlayActivity.class);
-        // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
 
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -102,16 +94,17 @@ public class NotificationReceiver extends BroadcastReceiver {
 
 
 
-        if(mode_code == 1){
+        if(mode_code == 2){
             //Daily Notifications
             if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
                 calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
             }
 
+            //TODO Provare Cancel
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notificationPendingIntent);
         }
 
-        else if(mode_code == 2){
+        else if(mode_code == 1){
             //Weekly Notifications
 
             if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
