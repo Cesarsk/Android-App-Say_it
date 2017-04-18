@@ -118,6 +118,15 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+        final Preference app_version = getPreferenceManager().findPreference("app_version");
+        app_version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/18/privacy-policy/");
+                return false;
+            }
+        });
+
         final Preference github = getPreferenceManager().findPreference("github");
         github.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
