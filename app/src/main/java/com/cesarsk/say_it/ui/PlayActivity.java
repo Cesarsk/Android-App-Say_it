@@ -1,8 +1,10 @@
 package com.cesarsk.say_it.ui;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
@@ -10,12 +12,15 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -27,11 +32,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.utility.ShowTimer;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
+import com.cesarsk.say_it.utility.utility_aidl.IabResult;
+import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -41,7 +50,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
@@ -88,11 +99,40 @@ public class PlayActivity extends AppCompatActivity {
     private long scaleAnimationDuration = 200;
     boolean maxDurationReached = false;
     public static String id_showcase = "utente";
+    IabHelper mHelper;
+    IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mHelper != null) try {
+            mHelper.dispose();
+        } catch (IabHelper.IabAsyncInProgressException e) {
+            e.printStackTrace();
+        }
+        mHelper = null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjmwcmQ3LCVG4peXDzrN8gJzSgoUPTYiy140BTbs+fdOZBjQCuvhvJk5EpPlA2sjaQiKmPGaylMRBZlsAIU0o/" +
+                "ZEWsAMcpWPTB5gviXTsWdeQS7Y6Ty+N/KBzK7bTcttnMQgFtl0o2/WJw9BRxK/+f28p+ETLIevoqwg+2LpzbPWZtsqOutd78nJr3HxZHUu7cSzVyk2p7cwkGu+Q9uImmpSD9Ho/" +
+                "KfuGURCXy6AchUtMSV8gto7+1LGQ0RxpjAK+jDSDCpNTaPWP8mAEhhBfnb9bWWHjMWbjBrp44nDA/6s4bR7NcEooMZpdN+5Y+uxix9TLxB1aiv4C+Db4HSxR/QIDAQAB";
+
+        // compute your public key and store it in base64EncodedPublicKey
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    // Oh no, there was a problem.
+                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                }
+                // Hooray, IAB is fully set up!
+            }
+        });
 
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
@@ -124,7 +164,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onInfo(MediaRecorder mediaRecorder, int what, int extra) {
 
-                if(what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED){
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
                     maxDurationReached = true;
                     vibrator.vibrate(100);
                     rec_button.setBackground(getDrawable(R.drawable.circle_red));
@@ -185,7 +225,7 @@ public class PlayActivity extends AppCompatActivity {
                             return true;
 
                         case MotionEvent.ACTION_UP:
-                            if(!maxDurationReached) {
+                            if (!maxDurationReached) {
                                 vibrator.vibrate(100);
                                 rec_button.setBackground(getDrawable(R.drawable.circle_red));
                                 chronometer.stop();
@@ -215,9 +255,7 @@ public class PlayActivity extends AppCompatActivity {
                                 return false;
                             }
                     }
-                }
-
-                else{
+                } else {
                     UtilityRecordings.requestRecordAudioPermissions(context);
                 }
                 return false;
@@ -254,11 +292,11 @@ public class PlayActivity extends AppCompatActivity {
                 play_button.setScaleX(0);
                 play_button.setScaleY(0);
                 play_button.setVisibility(VISIBLE);
-                rec_button.animate().setDuration(scaleAnimationDuration+400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                rec_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                     @Override
                     public void run() {
                         rec_button.setVisibility(View.INVISIBLE);
-                        play_button.animate().setDuration(scaleAnimationDuration+400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                        play_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
                     }
                 });
             }
@@ -276,11 +314,11 @@ public class PlayActivity extends AppCompatActivity {
                 rec_button.setScaleY(0);
                 rec_button.setScaleX(0);
                 rec_button.setVisibility(VISIBLE);
-                play_button.animate().setDuration(scaleAnimationDuration+400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                play_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                     @Override
                     public void run() {
                         play_button.setVisibility(View.INVISIBLE);
-                        rec_button.animate().setDuration(scaleAnimationDuration+400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                        rec_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
                     }
                 });
                 chronometer.setBase(SystemClock.elapsedRealtime());
@@ -377,9 +415,30 @@ public class PlayActivity extends AppCompatActivity {
         selected_word_view.setText(selected_word);
         selected_ipa_view.setText(selected_ipa);
 
+        mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
+            public void onQueryInventoryFinished(IabResult result, Inventory inventory)
+            {
+                if (result.isFailure()) {
+                    // handle error
+                    return;
+                }
+
+                String noAdsPrice = inventory.getSkuDetails("no_ads").getPrice();
+
+                // update the UI
+            }
+        };
+
         remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList additionalSkuList = new ArrayList();
+                additionalSkuList.add("no_ads");
+                try {
+                    mHelper.queryInventoryAsync(true, additionalSkuList, mQueryFinishedListener);
+                } catch (IabHelper.IabAsyncInProgressException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

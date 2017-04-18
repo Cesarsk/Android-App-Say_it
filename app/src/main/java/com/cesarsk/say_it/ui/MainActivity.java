@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         easyRatingDialog = new EasyRatingDialog(this);
 
         //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
