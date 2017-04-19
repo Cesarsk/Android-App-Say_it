@@ -41,6 +41,7 @@ import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
+import com.cesarsk.say_it.utility.utility_aidl.Purchase;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -101,6 +102,8 @@ public class PlayActivity extends AppCompatActivity {
     public static String id_showcase = "utente";
     IabHelper mHelper;
     IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
+    IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
+    public static String no_ads_in_app = "no_ads";
 
     @Override
     public void onDestroy() {
@@ -118,9 +121,7 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjmwcmQ3LCVG4peXDzrN8gJzSgoUPTYiy140BTbs+fdOZBjQCuvhvJk5EpPlA2sjaQiKmPGaylMRBZlsAIU0o/" +
-                "ZEWsAMcpWPTB5gviXTsWdeQS7Y6Ty+N/KBzK7bTcttnMQgFtl0o2/WJw9BRxK/+f28p+ETLIevoqwg+2LpzbPWZtsqOutd78nJr3HxZHUu7cSzVyk2p7cwkGu+Q9uImmpSD9Ho/" +
-                "KfuGURCXy6AchUtMSV8gto7+1LGQ0RxpjAK+jDSDCpNTaPWP8mAEhhBfnb9bWWHjMWbjBrp44nDA/6s4bR7NcEooMZpdN+5Y+uxix9TLxB1aiv4C+Db4HSxR/QIDAQAB";
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjmwcmQ3LCVG4peXDzrN8gJzSgoUPTYiy140BTbs+fdOZBjQCuvhvJk5EpPlA2sjaQiKmPGaylMRBZlsAIU0o/ZEWsAMcpWPTB5gviXTsWdeQS7Y6Ty+N/KBzK7bTcttnMQgFtl0o2/WJw9BRxK/+f28p+ETLIevoqwg+2LpzbPWZtsqOutd78nJr3HxZHUu7cSzVyk2p7cwkGu+Q9uImmpSD9Ho/KfuGURCXy6AchUtMSV8gto7+1LGQ0RxpjAK+jDSDCpNTaPWP8mAEhhBfnb9bWWHjMWbjBrp44nDA/6s4bR7NcEooMZpdN+5Y+uxix9TLxB1aiv4C+Db4HSxR/QIDAQAB";
 
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, base64EncodedPublicKey);
@@ -131,6 +132,7 @@ public class PlayActivity extends AppCompatActivity {
                     Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 // Hooray, IAB is fully set up!
+                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 
@@ -415,6 +417,19 @@ public class PlayActivity extends AppCompatActivity {
         selected_word_view.setText(selected_word);
         selected_ipa_view.setText(selected_ipa);
 
+        mIabPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+            @Override
+            public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                if (result.isFailure()) {
+                    // handle error
+                    return;
+                }
+                else if (info.getSku().equals(no_ads_in_app)) {
+                    // consume the item and update the UI
+                }
+            }
+        };
+
         mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
             public void onQueryInventoryFinished(IabResult result, Inventory inventory)
             {
@@ -423,8 +438,15 @@ public class PlayActivity extends AppCompatActivity {
                     return;
                 }
 
-                String noAdsPrice = inventory.getSkuDetails("no_ads").getPrice();
+                //Get in-app item price
+                String noAdsPrice = inventory.getSkuDetails(no_ads_in_app).getPrice();
 
+                //Open Purchase Dialog
+                try {
+                    mHelper.launchPurchaseFlow(PlayActivity.this, no_ads_in_app, 64000, mIabPurchaseFinishedListener);
+                } catch (IabHelper.IabAsyncInProgressException e) {
+                    e.printStackTrace();
+                }
                 // update the UI
             }
         };
@@ -432,8 +454,8 @@ public class PlayActivity extends AppCompatActivity {
         remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList additionalSkuList = new ArrayList();
-                additionalSkuList.add("no_ads");
+                List<String> additionalSkuList = new ArrayList<>();
+                additionalSkuList.add(no_ads_in_app);
                 try {
                     mHelper.queryInventoryAsync(true, additionalSkuList, mQueryFinishedListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
