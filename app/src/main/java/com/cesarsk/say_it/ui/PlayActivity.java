@@ -61,6 +61,7 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 
 public class PlayActivity extends AppCompatActivity {
     public final static String PLAY_WORD = "com.example.cesarsk.say_it.WORD";
@@ -120,8 +121,6 @@ public class PlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-
-        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjmwcmQ3LCVG4peXDzrN8gJzSgoUPTYiy140BTbs+fdOZBjQCuvhvJk5EpPlA2sjaQiKmPGaylMRBZlsAIU0o/ZEWsAMcpWPTB5gviXTsWdeQS7Y6Ty+N/KBzK7bTcttnMQgFtl0o2/WJw9BRxK/+f28p+ETLIevoqwg+2LpzbPWZtsqOutd78nJr3HxZHUu7cSzVyk2p7cwkGu+Q9uImmpSD9Ho/KfuGURCXy6AchUtMSV8gto7+1LGQ0RxpjAK+jDSDCpNTaPWP8mAEhhBfnb9bWWHjMWbjBrp44nDA/6s4bR7NcEooMZpdN+5Y+uxix9TLxB1aiv4C+Db4HSxR/QIDAQAB";
 
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, base64EncodedPublicKey);
