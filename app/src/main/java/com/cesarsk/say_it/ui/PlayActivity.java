@@ -424,7 +424,8 @@ public class PlayActivity extends AppCompatActivity {
                     return;
                 }
                 else if (info.getSku().equals(no_ads_in_app)) {
-                    // consume the item and update the UI
+                    UtilitySharedPrefs.loadAdsStatus(PlayActivity.this);
+                    UtilitySharedPrefs.savePrefs(PlayActivity.this, true, MainActivity.NO_ADS_STATUS_KEY);
                 }
             }
         };
@@ -471,6 +472,7 @@ public class PlayActivity extends AppCompatActivity {
         });
 
         //Gestione AD (TEST AD)
+        UtilitySharedPrefs.loadAdsStatus(this);
         AdView mAdView = (AdView) findViewById(R.id.adView);
         if(MainActivity.NO_ADS){
             mAdView.setVisibility(View.GONE);

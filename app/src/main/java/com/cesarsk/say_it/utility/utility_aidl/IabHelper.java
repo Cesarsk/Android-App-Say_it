@@ -720,6 +720,10 @@ public class IabHelper {
         queryInventoryAsync(b, additionalSkuList, null, listener);
     }
 
+    public void queryInventoryAsync(List<String> SkuList,  QueryInventoryFinishedListener listener) throws IabAsyncInProgressException{
+        queryInventoryAsync(true, SkuList, null, listener);
+    }
+
     /**
      * Consumes a given in-app product. Consuming can only be done on an item
      * that's owned, and as a result of consumption, the user will no longer own it.

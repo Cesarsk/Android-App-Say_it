@@ -32,6 +32,9 @@ import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
+import com.cesarsk.say_it.utility.utility_aidl.IabResult;
+import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -46,6 +49,7 @@ import java.util.Set;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
+import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -86,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
     public final static int REQUEST_CODE = 1;
 
     boolean doubleBackToExitPressedOnce = false;
+
+    //In-App Billing Helper
+    IabHelper mHelper;
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
@@ -157,6 +164,42 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         easyRatingDialog = new EasyRatingDialog(this);
+
+        final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
+                = new IabHelper.QueryInventoryFinishedListener() {
+            @Override
+            public void onQueryInventoryFinished(IabResult result,
+                                                 Inventory inventory) {
+
+                if (result.isFailure()) {
+                    Toast.makeText(MainActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(inventory.hasPurchase(PlayActivity.no_ads_in_app)){
+                        UtilitySharedPrefs.savePrefs(MainActivity.this, true, NO_ADS_STATUS_KEY);
+                    }
+                }
+            }
+        };
+
+        //IAB Helper initialization
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    // Oh no, there was a problem.
+                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                }
+                ArrayList<String> SKUs = new ArrayList<>();
+                SKUs.add(PlayActivity.no_ads_in_app);
+                try {
+                    mHelper.queryInventoryAsync(SKUs, mGotInventoryListener);
+                } catch (IabHelper.IabAsyncInProgressException e) {
+                    e.printStackTrace();
+                }
+                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+            }
+        });
 
         //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //Caricamento preferenze
