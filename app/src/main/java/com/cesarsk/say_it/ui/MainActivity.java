@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     public final static int REQUEST_CODE = 1;
 
     boolean doubleBackToExitPressedOnce = false;
+    boolean hasInterstitialDisplayed = false;
 
     //In-App Billing Helper
     IabHelper mHelper;
@@ -158,12 +159,6 @@ public class MainActivity extends AppCompatActivity {
         easyRatingDialog.showIfNeeded();
     }
 
-    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).build();
-
-        mInterstitialAd.loadAd(adRequest);
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         easyRatingDialog = new EasyRatingDialog(this);
 
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id));
+        mInterstitialAd.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id_test));
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
@@ -375,27 +370,35 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        if (mInterstitialAd.isLoaded()) {
+        if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
             mInterstitialAd.show();
+            hasInterstitialDisplayed = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    hasInterstitialDisplayed = false;
+                }
+            }, 60000);
         } else {
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
                 return;
             }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
         }
 
+    }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).build();
+        mInterstitialAd.loadAd(adRequest);
     }
 }
