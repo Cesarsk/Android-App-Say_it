@@ -191,16 +191,13 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     return;
                 }
 
-                //Get in-app item price
-                String noAdsPrice = inventory.getSkuDetails(PlayActivity.no_ads_in_app).getPrice();
-
                 //Open Purchase Dialog
                 try {
+                    mHelper.flagEndAsync();
                     mHelper.launchPurchaseFlow(getActivity(), PlayActivity.no_ads_in_app, 64000, mIabPurchaseFinishedListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
                 }
-                // update the UI
             }
         };
 
@@ -216,6 +213,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     List<String> additionalSkuList = new ArrayList<>();
                     additionalSkuList.add(PlayActivity.no_ads_in_app);
                     try {
+                        mHelper.flagEndAsync();
                         mHelper.queryInventoryAsync(true, additionalSkuList, mQueryFinishedListener);
                     } catch (IabHelper.IabAsyncInProgressException e) {
                         e.printStackTrace();

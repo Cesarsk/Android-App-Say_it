@@ -35,6 +35,7 @@ import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
+import com.cesarsk.say_it.utility.utility_aidl.Purchase;
 import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -134,6 +135,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         american_speaker_google.shutdown();
         british_speaker_google.shutdown();
+
+        if (mHelper != null) try {
+            mHelper.dispose();
+        } catch (IabHelper.IabAsyncInProgressException e) {
+            e.printStackTrace();
+        }
+        mHelper = null;
     }
 
     @Override
@@ -186,8 +194,21 @@ public class MainActivity extends AppCompatActivity {
                 if (result.isFailure()) {
                     Toast.makeText(MainActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
                 } else {
+
+                    /*//TODO Blocco try-catch SOLO PER IL TESTING
+                    try {
+                        mHelper.consumeAsync(inventory.getPurchase(PlayActivity.no_ads_in_app), new IabHelper.OnConsumeFinishedListener() {
+                            @Override
+                            public void onConsumeFinished(Purchase purchase, IabResult result) {
+                                UtilitySharedPrefs.savePrefs(MainActivity.this, false, NO_ADS_STATUS_KEY);
+                            }
+                        });
+                    } catch (IabHelper.IabAsyncInProgressException e) {
+                        e.printStackTrace();
+                    }*/
                     if (inventory.hasPurchase(PlayActivity.no_ads_in_app)) {
                         UtilitySharedPrefs.savePrefs(MainActivity.this, true, NO_ADS_STATUS_KEY);
+                        Toast.makeText(MainActivity.this, "NO ADS", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -204,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> SKUs = new ArrayList<>();
                 SKUs.add(PlayActivity.no_ads_in_app);
                 try {
+                    mHelper.flagEndAsync();
                     mHelper.queryInventoryAsync(SKUs, mGotInventoryListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
@@ -398,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).build();
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).addTestDevice(getResources().getString(R.string.test_device_honor_6)).build();
         mInterstitialAd.loadAd(adRequest);
     }
 }

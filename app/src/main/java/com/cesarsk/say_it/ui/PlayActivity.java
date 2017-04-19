@@ -436,11 +436,9 @@ public class PlayActivity extends AppCompatActivity {
                     return;
                 }
 
-                //Get in-app item price
-                String noAdsPrice = inventory.getSkuDetails(no_ads_in_app).getPrice();
-
                 //Open Purchase Dialog
                 try {
+                    mHelper.flagEndAsync();
                     mHelper.launchPurchaseFlow(PlayActivity.this, no_ads_in_app, 64000, mIabPurchaseFinishedListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
@@ -455,6 +453,7 @@ public class PlayActivity extends AppCompatActivity {
                 List<String> additionalSkuList = new ArrayList<>();
                 additionalSkuList.add(no_ads_in_app);
                 try {
+                    mHelper.flagEndAsync();
                     mHelper.queryInventoryAsync(true, additionalSkuList, mQueryFinishedListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
