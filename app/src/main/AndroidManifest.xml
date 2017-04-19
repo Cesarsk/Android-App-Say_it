@@ -21,6 +21,8 @@
         android:theme="@style/BlueYellowThemeNoActionBar"
         >
 
+        <meta-data android:name="android.max_aspect" android:value="2.1" />
+
         <activity
             android:name="com.cesarsk.say_it.ui.MainActivity"
             android:launchMode="singleTask"
