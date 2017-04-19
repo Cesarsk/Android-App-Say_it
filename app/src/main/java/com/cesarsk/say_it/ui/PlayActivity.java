@@ -420,7 +420,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onIabPurchaseFinished(IabResult result, Purchase info) {
                 if (result.isFailure()) {
-                    // handle error
+                    Toast.makeText(PlayActivity.this, "Purchase Failed! Perhaps have you already purchased the item?", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else if (info.getSku().equals(no_ads_in_app)) {
@@ -433,7 +433,7 @@ public class PlayActivity extends AppCompatActivity {
             public void onQueryInventoryFinished(IabResult result, Inventory inventory)
             {
                 if (result.isFailure()) {
-                    // handle error
+                    Toast.makeText(PlayActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -471,10 +471,15 @@ public class PlayActivity extends AppCompatActivity {
         });
 
         //Gestione AD (TEST AD)
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
         AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        if(MainActivity.NO_ADS){
+            mAdView.setVisibility(View.GONE);
+        }
+        else {
+            MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
 
         your_recordings.setOnClickListener(new View.OnClickListener() {
             @Override

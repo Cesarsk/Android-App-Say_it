@@ -32,6 +32,12 @@ import static com.cesarsk.say_it.ui.MainActivity.HISTORY_PREFS_KEY;
 
 @SuppressWarnings("ALL")
 public class UtilitySharedPrefs {
+
+    public static void loadAdsStatus(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.NO_ADS = preferences.getBoolean(MainActivity.NO_ADS_STATUS_KEY, false);
+    }
+
     //Gestione Preferences
     public static void savePrefs(Context context, Set<String> set, String prefs_key) {
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
@@ -56,6 +62,15 @@ public class UtilitySharedPrefs {
         editor.putInt(prefs_key, value);
         editor.apply();
     }
+
+    public static void savePrefs(Context context, boolean value, String prefs_key){
+        SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putBoolean(prefs_key, value);
+        editor.apply();
+    }
+
 
     public static void addFavs(Context context, Pair<String, String> pair) {
         Set<String> new_favs = new TreeSet<>();

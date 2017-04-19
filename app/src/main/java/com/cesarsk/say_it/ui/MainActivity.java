@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     public static String DEFAULT_ACCENT = null;
     public static String DEFAULT_NOTIFICATION_HOUR = null;
     public static String DEFAULT_NOTIFICATION_MINUTE = null;
+    public static boolean NO_ADS = false;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     public final static String DEFAULT_NOTIFICATION_RATE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.RATE";
     public final static String DEFAULT_NOTIFICATION_HOUR_KEY = "SAY.IT.DEFAULT.NOTIFICATION.HOUR";
     public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
+    public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
 
     public final static int REQUEST_CODE = 1;
 
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         UtilitySharedPrefs.loadSettingsPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
+        UtilitySharedPrefs.loadAdsStatus(this);
         RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
 
         if(Wordlists_Map.isEmpty()) {
