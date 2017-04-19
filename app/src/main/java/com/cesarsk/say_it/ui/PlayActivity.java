@@ -422,8 +422,7 @@ public class PlayActivity extends AppCompatActivity {
                 if (result.isFailure()) {
                     Toast.makeText(PlayActivity.this, "Purchase Failed! Perhaps have you already purchased the item?", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                else if (info.getSku().equals(no_ads_in_app)) {
+                } else if (info.getSku().equals(no_ads_in_app)) {
                     UtilitySharedPrefs.loadAdsStatus(PlayActivity.this);
                     UtilitySharedPrefs.savePrefs(PlayActivity.this, true, MainActivity.NO_ADS_STATUS_KEY);
                 }
@@ -431,8 +430,7 @@ public class PlayActivity extends AppCompatActivity {
         };
 
         mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
-            public void onQueryInventoryFinished(IabResult result, Inventory inventory)
-            {
+            public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
                 if (result.isFailure()) {
                     Toast.makeText(PlayActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
                     return;
@@ -474,12 +472,11 @@ public class PlayActivity extends AppCompatActivity {
         //Gestione AD (TEST AD)
         UtilitySharedPrefs.loadAdsStatus(this);
         AdView mAdView = (AdView) findViewById(R.id.adView);
-        if(MainActivity.NO_ADS){
+        if (MainActivity.NO_ADS) {
             mAdView.setVisibility(View.GONE);
-        }
-        else {
-            MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
-            AdRequest adRequest = new AdRequest.Builder().build();
+        } else {
+            MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id_test));
+            AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).build();
             mAdView.loadAd(adRequest);
         }
 

@@ -36,6 +36,9 @@ import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -116,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
     EasyRatingDialog easyRatingDialog;
 
     final FragmentManager fragmentManager = getFragmentManager();
+    InterstitialAd mInterstitialAd;
 
     @Override
     protected void onStop() {
@@ -136,26 +140,28 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         Bundle b = intent.getExtras();
         int value = 0; // or other values
-        if(b != null)
-        {
+        if (b != null) {
             value = b.getInt("fragment_index");
             bottomBar.selectTabAtPosition(value);
-        }
-        else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
+        } else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
         easyRatingDialog.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         easyRatingDialog.showIfNeeded();
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).build();
+
+        mInterstitialAd.loadAd(adRequest);
     }
 
     @Override
@@ -165,6 +171,17 @@ public class MainActivity extends AppCompatActivity {
 
         easyRatingDialog = new EasyRatingDialog(this);
 
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id));
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+            }
+        });
+
+        requestNewInterstitial();
+
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
                 = new IabHelper.QueryInventoryFinishedListener() {
             @Override
@@ -173,9 +190,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (result.isFailure()) {
                     Toast.makeText(MainActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    if(inventory.hasPurchase(PlayActivity.no_ads_in_app)){
+                } else {
+                    if (inventory.hasPurchase(PlayActivity.no_ads_in_app)) {
                         UtilitySharedPrefs.savePrefs(MainActivity.this, true, NO_ADS_STATUS_KEY);
                     }
                 }
@@ -209,14 +225,14 @@ public class MainActivity extends AppCompatActivity {
         UtilitySharedPrefs.loadAdsStatus(this);
         RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
 
-        if(Wordlists_Map.isEmpty()) {
+        if (Wordlists_Map.isEmpty()) {
             //Caricamento dizionario (inclusa word of the day)
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
                 int parsedHour = Integer.parseInt(DEFAULT_NOTIFICATION_HOUR);
                 int parsedMinute = Integer.parseInt(DEFAULT_NOTIFICATION_MINUTE);
-                NotificationReceiver.scheduleNotification(this,parsedHour, parsedMinute, DEFAULT_NOTIFICATION_RATE);
+                NotificationReceiver.scheduleNotification(this, parsedHour, parsedMinute, DEFAULT_NOTIFICATION_RATE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -236,7 +252,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent search_activity_intent = new Intent(v.getContext(), SearchActivity.class);
-                if(v.getId()==R.id.search_bar_voice_icon)search_activity_intent.putExtra("VOICE_SEARCH_SELECTED", true);
+                if (v.getId() == R.id.search_bar_voice_icon)
+                    search_activity_intent.putExtra("VOICE_SEARCH_SELECTED", true);
                 startActivity(search_activity_intent);
             }
         };
@@ -252,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentArrayList.add(new HistoryFragment());
         FragmentArrayList.add(new RecordingsFragment());
 
-        for(Fragment element: FragmentArrayList){
+        for (Fragment element : FragmentArrayList) {
             element.setExitTransition(new Fade());
         }
 
@@ -358,10 +375,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
         }
+
 
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
@@ -370,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
 
