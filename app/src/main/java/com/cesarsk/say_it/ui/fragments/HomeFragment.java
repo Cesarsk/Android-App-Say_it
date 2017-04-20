@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int adWidth = (int) dpWidth - 16;
 
-        adView.setAdSize(new AdSize(adWidth, 180));
+        adView.setAdSize(new AdSize(adWidth, 150));
 
         RelativeLayout adCardRL = (RelativeLayout) view.findViewById(R.id.adNativeCard);
         adCardRL.addView(adView);
