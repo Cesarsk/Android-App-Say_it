@@ -1,10 +1,8 @@
 package com.cesarsk.say_it.ui;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
@@ -12,8 +10,6 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
@@ -32,7 +28,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.vending.billing.IInAppBillingService;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.utility.ShowTimer;
 import com.cesarsk.say_it.utility.UtilityRecordings;
@@ -474,7 +469,7 @@ public class PlayActivity extends AppCompatActivity {
         if (MainActivity.NO_ADS) {
             mAdView.setVisibility(View.GONE);
         } else {
-            MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id_test));
+            MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.ad_unit_id_test));
             AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).build();
             mAdView.loadAd(adRequest);
         }

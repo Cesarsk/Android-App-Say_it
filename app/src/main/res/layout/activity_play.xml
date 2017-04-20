@@ -185,7 +185,7 @@
         android:scaleX="1.0"
         android:scaleY="1.0"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+        app:adUnitId="@string/banner_ad_unit_id_banner" />
 
 </android.support.design.widget.CoordinatorLayout>
 

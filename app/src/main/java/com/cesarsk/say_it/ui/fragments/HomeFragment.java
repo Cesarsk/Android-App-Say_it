@@ -36,6 +36,8 @@ import com.cesarsk.say_it.utility.SayItPair;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.ads.VideoController;
 
@@ -55,11 +57,6 @@ public class HomeFragment extends Fragment {
     public static int RECENT_HISTORY_CARD_ROW_LIMIT = 5;
     private boolean favorite_flag = false;
 
-    //Gestione ADs
-    NativeExpressAdView mAdView;
-    VideoController mVideoController;
-
-
     public HomeFragment() {
     }
 
@@ -72,6 +69,13 @@ public class HomeFragment extends Fragment {
 
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
+
+        NativeExpressAdView adView = (NativeExpressAdView)view.findViewById(R.id.adView);
+        AdRequest request = new AdRequest.Builder()
+                .addTestDevice(getResources().getString(R.string.test_device_oneplus_3))
+                .addTestDevice(getResources().getString(R.string.test_device_honor_6))
+                .build();
+        adView.loadAd(request);
 
         final FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button_home);
         fab.setOnClickListener(new View.OnClickListener() {

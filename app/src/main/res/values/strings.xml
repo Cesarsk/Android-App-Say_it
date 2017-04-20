@@ -19,11 +19,11 @@
     <string name="empty_field_error">You have to write something!</string>
     <string name="app_name">Say It!</string>
     <string name="search_hint">Search for a word</string>
-    <string name="banner_ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="banner_ad_unit_id_banner">ca-app-pub-9284620118215899/4312360361</string>
     <string name="banner_ad_unit_id_interstitial">ca-app-pub-9284620118215899/2835627168</string>
+    <string name="banner_ad_unit_id_native">ca-app-pub-9284620118215899/1101541969</string>
     <string name="banner_ad_unit_app">ca-app-pub-9284620118215899~4265868761</string>
-
     <string name="test_device_oneplus_3">91BE4FE979D3D0967B1CE55B15248365</string>
     <string name="test_device_honor_6">E43D79007EC93EBAA6B24FC5A1771C6D</string>
 

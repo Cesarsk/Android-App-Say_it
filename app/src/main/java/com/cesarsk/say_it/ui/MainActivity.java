@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         easyRatingDialog = new EasyRatingDialog(this);
 
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id_test));
+        mInterstitialAd.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id_interstitial));
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
