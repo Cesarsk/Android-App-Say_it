@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
 
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +71,20 @@ public class HomeFragment extends Fragment {
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
-        NativeExpressAdView adView = (NativeExpressAdView)view.findViewById(R.id.adView);
+        NativeExpressAdView adView = new NativeExpressAdView(getActivity());
+        RelativeLayout.LayoutParams adViewlayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        adView.setLayoutParams(adViewlayoutParams);
+        adView.setAdUnitId(getString(R.string.banner_ad_unit_id_native));
+
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int adWidth = (int) dpWidth - 16;
+
+        adView.setAdSize(new AdSize(adWidth, 180));
+
+        RelativeLayout adCardRL = (RelativeLayout) view.findViewById(R.id.adNativeCard);
+        adCardRL.addView(adView);
+
         AdRequest request = new AdRequest.Builder()
                 .addTestDevice(getResources().getString(R.string.test_device_oneplus_3))
                 .addTestDevice(getResources().getString(R.string.test_device_honor_6))
