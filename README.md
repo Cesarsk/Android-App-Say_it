@@ -51,8 +51,7 @@ See NOTICE.md file
 
 
 # Screenshots:
-![PlayActivity1](https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG1.png)
-<img src="https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG1.png" data-canonical-src="https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG1.png" width="200" height="400" />
+<img src="https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG1.png" width="1024" height="720" />
 
 ![PlayActivity2](https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG2.png)
 ![HomeFragment](https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG3.png)
