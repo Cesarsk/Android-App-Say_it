@@ -35,7 +35,6 @@ import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
-import com.cesarsk.say_it.utility.utility_aidl.Purchase;
 import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
     EasyRatingDialog easyRatingDialog;
 
     final FragmentManager fragmentManager = getFragmentManager();
-    InterstitialAd mInterstitialAd;
+    InterstitialAd mInterstitialAd = new InterstitialAd(this);
 
     @Override
     protected void onStop() {
@@ -174,16 +173,6 @@ public class MainActivity extends AppCompatActivity {
 
         easyRatingDialog = new EasyRatingDialog(this);
 
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id_interstitial));
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitial();
-            }
-        });
-
-        requestNewInterstitial();
 
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
                 = new IabHelper.QueryInventoryFinishedListener() {
@@ -241,6 +230,18 @@ public class MainActivity extends AppCompatActivity {
         UtilitySharedPrefs.loadHist(this);
         UtilitySharedPrefs.loadAdsStatus(this);
         RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
+
+        if (!NO_ADS) {
+            mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_interstitial_mainactivity_back));
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    requestNewInterstitial();
+                }
+            });
+
+            requestNewInterstitial();
+        }
 
         if (Wordlists_Map.isEmpty()) {
             //Caricamento dizionario (inclusa word of the day)
@@ -392,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
             mInterstitialAd.show();
             hasInterstitialDisplayed = true;

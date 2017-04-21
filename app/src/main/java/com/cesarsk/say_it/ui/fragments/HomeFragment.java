@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -40,7 +41,6 @@ import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
-import com.google.android.gms.ads.VideoController;
 
 import java.util.ArrayList;
 
@@ -57,39 +57,104 @@ public class HomeFragment extends Fragment {
 
     public static int RECENT_HISTORY_CARD_ROW_LIMIT = 5;
     private boolean favorite_flag = false;
+    View view;
+
+    ArrayList<SayItPair> recentHistory;
+    LinearLayout recentHistoryLinearLayout;
+    LinearLayout.LayoutParams layoutParams;
+    float scale;
+    RelativeLayout recent_search = null;
 
     public HomeFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
+        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        scale = getResources().getDisplayMetrics().density;
+
+    }
+
+    @Override
+    public void onResume() {
+        //TODO: Fix multiple list bug
+        super.onResume();
+        /*if(recentHistory != null && !(recentHistory.isEmpty())) {
+            recent_search.setVisibility(View.VISIBLE);
+            for (int i = 0; i < recentHistory.size(); i++) {
+                LinearLayout current_LL = new LinearLayout(getActivity());
+                recentHistoryLinearLayout.addView(current_LL);
+                current_LL.setLayoutParams(layoutParams);
+                TextView wordTextView = new TextView(getActivity());
+                wordTextView.setLayoutParams(layoutParams);
+                wordTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
+                wordTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                wordTextView.setTypeface(Typeface.DEFAULT_BOLD);
+                wordTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (16 * scale + 0.5f), 0);
+                wordTextView.setText(recentHistory.get(i).first);
+                current_LL.addView(wordTextView);
+                TextView ipaTextView = new TextView(getActivity());
+                ipaTextView.setLayoutParams(layoutParams);
+                ipaTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                ipaTextView.setPaddingRelative((int) (16 * scale + 0.5f), 0, (int) (8 * scale + 0.5f), 0);
+                ipaTextView.setText(recentHistory.get(i).second);
+                current_LL.addView(ipaTextView);
+            }
+        }
+
+        else{
+            LinearLayout norecent_LL = new LinearLayout(getActivity());
+            recentHistoryLinearLayout.addView(norecent_LL);
+            norecent_LL.setLayoutParams(layoutParams);
+            TextView norecentTextView = new TextView(getActivity());
+            norecentTextView.setLayoutParams(layoutParams);
+            norecentTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
+            norecentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            norecentTextView.setTypeface(Typeface.DEFAULT_BOLD);
+            norecentTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (16 * scale + 0.5f), 0);
+            norecentTextView.setText(R.string.NoRecent_Text);
+            norecent_LL.addView(norecentTextView);
+        }*/
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.fragment_home,
+        this.view = inflater.inflate(R.layout.fragment_home,
                 container, false);
+
+        recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
+        recent_search = (RelativeLayout)view.findViewById(R.id.Recent_Search);
 
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
-        NativeExpressAdView adView = new NativeExpressAdView(getActivity());
-        RelativeLayout.LayoutParams adViewlayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        adView.setLayoutParams(adViewlayoutParams);
-        adView.setAdUnitId(getString(R.string.banner_ad_unit_id_native));
+        UtilitySharedPrefs.loadAdsStatus(getActivity());
+        if (!MainActivity.NO_ADS) {
+            NativeExpressAdView adView = new NativeExpressAdView(getActivity());
+            RelativeLayout.LayoutParams adViewlayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            adView.setLayoutParams(adViewlayoutParams);
+            adView.setAdUnitId(getString(R.string.ad_unit_id_native_card));
 
-        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int adWidth = (int) dpWidth - 16;
+            DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+            int adWidth = (int) dpWidth - 16;
 
-        adView.setAdSize(new AdSize(adWidth, 150));
+            adView.setAdSize(new AdSize(adWidth, 150));
 
-        RelativeLayout adCardRL = (RelativeLayout) view.findViewById(R.id.adNativeCard);
-        adCardRL.addView(adView);
+            RelativeLayout adCardRL = (RelativeLayout) view.findViewById(R.id.adNativeCard);
+            adCardRL.setVisibility(View.VISIBLE);
+            adCardRL.addView(adView);
 
-        AdRequest request = new AdRequest.Builder()
-                .addTestDevice(getResources().getString(R.string.test_device_oneplus_3))
-                .addTestDevice(getResources().getString(R.string.test_device_honor_6))
-                .build();
-        adView.loadAd(request);
+            AdRequest request = new AdRequest.Builder()
+                    .addTestDevice(getResources().getString(R.string.test_device_oneplus_3))
+                    .addTestDevice(getResources().getString(R.string.test_device_honor_6))
+                    .build();
+            adView.loadAd(request);
+        }
 
         final FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button_home);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -222,52 +287,11 @@ public class HomeFragment extends Fragment {
         final TextView stats_item1 = (TextView)view.findViewById(R.id.card_stats_item1);
         final TextView stats_item2 = (TextView)view.findViewById(R.id.card_stats_item2);
 
-        ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
-        LinearLayout recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        float scale = getResources().getDisplayMetrics().density;
-        final RelativeLayout recent_search = (RelativeLayout)view.findViewById(R.id.Recent_Search);
 
-        if(recentHistory != null && !(recentHistory.isEmpty())) {
-            recent_search.setVisibility(View.VISIBLE);
-            for (int i = 0; i < recentHistory.size(); i++) {
-                LinearLayout current_LL = new LinearLayout(getActivity());
-                recentHistoryLinearLayout.addView(current_LL);
-                current_LL.setLayoutParams(layoutParams);
-                TextView wordTextView = new TextView(getActivity());
-                wordTextView.setLayoutParams(layoutParams);
-                wordTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
-                wordTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                wordTextView.setTypeface(Typeface.DEFAULT_BOLD);
-                wordTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (16 * scale + 0.5f), 0);
-                wordTextView.setText(recentHistory.get(i).first);
-                current_LL.addView(wordTextView);
-                TextView ipaTextView = new TextView(getActivity());
-                ipaTextView.setLayoutParams(layoutParams);
-                ipaTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                ipaTextView.setPaddingRelative((int) (16 * scale + 0.5f), 0, (int) (8 * scale + 0.5f), 0);
-                ipaTextView.setText(recentHistory.get(i).second);
-                current_LL.addView(ipaTextView);
-            }
-        }
-
-        else{
-            LinearLayout norecent_LL = new LinearLayout(getActivity());
-            recentHistoryLinearLayout.addView(norecent_LL);
-            norecent_LL.setLayoutParams(layoutParams);
-            TextView norecentTextView = new TextView(getActivity());
-            norecentTextView.setLayoutParams(layoutParams);
-            norecentTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
-            norecentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            norecentTextView.setTypeface(Typeface.DEFAULT_BOLD);
-            norecentTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (16 * scale + 0.5f), 0);
-            norecentTextView.setText(R.string.NoRecent_Text);
-            norecent_LL.addView(norecentTextView);
-        }
 
         //Setup our Stats
         UtilityRecordings.updateRecordings(getActivity());
-        stats_item1.setText("You've \uD83C\uDF99 "+MainActivity.RECORDINGS.size()+" words so far!");
+        stats_item1.setText("You've \uD83C\uDFB5 "+MainActivity.RECORDINGS.size()+" words so far!");
         stats_item2.setText("You've ♥ "+MainActivity.FAVORITES.size()+" words so far!");
 
         View.OnClickListener random_word_listener = new View.OnClickListener() {

@@ -37,8 +37,10 @@ import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.cesarsk.say_it.utility.utility_aidl.Purchase;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
@@ -100,6 +102,8 @@ public class PlayActivity extends AppCompatActivity {
     IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
     IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
     public static String no_ads_in_app = "no_ads";
+    private InterstitialAd mInterstitialAd;
+    private boolean hasInterstitialDisplayed = false;
 
     @Override
     public void onDestroy() {
@@ -110,6 +114,23 @@ public class PlayActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         mHelper = null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(mInterstitialAd != null) {
+            if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
+                mInterstitialAd.show();
+                hasInterstitialDisplayed = true;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        hasInterstitialDisplayed = false;
+                    }
+                }, 45000);
+            }
+        }
     }
 
     @Override
@@ -129,6 +150,20 @@ public class PlayActivity extends AppCompatActivity {
                 Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
+
+        UtilitySharedPrefs.loadAdsStatus(this);
+        if (!MainActivity.NO_ADS) {
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id_interstitial_playactivity_back));
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    requestNewInterstitial();
+                }
+            });
+
+            requestNewInterstitial();
+        }
 
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
@@ -258,7 +293,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        //TODO
         //Gestione Snackbar + UNDO
         snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
         final Context context = this;
@@ -612,5 +646,10 @@ public class PlayActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).addTestDevice(getResources().getString(R.string.test_device_honor_6)).build();
+        mInterstitialAd.loadAd(adRequest);
     }
 }

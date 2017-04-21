@@ -185,7 +185,7 @@
         android:scaleX="1.0"
         android:scaleY="1.0"
         app:adSize="BANNER"
-        app:adUnitId="@string/banner_ad_unit_id_banner" />
+        app:adUnitId="@string/ad_unit_id_banner_playactivity" />
 
 </android.support.design.widget.CoordinatorLayout>
 
