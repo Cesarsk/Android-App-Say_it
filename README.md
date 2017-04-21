@@ -51,6 +51,6 @@ See NOTICE.md file
 
 
 # Screenshots:
-![HomeFragment](https://github.com/Cesarsk/Say_it/blob/master/screenshots/screener_home_fragment.png)
-![PlayActivity1](https://github.com/Cesarsk/Say_it/blob/master/screenshots/screener_play_activity.png)
-![PlayActivity2](https://github.com/Cesarsk/Say_it/blob/master/screenshots/screener_play_activity2.png)
+![PlayActivity1](https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG1.png)
+![PlayActivity2](https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG2.png)
+![HomeFragment](https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG3.png)
