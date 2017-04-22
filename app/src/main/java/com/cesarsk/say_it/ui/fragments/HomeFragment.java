@@ -71,7 +71,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         scale = getResources().getDisplayMetrics().density;
 
@@ -81,7 +80,9 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         //TODO: Fix multiple list bug
         super.onResume();
-        /*if(recentHistory != null && !(recentHistory.isEmpty())) {
+        recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
+        if(recentHistory != null && !(recentHistory.isEmpty())) {
+            recentHistoryLinearLayout.removeAllViews();
             recent_search.setVisibility(View.VISIBLE);
             for (int i = 0; i < recentHistory.size(); i++) {
                 LinearLayout current_LL = new LinearLayout(getActivity());
@@ -116,7 +117,7 @@ public class HomeFragment extends Fragment {
             norecentTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (16 * scale + 0.5f), 0);
             norecentTextView.setText(R.string.NoRecent_Text);
             norecent_LL.addView(norecentTextView);
-        }*/
+        }
     }
 
     @Override
