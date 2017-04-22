@@ -11,17 +11,26 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.FileTextActivity;
 import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.utility.LCSecurity;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
+import com.cesarsk.say_it.utility.utility_aidl.IabResult;
+import com.cesarsk.say_it.utility.utility_aidl.Inventory;
+import com.cesarsk.say_it.utility.utility_aidl.Purchase;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 import static com.cesarsk.say_it.utility.Utility.rateUs;
 import static com.cesarsk.say_it.utility.Utility.shareToMail;
 
@@ -34,7 +43,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private Callback mCallback;
     private static final String KEY_1 = "button_notification";
     private static final String KEY_2 = "open_source_licenses";
-
+    IabHelper mHelper;
+    IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
+    IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
 
     public interface Callback {
         public void onNestedPreferenceSelected(int key);
@@ -51,6 +62,17 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             mCallback.onNestedPreferenceSelected(NestedPreferenceFragment.NESTED_SCREEN_2_KEY);
         }
         return false;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mHelper != null) try {
+            mHelper.dispose();
+        } catch (IabHelper.IabAsyncInProgressException e) {
+            e.printStackTrace();
+        }
+        mHelper = null;
     }
 
     @Override
@@ -118,6 +140,15 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+        final Preference app_version = getPreferenceManager().findPreference("app_version");
+        app_version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/18/privacy-policy/");
+                return false;
+            }
+        });
+
         final Preference github = getPreferenceManager().findPreference("github");
         github.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -127,13 +158,78 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+        // compute your public key and store it in base64EncodedPublicKey
+        mHelper = new IabHelper(getActivity(), LCSecurity.base64EncodedPublicKey);
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    // Oh no, there was a problem.
+                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                }
+                // Hooray, IAB is fully set up!
+                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+            }
+        });
+
+        mIabPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+            @Override
+            public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                if (result.isFailure()) {
+                    Toast.makeText(getActivity(), "Purchase Failed! Perhaps have you already purchased the item?", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (info.getSku().equals(PlayActivity.no_ads_in_app)) {
+                    UtilitySharedPrefs.loadAdsStatus(getActivity());
+                    UtilitySharedPrefs.savePrefs(getActivity(), true, MainActivity.NO_ADS_STATUS_KEY);
+                }
+            }
+        };
+
+        mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
+            public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+                if (result.isFailure()) {
+                    Toast.makeText(getActivity(), "Query Failed!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Open Purchase Dialog
+                try {
+                    mHelper.flagEndAsync();
+                    mHelper.launchPurchaseFlow(getActivity(), PlayActivity.no_ads_in_app, 64000, mIabPurchaseFinishedListener);
+                } catch (IabHelper.IabAsyncInProgressException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        final Preference remove_ads = getPreferenceManager().findPreference("remove_ads");
+        if (MainActivity.NO_ADS) {
+            remove_ads.setEnabled(false);
+            remove_ads.setSummary("Thank you for supporting us ❤");
+        } else {
+            remove_ads.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //helper to remove ads
+                    List<String> additionalSkuList = new ArrayList<>();
+                    additionalSkuList.add(PlayActivity.no_ads_in_app);
+                    try {
+                        mHelper.flagEndAsync();
+                        mHelper.queryInventoryAsync(true, additionalSkuList, mQueryFinishedListener);
+                    } catch (IabHelper.IabAsyncInProgressException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            });
+        }
+
         final Preference reset_tutorial = getPreferenceManager().findPreference("reset_showcase");
         reset_tutorial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Random rand = new Random();
                 int randomNum = rand.nextInt((10000 - 10) + 1) + 10; //(max - min) + 1 + min
-                PlayActivity.id_showcase = ""+randomNum;
+                PlayActivity.id_showcase = "" + randomNum;
                 Toast.makeText(getActivity(), "Tutorial has been reset", Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -180,22 +276,22 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 UtilitySharedPrefs.loadSettingsPrefs(context);
                 Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
                 return true;
-        }
-    });
+            }
+        });
 
         Preference acknowledgements = getPreferenceManager().findPreference("acknowledgements");
         acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
 
-    {
-        @Override
-        public boolean onPreferenceClick (Preference preference){
-        final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
-        Bundle args = new Bundle();
-        args.putString(FileTextActivity.PREFERENCE, "acknowledgements");
-        preference_intent.putExtras(args);
-        startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
-        return false;
+        {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
+                Bundle args = new Bundle();
+                args.putString(FileTextActivity.PREFERENCE, "acknowledgements");
+                preference_intent.putExtras(args);
+                startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                return false;
+            }
+        });
     }
-    });
-}
 }

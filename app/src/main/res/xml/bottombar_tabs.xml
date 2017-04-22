@@ -11,7 +11,7 @@
 
     <tab
         id="@+id/tab_favorites"
-        icon="@drawable/ic_favorite"
+        icon="@drawable/ic_favorite_black_24dp"
         title="Favorites"
         activeColor="@color/primary"
         barColorWhenSelected="@color/BottomBarColor"/>

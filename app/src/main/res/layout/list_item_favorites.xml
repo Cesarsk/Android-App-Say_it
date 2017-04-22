@@ -50,16 +50,4 @@
         android:backgroundTint="@color/Grey100"
         android:tint="@color/primary_dark"/>
 
-    <ImageButton
-        android:id="@+id/list_item_addToFavs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingStart="16dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:paddingEnd="16dp"
-        android:backgroundTint="@color/Grey100"
-        android:src="@drawable/ic_favorite_black_24dp"
-        android:tint="@color/primary_dark"/>
-
 </LinearLayout>

@@ -288,14 +288,12 @@ public class FavoritesFragment extends Fragment {
             TextView wordTextView;
             TextView IPATextView;
             ImageButton QuickPlayBtn;
-            ImageButton AddtoFavsBtn;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
                 IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
                 QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
-                AddtoFavsBtn = (ImageButton) itemView.findViewById(R.id.list_item_addToFavs);
             }
         }
 
@@ -304,7 +302,7 @@ public class FavoritesFragment extends Fragment {
 
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-            View view = inflater.inflate(R.layout.list_item_generic, parent, false);
+            View view = inflater.inflate(R.layout.list_item_favorites, parent, false);
 
             return new ViewHolder(view);
         }
@@ -341,23 +339,6 @@ public class FavoritesFragment extends Fragment {
                     play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
                     UtilitySharedPrefs.addHist(getActivity(), new SayItPair(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                     getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) getActivity()).toBundle());
-                }
-            });
-
-            final boolean favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), favorites.get(position).first);
-            if (favorite_flag)
-                holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
-
-            holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!favorite_flag) {
-                        add(holder);
-                    }
-
-                    if (favorite_flag) {
-                        remove(holder.getAdapterPosition());
-                    }
                 }
             });
 

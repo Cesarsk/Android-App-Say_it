@@ -32,7 +32,13 @@ import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
+import com.cesarsk.say_it.utility.utility_aidl.IabResult;
+import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -46,6 +52,7 @@ import java.util.Set;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
+import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -70,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public static String DEFAULT_ACCENT = null;
     public static String DEFAULT_NOTIFICATION_HOUR = null;
     public static String DEFAULT_NOTIFICATION_MINUTE = null;
+    public static boolean NO_ADS = false;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
@@ -80,10 +88,15 @@ public class MainActivity extends AppCompatActivity {
     public final static String DEFAULT_NOTIFICATION_RATE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.RATE";
     public final static String DEFAULT_NOTIFICATION_HOUR_KEY = "SAY.IT.DEFAULT.NOTIFICATION.HOUR";
     public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
+    public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
 
     public final static int REQUEST_CODE = 1;
 
     boolean doubleBackToExitPressedOnce = false;
+    boolean hasInterstitialDisplayed = false;
+
+    //In-App Billing Helper
+    IabHelper mHelper;
 
     //Definizione variabile WordList
     public static final ArrayList<String> WordList = new ArrayList<>();
@@ -107,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
     EasyRatingDialog easyRatingDialog;
 
     final FragmentManager fragmentManager = getFragmentManager();
+    InterstitialAd mInterstitialAd = new InterstitialAd(this);
 
     @Override
     protected void onStop() {
@@ -120,6 +134,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         american_speaker_google.shutdown();
         british_speaker_google.shutdown();
+
+        if (mHelper != null) try {
+            mHelper.dispose();
+        } catch (IabHelper.IabAsyncInProgressException e) {
+            e.printStackTrace();
+        }
+        mHelper = null;
     }
 
     @Override
@@ -127,24 +148,20 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         Bundle b = intent.getExtras();
         int value = 0; // or other values
-        if(b != null)
-        {
+        if (b != null) {
             value = b.getInt("fragment_index");
             bottomBar.selectTabAtPosition(value);
-        }
-        else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
+        } else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
         easyRatingDialog.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         easyRatingDialog.showIfNeeded();
     }
@@ -153,23 +170,87 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         easyRatingDialog = new EasyRatingDialog(this);
+
+
+        final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
+                = new IabHelper.QueryInventoryFinishedListener() {
+            @Override
+            public void onQueryInventoryFinished(IabResult result,
+                                                 Inventory inventory) {
+
+                if (result.isFailure()) {
+                    Toast.makeText(MainActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    /*//TODO Blocco try-catch SOLO PER IL TESTING
+                    try {
+                        mHelper.consumeAsync(inventory.getPurchase(PlayActivity.no_ads_in_app), new IabHelper.OnConsumeFinishedListener() {
+                            @Override
+                            public void onConsumeFinished(Purchase purchase, IabResult result) {
+                                UtilitySharedPrefs.savePrefs(MainActivity.this, false, NO_ADS_STATUS_KEY);
+                            }
+                        });
+                    } catch (IabHelper.IabAsyncInProgressException e) {
+                        e.printStackTrace();
+                    }*/
+                    if (inventory.hasPurchase(PlayActivity.no_ads_in_app)) {
+                        UtilitySharedPrefs.savePrefs(MainActivity.this, true, NO_ADS_STATUS_KEY);
+                        Toast.makeText(MainActivity.this, "NO ADS", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        };
+
+        //IAB Helper initialization
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    // Oh no, there was a problem.
+                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                }
+                ArrayList<String> SKUs = new ArrayList<>();
+                SKUs.add(PlayActivity.no_ads_in_app);
+                try {
+                    mHelper.flagEndAsync();
+                    mHelper.queryInventoryAsync(SKUs, mGotInventoryListener);
+                } catch (IabHelper.IabAsyncInProgressException e) {
+                    e.printStackTrace();
+                }
+                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+            }
+        });
 
         //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //Caricamento preferenze
         UtilitySharedPrefs.loadSettingsPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
+        UtilitySharedPrefs.loadAdsStatus(this);
         RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
 
-        if(Wordlists_Map.isEmpty()) {
+        if (!NO_ADS) {
+            mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_interstitial_mainactivity_back));
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    requestNewInterstitial();
+                }
+            });
+
+            requestNewInterstitial();
+        }
+
+        if (Wordlists_Map.isEmpty()) {
             //Caricamento dizionario (inclusa word of the day)
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
                 int parsedHour = Integer.parseInt(DEFAULT_NOTIFICATION_HOUR);
                 int parsedMinute = Integer.parseInt(DEFAULT_NOTIFICATION_MINUTE);
-                NotificationReceiver.scheduleNotification(this,parsedHour, parsedMinute, DEFAULT_NOTIFICATION_RATE);
+                NotificationReceiver.scheduleNotification(this, parsedHour, parsedMinute, DEFAULT_NOTIFICATION_RATE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -189,7 +270,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent search_activity_intent = new Intent(v.getContext(), SearchActivity.class);
-                if(v.getId()==R.id.search_bar_voice_icon)search_activity_intent.putExtra("VOICE_SEARCH_SELECTED", true);
+                if (v.getId() == R.id.search_bar_voice_icon)
+                    search_activity_intent.putExtra("VOICE_SEARCH_SELECTED", true);
                 startActivity(search_activity_intent);
             }
         };
@@ -205,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentArrayList.add(new HistoryFragment());
         FragmentArrayList.add(new RecordingsFragment());
 
-        for(Fragment element: FragmentArrayList){
+        for (Fragment element : FragmentArrayList) {
             element.setExitTransition(new Fade());
         }
 
@@ -311,21 +393,36 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+
+        if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
+            mInterstitialAd.show();
+            hasInterstitialDisplayed = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    hasInterstitialDisplayed = false;
+                }
+            }, 60000);
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
         }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
+    }
 
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
-
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).addTestDevice(getResources().getString(R.string.test_device_honor_6)).build();
+        mInterstitialAd.loadAd(adRequest);
     }
 }

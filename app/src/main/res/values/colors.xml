@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#5285ef</color>
-    <color name="colorPrimaryDark">#5285ef</color>
-    <color name="colorAccent">#ff4081</color>
+
     <!--<color name="inActiveTabColor">#484848</color>-->
     <color name="inActiveTabColor">@color/secondary_text</color>
     <!--<color name="BottomBarColor">#fefefe</color>-->

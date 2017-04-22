@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -118,11 +119,24 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         });
 
         //Pulsante FAV
+
+        if (UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString()))
+            viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
+
         viewHolder.addToFavsImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UtilitySharedPrefs.addFavs(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
-                Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
+                if (!UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString())) {
+                    UtilitySharedPrefs.addFavs(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
+                    Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show();
+                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
+                }
+
+                else if(UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString())) {
+                    UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
+                    Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.primary_dark));
+                }
             }
         });
 

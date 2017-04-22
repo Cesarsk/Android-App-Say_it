@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v7.app.NotificationCompat;
@@ -48,6 +49,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setContentTitle("Say it! Reminder ")
                         .setContentText("Hey! Here's your word of the day: " + MainActivity.wordOfTheDay)
                         .setSound(alarmSound)
+                        .setColor(Color.argb(0,21,101,192))
                         .setVibrate(new long[]{300, 300, 300, 300, 300})
                         .setAutoCancel(true);
 
@@ -105,7 +107,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         else if(mode_code == 1){
             //Weekly Notifications
-
             if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
                 calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY*7);
             }
