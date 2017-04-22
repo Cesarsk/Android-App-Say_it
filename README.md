@@ -51,4 +51,4 @@ See NOTICE.md file
 
 
 # Screenshots:
-<img src="https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG3.png" width="20%" /> <img src="https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG2.png" width="360" height="640" /> <img src="https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG1.png" width="360" height="640" />
+<img src="https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG3.png" width="40%" /> <img src="https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG2.png" width="40%" /> <img src="https://github.com/Cesarsk/Say_it/blob/master/screenshots/ENG1.png" width="40%" />
