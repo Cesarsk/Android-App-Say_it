@@ -341,7 +341,7 @@ public class FavoritesFragment extends Fragment {
                     getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) getActivity()).toBundle());
                 }
             });
-            
+
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
