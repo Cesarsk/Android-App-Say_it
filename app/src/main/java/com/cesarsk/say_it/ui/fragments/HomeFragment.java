@@ -78,7 +78,6 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
-        //TODO: Fix multiple list bug
         super.onResume();
         recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
         if(recentHistory != null && !(recentHistory.isEmpty())) {

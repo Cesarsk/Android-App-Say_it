@@ -301,7 +301,7 @@ public class HistoryFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final HistoryAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final HistoryAdapter.ViewHolder holder, final int position) {
 
                 holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -331,23 +331,22 @@ public class HistoryFragment extends Fragment {
                 }
             });
 
-            final boolean favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first);
-            if (favorite_flag)
-                holder.AddtoFavsBtn.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+            if (UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first))
+                holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
 
             holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!favorite_flag) {
+                    if (!UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first)) {
                         UtilitySharedPrefs.addFavs(getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                         Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-                        holder.AddtoFavsBtn.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+                        holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
                     }
 
-                    if (favorite_flag) {
+                    else if(UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first)) {
                         UtilitySharedPrefs.removeFavs(v.getContext(), history.get(holder.getAdapterPosition()));
                         Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                        holder.AddtoFavsBtn.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
+                        holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary_dark));
                     }
                 }
             });

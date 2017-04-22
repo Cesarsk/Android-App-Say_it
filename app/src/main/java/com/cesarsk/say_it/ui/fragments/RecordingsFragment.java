@@ -12,6 +12,7 @@ import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,7 @@ import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityRecordings;
+import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -245,13 +247,17 @@ public class RecordingsFragment extends Fragment {
         class ViewHolder extends RecyclerView.ViewHolder {
 
             TextView wordTextView;
+            TextView IPATextView;
             ImageButton QuickPlayBtn;
-            ImageButton DeleteRecording;
+            ImageButton AddtoFavsBtn;
 
             ViewHolder(View itemView) {
                 super(itemView);
                 wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
+                IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
                 QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
+                AddtoFavsBtn = (ImageButton) itemView.findViewById(R.id.list_item_addToFavs);
+
             }
         }
 
@@ -270,13 +276,33 @@ public class RecordingsFragment extends Fragment {
 
             final String recordingName = (recordings.get(position).getName()).substring(0, recordings.get(position).getName().lastIndexOf('.'));
 
-
+            //TODO: IPA
             holder.wordTextView.setText(recordingName);
 
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     UtilityRecordings.playRecording(getActivity(), mediaPlayer, recordingName + ".aac");
+                }
+            });
+
+            if (UtilitySharedPrefs.checkFavs(getActivity(), holder.wordTextView.getText().toString()))
+                holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
+
+            holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!UtilitySharedPrefs.checkFavs(getActivity(), holder.wordTextView.getText().toString())) {
+                        UtilitySharedPrefs.addFavs(getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
+                        Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
+                        holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
+                    }
+
+                    else if(UtilitySharedPrefs.checkFavs(getActivity(), holder.wordTextView.getText().toString())) {
+                        UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
+                        Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                        holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary_dark));
+                    }
                 }
             });
 
