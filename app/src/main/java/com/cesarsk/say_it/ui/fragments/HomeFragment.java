@@ -107,6 +107,7 @@ public class HomeFragment extends Fragment {
 
         else{
             LinearLayout norecent_LL = new LinearLayout(getActivity());
+            recentHistoryLinearLayout.removeAllViews();
             recentHistoryLinearLayout.addView(norecent_LL);
             norecent_LL.setLayoutParams(layoutParams);
             TextView norecentTextView = new TextView(getActivity());

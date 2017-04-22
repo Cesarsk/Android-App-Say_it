@@ -29,6 +29,8 @@
     <string name="ad_unit_id_interstitial_playactivity_back">ca-app-pub-9284620118215899/4707483164</string>
     <string name="ad_unit_id_banner_settings">ca-app-pub-9284620118215899/7660949569</string>
 
+    <string name="swipe_to_delete_hint">Swipe to Delete</string>
+
     <string-array name="default_voice">
         <item>American English</item>
         <item>British English</item>

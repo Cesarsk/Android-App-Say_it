@@ -89,7 +89,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_favorite"
+                android:src="@drawable/ic_favorite_black_24dp"
                 android:tint="@color/primary_light" />
 
             <ImageButton

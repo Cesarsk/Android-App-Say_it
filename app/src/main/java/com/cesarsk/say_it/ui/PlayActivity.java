@@ -151,20 +151,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        UtilitySharedPrefs.loadAdsStatus(this);
-        if (!MainActivity.NO_ADS) {
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id_interstitial_playactivity_back));
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    requestNewInterstitial();
-                }
-            });
-
-            requestNewInterstitial();
-        }
-
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
 
@@ -184,6 +170,25 @@ public class PlayActivity extends AppCompatActivity {
         vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         selected_word = args.getString(PLAY_WORD);
         selected_ipa = args.getString(PLAY_IPA);
+
+        UtilitySharedPrefs.loadAdsStatus(this);
+        if (!MainActivity.NO_ADS) {
+
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id_interstitial_playactivity_back));
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    requestNewInterstitial();
+                }
+            });
+
+            requestNewInterstitial();
+        }
+
+        else if(MainActivity.NO_ADS){
+            remove_ad.setVisibility(View.GONE);
+        }
 
         //Setting Up Chronometer
         final Chronometer chronometer = (Chronometer) findViewById(R.id.recording_timer);
