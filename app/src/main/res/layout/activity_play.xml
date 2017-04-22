@@ -89,7 +89,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_favorite"
+                android:src="@drawable/ic_favorite_black_24dp"
                 android:tint="@color/primary_light" />
 
             <ImageButton
@@ -185,7 +185,7 @@
         android:scaleX="1.0"
         android:scaleY="1.0"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+        app:adUnitId="@string/ad_unit_id_banner_playactivity" />
 
 </android.support.design.widget.CoordinatorLayout>
 

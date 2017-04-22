@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "605767928563",
+    "firebase_url": "https://say-it-4646d.firebaseio.com",
+    "project_id": "say-it-4646d",
+    "storage_bucket": "say-it-4646d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605767928563:android:9f6878a8bcfb6599",
+        "android_client_info": {
+          "package_name": "com.cesarsk.say_it"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605767928563-vlqi9fblq66mqdqst7pmbor2ira9bv0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhVi1dOUxUYmYRbB-g1NH3CWa1Kxr_fs8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

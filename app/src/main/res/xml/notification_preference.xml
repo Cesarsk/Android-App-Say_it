@@ -6,7 +6,7 @@
         android:layout="@xml/categories_settings_layout"
         android:title="Notification Settings">
 
-        <com.example.cesarsk.say_it.settings.TimePreference
+        <com.cesarsk.say_it.settings.TimePreference
             android:key="time_preference"
             android:layout="@xml/voices_settings_layout"
             android:summary="Set when you want to receive our notifications"
