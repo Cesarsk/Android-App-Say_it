@@ -105,19 +105,38 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        else{
-            LinearLayout norecent_LL = new LinearLayout(getActivity());
-            recentHistoryLinearLayout.removeAllViews();
-            recentHistoryLinearLayout.addView(norecent_LL);
-            norecent_LL.setLayoutParams(layoutParams);
-            TextView norecentTextView = new TextView(getActivity());
-            norecentTextView.setLayoutParams(layoutParams);
-            norecentTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
-            norecentTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            norecentTextView.setTypeface(Typeface.DEFAULT_BOLD);
-            norecentTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (16 * scale + 0.5f), 0);
-            norecentTextView.setText(R.string.NoRecent_Text);
-            norecent_LL.addView(norecentTextView);
+        else if(recent_search.getVisibility() != View.GONE){
+                recent_search.setVisibility(View.GONE);
+            }
+
+        //Setup our Stats
+        //TODO racchiudere in un metodo per aggiornare quando si aggiunge una parola ai preferiti dalla Home
+        if (MainActivity.RECORDINGS != null || MainActivity.FAVORITES != null) {
+
+            RelativeLayout card_stats = (RelativeLayout) view.findViewById(R.id.card_stats);
+            final TextView stats_item1 = (TextView) view.findViewById(R.id.card_stats_item1);
+            final TextView stats_item2 = (TextView)view.findViewById(R.id.card_stats_item2);
+
+            if(!(MainActivity.RECORDINGS.isEmpty())) {
+                card_stats.setVisibility(View.VISIBLE);
+                stats_item1.setVisibility(View.VISIBLE);
+                UtilityRecordings.updateRecordings(getActivity());
+                stats_item1.setText("You've \uD83C\uDFB5 " + MainActivity.RECORDINGS.size() + " words so far!");
+            }
+
+            else {
+                stats_item1.setVisibility(View.GONE);
+            }
+
+            if(!MainActivity.FAVORITES.isEmpty()){
+                card_stats.setVisibility(View.VISIBLE);
+                stats_item2.setVisibility(View.VISIBLE);
+                stats_item2.setText("You've ♥ "+MainActivity.FAVORITES.size()+" words so far!");
+            }
+
+            else{
+                stats_item2.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -286,15 +305,7 @@ public class HomeFragment extends Fragment {
         final FadingTextView wotd_text_view7 = (FadingTextView)view.findViewById(R.id.seventh_wotd); wotd_text_view7.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         //final FadingTextView wotd_text_view8 = (FadingTextView)view.findViewById(R.id.eighth_wotd); wotd_text_view8.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view9 = (FadingTextView)view.findViewById(R.id.ninth_wotd); wotd_text_view9.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        final TextView stats_item1 = (TextView)view.findViewById(R.id.card_stats_item1);
-        final TextView stats_item2 = (TextView)view.findViewById(R.id.card_stats_item2);
 
-
-
-        //Setup our Stats
-        UtilityRecordings.updateRecordings(getActivity());
-        stats_item1.setText("You've \uD83C\uDFB5 "+MainActivity.RECORDINGS.size()+" words so far!");
-        stats_item2.setText("You've ♥ "+MainActivity.FAVORITES.size()+" words so far!");
 
         View.OnClickListener random_word_listener = new View.OnClickListener() {
             @Override
@@ -364,8 +375,6 @@ public class HomeFragment extends Fragment {
         wotd_text_view7.setOnClickListener(random_word_listener);
         //wotd_text_view8.setOnClickListener(random_word_listener);
         wotd_text_view9.setOnClickListener(random_word_listener);
-
-        final FragmentManager fragmentManager= (getActivity()).getFragmentManager();
 
         return view;
     }
