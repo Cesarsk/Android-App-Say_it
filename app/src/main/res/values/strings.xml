@@ -8,6 +8,9 @@
     <string name="Welcome_Text">Welcome, </string>
     <string name="NoRecent_Text">You do not have recent history. Try searching some words!</string>
 
+    <!-- Other Strings -->
+    <string name="swipe_hint">Swipe an item to delete</string>
+
     <!-- Content Description -->
     <string name="FavsContentDescription">Add word to favorites</string>
     <string name="CopyContentDescription">Copy word to clipboard</string>
