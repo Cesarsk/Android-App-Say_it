@@ -80,6 +80,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
+        //History not empty
         if(recentHistory != null && !(recentHistory.isEmpty())) {
             recentHistoryLinearLayout.removeAllViews();
             recent_search.setVisibility(View.VISIBLE);
@@ -92,13 +93,13 @@ public class HomeFragment extends Fragment {
                 wordTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
                 wordTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 wordTextView.setTypeface(Typeface.DEFAULT_BOLD);
-                wordTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (16 * scale + 0.5f), 0);
+                wordTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (2 * scale + 0.5f), 0);
                 wordTextView.setText(recentHistory.get(i).first);
                 current_LL.addView(wordTextView);
                 TextView ipaTextView = new TextView(getActivity());
                 ipaTextView.setLayoutParams(layoutParams);
                 ipaTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                ipaTextView.setPaddingRelative((int) (16 * scale + 0.5f), 0, (int) (8 * scale + 0.5f), 0);
+                //ipaTextView.setPaddingRelative((int) (16 * scale + 0.5f), 0, (int) (8 * scale + 0.5f), 0);
                 ipaTextView.setText(recentHistory.get(i).second);
                 current_LL.addView(ipaTextView);
             }
@@ -278,12 +279,12 @@ public class HomeFragment extends Fragment {
         });
 
         final FadingTextView wotd_text_view1 = (FadingTextView)view.findViewById(R.id.first_wotd); wotd_text_view1.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd); wotd_text_view2.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        //final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd); wotd_text_view2.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view3 = (FadingTextView)view.findViewById(R.id.third_wotd); wotd_text_view3.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        final FadingTextView wotd_text_view4 = (FadingTextView)view.findViewById(R.id.fourth_wotd); wotd_text_view4.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        //final FadingTextView wotd_text_view4 = (FadingTextView)view.findViewById(R.id.fourth_wotd); wotd_text_view4.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view6 = (FadingTextView)view.findViewById(R.id.sixth_wotd); wotd_text_view6.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view7 = (FadingTextView)view.findViewById(R.id.seventh_wotd); wotd_text_view7.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        final FadingTextView wotd_text_view8 = (FadingTextView)view.findViewById(R.id.eighth_wotd); wotd_text_view8.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        //final FadingTextView wotd_text_view8 = (FadingTextView)view.findViewById(R.id.eighth_wotd); wotd_text_view8.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final FadingTextView wotd_text_view9 = (FadingTextView)view.findViewById(R.id.ninth_wotd); wotd_text_view9.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         final TextView stats_item1 = (TextView)view.findViewById(R.id.card_stats_item1);
         final TextView stats_item2 = (TextView)view.findViewById(R.id.card_stats_item2);
@@ -307,11 +308,11 @@ public class HomeFragment extends Fragment {
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
-                    case R.id.second_wotd:
+                    /*case R.id.second_wotd:
                         play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view2.word);
                         play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view2.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
-                        break;
+                        break;*/
 
                     case R.id.third_wotd:
                         play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view3.word);
@@ -319,11 +320,11 @@ public class HomeFragment extends Fragment {
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
-                    case R.id.fourth_wotd:
+                    /*case R.id.fourth_wotd:
                         play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view4.word);
                         play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view4.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
-                        break;
+                        break;*/
 
                     case R.id.sixth_wotd:
                         play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view6.word);
@@ -337,11 +338,11 @@ public class HomeFragment extends Fragment {
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
                         break;
 
-                    case R.id.eighth_wotd:
+                    /*case R.id.eighth_wotd:
                         play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view8.word);
                         play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view8.ipa);
                         v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
-                        break;
+                        break;*/
 
                     case R.id.ninth_wotd:
                         play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view9.word);
@@ -356,12 +357,12 @@ public class HomeFragment extends Fragment {
         };
 
         wotd_text_view1.setOnClickListener(random_word_listener);
-        wotd_text_view2.setOnClickListener(random_word_listener);
+        //wotd_text_view2.setOnClickListener(random_word_listener);
         wotd_text_view3.setOnClickListener(random_word_listener);
-        wotd_text_view4.setOnClickListener(random_word_listener);
+        //wotd_text_view4.setOnClickListener(random_word_listener);
         wotd_text_view6.setOnClickListener(random_word_listener);
         wotd_text_view7.setOnClickListener(random_word_listener);
-        wotd_text_view8.setOnClickListener(random_word_listener);
+        //wotd_text_view8.setOnClickListener(random_word_listener);
         wotd_text_view9.setOnClickListener(random_word_listener);
 
         final FragmentManager fragmentManager= (getActivity()).getFragmentManager();

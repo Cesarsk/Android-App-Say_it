@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }*/
                     if (inventory.hasPurchase(PlayActivity.no_ads_in_app)) {
+                        //TODO Spostare la riga saveprefs
                         UtilitySharedPrefs.savePrefs(MainActivity.this, true, NO_ADS_STATUS_KEY);
                         Toast.makeText(MainActivity.this, "NO ADS", Toast.LENGTH_SHORT).show();
                     }
