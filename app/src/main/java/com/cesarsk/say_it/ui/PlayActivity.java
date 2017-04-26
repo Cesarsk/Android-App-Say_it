@@ -103,7 +103,7 @@ public class PlayActivity extends AppCompatActivity {
     IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
     public static String no_ads_in_app = "no_ads";
     private InterstitialAd mInterstitialAd;
-    private boolean hasInterstitialDisplayed = false;
+    //private boolean hasInterstitialDisplayed = false;
 
     @Override
     public void onDestroy() {
@@ -120,15 +120,16 @@ public class PlayActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         if(mInterstitialAd != null) {
-            if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
+            if (mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
-                hasInterstitialDisplayed = true;
-                new Handler().postDelayed(new Runnable() {
+                //Do not launch this thread because ADMob should automatically load ADs every X minutes.
+                /*hasInterstitialDisplayed = true;
+                new Handler().postDelayed(  new Runnable() {
                     @Override
                     public void run() {
                         hasInterstitialDisplayed = false;
                     }
-                }, 45000);
+                }, 45000);*/
             }
         }
     }

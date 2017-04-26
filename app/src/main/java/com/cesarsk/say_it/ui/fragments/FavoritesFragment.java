@@ -3,13 +3,16 @@ package com.cesarsk.say_it.ui.fragments;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -348,6 +351,29 @@ public class FavoritesFragment extends Fragment {
                     UtilitySharedPrefs.addFavs(getActivity(), temp_fav);
                     favorites = loadDeserializedFavs(getActivity());
                     notifyItemInserted(favorites.indexOf(temp_fav));
+                }
+            });
+
+            final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button_history);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Clear Favorites")
+                            .setMessage("Are you sure you want to clear your Favorites?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Clear Favorites
+                                    Toast.makeText(getActivity(), "Favorites Cleared!", Toast.LENGTH_SHORT).show();
+
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing
+                                }
+                            })
+                            .show();
                 }
             });
         }
