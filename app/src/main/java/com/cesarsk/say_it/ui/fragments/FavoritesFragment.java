@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
+import static com.cesarsk.say_it.ui.MainActivity.bottomBar;
 
 /**
  * A simple {@link Fragment} subclass.

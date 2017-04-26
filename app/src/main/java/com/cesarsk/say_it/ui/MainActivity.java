@@ -58,10 +58,10 @@ import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 public class MainActivity extends AppCompatActivity {
 
     //Indici per la FragmentList
-    private final int HOME_FRAGMENT_INDEX = 0;
-    private final int FAVORITES_FRAGMENT_INDEX = 1;
-    private final int HISTORY_FRAGMENT_INDEX = 2;
-    private final int RECORDINGS_FRAGMENT_INDEX = 3;
+    public static final int HOME_FRAGMENT_INDEX = 0;
+    public static final int FAVORITES_FRAGMENT_INDEX = 1;
+    public static final int HISTORY_FRAGMENT_INDEX = 2;
+    public static final int RECORDINGS_FRAGMENT_INDEX = 3;
 
     //Definizione variabile TTS
     public static TextToSpeech american_speaker_google;
@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
 
     public final static int REQUEST_CODE = 1;
+
+    int selectedTab = 0; // or other values
 
     boolean doubleBackToExitPressedOnce = false;
     boolean hasInterstitialDisplayed = false;
@@ -147,10 +149,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Bundle b = intent.getExtras();
-        int value = 0; // or other values
         if (b != null) {
-            value = b.getInt("fragment_index");
-            bottomBar.selectTabAtPosition(value);
+            selectedTab = b.getInt("fragment_index");
+            bottomBar.selectTabAtPosition(selectedTab);
         } else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
     }
 
@@ -317,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
                             FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
+                        selectedTab = FAVORITES_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX));
                         last_index = FAVORITES_FRAGMENT_INDEX;
                         break;
@@ -329,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
                             FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
+                        selectedTab = HOME_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
                         last_index = HOME_FRAGMENT_INDEX;
                         break;
@@ -341,6 +344,7 @@ public class MainActivity extends AppCompatActivity {
                             FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
+                        selectedTab = HISTORY_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX));
                         last_index = HISTORY_FRAGMENT_INDEX;
                         break;
@@ -353,6 +357,7 @@ public class MainActivity extends AppCompatActivity {
                             FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
+                        selectedTab = RECORDINGS_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX));
                         last_index = RECORDINGS_FRAGMENT_INDEX;
                         break;
@@ -394,32 +399,38 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
-            mInterstitialAd.show();
-            hasInterstitialDisplayed = true;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    hasInterstitialDisplayed = false;
-                }
-            }, 60000);
-        } else {
-            if (doubleBackToExitPressedOnce) {
-                super.onBackPressed();
-                return;
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
+        if(selectedTab != HOME_FRAGMENT_INDEX)
+        {
+            bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
         }
 
+        else
+        {
+            if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
+                mInterstitialAd.show();
+                hasInterstitialDisplayed = true;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        hasInterstitialDisplayed = false;
+                    }
+                }, 60000);
+            } else {
+                if (doubleBackToExitPressedOnce) {
+                    super.onBackPressed();
+                    return;
+                }
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+            }
+        }
     }
 
     private void requestNewInterstitial() {
