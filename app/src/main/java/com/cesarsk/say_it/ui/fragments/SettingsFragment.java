@@ -38,7 +38,7 @@ import static com.cesarsk.say_it.utility.Utility.shareToMail;
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
-    private String emails[] = {"luca.cesarano1@gmail.com"};
+    private String emails[] = {"sayit.edu@gmail.com"};
     static private int index_default_accent = 0;
     private Callback mCallback;
     private static final String KEY_1 = "button_notification";
