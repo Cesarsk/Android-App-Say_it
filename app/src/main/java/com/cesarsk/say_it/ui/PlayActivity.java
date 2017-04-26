@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
@@ -216,7 +217,7 @@ public class PlayActivity extends AppCompatActivity {
                         //Button reverse animation to NORMAL RED
                         rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
                         //START OVERSHOOT ANIMATION
-                        rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(null).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                        rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new AccelerateDecelerateInterpolator()).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                             @Override
                             public void run() {
                                 rec_button.setVisibility(View.INVISIBLE);
@@ -276,7 +277,7 @@ public class PlayActivity extends AppCompatActivity {
                                     //Button reverse animation to NORMAL RED
                                     rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
                                     //START OVERSHOOT ANIMATION
-                                    rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(null).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                                    rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new AccelerateDecelerateInterpolator()).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                                         @Override
                                         public void run() {
                                             rec_button.setVisibility(View.INVISIBLE);
@@ -318,7 +319,7 @@ public class PlayActivity extends AppCompatActivity {
                 rec_button.setScaleY(0);
                 rec_button.setScaleX(0);
                 rec_button.setVisibility(VISIBLE);
-                play_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(null).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                play_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new AccelerateDecelerateInterpolator()).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                     @Override
                     public void run() {
                         play_button.setVisibility(View.INVISIBLE);
@@ -605,7 +606,7 @@ public class PlayActivity extends AppCompatActivity {
                 play_button.setScaleX(0);
                 play_button.setScaleY(0);
                 play_button.setVisibility(VISIBLE);
-                rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(null).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new AccelerateDecelerateInterpolator()).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                     @Override
                     public void run() {
                         rec_button.setVisibility(View.INVISIBLE);
