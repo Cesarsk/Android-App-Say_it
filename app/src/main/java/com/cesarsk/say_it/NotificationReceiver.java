@@ -92,6 +92,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
 
 
 

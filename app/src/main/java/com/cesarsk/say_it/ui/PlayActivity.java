@@ -14,6 +14,7 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.SwipeDismissBehavior;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -239,11 +240,12 @@ public class PlayActivity extends AppCompatActivity {
         });
         mediaPlayer = new MediaPlayer();
 
+        UtilitySharedPrefs.loadSettingsPrefs(this); //Caricamento dei Settings prima di controllare il DEFAULT_ACCENT (Arresto Anomalo)
         if (MainActivity.DEFAULT_ACCENT.equals("0")) {
-            accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
+            accent_button.setColorFilter(ContextCompat.getColor(this, R.color.primary_light));
             accent_flag = false;
         } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
-            accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
+            accent_button.setColorFilter(ContextCompat.getColor(this, R.color.Yellow600));
             accent_flag = true;
         }
 

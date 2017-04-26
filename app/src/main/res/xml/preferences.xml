@@ -106,7 +106,7 @@
         <Preference
             android:key="app_version"
             android:layout="@xml/voices_settings_layout"
-            android:summary="Version: 1.4-beta (Click for Privacy Policy)"
+            android:summary="Version: 1.5-beta (Click for Privacy Policy)"
             android:title="Say It! version" />
 
     </PreferenceCategory>
