@@ -10,6 +10,7 @@ import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,6 +31,7 @@ import com.cesarsk.say_it.ui.fragments.FavoritesFragment;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
+import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -49,6 +52,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
+
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -91,6 +98,12 @@ public class MainActivity extends AppCompatActivity {
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
 
     public final static int REQUEST_CODE = 1;
+
+    //Unique IDs related to showcase
+    public static String id_showcase_playactivity = "utente_playactivity";
+    public static String id_showcase_fragments = "utente_fragments";
+    public static MaterialShowcaseView showCaseFragmentView;
+
 
     int selectedTab = 0; // or other values
 
@@ -402,6 +415,7 @@ public class MainActivity extends AppCompatActivity {
         if(selectedTab != HOME_FRAGMENT_INDEX)
         {
             bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
+            if(showCaseFragmentView != null) showCaseFragmentView.hide();
         }
 
         else

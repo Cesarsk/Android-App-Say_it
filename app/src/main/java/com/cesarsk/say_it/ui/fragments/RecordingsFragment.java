@@ -37,6 +37,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,7 +56,7 @@ public class RecordingsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(recyclerView != null){
+        if (recyclerView != null) {
             UtilityRecordings.updateRecordings(getActivity());
             RecordingsAdapter adapter = (RecordingsAdapter) recyclerView.getAdapter();
             adapter.setRecordings(MainActivity.RECORDINGS);
@@ -329,9 +333,7 @@ public class RecordingsFragment extends Fragment {
                         UtilitySharedPrefs.addFavs(getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                         Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
                         holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
-                    }
-
-                    else if(UtilitySharedPrefs.checkFavs(getActivity(), holder.wordTextView.getText().toString())) {
+                    } else if (UtilitySharedPrefs.checkFavs(getActivity(), holder.wordTextView.getText().toString())) {
                         UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                         Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                         holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary_dark));
@@ -339,7 +341,8 @@ public class RecordingsFragment extends Fragment {
                 }
             });
 
-            final FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.floating_button_recordings);
+            final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floating_button_recordings);
+            startTutorialPlayActivity(holder);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -370,7 +373,7 @@ public class RecordingsFragment extends Fragment {
             return recordings.size();
         }
 
-        public void remove(int pos){
+        public void remove(int pos) {
             temp_rec_file = recordings.get(pos);
             temp_rec_bytes = UtilityRecordings.getRecordingBytesfromFile(recordings.get(pos));
 
@@ -390,5 +393,17 @@ public class RecordingsFragment extends Fragment {
                 recordings_files.add(current_recording);
             }
         }*/
+    }
+
+    private void startTutorialPlayActivity(RecordingsAdapter.ViewHolder holder) {
+        MainActivity.showCaseFragmentView = new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(holder.wordTextView)
+                .setDismissText(getString(R.string.showcase_str_btn_5))
+                .setContentText(getString(R.string.showcase_str_5))
+                .setDelay(100) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse(MainActivity.id_showcase_fragments) // provide a unique ID used to ensure it is only shown once
+                .setDismissOnTouch(true)
+                .withoutShape()
+                .show();
     }
 }

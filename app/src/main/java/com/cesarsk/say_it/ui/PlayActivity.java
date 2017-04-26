@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
@@ -56,6 +55,7 @@ import java.util.Date;
 import java.util.List;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
@@ -101,7 +101,6 @@ public class PlayActivity extends AppCompatActivity {
     private long scaleAnimationDuration = 200;
     private long scaleAnimationDurationLong = 300;
     boolean maxDurationReached = false;
-    public static String id_showcase = "utente";
     IabHelper mHelper;
     IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
     IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
@@ -636,18 +635,39 @@ public class PlayActivity extends AppCompatActivity {
         config.setDelay(50); // 50ms between each showcase views
         config.setShapePadding(15);
         config.setRenderOverNavigationBar(true);
+
         MaterialShowcaseSequence sequence;
-        sequence = new MaterialShowcaseSequence(this, id_showcase);
+        sequence = new MaterialShowcaseSequence(this, MainActivity.id_showcase_playactivity);
         sequence.setConfig(config);
 
-        sequence.addSequenceItem(multibutton,
-                getString(R.string.showcase_str_1), getString(R.string.showcase_str_btn_1));
-        sequence.addSequenceItem(play_original_button,
-                getString(R.string.showcase_str_2), Utility.underlineText(getString(R.string.showcase_str_btn_2)).toString());
-        sequence.addSequenceItem(accent_button,
-                getString(R.string.showcase_str_3), Utility.underlineText(getString(R.string.showcase_str_btn_3)).toString());
-        sequence.addSequenceItem(slow_button,
-                getString(R.string.showcase_str_4), Utility.underlineText(getString(R.string.showcase_str_btn_4)).toString());
+        sequence.addSequenceItem(new MaterialShowcaseView.Builder(this)
+                .setTarget(multibutton)
+                .setDismissText(getString(R.string.showcase_str_btn_1))
+                .setContentText(getString(R.string.showcase_str_1))
+                .setDismissOnTouch(true)
+                .build()
+        );
+        sequence.addSequenceItem(new MaterialShowcaseView.Builder(this)
+                .setTarget(play_original_button)
+                .setDismissText(getString(R.string.showcase_str_btn_2))
+                .setContentText(getString(R.string.showcase_str_2))
+                .setDismissOnTouch(true)
+                .build()
+        );
+        sequence.addSequenceItem(new MaterialShowcaseView.Builder(this)
+                .setTarget(accent_button)
+                .setDismissText(getString(R.string.showcase_str_btn_3))
+                .setContentText(getString(R.string.showcase_str_3))
+                .setDismissOnTouch(true)
+                .build()
+        );
+        sequence.addSequenceItem(new MaterialShowcaseView.Builder(this)
+                .setTarget(slow_button)
+                .setDismissText(getString(R.string.showcase_str_btn_4))
+                .setContentText(getString(R.string.showcase_str_4))
+                .setDismissOnTouch(true)
+                .build()
+        );
         sequence.start();
     }
 

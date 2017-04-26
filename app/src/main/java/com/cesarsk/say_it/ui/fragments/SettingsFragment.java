@@ -11,7 +11,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
@@ -30,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 import static com.cesarsk.say_it.utility.Utility.rateUs;
 import static com.cesarsk.say_it.utility.Utility.shareToMail;
 
@@ -229,7 +227,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             public boolean onPreferenceClick(Preference preference) {
                 Random rand = new Random();
                 int randomNum = rand.nextInt((10000 - 10) + 1) + 10; //(max - min) + 1 + min
-                PlayActivity.id_showcase = "" + randomNum;
+                int randomNum2 = rand.nextInt((10000 - 10) + 1) + 10; //(max - min) + 1 + min
+                MainActivity.id_showcase_playactivity = "" + randomNum;
+                MainActivity.id_showcase_fragments = "" + randomNum2;
                 Toast.makeText(getActivity(), "Tutorial has been reset", Toast.LENGTH_SHORT).show();
                 return false;
             }

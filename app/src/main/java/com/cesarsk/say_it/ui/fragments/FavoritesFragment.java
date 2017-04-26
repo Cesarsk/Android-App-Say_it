@@ -39,6 +39,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.cesarsk.say_it.ui.MainActivity.bottomBar;
 
@@ -78,10 +82,8 @@ public class FavoritesFragment extends Fragment {
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
 
-
         final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
         recyclerView.setAdapter(adapter);
-
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
             Drawable background;
@@ -355,6 +357,7 @@ public class FavoritesFragment extends Fragment {
             });
 
             final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button_history);
+            startTutorialPlayActivity(holder);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -412,5 +415,17 @@ public class FavoritesFragment extends Fragment {
             this.favorites = favorites;
             notifyDataSetChanged();
         }
+    }
+
+    private void startTutorialPlayActivity(FavoritesAdapter.ViewHolder holder) {
+        MainActivity.showCaseFragmentView = new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(holder.wordTextView)
+                .setDismissText(getString(R.string.showcase_str_btn_5))
+                .setContentText(getString(R.string.showcase_str_5))
+                .setDelay(100) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse(MainActivity.id_showcase_fragments) // provide a unique ID used to ensure it is only shown once
+                .setDismissOnTouch(true)
+                .withoutShape()
+                .show();
     }
 }
