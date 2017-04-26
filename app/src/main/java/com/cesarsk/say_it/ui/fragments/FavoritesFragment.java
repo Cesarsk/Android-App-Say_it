@@ -76,7 +76,6 @@ public class FavoritesFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
-        snackbar = Snackbar.make(view.findViewById(R.id.favorites_fragment_coordinator), "Removed Element from Favorites", (int) FavoritesAdapter.UNDO_TIMEOUT);
 
 
         final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
@@ -102,8 +101,17 @@ public class FavoritesFragment extends Fragment {
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
                 adapter.remove(viewHolder.getAdapterPosition());
+                snackbar = Snackbar.make(view.findViewById(R.id.favorites_fragment_coordinator), "Removed Element from Favorites", (int) FavoritesAdapter.UNDO_TIMEOUT);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UtilitySharedPrefs.addFavs(getActivity(), adapter.getTemp_fav());
+                        adapter.setFavorites(loadDeserializedFavs(getActivity()));
+                        adapter.notifyItemInserted(adapter.getFavorites().indexOf(adapter.getTemp_fav()));
+                    }
+                });
                 snackbar.show();
             }
 
@@ -345,15 +353,6 @@ public class FavoritesFragment extends Fragment {
                 }
             });
 
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    UtilitySharedPrefs.addFavs(getActivity(), temp_fav);
-                    favorites = loadDeserializedFavs(getActivity());
-                    notifyItemInserted(favorites.indexOf(temp_fav));
-                }
-            });
-
             final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button_history);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -364,6 +363,8 @@ public class FavoritesFragment extends Fragment {
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     //Clear Favorites
+                                    UtilitySharedPrefs.clearFavorites(getActivity());
+                                    setFavorites(loadDeserializedFavs(getActivity()));
                                     Toast.makeText(getActivity(), "Favorites Cleared!", Toast.LENGTH_SHORT).show();
 
                                 }

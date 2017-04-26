@@ -71,11 +71,10 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
+        final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         DeserializedHistory = loadDeserializedHistory(getActivity());
 
-        snackbar = Snackbar.make(view.findViewById(R.id.history_fragment_coordinator), "Removed Element from Favorites", (int) HistoryAdapter.UNDO_TIMEOUT);
         recyclerView = (RecyclerView) view.findViewById(R.id.history_list);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -109,6 +108,15 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 adapter.remove(viewHolder.getAdapterPosition());
+                snackbar = Snackbar.make(view.findViewById(R.id.history_fragment_coordinator), "Removed Element from Favorites", (int) HistoryAdapter.UNDO_TIMEOUT);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UtilitySharedPrefs.addHist(getActivity(), adapter.getTemp_hist());
+                        adapter.setHistory(loadDeserializedHistory(getActivity()));
+                        adapter.notifyItemInserted(adapter.getHistory().indexOf(adapter.getTemp_hist()));
+                    }
+                });
                 snackbar.show();
             }
 
@@ -244,7 +252,7 @@ public class HistoryFragment extends Fragment {
             notifyDataSetChanged();
         }
 
-        public Pair<String, String> getTemp_hist() {
+        public SayItPair getTemp_hist() {
             return temp_hist;
         }
 
@@ -348,15 +356,6 @@ public class HistoryFragment extends Fragment {
                         Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                         holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary_dark));
                     }
-                }
-            });
-
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    UtilitySharedPrefs.addHist(getActivity(), temp_hist);
-                    history = loadDeserializedHistory(getActivity());
-                    notifyItemInserted(history.indexOf(temp_hist));
                 }
             });
 

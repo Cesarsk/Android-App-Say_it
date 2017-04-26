@@ -76,7 +76,6 @@ public class RecordingsFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        snackbar = Snackbar.make(view.findViewById(R.id.recordings_fragment_coordinator), "Deleted Recording", (int) RecordingsAdapter.UNDO_TIMEOUT);
 
         final RecordingsAdapter adapter = new RecordingsAdapter(recordings);
         recyclerView.setAdapter(adapter);
@@ -103,6 +102,24 @@ public class RecordingsFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 adapter.remove(viewHolder.getAdapterPosition());
+                snackbar = Snackbar.make(view.findViewById(R.id.recordings_fragment_coordinator), "Deleted Recording", (int) RecordingsAdapter.UNDO_TIMEOUT);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        FileOutputStream outputStream = null;
+                        try {
+                            outputStream = new FileOutputStream(adapter.getTemp_rec_file());
+                            outputStream.write(adapter.getTemp_rec_bytes());
+                            outputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        adapter.setRecordings(UtilityRecordings.loadRecordingsfromStorage(getActivity()));
+                        Collections.sort(adapter.getRecordings());
+                        adapter.notifyItemInserted(adapter.getRecordings().indexOf(adapter.getTemp_rec_file()));
+                    }
+                });
                 snackbar.show();
             }
 
@@ -237,6 +254,22 @@ public class RecordingsFragment extends Fragment {
         private ArrayList<File> recordings;
         private MediaPlayer mediaPlayer = new MediaPlayer();
 
+        public File getTemp_rec_file() {
+            return temp_rec_file;
+        }
+
+        public void setTemp_rec_file(File temp_rec_file) {
+            this.temp_rec_file = temp_rec_file;
+        }
+
+        public byte[] getTemp_rec_bytes() {
+            return temp_rec_bytes;
+        }
+
+        public void setTemp_rec_bytes(byte[] temp_rec_bytes) {
+            this.temp_rec_bytes = temp_rec_bytes;
+        }
+
         private File temp_rec_file;
         private byte[] temp_rec_bytes;
 
@@ -303,24 +336,6 @@ public class RecordingsFragment extends Fragment {
                         Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                         holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary_dark));
                     }
-                }
-            });
-
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    FileOutputStream outputStream = null;
-                    try {
-                        outputStream = new FileOutputStream(temp_rec_file);
-                        outputStream.write(temp_rec_bytes);
-                        outputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    recordings = UtilityRecordings.loadRecordingsfromStorage(getActivity());
-                    Collections.sort(recordings);
-                    notifyItemInserted(recordings.indexOf(temp_rec_file));
                 }
             });
 

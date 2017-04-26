@@ -122,6 +122,11 @@ public class UtilitySharedPrefs {
         loadHist(context); //refreshing the view
     }
 
+    public static void clearFavorites(Context context){
+        savePrefs(context, new TreeSet<String>(), MainActivity.FAVORITES_PREFS_KEY);
+        loadFavs(context);
+    }
+
     /*public static void removeRecording(Context context, String recordingFilename){
         Set<String> new_recs = new TreeSet<>();
         loadRecordings(context);

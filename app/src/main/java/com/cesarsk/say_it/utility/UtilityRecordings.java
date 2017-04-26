@@ -32,7 +32,6 @@ public class UtilityRecordings {
 
         if (file.delete()) {
             updateRecordings(context);
-            Toast.makeText(context, "Deleted Recording", Toast.LENGTH_SHORT).show();
             return true;
         }
         return false;
