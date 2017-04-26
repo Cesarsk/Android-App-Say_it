@@ -27,7 +27,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/primary_light"
-                android:textSize="45sp" />
+                android:textSize="40sp" />
 
             <TextView
                 android:id="@+id/selected_word_ipa"
