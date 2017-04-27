@@ -76,7 +76,6 @@ public class TimePickerPreference extends DialogPreference
             UtilitySharedPrefs.savePrefs(context, formatted_hour, MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY);
             UtilitySharedPrefs.savePrefs(context, formatted_minute, MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY);
             setSummary(getTimeFromSharedPrefs());
-            Toast.makeText(context, "Time CHANGED!", Toast.LENGTH_SHORT).show();
             //Change 24-12 system in schedule notification
             NotificationReceiver.scheduleNotification(context, selected_hour, selected_minute, MainActivity.DEFAULT_NOTIFICATION_RATE);
         }
