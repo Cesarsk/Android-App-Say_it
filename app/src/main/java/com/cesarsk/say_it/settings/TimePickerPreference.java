@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.text.format.DateFormat;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -23,38 +24,62 @@ import java.util.Locale;
  */
 
 public class TimePickerPreference extends DialogPreference
-        implements TimePickerDialog.OnTimeSetListener {
+        implements TimePicker.OnTimeChangedListener {
 
-    Context context;
-    public TimePickerPreference(Context context) {
-        super(context);
+    private Context context;
+    private TimePicker time_picker = null;
+    private int selected_hour;
+    private int selected_minute;
+
+    public TimePickerPreference(Context context, AttributeSet attrs) {
+        super(context, attrs);
         this.context = context;
+        setSummary(getTimeFromSharedPrefs());
     }
+
 
     @Override
     protected View onCreateDialogView() {
-        TimePicker time_picker = new TimePicker((getContext()));
-        if(DateFormat.is24HourFormat(context)) time_picker.setIs24HourView(true);
-
-        //retrieving hour and minute
-        final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY); time_picker.setCurrentHour(hour);
-        int minute = c.get(Calendar.MINUTE); time_picker.setCurrentMinute(minute);
+        time_picker = new TimePicker((getContext()));
+        time_picker.setOnTimeChangedListener(this);
 
         return time_picker;
     }
 
     @Override
-    public void onTimeSet(TimePicker view, int hour, int minute) {
-        // Do something with the time chosen by the user
-        String formatted_hour = String.format(Locale.getDefault(),"%02d", hour);
-        String formatted_minute = String.format(Locale.getDefault(), "%02d", minute);
-        UtilitySharedPrefs.savePrefs(view.getContext(), formatted_hour, MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY);
-        UtilitySharedPrefs.savePrefs(view.getContext(), formatted_minute, MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY);
-        setSummary(getTimeFromSharedPrefs());
+    protected void onBindDialogView(View view) {
+        super.onBindDialogView(view);
 
-        //Change 24-12 system in schedule notification
-        NotificationReceiver.scheduleNotification(view.getContext(), hour, minute, MainActivity.DEFAULT_NOTIFICATION_RATE);
+        //if(!DateFormat.is24HourFormat(context))
+
+        time_picker.setIs24HourView(true);
+
+        //retrieving hour and minute
+        final Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY); time_picker.setCurrentHour(hour);
+        int minute = c.get(Calendar.MINUTE); time_picker.setCurrentMinute(minute);
+    }
+
+    @Override
+    public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
+        selected_hour = hour;
+        selected_minute = minute;
+    }
+
+    @Override
+    protected void onDialogClosed(boolean positiveResult) {
+        super.onDialogClosed(positiveResult);
+
+        if(positiveResult){
+            String formatted_hour = String.format(Locale.getDefault(),"%02d", selected_hour);
+            String formatted_minute = String.format(Locale.getDefault(), "%02d", selected_minute);
+            UtilitySharedPrefs.savePrefs(context, formatted_hour, MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY);
+            UtilitySharedPrefs.savePrefs(context, formatted_minute, MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY);
+            setSummary(getTimeFromSharedPrefs());
+            Toast.makeText(context, "Time CHANGED!", Toast.LENGTH_SHORT).show();
+            //Change 24-12 system in schedule notification
+            NotificationReceiver.scheduleNotification(context, selected_hour, selected_minute, MainActivity.DEFAULT_NOTIFICATION_RATE);
+        }
     }
 
     private String getTimeFromSharedPrefs() {

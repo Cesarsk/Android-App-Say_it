@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v7.app.NotificationCompat;
+import android.text.format.DateFormat;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.MainActivity;
@@ -20,7 +21,9 @@ import com.cesarsk.say_it.ui.PlayActivity;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
