@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.utility.Utility;
+import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
@@ -315,6 +316,7 @@ public class RecordingsFragment extends Fragment {
 
             //TODO: IPA
             holder.wordTextView.setText(recordingName);
+            holder.IPATextView.setText(UtilityDictionary.getIPAfromWord(recordingName));
 
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
