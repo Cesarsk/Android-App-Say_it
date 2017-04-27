@@ -4,6 +4,7 @@ package com.cesarsk.say_it.settings;
  * Created by Andrea Croce on 16/03/2017.
  */
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.DialogPreference;
@@ -18,7 +19,7 @@ import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import java.util.Locale;
 
 public class TimePreference extends DialogPreference implements
-        TimePicker.OnTimeChangedListener {
+        TimePickerDialog.OnTimeSetListener {
 
     //TODO Probabilmente da rifare tutto il TimePickerDialog
 
@@ -27,8 +28,8 @@ public class TimePreference extends DialogPreference implements
     private String defaultValue;
     Context context;
 
-    public TimePreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public TimePreference(Context context) {
+        super(context);
         this.context = context;
         setPersistent(true);
         UtilitySharedPrefs.loadSettingsPrefs(context);
@@ -40,7 +41,6 @@ public class TimePreference extends DialogPreference implements
     protected View onCreateDialogView() {
         TimePicker time_picker = new TimePicker(getContext());
         time_picker.setIs24HourView(true);
-        time_picker.setOnTimeChangedListener(this);
 
         int h = getHour();
         int m = getMinute();
@@ -52,7 +52,7 @@ public class TimePreference extends DialogPreference implements
     }
 
     @Override
-    public void onTimeChanged(TimePicker view, int hour, int minute) {
+    public void onTimeSet(TimePicker view, int hour, int minute) {
         //persistString(String.format("%02d", hour) + ":" + String.format("%02d", minute));
         String formatted_hour = String.format(Locale.getDefault(),"%02d", hour);
         String formatted_minute = String.format(Locale.getDefault(), "%02d", minute);

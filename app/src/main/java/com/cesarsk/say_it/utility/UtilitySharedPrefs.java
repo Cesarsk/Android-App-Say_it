@@ -266,7 +266,7 @@ public class UtilitySharedPrefs {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.DEFAULT_ACCENT = sharedPreferences.getString(DEFAULT_ACCENT_KEY, "0");
         MainActivity.DEFAULT_NOTIFICATION_RATE = sharedPreferences.getString(DEFAULT_NOTIFICATION_RATE_KEY, "2");
-        MainActivity.DEFAULT_NOTIFICATION_HOUR = sharedPreferences.getString(DEFAULT_NOTIFICATION_HOUR_KEY, "14");
+        MainActivity.DEFAULT_NOTIFICATION_HOUR = sharedPreferences.getString(DEFAULT_NOTIFICATION_HOUR_KEY, "12");
         MainActivity.DEFAULT_NOTIFICATION_MINUTE = sharedPreferences.getString(DEFAULT_NOTIFICATION_MINUTE_KEY, "00");
     }
 

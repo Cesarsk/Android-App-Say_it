@@ -52,7 +52,6 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                     int hour = Integer.parseInt(MainActivity.DEFAULT_NOTIFICATION_HOUR);
                     int minute = Integer.parseInt(MainActivity.DEFAULT_NOTIFICATION_MINUTE);
                     NotificationReceiver.scheduleNotification(getActivity(), hour, minute, MainActivity.DEFAULT_NOTIFICATION_RATE);
-                    //index_notification_rate = notification_rate.findIndexOfValue(new_value);
                     return true;
                 }
             });
