@@ -170,10 +170,7 @@ public class HomeFragment extends Fragment {
             adCardRL.setVisibility(View.VISIBLE);
             adCardRL.addView(adView);
 
-            AdRequest request = new AdRequest.Builder()
-                    .addTestDevice(getResources().getString(R.string.test_device_oneplus_3))
-                    .addTestDevice(getResources().getString(R.string.test_device_honor_6))
-                    .build();
+            AdRequest request = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
             adView.loadAd(request);
         }
 
