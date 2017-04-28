@@ -63,20 +63,17 @@ public class MainActivity extends AppCompatActivity {
     public static final boolean isLoggingEnabled = false;
 
     //Indici per la FragmentList
-    public static final int HOME_FRAGMENT_INDEX = 0;
-    public static final int FAVORITES_FRAGMENT_INDEX = 1;
-    public static final int HISTORY_FRAGMENT_INDEX = 2;
-    public static final int RECORDINGS_FRAGMENT_INDEX = 3;
-
-    //Intent Extra
-    public static final String IS_NOTIFICATION = "SAY.IT.FROM.NOTIFICATION";
+    private static final int HOME_FRAGMENT_INDEX = 0;
+    private static final int FAVORITES_FRAGMENT_INDEX = 1;
+    private static final int HISTORY_FRAGMENT_INDEX = 2;
+    private static final int RECORDINGS_FRAGMENT_INDEX = 3;
 
     //Definizione variabile TTS
     private TextToSpeech tts_speaker;
     public static TextToSpeech american_speaker_google;
     public static TextToSpeech british_speaker_google;
-    public static Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
-    public static Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static final Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static final Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
     //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;
@@ -92,14 +89,11 @@ public class MainActivity extends AppCompatActivity {
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
-    public final static String RECORDINGS_PREFS_KEY = "SAY.IT.RECORDINGS"; //Chiave che identifica il Set della lista dei Recordings
     public final static String DEFAULT_ACCENT_KEY = "SAY.IT.DEFAULT.ACCENT"; //Chiave che identifica il DEFAULT ACCENT
     public final static String DEFAULT_NOTIFICATION_RATE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.RATE";
     public final static String DEFAULT_NOTIFICATION_HOUR_KEY = "SAY.IT.DEFAULT.NOTIFICATION.HOUR";
     public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
-
-    public final static int REQUEST_CODE = 1;
 
     //Unique IDs related to showcase
     public static String id_showcase_playactivity = "utente_playactivity";
@@ -107,16 +101,15 @@ public class MainActivity extends AppCompatActivity {
     public static MaterialShowcaseView showCaseFragmentView;
 
 
-    int selectedTab = 0; // or other values
+    private int selectedTab = 0; // or other values
 
-    boolean doubleBackToExitPressedOnce = false;
-    boolean hasInterstitialDisplayed = false;
+    private boolean doubleBackToExitPressedOnce = false;
+    private boolean hasInterstitialDisplayed = false;
 
     //In-App Billing Helper
-    IabHelper mHelper;
+    private IabHelper mHelper;
 
     //Definizione variabile WordList
-    public static final ArrayList<String> WordList = new ArrayList<>();
     public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
     public static final ArrayList<String> Quotes = new ArrayList<>();
     public static String wordOfTheDay;
@@ -126,18 +119,18 @@ public class MainActivity extends AppCompatActivity {
     public static BottomBar bottomBar;
 
     //EditText Searchbar variable
-    EditText editText;
-    ImageView lens_search_button;
-    ImageButton voice_search_button;
+    private EditText editText;
+    private ImageView lens_search_button;
+    private ImageButton voice_search_button;
 
     //Notification id
     public static final int notifId = 150;
 
     //Rate Dialog
-    EasyRatingDialog easyRatingDialog;
+    private EasyRatingDialog easyRatingDialog;
 
-    final FragmentManager fragmentManager = getFragmentManager();
-    InterstitialAd mInterstitialAd = new InterstitialAd(this);
+    private final FragmentManager fragmentManager = getFragmentManager();
+    private final InterstitialAd mInterstitialAd = new InterstitialAd(this);
 
     @Override
     protected void onStop() {
@@ -436,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
                 tts_speaker.setPitch((float) 0.90);
                 tts_speaker.setSpeechRate((float) 0.90);
                 if(accent)tts_speaker.setVoice(voice_american_female);
-                else if(!accent)tts_speaker.setVoice(voice_british_female);
+                else tts_speaker.setVoice(voice_british_female);
             }
         });
 

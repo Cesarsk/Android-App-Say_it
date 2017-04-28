@@ -23,7 +23,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
     public static final int NESTED_SCREEN_2_KEY = 2;
     //static private int index_notification_rate = 2; //DO NOT REMOVE THIS
     private static final String TAG_KEY = "NESTED_KEY";
-    public static int selected_fragment_layout;
+    private static int selected_fragment_layout;
 
     public static NestedPreferenceFragment newInstance(int key) {
         NestedPreferenceFragment fragment = new NestedPreferenceFragment();

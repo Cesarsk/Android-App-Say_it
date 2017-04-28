@@ -21,7 +21,7 @@ import java.util.Locale;
 public class TimePickerPreference extends DialogPreference
         implements TimePicker.OnTimeChangedListener {
 
-    private Context context;
+    private final Context context;
     private TimePicker time_picker = null;
     private int selected_hour;
     private int selected_minute;

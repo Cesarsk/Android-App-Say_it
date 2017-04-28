@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="PLACEHOLDER">Placeholder</string>
 
@@ -49,10 +49,8 @@
     <string name="full_history_button">FULL HISTORY</string>
 
     <!-- Strings related to Settings -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="speech_prompt">Say something&#8230;</string>
     <string name="speech_not_supported">Sorry! Your device doesn\\\'t support speech input</string>
-    <string name="random_words_title">Try also these random words:</string>
     <string name="card_your_stats">Your stats:</string>
 
     <!-- Strings related to Rate Dialog -->
@@ -63,15 +61,15 @@
     <string name="erd_rate_now">Rate now.</string>
 
     <!-- showcase tutorial strings -->
-    <string name="showcase_str_1">[1/4] HOLD this button to record a word. Release and PRESS it to listen to your recording.</string>
+    <string name="showcase_str_1" tools:ignore="TypographyFractions">[1/4] HOLD this button to record a word. Release and PRESS it to listen to your recording.</string>
     <string name="showcase_str_2">[2/4] PRESS this button to listen to the original pronunciation.</string>
-    <string name="showcase_str_3">[3/4] Want to switch the accent? PRESS this one!</string>
+    <string name="showcase_str_3" tools:ignore="TypographyFractions">[3/4] Want to switch the accent? PRESS this one!</string>
     <string name="showcase_str_4">[4/4] Is the pronunciation too quick? Use the SLOW BUTTON.</string>
     <string name="showcase_str_5">Swipe an item to remove it from this list.</string>
     <string name="showcase_str_btn_1">[OKAY]</string>
     <string name="showcase_str_btn_2">[GO AWAY!]</string>
     <string name="showcase_str_btn_3">[SERIOUSLY, I\'VE GOT THIS!]</string>
-    <string name="showcase_str_btn_4">[...I will]</string>
+    <string name="showcase_str_btn_4">[…I will]</string>
     <string name="showcase_str_btn_5">[OKAY]</string>
     <string name="ad_space_card">AD SPACE</string>
     <string name="undo">UNDO</string>

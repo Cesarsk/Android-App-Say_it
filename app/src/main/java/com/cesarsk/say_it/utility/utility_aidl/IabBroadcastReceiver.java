@@ -32,6 +32,7 @@ import android.content.Intent;
  * a message to this BroadcastReceiver will indicate that the an item
  * has been acquired.</p>
  */
+@SuppressWarnings("ALL")
 public class IabBroadcastReceiver extends BroadcastReceiver {
     /**
      * Listener interface for received broadcast messages.

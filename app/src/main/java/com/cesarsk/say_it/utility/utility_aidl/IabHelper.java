@@ -71,6 +71,7 @@ import java.util.List;
  * has not yet completed will result in an exception being thrown.
  *
  */
+@SuppressWarnings("ALL")
 public class IabHelper {
     // Is debug logging enabled?
     boolean mDebugLog = false;

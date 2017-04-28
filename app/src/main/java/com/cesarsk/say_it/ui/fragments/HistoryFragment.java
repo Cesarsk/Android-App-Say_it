@@ -39,7 +39,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -51,9 +50,8 @@ import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
  */
 public class HistoryFragment extends Fragment {
 
-    private ArrayList<SayItPair> DeserializedHistory;
-    RecyclerView recyclerView;
-    Snackbar snackbar;
+    private RecyclerView recyclerView;
+    private Snackbar snackbar;
 
     public HistoryFragment() {
 
@@ -75,7 +73,7 @@ public class HistoryFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        DeserializedHistory = loadDeserializedHistory(getActivity());
+        ArrayList<SayItPair> deserializedHistory = loadDeserializedHistory(getActivity());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.history_list);
         recyclerView.setHasFixedSize(true);
@@ -85,7 +83,7 @@ public class HistoryFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(defaultItemAnimator);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        final HistoryAdapter adapter = new HistoryAdapter(DeserializedHistory);
+        final HistoryAdapter adapter = new HistoryAdapter(deserializedHistory);
         recyclerView.setAdapter(adapter);
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -260,22 +258,7 @@ public class HistoryFragment extends Fragment {
 
         private SayItPair temp_hist;
 
-        public int getTemp_pos() {
-            return temp_pos;
-        }
-
-        public void setTemp_pos(int temp_pos) {
-            this.temp_pos = temp_pos;
-        }
-
         private int temp_pos;
-
-        private Date temp_adding_time;
-
-        public void setTemp_hist(SayItPair temp_hist) {
-            this.temp_hist = temp_hist;
-        }
-
 
         private ArrayList<SayItPair> history;
 
@@ -286,10 +269,10 @@ public class HistoryFragment extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            TextView wordTextView;
-            TextView IPATextView;
-            ImageButton QuickPlayBtn;
-            ImageButton AddtoFavsBtn;
+            final TextView wordTextView;
+            final TextView IPATextView;
+            final ImageButton QuickPlayBtn;
+            final ImageButton AddtoFavsBtn;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -311,7 +294,7 @@ public class HistoryFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final HistoryAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final HistoryAdapter.ViewHolder holder, int position) {
 
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -346,11 +329,11 @@ public class HistoryFragment extends Fragment {
             holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first)) {
+                    if (!UtilitySharedPrefs.checkFavs(getActivity(), history.get(holder.getAdapterPosition()).first)) {
                         UtilitySharedPrefs.addFavs(getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                         Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
                         holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
-                    } else if (UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first)) {
+                    } else if (UtilitySharedPrefs.checkFavs(getActivity(), history.get(holder.getAdapterPosition()).first)) {
                         UtilitySharedPrefs.removeFavs(v.getContext(), history.get(holder.getAdapterPosition()));
                         Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                         holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary_dark));
@@ -393,7 +376,6 @@ public class HistoryFragment extends Fragment {
         void remove(int pos) {
             temp_hist = history.get(pos);
             temp_pos = pos;
-            temp_adding_time = temp_hist.getAdding_time();
 
             UtilitySharedPrefs.removeHist(getActivity(), new SayItPair(history.get(pos).first, history.get(pos).second, history.get(pos).getAdding_time()));
             history = loadDeserializedHistory(getActivity());

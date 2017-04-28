@@ -22,6 +22,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            //noinspection ConstantConditions
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             //Change arrow color Toolbar
             final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material);

@@ -36,14 +36,14 @@ import static com.cesarsk.say_it.utility.Utility.shareToMail;
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
-    private String emails[] = {"sayit.edu@gmail.com"};
+    private final String[] emails = {"sayit.edu@gmail.com"};
     static private int index_default_accent = 0;
     private Callback mCallback;
     private static final String KEY_1 = "button_notification";
     private static final String KEY_2 = "open_source_licenses";
-    IabHelper mHelper;
-    IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
-    IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
+    private IabHelper mHelper;
+    private IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
+    private IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
 
     public interface Callback {
         void onNestedPreferenceSelected(int key);
@@ -183,7 +183,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             public void onIabPurchaseFinished(IabResult result, Purchase info) {
                 if (result.isFailure()) {
                     Toast.makeText(getActivity(), "Purchase Failed! Perhaps have you already purchased the item?", Toast.LENGTH_SHORT).show();
-                    return;
                 } else if (info.getSku().equals(PlayActivity.no_ads_in_app)) {
                     UtilitySharedPrefs.loadAdsStatus(getActivity());
                     UtilitySharedPrefs.savePrefs(getActivity(), true, MainActivity.NO_ADS_STATUS_KEY);

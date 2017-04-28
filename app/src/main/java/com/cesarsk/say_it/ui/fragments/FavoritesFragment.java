@@ -47,9 +47,9 @@ import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
  */
 public class FavoritesFragment extends Fragment {
 
-    ArrayList<Pair<String, String>> DeserializedFavs;
-    RecyclerView recyclerView;
-    Snackbar snackbar;
+    private ArrayList<Pair<String, String>> DeserializedFavs;
+    private RecyclerView recyclerView;
+    private Snackbar snackbar;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -233,7 +233,7 @@ public class FavoritesFragment extends Fragment {
         return view;
     }
 
-    public static ArrayList<Pair<String, String>> loadDeserializedFavs(Context context) {
+    private static ArrayList<Pair<String, String>> loadDeserializedFavs(Context context) {
 
         UtilitySharedPrefs.loadFavs(context);
         ArrayList<String> SerializedFavs = new ArrayList<>(MainActivity.FAVORITES);
@@ -269,19 +269,7 @@ public class FavoritesFragment extends Fragment {
 
         private Pair<String, String> temp_fav;
 
-        public int getTemp_pos() {
-            return temp_pos;
-        }
-
-        public void setTemp_pos(int temp_pos) {
-            this.temp_pos = temp_pos;
-        }
-
         private int temp_pos;
-
-        public void setTemp_fav(Pair<String, String> temp_fav) {
-            this.temp_fav = temp_fav;
-        }
 
         /*private ArrayList<Pair<String, String>> pendingFavorites;
         private Handler handler = new Handler(); //Handler per gestire i Runnable per permettere l'UNDO con il Delay
@@ -295,9 +283,9 @@ public class FavoritesFragment extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            TextView wordTextView;
-            TextView IPATextView;
-            ImageButton QuickPlayBtn;
+            final TextView wordTextView;
+            final TextView IPATextView;
+            final ImageButton QuickPlayBtn;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -397,10 +385,6 @@ public class FavoritesFragment extends Fragment {
         public void add(FavoritesAdapter.ViewHolder viewHolder) {
             UtilitySharedPrefs.addFavs(getActivity(), new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.IPATextView.getText().toString()));
             Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-        }
-
-        public void recover_temp_fav(){
-
         }
 
         public ArrayList<Pair<String, String>> getFavorites() {

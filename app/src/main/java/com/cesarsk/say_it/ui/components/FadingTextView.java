@@ -14,12 +14,12 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
 
     //TODO Istanziare un array di FadingTextView e generarle nell'HomeFragment
 
-    ObjectAnimator fade_animator;
-    Random rand;
-    android.support.v4.util.Pair<String, String> pair;
+    private ObjectAnimator fade_animator;
+    private Random rand;
+    private android.support.v4.util.Pair<String, String> pair;
     public String word;
     public String ipa;
-    boolean repeated = true;
+    private boolean repeated = true;
 
     public FadingTextView(Context context) {
         super(context);

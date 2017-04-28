@@ -21,6 +21,7 @@ package com.cesarsk.say_it.utility.utility_aidl;
  * To get the IAB result that caused this exception to be thrown,
  * call {@link #getResult()}.
  */
+@SuppressWarnings("ALL")
 public class IabException extends Exception {
     IabResult mResult;
 
