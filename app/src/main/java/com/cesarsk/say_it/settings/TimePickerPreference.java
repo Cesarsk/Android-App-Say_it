@@ -50,9 +50,9 @@ public class TimePickerPreference extends DialogPreference
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
-        //if(!DateFormat.is24HourFormat(context))
-
-        time_picker.setIs24HourView(true);
+        if(DateFormat.is24HourFormat(context)) {
+            time_picker.setIs24HourView(true);
+        }
 
         //retrieving hour and minute
         final Calendar c = Calendar.getInstance();

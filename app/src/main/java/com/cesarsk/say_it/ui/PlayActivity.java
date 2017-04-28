@@ -12,6 +12,8 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.Voice;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -53,12 +55,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
+import static android.speech.tts.Voice.LATENCY_VERY_LOW;
+import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
@@ -108,6 +113,14 @@ public class PlayActivity extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     //private boolean hasInterstitialDisplayed = false;
 
+    //Definizione variabile TTS
+    private TextToSpeech tts_speaker;
+    public static TextToSpeech american_speaker_google;
+    public static TextToSpeech british_speaker_google;
+    public static Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -122,7 +135,7 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(mInterstitialAd != null) {
+        if (mInterstitialAd != null) {
             if (mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
                 //Do not launch this thread because ADMob should automatically load ADs every X minutes.
@@ -158,6 +171,16 @@ public class PlayActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
 
+        if ((MainActivity.american_speaker_google != null || british_speaker_google != null)) {
+            //bind TTs
+            american_speaker_google = MainActivity.american_speaker_google;
+            british_speaker_google = MainActivity.british_speaker_google;
+        } else {
+            //init TTSs
+            american_speaker_google = initTTS(this, true);
+            british_speaker_google = initTTS(this, false);
+        }
+
         rec_button = (Button) findViewById(R.id.rec_button);
         final Button play_button = (Button) findViewById(R.id.play_button);
         final TextView selected_word_view = (TextView) findViewById(R.id.selected_word);
@@ -188,9 +211,7 @@ public class PlayActivity extends AppCompatActivity {
             });
 
             requestNewInterstitial();
-        }
-
-        else if(MainActivity.NO_ADS){
+        } else if (MainActivity.NO_ADS) {
             remove_ad.setVisibility(View.GONE);
         }
 
@@ -568,10 +589,10 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!accent_flag) {
-                    MainActivity.american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                    american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
                     vibrator.vibrate(100);
                 } else if (accent_flag) {
-                    MainActivity.british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                    british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
                     vibrator.vibrate(100);
                 }
             }
@@ -580,7 +601,7 @@ public class PlayActivity extends AppCompatActivity {
         startTutorialPlayActivity(rec_button, play_original_button, accent_button, slow_button);
     }
 
-    private void setupSnackbar(final Chronometer chronometer, final ImageButton delete_button, final Button play_button){
+    private void setupSnackbar(final Chronometer chronometer, final ImageButton delete_button, final Button play_button) {
         snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
         snackbar.setAction("UNDO", new View.OnClickListener() {
             @Override
@@ -694,4 +715,20 @@ public class PlayActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
         mInterstitialAd.loadAd(adRequest);
     }
+
+    private TextToSpeech initTTS(Context context, final boolean accent) {
+        TextToSpeech.OnInitListener onInitListener = null;
+        tts_speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                tts_speaker.setPitch((float) 0.90);
+                tts_speaker.setSpeechRate((float) 0.90);
+                if (accent) tts_speaker.setVoice(MainActivity.voice_american_female);
+                else if (!accent) tts_speaker.setVoice(MainActivity.voice_british_female);
+            }
+        });
+
+        return tts_speaker;
+    }
+
 }
