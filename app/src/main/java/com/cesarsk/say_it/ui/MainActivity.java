@@ -35,6 +35,7 @@ import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.cesarsk.say_it.utility.UtilityTTS;
 import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
@@ -381,33 +382,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //IMPOSTAZIONE TEXT TO SPEECH
-        american_speaker_google = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                // TODO OTTIMIZZARE TTS
-                if (status == TextToSpeech.SUCCESS) {
-                    //Ridondante?
-                    american_speaker_google.setPitch((float) 0.90);
-                    american_speaker_google.setSpeechRate((float) 0.90);
-                    american_speaker_google.setVoice(voice_american_female);
-                } else
-                    Log.e("error", "Initilization Failed!");
-            }
-        });
-
-        british_speaker_google = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                // TODO OTTIMIZZARE TTS
-                if (status == TextToSpeech.SUCCESS) {
-                    //Ridondante?
-                    british_speaker_google.setPitch((float) 0.90);
-                    british_speaker_google.setSpeechRate((float) 0.90);
-                    british_speaker_google.setVoice(voice_british_female);
-                } else
-                    Log.e("error", "Initilization Failed!");
-            }
-        });
+        american_speaker_google = UtilityTTS.initTTS(this, true);
+        british_speaker_google = UtilityTTS.initTTS(this, false);
     }
 
     @Override
@@ -451,4 +427,5 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
         mInterstitialAd.loadAd(adRequest);
     }
+
 }
