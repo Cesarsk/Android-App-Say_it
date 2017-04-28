@@ -38,9 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 
 /**

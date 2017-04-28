@@ -1,7 +1,6 @@
 package com.cesarsk.say_it.ui.fragments;
 
 import android.app.ActivityOptions;
-import android.app.Notification;
 import android.content.Intent;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -15,7 +14,7 @@ import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 /**
- * Created by Mamma on 30/03/2017.
+ * Created by team on 30/03/2017.
  */
 
 public class NestedPreferenceFragment extends PreferenceFragment {

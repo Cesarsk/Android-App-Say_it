@@ -46,7 +46,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
 
     public interface Callback {
-        public void onNestedPreferenceSelected(int key);
+        void onNestedPreferenceSelected(int key);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         Preference open_source_licenses = findPreference(KEY_2);
         open_source_licenses.setOnPreferenceClickListener(this);
 
-        Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
+        Preference rate_us = getPreferenceManager().findPreference("rate_us");
         rate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -134,6 +134,15 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com");
+                return false;
+            }
+        });
+
+        final Preference eula = getPreferenceManager().findPreference("eula");
+        eula.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/28/say-it-eula-agreement/");
                 return false;
             }
         });

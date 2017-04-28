@@ -1,6 +1,5 @@
 package com.cesarsk.say_it.utility;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.util.Pair;

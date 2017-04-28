@@ -8,7 +8,6 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 import com.cesarsk.say_it.ui.MainActivity;
 

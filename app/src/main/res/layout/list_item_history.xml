@@ -48,7 +48,8 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:backgroundTint="@color/Grey100"
-        android:tint="@color/primary_dark"/>
+        android:tint="@color/primary_dark"
+        android:contentDescription="@string/quickplay_button_description"/>
 
     <ImageButton
         android:id="@+id/list_item_addToFavs"
@@ -60,13 +61,14 @@
         android:backgroundTint="@color/Grey100"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_favorite_black_24dp"
-        android:tint="@color/primary_dark"/>
+        android:tint="@color/primary_dark"
+        android:contentDescription="@string/quickplay_button_description"/>
 
     <TextView
         android:id="@+id/undo_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="UNDO"
+        android:text="@string/undo"
         android:layout_marginEnd="8dp"
         android:layout_gravity="center"
         android:gravity="center"

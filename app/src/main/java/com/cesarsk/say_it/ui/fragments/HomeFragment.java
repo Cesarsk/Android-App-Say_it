@@ -22,7 +22,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.app.FragmentManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -286,7 +285,7 @@ public class HomeFragment extends Fragment {
         random_quote.setText(getDailyRandomQuote());
 
         final TextView view_full_history = (TextView)view.findViewById(R.id.view_full_history);
-        view_full_history.setText("Full History");
+        view_full_history.setText(getString(R.string.full_history_button));
         view_full_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

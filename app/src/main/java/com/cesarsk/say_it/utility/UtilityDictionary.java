@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.Random;
 
 import static com.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
-import static com.cesarsk.say_it.ui.MainActivity.Wordlists_Map;
 import static com.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
 
 /**

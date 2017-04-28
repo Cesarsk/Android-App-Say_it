@@ -104,6 +104,12 @@
             android:title="Acknowledgements" />
 
         <Preference
+            android:key="eula"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Click for EULA"
+            android:title="EULA" />
+
+        <Preference
             android:key="app_version"
             android:layout="@xml/voices_settings_layout"
             android:summary="Version: 1.5-beta (Click for Privacy Policy)"

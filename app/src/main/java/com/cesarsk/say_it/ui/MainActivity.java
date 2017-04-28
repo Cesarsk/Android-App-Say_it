@@ -1,7 +1,5 @@
 package com.cesarsk.say_it.ui;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,7 +11,6 @@ import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +19,6 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,11 +30,9 @@ import com.cesarsk.say_it.ui.fragments.FavoritesFragment;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
-import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
-import com.cesarsk.say_it.utility.UtilityTTS;
 import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
@@ -57,9 +51,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -332,10 +324,10 @@ public class MainActivity extends AppCompatActivity {
                 switch (tabId) {
                     case R.id.tab_favorites:
                         if (FAVORITES_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (FAVORITES_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = FAVORITES_FRAGMENT_INDEX;
@@ -345,10 +337,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_home:
                         if (HOME_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HOME_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = HOME_FRAGMENT_INDEX;
@@ -358,10 +350,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_history:
                         if (HISTORY_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HISTORY_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = HISTORY_FRAGMENT_INDEX;
@@ -371,10 +363,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_recordings:
                         if (RECORDINGS_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = RECORDINGS_FRAGMENT_INDEX;

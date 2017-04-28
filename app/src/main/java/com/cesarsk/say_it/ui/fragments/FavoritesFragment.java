@@ -1,7 +1,6 @@
 package com.cesarsk.say_it.ui.fragments;
 
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -39,12 +38,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-import static com.cesarsk.say_it.ui.MainActivity.bottomBar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -352,7 +348,7 @@ public class FavoritesFragment extends Fragment {
                     play_activity_intent.putExtra(PlayActivity.PLAY_WORD, holder.wordTextView.getText());
                     play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
                     UtilitySharedPrefs.addHist(getActivity(), new SayItPair(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
-                    getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) getActivity()).toBundle());
+                    getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                 }
             });
 

@@ -1,16 +1,10 @@
 package com.cesarsk.say_it.utility;
 
-import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
-import android.util.Log;
-
-import com.cesarsk.say_it.ui.MainActivity;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.cesarsk.say_it.ui.MainActivity.american_speaker_google;
-import static com.cesarsk.say_it.ui.MainActivity.voice_american_female;
-import static com.cesarsk.say_it.ui.MainActivity.voice_british_female;
 
 /**
  * Created by Claudio on 22/03/2017.

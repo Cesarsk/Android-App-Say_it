@@ -6,20 +6,10 @@
     <string name="WOTD_Subtext">Here\'s your word of the day:</string>
     <string name="Recent_Search_Subtext">You recently searched:</string>
     <string name="Welcome_Text">Welcome, </string>
-    <string name="NoRecent_Text">You do not have recent history. Try searching some words!</string>
 
     <!-- Other Strings -->
     <string name="swipe_hint">Swipe an item to delete</string>
 
-    <!-- Content Description -->
-    <string name="FavsContentDescription">Add word to favorites</string>
-    <string name="CopyContentDescription">Copy word to clipboard</string>
-    <string name="QuickPlayContentDescription">Play Word</string>
-    <string name="ShareContentDescription">Share Word</string>
-
-    <string name="say_it_button">SAY IT!</string>
-    <string name="not_found_error">Word not found!</string>
-    <string name="empty_field_error">You have to write something!</string>
     <string name="app_name">Say It!</string>
     <string name="search_hint">Search for a word</string>
     <string name="ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
@@ -32,8 +22,6 @@
     <string name="test_device_htc_one_m8">8F41413C950FF0509CECFF6C1EC8FEFC</string>
     <string name="ad_unit_id_interstitial_playactivity_back">ca-app-pub-9284620118215899/4707483164</string>
     <string name="ad_unit_id_banner_settings">ca-app-pub-9284620118215899/7660949569</string>
-
-    <string name="swipe_to_delete_hint">Swipe to Delete</string>
 
     <string-array name="default_voice">
         <item>American English</item>
@@ -58,17 +46,13 @@
     </string-array>
 
     <string name="title_activity_settings">Settings</string>
+    <string name="full_history_button">FULL HISTORY</string>
 
     <!-- Strings related to Settings -->
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="speech_prompt">Say something&#8230;</string>
-    <string name="tap_on_mic">Tap on mic to speak</string>
     <string name="speech_not_supported">Sorry! Your device doesn\\\'t support speech input</string>
     <string name="random_words_title">Try also these random words:</string>
-    <string name="search_bar_hint_icon_description">Search Bar Hint Icon</string>
-    <string name="voice_speech_icon_description">Voice Speech Icon</string>
-    <string name="delete_button_description">Delete your Recording</string>
     <string name="card_your_stats">Your stats:</string>
 
     <!-- Strings related to Rate Dialog -->
@@ -89,5 +73,24 @@
     <string name="showcase_str_btn_3">[SERIOUSLY, I\'VE GOT THIS!]</string>
     <string name="showcase_str_btn_4">[...I will]</string>
     <string name="showcase_str_btn_5">[OKAY]</string>
+    <string name="ad_space_card">AD SPACE</string>
+    <string name="undo">UNDO</string>
+
+    <!-- descriptions (accessibility) -->
+    <string name="recording_menu_description">Recording menu</string>
+    <string name="accent_button_description">Click to change accent</string>
+    <string name="slow_button_description">Click to slow the word</string>
+    <string name="search_meaning_button_description">Search the meaning of this word on Google</string>
+    <string name="remove_ads_button_description">Support us removing ads from this app</string>
+    <string name="delete_button_description">Click to delete your recording</string>
+    <string name="clear_editText_description">Clear this window</string>
+    <string name="search_bar_hint_icon_description">Search Bar Hint Icon</string>
+    <string name="CopyContentDescription">Copy word to clipboard</string>
+    <string name="ShareContentDescription">Share Word</string>
+
+    <string name="quickplay_button_description">Listen to the pronunciation of this word</string>
+    <string name="favorite_button_description">Add word to favorites</string>
+    <string name="voice_search_button_description">Dictate your word</string>
+
 
 </resources>
