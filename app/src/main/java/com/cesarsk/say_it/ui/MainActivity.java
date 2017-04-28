@@ -3,6 +3,7 @@ package com.cesarsk.say_it.ui;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int RECORDINGS_FRAGMENT_INDEX = 3;
 
     //Definizione variabile TTS
+    private TextToSpeech tts_speaker;
     public static TextToSpeech american_speaker_google;
     public static TextToSpeech british_speaker_google;
     public static Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
@@ -382,8 +384,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //IMPOSTAZIONE TEXT TO SPEECH
-        american_speaker_google = UtilityTTS.initTTS(this, true);
-        british_speaker_google = UtilityTTS.initTTS(this, false);
+        american_speaker_google = initTTS(this, true);
+        british_speaker_google = initTTS(this, false);
     }
 
     @Override
@@ -428,4 +430,18 @@ public class MainActivity extends AppCompatActivity {
         mInterstitialAd.loadAd(adRequest);
     }
 
+    private TextToSpeech initTTS(Context context, final boolean accent) {
+        TextToSpeech.OnInitListener onInitListener = null;
+        tts_speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                tts_speaker.setPitch((float) 0.90);
+                tts_speaker.setSpeechRate((float) 0.90);
+                if(accent)tts_speaker.setVoice(voice_american_female);
+                else if(!accent)tts_speaker.setVoice(voice_british_female);
+            }
+        });
+
+        return tts_speaker;
+    }
 }

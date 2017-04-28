@@ -38,21 +38,4 @@ public class UtilityTTS {
         }
         return null;
     }
-
-    public static TextToSpeech initTTS(Context context, final boolean accent) {
-        TextToSpeech.OnInitListener onInitListener = null;
-
-        final TextToSpeech tts_speaker = new TextToSpeech(context, onInitListener);
-        onInitListener = new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                tts_speaker.setPitch((float) 0.90);
-                tts_speaker.setSpeechRate((float) 0.90);
-                if(accent)tts_speaker.setVoice(voice_british_female);
-                else if(!accent)tts_speaker.setVoice(voice_british_female);
-            }
-        };
-
-        return tts_speaker;
-    }
 }
