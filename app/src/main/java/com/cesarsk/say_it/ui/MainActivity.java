@@ -1,5 +1,7 @@
 package com.cesarsk.say_it.ui;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -71,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int FAVORITES_FRAGMENT_INDEX = 1;
     public static final int HISTORY_FRAGMENT_INDEX = 2;
     public static final int RECORDINGS_FRAGMENT_INDEX = 3;
+
+    //Intent Extra
+    public static final String IS_NOTIFICATION = "SAY.IT.FROM.NOTIFICATION";
 
     //Definizione variabile TTS
     private TextToSpeech tts_speaker;
@@ -189,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         easyRatingDialog = new EasyRatingDialog(this);
-
 
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
                 = new IabHelper.QueryInventoryFinishedListener() {

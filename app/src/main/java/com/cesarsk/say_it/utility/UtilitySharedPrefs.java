@@ -281,7 +281,7 @@ public class UtilitySharedPrefs {
         Toast.makeText(context, "Preferences deleted!", Toast.LENGTH_SHORT).show();
     }
 
-    public static void loadQuotes(Activity activity) throws IOException {
+    public static void loadQuotes(Context activity) throws IOException {
 
         //Getting Buffered Readers linked to the two txt files in the raw folder
         BufferedReader quote_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.quotes)));

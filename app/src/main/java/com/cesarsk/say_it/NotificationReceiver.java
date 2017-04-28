@@ -1,5 +1,6 @@
 package com.cesarsk.say_it;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,6 +20,7 @@ import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.ui.PlayActivity;
 import com.cesarsk.say_it.utility.UtilityDictionary;
+import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,6 +38,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (MainActivity.wordOfTheDay == null) {
             try {
                 UtilityDictionary.loadDictionary(context);
+                UtilitySharedPrefs.loadQuotes(context);
             } catch (IOException e) {
                 e.printStackTrace();
             }
