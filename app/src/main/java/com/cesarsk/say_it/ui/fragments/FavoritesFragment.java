@@ -3,13 +3,16 @@ package com.cesarsk.say_it.ui.fragments;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -36,7 +39,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
+import static com.cesarsk.say_it.ui.MainActivity.bottomBar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,12 +81,9 @@ public class FavoritesFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
-        snackbar = Snackbar.make(view.findViewById(R.id.favorites_fragment_coordinator), "Removed Element from Favorites", (int) FavoritesAdapter.UNDO_TIMEOUT);
-
 
         final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
         recyclerView.setAdapter(adapter);
-
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
             Drawable background;
@@ -99,8 +104,17 @@ public class FavoritesFragment extends Fragment {
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
                 adapter.remove(viewHolder.getAdapterPosition());
+                snackbar = Snackbar.make(view.findViewById(R.id.favorites_fragment_coordinator), "Removed Element from Favorites", (int) FavoritesAdapter.UNDO_TIMEOUT);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UtilitySharedPrefs.addFavs(getActivity(), adapter.getTemp_fav());
+                        adapter.setFavorites(loadDeserializedFavs(getActivity()));
+                        adapter.notifyItemInserted(adapter.getFavorites().indexOf(adapter.getTemp_fav()));
+                    }
+                });
                 snackbar.show();
             }
 
@@ -342,12 +356,29 @@ public class FavoritesFragment extends Fragment {
                 }
             });
 
-            snackbar.setAction("UNDO", new View.OnClickListener() {
+            final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button_history);
+            startTutorialPlayActivity(holder);
+            fab.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    UtilitySharedPrefs.addFavs(getActivity(), temp_fav);
-                    favorites = loadDeserializedFavs(getActivity());
-                    notifyItemInserted(favorites.indexOf(temp_fav));
+                public void onClick(View view) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Clear Favorites")
+                            .setMessage("Are you sure you want to clear your Favorites?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Clear Favorites
+                                    UtilitySharedPrefs.clearFavorites(getActivity());
+                                    setFavorites(loadDeserializedFavs(getActivity()));
+                                    Toast.makeText(getActivity(), "Favorites Cleared!", Toast.LENGTH_SHORT).show();
+
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do nothing
+                                }
+                            })
+                            .show();
                 }
             });
         }
@@ -384,5 +415,17 @@ public class FavoritesFragment extends Fragment {
             this.favorites = favorites;
             notifyDataSetChanged();
         }
+    }
+
+    private void startTutorialPlayActivity(FavoritesAdapter.ViewHolder holder) {
+        MainActivity.showCaseFragmentView = new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(holder.wordTextView)
+                .setDismissText(getString(R.string.showcase_str_btn_5))
+                .setContentText(getString(R.string.showcase_str_5))
+                .setDelay(100) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse(MainActivity.id_showcase_fragments) // provide a unique ID used to ensure it is only shown once
+                .setDismissOnTouch(true)
+                .withoutShape()
+                .show();
     }
 }

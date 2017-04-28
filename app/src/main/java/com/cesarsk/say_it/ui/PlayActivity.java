@@ -12,13 +12,17 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.Voice;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
@@ -51,11 +55,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
+import static android.speech.tts.Voice.LATENCY_VERY_LOW;
+import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
@@ -96,14 +104,22 @@ public class PlayActivity extends AppCompatActivity {
     Vibrator vibrator;
     TransitionDrawable green_animation;
     private long scaleAnimationDuration = 200;
+    private long scaleAnimationDurationLong = 300;
     boolean maxDurationReached = false;
-    public static String id_showcase = "utente";
     IabHelper mHelper;
     IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
     IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
     public static String no_ads_in_app = "no_ads";
     private InterstitialAd mInterstitialAd;
-    private boolean hasInterstitialDisplayed = false;
+    //private boolean hasInterstitialDisplayed = false;
+
+    //Definizione variabile TTS
+    private TextToSpeech tts_speaker;
+    public static TextToSpeech american_speaker_google;
+    public static TextToSpeech british_speaker_google;
+    public static Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+
 
     @Override
     public void onDestroy() {
@@ -119,16 +135,17 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(mInterstitialAd != null) {
-            if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
+        if (mInterstitialAd != null) {
+            if (mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
-                hasInterstitialDisplayed = true;
-                new Handler().postDelayed(new Runnable() {
+                //Do not launch this thread because ADMob should automatically load ADs every X minutes.
+                /*hasInterstitialDisplayed = true;
+                new Handler().postDelayed(  new Runnable() {
                     @Override
                     public void run() {
                         hasInterstitialDisplayed = false;
                     }
-                }, 45000);
+                }, 45000);*/
             }
         }
     }
@@ -153,6 +170,16 @@ public class PlayActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
+
+        if ((MainActivity.american_speaker_google != null || british_speaker_google != null)) {
+            //bind TTs
+            american_speaker_google = MainActivity.american_speaker_google;
+            british_speaker_google = MainActivity.british_speaker_google;
+        } else {
+            //init TTSs
+            american_speaker_google = initTTS(this, true);
+            british_speaker_google = initTTS(this, false);
+        }
 
         rec_button = (Button) findViewById(R.id.rec_button);
         final Button play_button = (Button) findViewById(R.id.play_button);
@@ -184,9 +211,7 @@ public class PlayActivity extends AppCompatActivity {
             });
 
             requestNewInterstitial();
-        }
-
-        else if(MainActivity.NO_ADS){
+        } else if (MainActivity.NO_ADS) {
             remove_ad.setVisibility(View.GONE);
         }
 
@@ -213,11 +238,11 @@ public class PlayActivity extends AppCompatActivity {
                         //Button reverse animation to NORMAL RED
                         rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
                         //START OVERSHOOT ANIMATION
-                        rec_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                        rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new AccelerateDecelerateInterpolator()).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                             @Override
                             public void run() {
                                 rec_button.setVisibility(View.INVISIBLE);
-                                play_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                                play_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
                                 delete_button.setAlpha(0f);
                                 delete_button.setVisibility(VISIBLE);
                                 delete_button.animate().setDuration(scaleAnimationDuration).alpha(1);
@@ -235,11 +260,12 @@ public class PlayActivity extends AppCompatActivity {
         });
         mediaPlayer = new MediaPlayer();
 
+        UtilitySharedPrefs.loadSettingsPrefs(this); //Caricamento dei Settings prima di controllare il DEFAULT_ACCENT (Arresto Anomalo)
         if (MainActivity.DEFAULT_ACCENT.equals("0")) {
-            accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
+            accent_button.setColorFilter(ContextCompat.getColor(this, R.color.primary_light));
             accent_flag = false;
         } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
-            accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
+            accent_button.setColorFilter(ContextCompat.getColor(this, R.color.Yellow600));
             accent_flag = true;
         }
 
@@ -273,11 +299,11 @@ public class PlayActivity extends AppCompatActivity {
                                     //Button reverse animation to NORMAL RED
                                     rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
                                     //START OVERSHOOT ANIMATION
-                                    rec_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                                    rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new AccelerateDecelerateInterpolator()).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                                         @Override
                                         public void run() {
                                             rec_button.setVisibility(View.INVISIBLE);
-                                            play_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                                            play_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
                                             delete_button.setAlpha(0f);
                                             delete_button.setVisibility(VISIBLE);
                                             delete_button.animate().setDuration(scaleAnimationDuration).alpha(1);
@@ -299,43 +325,9 @@ public class PlayActivity extends AppCompatActivity {
         });
 
         //Gestione Snackbar + UNDO
-        snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
+        setupSnackbar(chronometer, delete_button, play_button);
         final Context context = this;
 
-        snackbar.setAction("UNDO", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                File recovered_file = new File(view.getContext().getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac");
-                FileOutputStream outputStream = null;
-                try {
-                    outputStream = new FileOutputStream(recovered_file);
-                    outputStream.write(temp_recording_bytes);
-                    outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Long duration = UtilityRecordings.getRecordingDuration(view.getContext(), mediaPlayer, selected_word);
-                @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("mm:ss");
-                String durationText = dateFormat.format(new Date(duration));
-                chronometer.setText(durationText);
-
-                delete_button.setAlpha(0f);
-                delete_button.setVisibility(VISIBLE);
-                delete_button.animate().setDuration(300).alpha(1);
-                play_button.setScaleX(0);
-                play_button.setScaleY(0);
-                play_button.setVisibility(VISIBLE);
-                rec_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        rec_button.setVisibility(View.INVISIBLE);
-                        play_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
-                    }
-                });
-            }
-        });
 
         delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -349,11 +341,11 @@ public class PlayActivity extends AppCompatActivity {
                 rec_button.setScaleY(0);
                 rec_button.setScaleX(0);
                 rec_button.setVisibility(VISIBLE);
-                play_button.animate().setDuration(scaleAnimationDuration + 400).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                play_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new AccelerateDecelerateInterpolator()).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                     @Override
                     public void run() {
                         play_button.setVisibility(View.INVISIBLE);
-                        rec_button.animate().setDuration(scaleAnimationDuration + 400).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                        rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
                     }
                 });
                 chronometer.setBase(SystemClock.elapsedRealtime());
@@ -361,6 +353,7 @@ public class PlayActivity extends AppCompatActivity {
                 File recording_file = new File(filename);
                 temp_recording_bytes = UtilityRecordings.getRecordingBytesfromFile(recording_file);
                 UtilityRecordings.deleteRecording(context, recording_file.getName());
+                setupSnackbar(chronometer, delete_button, play_button);
                 snackbar.show();
             }
         });
@@ -368,12 +361,13 @@ public class PlayActivity extends AppCompatActivity {
         play_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                delete_button.setEnabled(false);
                 UtilityRecordings.playRecording(view.getContext(), mediaPlayer, selected_word + ".aac");
                 //START GREEN-to-GREEN-PRESSED ANIMATION
                 play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_green_pressed));
                 green_animation = (TransitionDrawable) play_button.getBackground();
                 green_animation.startTransition(durationMillis);
-                play_button.animate().setDuration(durationMillis).scaleX(0.85f).scaleY(0.85f);
+                play_button.animate().setDuration(durationMillis).scaleX(0.8f).scaleY(0.8f);
                 new CountDownTimer(mediaPlayer.getDuration(), 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -385,7 +379,12 @@ public class PlayActivity extends AppCompatActivity {
                         play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_pressed_to_green));
                         green_animation = (TransitionDrawable) play_button.getBackground();
                         green_animation.startTransition(durationMillis);
-                        play_button.animate().setDuration(durationMillis).scaleX(1).scaleY(1);
+                        play_button.animate().setDuration(durationMillis).scaleX(1).scaleY(1).withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                delete_button.setEnabled(true);
+                            }
+                        });
                     }
                 }.start();
             }
@@ -509,7 +508,7 @@ public class PlayActivity extends AppCompatActivity {
             mAdView.setVisibility(View.GONE);
         } else {
             MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.ad_unit_id_test));
-            AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).build();
+            AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
             mAdView.loadAd(adRequest);
         }
 
@@ -590,16 +589,54 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!accent_flag) {
-                    MainActivity.american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                    american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
                     vibrator.vibrate(100);
                 } else if (accent_flag) {
-                    MainActivity.british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                    british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
                     vibrator.vibrate(100);
                 }
             }
         });
 
         startTutorialPlayActivity(rec_button, play_original_button, accent_button, slow_button);
+    }
+
+    private void setupSnackbar(final Chronometer chronometer, final ImageButton delete_button, final Button play_button) {
+        snackbar = Snackbar.make(findViewById(R.id.play_activity_coordinator), "Deleted Recording", (int) UNDO_TIMEOUT);
+        snackbar.setAction("UNDO", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                File recovered_file = new File(view.getContext().getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac");
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(recovered_file);
+                    outputStream.write(temp_recording_bytes);
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Long duration = UtilityRecordings.getRecordingDuration(view.getContext(), mediaPlayer, selected_word);
+                @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+                String durationText = dateFormat.format(new Date(duration));
+                chronometer.setText(durationText);
+
+                delete_button.setAlpha(0f);
+                delete_button.setVisibility(VISIBLE);
+                delete_button.animate().setDuration(scaleAnimationDuration).alpha(1);
+                play_button.setScaleX(0);
+                play_button.setScaleY(0);
+                play_button.setVisibility(VISIBLE);
+                rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new AccelerateDecelerateInterpolator()).scaleX(0).scaleY(0).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        rec_button.setVisibility(View.INVISIBLE);
+                        play_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new OvershootInterpolator()).scaleX(1).scaleY(1);
+                    }
+                });
+            }
+        });
     }
 
     private boolean checkDuration(String time) {
@@ -619,18 +656,39 @@ public class PlayActivity extends AppCompatActivity {
         config.setDelay(50); // 50ms between each showcase views
         config.setShapePadding(15);
         config.setRenderOverNavigationBar(true);
+
         MaterialShowcaseSequence sequence;
-        sequence = new MaterialShowcaseSequence(this, id_showcase);
+        sequence = new MaterialShowcaseSequence(this, MainActivity.id_showcase_playactivity);
         sequence.setConfig(config);
 
-        sequence.addSequenceItem(multibutton,
-                getString(R.string.showcase_str_1), getString(R.string.showcase_str_btn_1));
-        sequence.addSequenceItem(play_original_button,
-                getString(R.string.showcase_str_2), Utility.underlineText(getString(R.string.showcase_str_btn_2)).toString());
-        sequence.addSequenceItem(accent_button,
-                getString(R.string.showcase_str_3), Utility.underlineText(getString(R.string.showcase_str_btn_3)).toString());
-        sequence.addSequenceItem(slow_button,
-                getString(R.string.showcase_str_4), Utility.underlineText(getString(R.string.showcase_str_btn_4)).toString());
+        sequence.addSequenceItem(new MaterialShowcaseView.Builder(this)
+                .setTarget(multibutton)
+                .setDismissText(getString(R.string.showcase_str_btn_1))
+                .setContentText(getString(R.string.showcase_str_1))
+                .setDismissOnTouch(true)
+                .build()
+        );
+        sequence.addSequenceItem(new MaterialShowcaseView.Builder(this)
+                .setTarget(play_original_button)
+                .setDismissText(getString(R.string.showcase_str_btn_2))
+                .setContentText(getString(R.string.showcase_str_2))
+                .setDismissOnTouch(true)
+                .build()
+        );
+        sequence.addSequenceItem(new MaterialShowcaseView.Builder(this)
+                .setTarget(accent_button)
+                .setDismissText(getString(R.string.showcase_str_btn_3))
+                .setContentText(getString(R.string.showcase_str_3))
+                .setDismissOnTouch(true)
+                .build()
+        );
+        sequence.addSequenceItem(new MaterialShowcaseView.Builder(this)
+                .setTarget(slow_button)
+                .setDismissText(getString(R.string.showcase_str_btn_4))
+                .setContentText(getString(R.string.showcase_str_4))
+                .setDismissOnTouch(true)
+                .build()
+        );
         sequence.start();
     }
 
@@ -654,7 +712,23 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).addTestDevice(getResources().getString(R.string.test_device_honor_6)).build();
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
         mInterstitialAd.loadAd(adRequest);
     }
+
+    private TextToSpeech initTTS(Context context, final boolean accent) {
+        TextToSpeech.OnInitListener onInitListener = null;
+        tts_speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                tts_speaker.setPitch((float) 0.90);
+                tts_speaker.setSpeechRate((float) 0.90);
+                if (accent) tts_speaker.setVoice(MainActivity.voice_american_female);
+                else if (!accent) tts_speaker.setVoice(MainActivity.voice_british_female);
+            }
+        });
+
+        return tts_speaker;
+    }
+
 }

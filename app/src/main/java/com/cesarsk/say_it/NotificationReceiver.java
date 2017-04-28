@@ -1,5 +1,6 @@
 package com.cesarsk.say_it;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,14 +14,18 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v7.app.NotificationCompat;
+import android.text.format.DateFormat;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.ui.PlayActivity;
 import com.cesarsk.say_it.utility.UtilityDictionary;
+import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
@@ -33,6 +38,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (MainActivity.wordOfTheDay == null) {
             try {
                 UtilityDictionary.loadDictionary(context);
+                UtilitySharedPrefs.loadQuotes(context);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -92,6 +98,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
 
 
 

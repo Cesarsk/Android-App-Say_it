@@ -1,8 +1,11 @@
 package com.cesarsk.say_it.ui;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
@@ -10,6 +13,7 @@ import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +22,7 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,9 +34,11 @@ import com.cesarsk.say_it.ui.fragments.FavoritesFragment;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
+import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.cesarsk.say_it.utility.UtilityTTS;
 import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
@@ -50,6 +57,10 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
@@ -58,12 +69,16 @@ import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 public class MainActivity extends AppCompatActivity {
 
     //Indici per la FragmentList
-    private final int HOME_FRAGMENT_INDEX = 0;
-    private final int FAVORITES_FRAGMENT_INDEX = 1;
-    private final int HISTORY_FRAGMENT_INDEX = 2;
-    private final int RECORDINGS_FRAGMENT_INDEX = 3;
+    public static final int HOME_FRAGMENT_INDEX = 0;
+    public static final int FAVORITES_FRAGMENT_INDEX = 1;
+    public static final int HISTORY_FRAGMENT_INDEX = 2;
+    public static final int RECORDINGS_FRAGMENT_INDEX = 3;
+
+    //Intent Extra
+    public static final String IS_NOTIFICATION = "SAY.IT.FROM.NOTIFICATION";
 
     //Definizione variabile TTS
+    private TextToSpeech tts_speaker;
     public static TextToSpeech american_speaker_google;
     public static TextToSpeech british_speaker_google;
     public static Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
@@ -91,6 +106,14 @@ public class MainActivity extends AppCompatActivity {
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
 
     public final static int REQUEST_CODE = 1;
+
+    //Unique IDs related to showcase
+    public static String id_showcase_playactivity = "utente_playactivity";
+    public static String id_showcase_fragments = "utente_fragments";
+    public static MaterialShowcaseView showCaseFragmentView;
+
+
+    int selectedTab = 0; // or other values
 
     boolean doubleBackToExitPressedOnce = false;
     boolean hasInterstitialDisplayed = false;
@@ -147,10 +170,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Bundle b = intent.getExtras();
-        int value = 0; // or other values
         if (b != null) {
-            value = b.getInt("fragment_index");
-            bottomBar.selectTabAtPosition(value);
+            selectedTab = b.getInt("fragment_index");
+            bottomBar.selectTabAtPosition(selectedTab);
         } else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
     }
 
@@ -172,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         easyRatingDialog = new EasyRatingDialog(this);
-
 
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
                 = new IabHelper.QueryInventoryFinishedListener() {
@@ -317,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
                             FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
+                        selectedTab = FAVORITES_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX));
                         last_index = FAVORITES_FRAGMENT_INDEX;
                         break;
@@ -329,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
                             FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
+                        selectedTab = HOME_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
                         last_index = HOME_FRAGMENT_INDEX;
                         break;
@@ -341,6 +364,7 @@ public class MainActivity extends AppCompatActivity {
                             FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
+                        selectedTab = HISTORY_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX));
                         last_index = HISTORY_FRAGMENT_INDEX;
                         break;
@@ -353,6 +377,7 @@ public class MainActivity extends AppCompatActivity {
                             FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
+                        selectedTab = RECORDINGS_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX));
                         last_index = RECORDINGS_FRAGMENT_INDEX;
                         break;
@@ -363,67 +388,64 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //IMPOSTAZIONE TEXT TO SPEECH
-        american_speaker_google = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                // TODO OTTIMIZZARE TTS
-                if (status == TextToSpeech.SUCCESS) {
-                    //Ridondante?
-                    american_speaker_google.setPitch((float) 0.90);
-                    american_speaker_google.setSpeechRate((float) 0.90);
-                    american_speaker_google.setVoice(voice_american_female);
-                } else
-                    Log.e("error", "Initilization Failed!");
-            }
-        });
-
-        british_speaker_google = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                // TODO OTTIMIZZARE TTS
-                if (status == TextToSpeech.SUCCESS) {
-                    //Ridondante?
-                    british_speaker_google.setPitch((float) 0.90);
-                    british_speaker_google.setSpeechRate((float) 0.90);
-                    british_speaker_google.setVoice(voice_british_female);
-                } else
-                    Log.e("error", "Initilization Failed!");
-            }
-        });
+        american_speaker_google = initTTS(this, true);
+        british_speaker_google = initTTS(this, false);
     }
 
     @Override
     public void onBackPressed() {
-
-        if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
-            mInterstitialAd.show();
-            hasInterstitialDisplayed = true;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    hasInterstitialDisplayed = false;
-                }
-            }, 60000);
-        } else {
-            if (doubleBackToExitPressedOnce) {
-                super.onBackPressed();
-                return;
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
+        if(selectedTab != HOME_FRAGMENT_INDEX)
+        {
+            bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
+            if(showCaseFragmentView != null) showCaseFragmentView.hide();
         }
 
+        else
+        {
+            if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
+                mInterstitialAd.show();
+                hasInterstitialDisplayed = true;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        hasInterstitialDisplayed = false;
+                    }
+                }, 60000);
+            } else {
+                if (doubleBackToExitPressedOnce) {
+                    super.onBackPressed();
+                    return;
+                }
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, "Click Back again to exit", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+            }
+        }
     }
 
     private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getResources().getString(R.string.test_device_oneplus_3)).addTestDevice(getResources().getString(R.string.test_device_honor_6)).build();
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
         mInterstitialAd.loadAd(adRequest);
+    }
+
+    private TextToSpeech initTTS(Context context, final boolean accent) {
+        TextToSpeech.OnInitListener onInitListener = null;
+        tts_speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                tts_speaker.setPitch((float) 0.90);
+                tts_speaker.setSpeechRate((float) 0.90);
+                if(accent)tts_speaker.setVoice(voice_american_female);
+                else if(!accent)tts_speaker.setVoice(voice_british_female);
+            }
+        });
+
+        return tts_speaker;
     }
 }

@@ -41,6 +41,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 
 
@@ -60,7 +64,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(recyclerView != null) {
+        if (recyclerView != null) {
             //TODO risettare la lista dell'adapter QUI con un metodo di Update (loadDeserializedHistory)
             HistoryAdapter adapter = (HistoryAdapter) recyclerView.getAdapter();
             adapter.setHistory(loadDeserializedHistory(getActivity()));
@@ -71,11 +75,10 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
+        final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         DeserializedHistory = loadDeserializedHistory(getActivity());
 
-        snackbar = Snackbar.make(view.findViewById(R.id.history_fragment_coordinator), "Removed Element from Favorites", (int) HistoryAdapter.UNDO_TIMEOUT);
         recyclerView = (RecyclerView) view.findViewById(R.id.history_list);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -109,6 +112,15 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 adapter.remove(viewHolder.getAdapterPosition());
+                snackbar = Snackbar.make(view.findViewById(R.id.history_fragment_coordinator), "Removed Element from Favorites", (int) HistoryAdapter.UNDO_TIMEOUT);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UtilitySharedPrefs.addHist(getActivity(), adapter.getTemp_hist());
+                        adapter.setHistory(loadDeserializedHistory(getActivity()));
+                        adapter.notifyItemInserted(adapter.getHistory().indexOf(adapter.getTemp_hist()));
+                    }
+                });
                 snackbar.show();
             }
 
@@ -244,7 +256,7 @@ public class HistoryFragment extends Fragment {
             notifyDataSetChanged();
         }
 
-        public Pair<String, String> getTemp_hist() {
+        public SayItPair getTemp_hist() {
             return temp_hist;
         }
 
@@ -303,19 +315,18 @@ public class HistoryFragment extends Fragment {
         @Override
         public void onBindViewHolder(final HistoryAdapter.ViewHolder holder, final int position) {
 
-                holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(MainActivity.DEFAULT_ACCENT.equals("0")) {
-                            MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                            //Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
-                        }
-                        else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
-                            MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
-                            //Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
-                        }
+            holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (MainActivity.DEFAULT_ACCENT.equals("0")) {
+                        MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                        //Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                    } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
+                        MainActivity.british_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                        //Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
                     }
-                });
+                }
+            });
 
             holder.wordTextView.setText(history.get(position).first);
             holder.IPATextView.setText(history.get(position).second);
@@ -341,9 +352,7 @@ public class HistoryFragment extends Fragment {
                         UtilitySharedPrefs.addFavs(getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                         Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
                         holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
-                    }
-
-                    else if(UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first)) {
+                    } else if (UtilitySharedPrefs.checkFavs(getActivity(), history.get(position).first)) {
                         UtilitySharedPrefs.removeFavs(v.getContext(), history.get(holder.getAdapterPosition()));
                         Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                         holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary_dark));
@@ -351,16 +360,8 @@ public class HistoryFragment extends Fragment {
                 }
             });
 
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    UtilitySharedPrefs.addHist(getActivity(), temp_hist);
-                    history = loadDeserializedHistory(getActivity());
-                    notifyItemInserted(history.indexOf(temp_hist));
-                }
-            });
-
-            final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button_history);
+            final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floating_button_history);
+            startTutorialPlayActivity(holder);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -423,5 +424,17 @@ public class HistoryFragment extends Fragment {
         });
 
         return DeserializedHistory;
+    }
+
+    private void startTutorialPlayActivity(HistoryAdapter.ViewHolder holder) {
+        MainActivity.showCaseFragmentView = new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(holder.wordTextView)
+                .setDismissText(getString(R.string.showcase_str_btn_5))
+                .setContentText(getString(R.string.showcase_str_5))
+                .setDelay(100) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse(MainActivity.id_showcase_fragments) // provide a unique ID used to ensure it is only shown once
+                .setDismissOnTouch(true)
+                .withoutShape()
+                .show();
     }
 }

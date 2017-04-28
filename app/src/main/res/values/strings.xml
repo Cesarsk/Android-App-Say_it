@@ -8,6 +8,9 @@
     <string name="Welcome_Text">Welcome, </string>
     <string name="NoRecent_Text">You do not have recent history. Try searching some words!</string>
 
+    <!-- Other Strings -->
+    <string name="swipe_hint">Swipe an item to delete</string>
+
     <!-- Content Description -->
     <string name="FavsContentDescription">Add word to favorites</string>
     <string name="CopyContentDescription">Copy word to clipboard</string>
@@ -26,6 +29,7 @@
     <string name="banner_ad_unit_app">ca-app-pub-9284620118215899~4265868761</string>
     <string name="test_device_oneplus_3">91BE4FE979D3D0967B1CE55B15248365</string>
     <string name="test_device_honor_6">E43D79007EC93EBAA6B24FC5A1771C6D</string>
+    <string name="test_device_htc_one_m8">8F41413C950FF0509CECFF6C1EC8FEFC</string>
     <string name="ad_unit_id_interstitial_playactivity_back">ca-app-pub-9284620118215899/4707483164</string>
     <string name="ad_unit_id_banner_settings">ca-app-pub-9284620118215899/7660949569</string>
 
@@ -75,13 +79,15 @@
     <string name="erd_rate_now">Rate now.</string>
 
     <!-- showcase tutorial strings -->
-    <string name="showcase_str_1">HOLD this button to record a word. Release and PRESS it to listen to your recording.</string>
-    <string name="showcase_str_2">PRESS this button to listen to the original pronunciation.</string>
-    <string name="showcase_str_3">Want to switch the accent? PRESS this one!</string>
-    <string name="showcase_str_4">Is the pronunciation too quick? Use the SLOW BUTTON.</string>
-    <string name="showcase_str_btn_1">[DISMISS]</string>
+    <string name="showcase_str_1">[1/4] HOLD this button to record a word. Release and PRESS it to listen to your recording.</string>
+    <string name="showcase_str_2">[2/4] PRESS this button to listen to the original pronunciation.</string>
+    <string name="showcase_str_3">[3/4] Want to switch the accent? PRESS this one!</string>
+    <string name="showcase_str_4">[4/4] Is the pronunciation too quick? Use the SLOW BUTTON.</string>
+    <string name="showcase_str_5">Swipe an item to remove it from this list.</string>
+    <string name="showcase_str_btn_1">[OKAY]</string>
     <string name="showcase_str_btn_2">[GO AWAY!]</string>
     <string name="showcase_str_btn_3">[SERIOUSLY, I\'VE GOT THIS!]</string>
     <string name="showcase_str_btn_4">[...I will]</string>
+    <string name="showcase_str_btn_5">[OKAY]</string>
 
 </resources>

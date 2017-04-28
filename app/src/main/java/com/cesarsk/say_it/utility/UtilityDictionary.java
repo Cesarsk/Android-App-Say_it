@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.Random;
 
 import static com.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
+import static com.cesarsk.say_it.ui.MainActivity.Wordlists_Map;
 import static com.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
 
 /**
@@ -55,6 +56,21 @@ public class UtilityDictionary {
 
         //String random_word = WordList.get(new Random().nextInt(WordList.size()));
         return random_pair;
+    }
+
+    public static String getIPAfromWord(String word){
+
+        String IPA = null;
+
+        ArrayList<Pair<String, String>> sublist = MainActivity.Wordlists_Map.get(word.substring(0,1).toLowerCase());
+
+        for(Pair<String, String> element : sublist){
+           if(element.first.equalsIgnoreCase(word)){
+               IPA = element.second;
+           }
+        }
+
+        return IPA;
     }
 
     public static String getRandomWord(long seed, boolean ipa) {

@@ -122,6 +122,11 @@ public class UtilitySharedPrefs {
         loadHist(context); //refreshing the view
     }
 
+    public static void clearFavorites(Context context){
+        savePrefs(context, new TreeSet<String>(), MainActivity.FAVORITES_PREFS_KEY);
+        loadFavs(context);
+    }
+
     /*public static void removeRecording(Context context, String recordingFilename){
         Set<String> new_recs = new TreeSet<>();
         loadRecordings(context);
@@ -261,7 +266,7 @@ public class UtilitySharedPrefs {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.DEFAULT_ACCENT = sharedPreferences.getString(DEFAULT_ACCENT_KEY, "0");
         MainActivity.DEFAULT_NOTIFICATION_RATE = sharedPreferences.getString(DEFAULT_NOTIFICATION_RATE_KEY, "2");
-        MainActivity.DEFAULT_NOTIFICATION_HOUR = sharedPreferences.getString(DEFAULT_NOTIFICATION_HOUR_KEY, "14");
+        MainActivity.DEFAULT_NOTIFICATION_HOUR = sharedPreferences.getString(DEFAULT_NOTIFICATION_HOUR_KEY, "12");
         MainActivity.DEFAULT_NOTIFICATION_MINUTE = sharedPreferences.getString(DEFAULT_NOTIFICATION_MINUTE_KEY, "00");
     }
 
@@ -276,7 +281,7 @@ public class UtilitySharedPrefs {
         Toast.makeText(context, "Preferences deleted!", Toast.LENGTH_SHORT).show();
     }
 
-    public static void loadQuotes(Activity activity) throws IOException {
+    public static void loadQuotes(Context activity) throws IOException {
 
         //Getting Buffered Readers linked to the two txt files in the raw folder
         BufferedReader quote_line_reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.quotes)));
