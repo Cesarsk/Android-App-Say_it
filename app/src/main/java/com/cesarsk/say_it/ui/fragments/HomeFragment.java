@@ -18,6 +18,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -189,20 +190,20 @@ public class HomeFragment extends Fragment {
                 public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
                     if (scrollY > oldScrollY) {
-                        //Log.i("DEBUG", "Scroll DOWN");
+                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "Scroll DOWN");
                         fab.hide();
                     }
                     if (scrollY < oldScrollY) {
-                        //Log.i("DEBUG", "Scroll UP");
+                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "Scroll UP");
                     }
 
                     if (scrollY == 0) {
-                        //Log.i("DEBUG", "TOP SCROLL");
+                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "TOP SCROLL");
                         fab.show();
                     }
 
                     if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                        //Log.i("DEBUG", "BOTTOM SCROLL");
+                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "BOTTOM SCROLL");
                     }
                 }
             });

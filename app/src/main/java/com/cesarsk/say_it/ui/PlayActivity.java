@@ -161,10 +161,10 @@ public class PlayActivity extends AppCompatActivity {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 // Hooray, IAB is fully set up!
-                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 

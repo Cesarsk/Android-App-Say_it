@@ -60,6 +60,8 @@ import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final boolean isLoggingEnabled = false;
+
     //Indici per la FragmentList
     public static final int HOME_FRAGMENT_INDEX = 0;
     public static final int FAVORITES_FRAGMENT_INDEX = 1;
@@ -223,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 ArrayList<String> SKUs = new ArrayList<>();
                 SKUs.add(PlayActivity.no_ads_in_app);
@@ -233,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
                 }
-                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 

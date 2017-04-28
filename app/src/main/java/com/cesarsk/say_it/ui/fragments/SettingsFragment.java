@@ -171,10 +171,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 // Hooray, IAB is fully set up!
-                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 
@@ -270,7 +270,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
         default_accent.setSummary(default_accent.getEntry());
         final CharSequence choice = default_accent.getValue();
-        Log.i("DEFAULT LANGUAGE SETTED", (String) choice);
 
         default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -283,7 +282,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
                 Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
                 UtilitySharedPrefs.loadSettingsPrefs(context);
-                Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
                 return true;
             }
         });
