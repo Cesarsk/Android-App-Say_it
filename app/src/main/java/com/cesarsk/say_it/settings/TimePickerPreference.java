@@ -1,16 +1,11 @@
 package com.cesarsk.say_it.settings;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.cesarsk.say_it.NotificationReceiver;
 import com.cesarsk.say_it.ui.MainActivity;
@@ -26,7 +21,7 @@ import java.util.Locale;
 public class TimePickerPreference extends DialogPreference
         implements TimePicker.OnTimeChangedListener {
 
-    private Context context;
+    private final Context context;
     private TimePicker time_picker = null;
     private int selected_hour;
     private int selected_minute;

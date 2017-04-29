@@ -18,11 +18,11 @@ import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.app.FragmentManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -55,15 +55,14 @@ import static com.cesarsk.say_it.utility.UtilityDictionary.getDailyRandomQuote;
  */
 public class HomeFragment extends Fragment {
 
-    public static int RECENT_HISTORY_CARD_ROW_LIMIT = 5;
+    private static final int RECENT_HISTORY_CARD_ROW_LIMIT = 5;
     private boolean favorite_flag = false;
-    View view;
+    private View view;
 
-    ArrayList<SayItPair> recentHistory;
-    LinearLayout recentHistoryLinearLayout;
-    LinearLayout.LayoutParams layoutParams;
-    float scale;
-    RelativeLayout recent_search = null;
+    private LinearLayout recentHistoryLinearLayout;
+    private LinearLayout.LayoutParams layoutParams;
+    private float scale;
+    private RelativeLayout recent_search = null;
 
     public HomeFragment() {
     }
@@ -79,7 +78,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
+        ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
         //History not empty
         if(recentHistory != null && !(recentHistory.isEmpty())) {
             recentHistoryLinearLayout.removeAllViews();
@@ -190,20 +189,20 @@ public class HomeFragment extends Fragment {
                 public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
                     if (scrollY > oldScrollY) {
-                        //Log.i("DEBUG", "Scroll DOWN");
+                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "Scroll DOWN");
                         fab.hide();
                     }
                     if (scrollY < oldScrollY) {
-                        //Log.i("DEBUG", "Scroll UP");
+                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "Scroll UP");
                     }
 
                     if (scrollY == 0) {
-                        //Log.i("DEBUG", "TOP SCROLL");
+                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "TOP SCROLL");
                         fab.show();
                     }
 
                     if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                        //Log.i("DEBUG", "BOTTOM SCROLL");
+                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "BOTTOM SCROLL");
                     }
                 }
             });
@@ -232,17 +231,17 @@ public class HomeFragment extends Fragment {
 
         final ImageButton favorite_button = (ImageButton)view.findViewById(R.id.favorite_card_button);
         favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), wordOfTheDay);
-        if(favorite_flag) favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+        if(favorite_flag) favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
         favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!favorite_flag) {
                     UtilitySharedPrefs.addFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag= !favorite_flag;
-                    favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+                    favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
                 }
                 else {
-                    favorite_button.setColorFilter(getResources().getColor(R.color.white));
+                    favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.white));
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag = !favorite_flag;
                 }
@@ -286,7 +285,7 @@ public class HomeFragment extends Fragment {
         random_quote.setText(getDailyRandomQuote());
 
         final TextView view_full_history = (TextView)view.findViewById(R.id.view_full_history);
-        view_full_history.setText("Full History");
+        view_full_history.setText(getString(R.string.full_history_button));
         view_full_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

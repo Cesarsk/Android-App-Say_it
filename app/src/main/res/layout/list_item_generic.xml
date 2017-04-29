@@ -48,7 +48,8 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:backgroundTint="@color/Grey100"
-        android:tint="@color/primary_dark"/>
+        android:tint="@color/primary_dark"
+        android:contentDescription="@string/quickplay_button_description"/>
 
     <ImageButton
         android:id="@+id/list_item_addToFavs"
@@ -60,6 +61,7 @@
         android:paddingEnd="16dp"
         android:backgroundTint="@color/Grey100"
         android:src="@drawable/ic_favorite_black_24dp"
-        android:tint="@color/primary_dark"/>
+        android:tint="@color/primary_dark"
+        android:contentDescription="@string/favorite_button_description"/>
 
 </LinearLayout>

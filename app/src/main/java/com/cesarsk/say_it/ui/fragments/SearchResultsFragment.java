@@ -1,7 +1,6 @@
 package com.cesarsk.say_it.ui.fragments;
 
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.Editable;
@@ -45,7 +44,6 @@ public class SearchResultsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //new AsyncFiltering().execute(adapter, s);
                 adapter.getFilter().filter(s);
             }
 
@@ -55,20 +53,6 @@ public class SearchResultsFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private class AsyncFiltering extends AsyncTask{
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-
-            SearchListAdapter adapter = (SearchListAdapter) objects[0];
-            CharSequence s = (CharSequence) objects[1];
-
-            adapter.getFilter().filter(s);
-
-            return null;
-        }
     }
 
 }

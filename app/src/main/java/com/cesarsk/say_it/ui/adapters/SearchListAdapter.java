@@ -108,12 +108,12 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                 if(MainActivity.DEFAULT_ACCENT.equals("0")) {
                     MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
                     MainActivity.american_speaker_google.speak(viewHolder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                    //Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
+                    if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
                 }
                 else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
                     MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
                     MainActivity.british_speaker_google.speak(viewHolder.wordTextView.getText(),QUEUE_FLUSH,null,null);
-                    //Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
+                    if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
                 }
             }
         });

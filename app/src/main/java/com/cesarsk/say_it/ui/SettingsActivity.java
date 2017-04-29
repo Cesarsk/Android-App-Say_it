@@ -22,15 +22,16 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            //noinspection ConstantConditions
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             //Change arrow color Toolbar
-            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material);
+            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_ab_back_material);
             upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
         SettingsFragment fragment = new SettingsFragment();
-        //TODO ANIMATION fragment.setEnterTransition(new Slide(Gravity.RIGHT));
+        //TODO ANIMATION fragment.setEnterTransition(new Slide(Gravity.END));
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.contentSettings, fragment)

@@ -48,6 +48,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:backgroundTint="@color/Grey100"
-        android:tint="@color/primary_dark"/>
+        android:tint="@color/primary_dark"
+        android:contentDescription="@string/quickplay_button_description"/>
 
 </LinearLayout>

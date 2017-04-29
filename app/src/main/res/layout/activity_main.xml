@@ -47,7 +47,7 @@
                 android:layout_height="32dp"
                 android:src="@drawable/ic_mic_blue_yellow"
                 android:background="@color/primary_dark"
-                android:contentDescription="@string/voice_speech_icon_description"/>
+                android:contentDescription="@string/voice_search_button_description"/>
 
         </LinearLayout>
 

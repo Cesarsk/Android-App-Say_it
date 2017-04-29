@@ -30,11 +30,6 @@
         <item name="android:textColorHint">@color/primary_light</item>
     </style>
 
-    <style name="CustomTitleTextAppearance">
-        <item name="android:textSize">23sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
     <style name="Preference" parent="BlueYellowThemeNoActionBar">
         <item name="colorAccent">@color/primary</item>
         <item name="android:textColorPrimary">@color/primary_text</item>

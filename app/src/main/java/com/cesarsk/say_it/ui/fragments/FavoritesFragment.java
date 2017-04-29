@@ -1,7 +1,6 @@
 package com.cesarsk.say_it.ui.fragments;
 
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -39,21 +38,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-import static com.cesarsk.say_it.ui.MainActivity.bottomBar;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FavoritesFragment extends Fragment {
 
-    ArrayList<Pair<String, String>> DeserializedFavs;
-    RecyclerView recyclerView;
-    Snackbar snackbar;
+    private RecyclerView recyclerView;
+    private Snackbar snackbar;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -74,7 +69,7 @@ public class FavoritesFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
-        DeserializedFavs = loadDeserializedFavs(getActivity());
+        ArrayList<Pair<String, String>> deserializedFavs = loadDeserializedFavs(getActivity());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.favorites_list);
         recyclerView.setHasFixedSize(true);
@@ -82,7 +77,7 @@ public class FavoritesFragment extends Fragment {
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
 
-        final FavoritesAdapter adapter = new FavoritesAdapter(DeserializedFavs);
+        final FavoritesAdapter adapter = new FavoritesAdapter(deserializedFavs);
         recyclerView.setAdapter(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
@@ -237,7 +232,7 @@ public class FavoritesFragment extends Fragment {
         return view;
     }
 
-    public static ArrayList<Pair<String, String>> loadDeserializedFavs(Context context) {
+    private static ArrayList<Pair<String, String>> loadDeserializedFavs(Context context) {
 
         UtilitySharedPrefs.loadFavs(context);
         ArrayList<String> SerializedFavs = new ArrayList<>(MainActivity.FAVORITES);
@@ -273,20 +268,6 @@ public class FavoritesFragment extends Fragment {
 
         private Pair<String, String> temp_fav;
 
-        public int getTemp_pos() {
-            return temp_pos;
-        }
-
-        public void setTemp_pos(int temp_pos) {
-            this.temp_pos = temp_pos;
-        }
-
-        private int temp_pos;
-
-        public void setTemp_fav(Pair<String, String> temp_fav) {
-            this.temp_fav = temp_fav;
-        }
-
         /*private ArrayList<Pair<String, String>> pendingFavorites;
         private Handler handler = new Handler(); //Handler per gestire i Runnable per permettere l'UNDO con il Delay
         HashMap<Pair<String, String>, Runnable> pendingRunnables = new HashMap<>(); //HashMap che associa ad ogni elemento della lista un Runnable che aspetterà
@@ -299,9 +280,9 @@ public class FavoritesFragment extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            TextView wordTextView;
-            TextView IPATextView;
-            ImageButton QuickPlayBtn;
+            final TextView wordTextView;
+            final TextView IPATextView;
+            final ImageButton QuickPlayBtn;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -324,9 +305,6 @@ public class FavoritesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final FavoritesAdapter.ViewHolder holder, int position) {
-
-            final Pair<String, String> current_item = favorites.get(position);
-
                 holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -352,7 +330,7 @@ public class FavoritesFragment extends Fragment {
                     play_activity_intent.putExtra(PlayActivity.PLAY_WORD, holder.wordTextView.getText());
                     play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
                     UtilitySharedPrefs.addHist(getActivity(), new SayItPair(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
-                    getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) getActivity()).toBundle());
+                    getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                 }
             });
 
@@ -391,20 +369,10 @@ public class FavoritesFragment extends Fragment {
         void remove(int pos) {
 
             temp_fav = favorites.get(pos);
-            temp_pos = pos;
 
             UtilitySharedPrefs.removeFavs(getActivity(), favorites.get(pos));
             favorites = loadDeserializedFavs(getActivity());
             notifyItemRemoved(pos);
-        }
-
-        public void add(FavoritesAdapter.ViewHolder viewHolder) {
-            UtilitySharedPrefs.addFavs(getActivity(), new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.IPATextView.getText().toString()));
-            Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-        }
-
-        public void recover_temp_fav(){
-
         }
 
         public ArrayList<Pair<String, String>> getFavorites() {

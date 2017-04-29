@@ -36,17 +36,17 @@ import static com.cesarsk.say_it.utility.Utility.shareToMail;
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
-    private String emails[] = {"sayit.edu@gmail.com"};
+    private final String[] emails = {"sayit.edu@gmail.com"};
     static private int index_default_accent = 0;
     private Callback mCallback;
     private static final String KEY_1 = "button_notification";
     private static final String KEY_2 = "open_source_licenses";
-    IabHelper mHelper;
-    IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
-    IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
+    private IabHelper mHelper;
+    private IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
+    private IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
 
     public interface Callback {
-        public void onNestedPreferenceSelected(int key);
+        void onNestedPreferenceSelected(int key);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         Preference open_source_licenses = findPreference(KEY_2);
         open_source_licenses.setOnPreferenceClickListener(this);
 
-        Preference rate_us = (Preference) getPreferenceManager().findPreference("rate_us");
+        Preference rate_us = getPreferenceManager().findPreference("rate_us");
         rate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -133,7 +133,16 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         about_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com");
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/29/about-wordly/");
+                return false;
+            }
+        });
+
+        final Preference eula = getPreferenceManager().findPreference("eula");
+        eula.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/28/say-it-eula-agreement/");
                 return false;
             }
         });
@@ -162,10 +171,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 // Hooray, IAB is fully set up!
-                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 
@@ -174,7 +183,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             public void onIabPurchaseFinished(IabResult result, Purchase info) {
                 if (result.isFailure()) {
                     Toast.makeText(getActivity(), "Purchase Failed! Perhaps have you already purchased the item?", Toast.LENGTH_SHORT).show();
-                    return;
                 } else if (info.getSku().equals(PlayActivity.no_ads_in_app)) {
                     UtilitySharedPrefs.loadAdsStatus(getActivity());
                     UtilitySharedPrefs.savePrefs(getActivity(), true, MainActivity.NO_ADS_STATUS_KEY);
@@ -260,9 +268,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
         default_accent.setSummary(default_accent.getEntry());
-        final CharSequence choice = default_accent.getValue();
-        Log.i("DEFAULT LANGUAGE SETTED", (String) choice);
-
         default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -274,7 +279,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
                 Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
                 UtilitySharedPrefs.loadSettingsPrefs(context);
-                Log.i("DEFAULT", String.valueOf(entries[index_default_accent]));
                 return true;
             }
         });

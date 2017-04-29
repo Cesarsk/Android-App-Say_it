@@ -1,7 +1,5 @@
 package com.cesarsk.say_it.ui;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,7 +11,6 @@ import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +19,6 @@ import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,11 +30,9 @@ import com.cesarsk.say_it.ui.fragments.FavoritesFragment;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
-import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
-import com.cesarsk.say_it.utility.UtilityTTS;
 import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
@@ -57,9 +51,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -68,21 +60,18 @@ import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final boolean isLoggingEnabled = false;
+
     //Indici per la FragmentList
-    public static final int HOME_FRAGMENT_INDEX = 0;
-    public static final int FAVORITES_FRAGMENT_INDEX = 1;
-    public static final int HISTORY_FRAGMENT_INDEX = 2;
-    public static final int RECORDINGS_FRAGMENT_INDEX = 3;
+    private static final int HOME_FRAGMENT_INDEX = 0;
+    private static final int FAVORITES_FRAGMENT_INDEX = 1;
+    private static final int HISTORY_FRAGMENT_INDEX = 2;
+    private static final int RECORDINGS_FRAGMENT_INDEX = 3;
 
-    //Intent Extra
-    public static final String IS_NOTIFICATION = "SAY.IT.FROM.NOTIFICATION";
-
-    //Definizione variabile TTS
-    private TextToSpeech tts_speaker;
     public static TextToSpeech american_speaker_google;
     public static TextToSpeech british_speaker_google;
-    public static Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
-    public static Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static final Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    public static final Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
     //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;
@@ -98,14 +87,11 @@ public class MainActivity extends AppCompatActivity {
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
-    public final static String RECORDINGS_PREFS_KEY = "SAY.IT.RECORDINGS"; //Chiave che identifica il Set della lista dei Recordings
     public final static String DEFAULT_ACCENT_KEY = "SAY.IT.DEFAULT.ACCENT"; //Chiave che identifica il DEFAULT ACCENT
     public final static String DEFAULT_NOTIFICATION_RATE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.RATE";
     public final static String DEFAULT_NOTIFICATION_HOUR_KEY = "SAY.IT.DEFAULT.NOTIFICATION.HOUR";
     public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
-
-    public final static int REQUEST_CODE = 1;
 
     //Unique IDs related to showcase
     public static String id_showcase_playactivity = "utente_playactivity";
@@ -113,16 +99,15 @@ public class MainActivity extends AppCompatActivity {
     public static MaterialShowcaseView showCaseFragmentView;
 
 
-    int selectedTab = 0; // or other values
+    private int selectedTab = 0; // or other values
 
-    boolean doubleBackToExitPressedOnce = false;
-    boolean hasInterstitialDisplayed = false;
+    private boolean doubleBackToExitPressedOnce = false;
+    private boolean hasInterstitialDisplayed = false;
 
     //In-App Billing Helper
-    IabHelper mHelper;
+    private IabHelper mHelper;
 
     //Definizione variabile WordList
-    public static final ArrayList<String> WordList = new ArrayList<>();
     public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
     public static final ArrayList<String> Quotes = new ArrayList<>();
     public static String wordOfTheDay;
@@ -131,19 +116,14 @@ public class MainActivity extends AppCompatActivity {
     //Bottom Bar variable
     public static BottomBar bottomBar;
 
-    //EditText Searchbar variable
-    EditText editText;
-    ImageView lens_search_button;
-    ImageButton voice_search_button;
-
     //Notification id
     public static final int notifId = 150;
 
     //Rate Dialog
-    EasyRatingDialog easyRatingDialog;
+    private EasyRatingDialog easyRatingDialog;
 
-    final FragmentManager fragmentManager = getFragmentManager();
-    InterstitialAd mInterstitialAd = new InterstitialAd(this);
+    private final FragmentManager fragmentManager = getFragmentManager();
+    private final InterstitialAd mInterstitialAd = new InterstitialAd(this);
 
     @Override
     protected void onStop() {
@@ -231,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 ArrayList<String> SKUs = new ArrayList<>();
                 SKUs.add(PlayActivity.no_ads_in_app);
@@ -241,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
                 }
-                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 
@@ -284,9 +264,9 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO SISTEMARE LISTENER
 
-        editText = (EditText) findViewById(R.id.search_bar_edit_text);
-        lens_search_button = (ImageView) findViewById(R.id.search_bar_hint_icon);
-        voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
+        EditText editText = (EditText) findViewById(R.id.search_bar_edit_text);
+        ImageView lens_search_button = (ImageView) findViewById(R.id.search_bar_hint_icon);
+        ImageButton voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
 
         View.OnClickListener search_bar_listener = new View.OnClickListener() {
             @Override
@@ -332,10 +312,10 @@ public class MainActivity extends AppCompatActivity {
                 switch (tabId) {
                     case R.id.tab_favorites:
                         if (FAVORITES_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (FAVORITES_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = FAVORITES_FRAGMENT_INDEX;
@@ -345,10 +325,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_home:
                         if (HOME_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HOME_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = HOME_FRAGMENT_INDEX;
@@ -358,10 +338,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_history:
                         if (HISTORY_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HISTORY_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = HISTORY_FRAGMENT_INDEX;
@@ -371,10 +351,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_recordings:
                         if (RECORDINGS_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = RECORDINGS_FRAGMENT_INDEX;
@@ -387,9 +367,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        //IMPOSTAZIONE TEXT TO SPEECH
-        american_speaker_google = initTTS(this, true);
-        british_speaker_google = initTTS(this, false);
+        //Init TTS
+        initTTS(this);
     }
 
     @Override
@@ -434,18 +413,37 @@ public class MainActivity extends AppCompatActivity {
         mInterstitialAd.loadAd(adRequest);
     }
 
-    private TextToSpeech initTTS(Context context, final boolean accent) {
-        TextToSpeech.OnInitListener onInitListener = null;
-        tts_speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+    private void initTTS(Context context){
+
+        american_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
-            public void onInit(int status) {
-                tts_speaker.setPitch((float) 0.90);
-                tts_speaker.setSpeechRate((float) 0.90);
-                if(accent)tts_speaker.setVoice(voice_american_female);
-                else if(!accent)tts_speaker.setVoice(voice_british_female);
+            public void onInit(int i) {
+                if (i == TextToSpeech.SUCCESS) {
+                    american_speaker_google.setPitch(0.90f);
+                    american_speaker_google.setSpeechRate(0.90f);
+                    american_speaker_google.setVoice(MainActivity.voice_american_female);
+                }
+
+                else{
+                    if(MainActivity.isLoggingEnabled)
+                        Log.e("error", "Initilization Failed!");
+                }
             }
         });
 
-        return tts_speaker;
+        british_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                if (i == TextToSpeech.SUCCESS) {
+                    british_speaker_google.setPitch(0.90f);
+                    british_speaker_google.setSpeechRate(0.90f);
+                    british_speaker_google.setVoice(MainActivity.voice_british_female);
+                }
+                else{
+                    if(MainActivity.isLoggingEnabled)
+                        Log.e("error", "Initilization Failed!");
+                }
+            }
+        });
     }
 }

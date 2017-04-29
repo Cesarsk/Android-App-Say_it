@@ -38,9 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 
 /**
@@ -48,8 +46,8 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
  */
 public class RecordingsFragment extends Fragment {
 
-    Snackbar snackbar;
-    RecyclerView recyclerView;
+    private Snackbar snackbar;
+    private RecyclerView recyclerView;
 
     public RecordingsFragment() {
     }
@@ -111,7 +109,7 @@ public class RecordingsFragment extends Fragment {
                 snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        FileOutputStream outputStream = null;
+                        FileOutputStream outputStream;
                         try {
                             outputStream = new FileOutputStream(adapter.getTemp_rec_file());
                             outputStream.write(adapter.getTemp_rec_bytes());
@@ -257,22 +255,14 @@ public class RecordingsFragment extends Fragment {
         }
 
         private ArrayList<File> recordings;
-        private MediaPlayer mediaPlayer = new MediaPlayer();
+        private final MediaPlayer mediaPlayer = new MediaPlayer();
 
         public File getTemp_rec_file() {
             return temp_rec_file;
         }
 
-        public void setTemp_rec_file(File temp_rec_file) {
-            this.temp_rec_file = temp_rec_file;
-        }
-
         public byte[] getTemp_rec_bytes() {
             return temp_rec_bytes;
-        }
-
-        public void setTemp_rec_bytes(byte[] temp_rec_bytes) {
-            this.temp_rec_bytes = temp_rec_bytes;
         }
 
         private File temp_rec_file;
@@ -284,10 +274,10 @@ public class RecordingsFragment extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            TextView wordTextView;
-            TextView IPATextView;
-            ImageButton QuickPlayBtn;
-            ImageButton AddtoFavsBtn;
+            final TextView wordTextView;
+            final TextView IPATextView;
+            final ImageButton QuickPlayBtn;
+            final ImageButton AddtoFavsBtn;
 
             ViewHolder(View itemView) {
                 super(itemView);
@@ -375,6 +365,7 @@ public class RecordingsFragment extends Fragment {
             return recordings.size();
         }
 
+        @SuppressWarnings("ResultOfMethodCallIgnored")
         public void remove(int pos) {
             temp_rec_file = recordings.get(pos);
             temp_rec_bytes = UtilityRecordings.getRecordingBytesfromFile(recordings.get(pos));

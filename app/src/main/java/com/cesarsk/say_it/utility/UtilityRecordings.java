@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 import com.cesarsk.say_it.ui.MainActivity;
 
@@ -22,19 +20,14 @@ import static com.cesarsk.say_it.ui.PlayActivity.RequestPermissionCode;
 
 public class UtilityRecordings {
 
-    public static final String AUDIO_RECORDER_FOLDER = "Say it";
-    public static final String RECORDINGS_PATH = Environment.getExternalStorageDirectory().getPath() + "/" + AUDIO_RECORDER_FOLDER + "/";
 
-
-    public static boolean deleteRecording(Context context, String filename) {
+    public static void deleteRecording(Context context, String filename) {
 
         File file = new File(context.getFilesDir().getAbsolutePath() + "/" + filename);
 
         if (file.delete()) {
             updateRecordings(context);
-            return true;
         }
-        return false;
     }
 
     public static ArrayList<File> loadRecordingsfromStorage(Context context) {
@@ -70,7 +63,7 @@ public class UtilityRecordings {
                 String[]{RECORD_AUDIO}, RequestPermissionCode);
     }
 
-    public static boolean startRecording(Context context, MediaRecorder recorder, String word){
+    public static void startRecording(Context context, MediaRecorder recorder, String word){
         recorder.reset();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
@@ -85,10 +78,10 @@ public class UtilityRecordings {
             e.printStackTrace();
         }
         recorder.start();
-        return true;
     }
 
-    public static boolean stopRecording(Context context, MediaRecorder recorder, String word){
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void stopRecording(Context context, MediaRecorder recorder, String word){
         if(recorder != null){
             File recording_file = new File(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
 
@@ -97,12 +90,10 @@ public class UtilityRecordings {
             } catch (RuntimeException stopException) {
                 recording_file.delete();
                 recorder.reset();
-                return false;
+                return;
             }
             recorder.reset();
-            return true;
         }
-        return false;
     }
 
     public static long getRecordingDuration(Context context, MediaPlayer mediaPlayer, String word){
@@ -128,6 +119,7 @@ public class UtilityRecordings {
         return duration;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static byte[] getRecordingBytesfromFile(File file) {
 
         byte[] bytes = new byte[0];
@@ -166,6 +158,7 @@ public class UtilityRecordings {
         MainActivity.RECORDINGS = loadRecordingsfromStorage(context);
     }
 
+    @SuppressWarnings({"unused", "UnusedAssignment"})
     public static void stopPlaying(MediaPlayer mediaPlayer) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();

@@ -9,11 +9,10 @@ import android.graphics.drawable.TransitionDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.Voice;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -33,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.utility.ShowTimer;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -55,15 +53,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-import static android.speech.tts.Voice.LATENCY_VERY_LOW;
-import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
@@ -71,54 +66,34 @@ import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 public class PlayActivity extends AppCompatActivity {
     public final static String PLAY_WORD = "com.example.cesarsk.say_it.WORD";
     public final static String PLAY_IPA = "com.example.cesarsk.say_it.IPA";
-    public static final long UNDO_TIMEOUT = 3000;
-    private static final String AUDIO_RECORDER_FILE_EXT_AAC = ".aac";
-    private static final String AUDIO_RECORDER_FOLDER = "Say it";
+    private static final long UNDO_TIMEOUT = 3000;
     private MediaRecorder recorder = null;
-    private ShowTimer timer;
-    private int currentFormat = 0;
-    private int output_formats[] = {MediaRecorder.OutputFormat.DEFAULT};
-    private String file_exts[] = {AUDIO_RECORDER_FILE_EXT_AAC};
     public static final int RequestPermissionCode = 1;
-    MediaPlayer mediaPlayer;
-    int N = 10;
-    private CharSequence[] history;
-    int testa = 0;
+    private MediaPlayer mediaPlayer;
     public static String selected_word;
     public static String selected_ipa;
     private boolean slow_mode = false;
     private boolean accent_flag = false;
     private boolean favorite_flag = false;
-    Context context = this;
-    final int durationMillis = 500;
-    AlphaAnimation delete_button_anim, delete_button_anim_reverse;
-    Snackbar snackbar;
-    Handler handler = new Handler();
-    Runnable pendingRemovalRunnable;
-    byte[] temp_recording_bytes;
-    private boolean isRecording = false;
-    CountDownTimer countDownTimer;
-    CountDownTimer minDurationTimer;
-    private boolean isMinimumDurationReached = false;
-    Button rec_button;
-    Vibrator vibrator;
-    TransitionDrawable green_animation;
-    private long scaleAnimationDuration = 200;
-    private long scaleAnimationDurationLong = 300;
-    boolean maxDurationReached = false;
-    IabHelper mHelper;
-    IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
-    IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
-    public static String no_ads_in_app = "no_ads";
+    private final Context context = this;
+    private final int durationMillis = 500;
+    private Snackbar snackbar;
+    private byte[] temp_recording_bytes;
+    private Button rec_button;
+    private Vibrator vibrator;
+    private TransitionDrawable green_animation;
+    private final long scaleAnimationDuration = 200;
+    private final long scaleAnimationDurationLong = 300;
+    private boolean maxDurationReached = false;
+    private IabHelper mHelper;
+    private IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
+    private IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
+    public static final String no_ads_in_app = "no_ads";
     private InterstitialAd mInterstitialAd;
     //private boolean hasInterstitialDisplayed = false;
 
-    //Definizione variabile TTS
-    private TextToSpeech tts_speaker;
-    public static TextToSpeech american_speaker_google;
-    public static TextToSpeech british_speaker_google;
-    public static Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
-    public static Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
+    private static TextToSpeech american_speaker_google;
+    private static TextToSpeech british_speaker_google;
 
 
     @Override
@@ -161,10 +136,10 @@ public class PlayActivity extends AppCompatActivity {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 // Hooray, IAB is fully set up!
-                Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 
@@ -177,8 +152,7 @@ public class PlayActivity extends AppCompatActivity {
             british_speaker_google = MainActivity.british_speaker_google;
         } else {
             //init TTSs
-            american_speaker_google = initTTS(this, true);
-            british_speaker_google = initTTS(this, false);
+            initTTS(context);
         }
 
         rec_button = (Button) findViewById(R.id.rec_button);
@@ -402,8 +376,8 @@ public class PlayActivity extends AppCompatActivity {
             chronometer.setText(durationText);
         }
 
-        delete_button_anim = new AlphaAnimation(1.0f, 0.0f);
-        delete_button_anim_reverse = new AlphaAnimation(0.0f, 1.0f);
+        AlphaAnimation delete_button_anim = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation delete_button_anim_reverse = new AlphaAnimation(0.0f, 1.0f);
         delete_button_anim.setDuration(500);
         delete_button_anim_reverse.setDuration(500);
         delete_button_anim_reverse.setAnimationListener(new Animation.AnimationListener() {
@@ -454,7 +428,6 @@ public class PlayActivity extends AppCompatActivity {
             public void onIabPurchaseFinished(IabResult result, Purchase info) {
                 if (result.isFailure()) {
                     Toast.makeText(PlayActivity.this, "Purchase Failed! Perhaps have you already purchased the item?", Toast.LENGTH_SHORT).show();
-                    return;
                 } else if (info.getSku().equals(no_ads_in_app)) {
                     UtilitySharedPrefs.loadAdsStatus(PlayActivity.this);
                     UtilitySharedPrefs.savePrefs(PlayActivity.this, true, MainActivity.NO_ADS_STATUS_KEY);
@@ -527,7 +500,7 @@ public class PlayActivity extends AppCompatActivity {
 
         favorite_flag = UtilitySharedPrefs.checkFavs(this, selected_word);
         if (favorite_flag)
-            favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+            favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
 
         favorite_button.setOnClickListener(new View.OnClickListener()
 
@@ -538,9 +511,9 @@ public class PlayActivity extends AppCompatActivity {
                     UtilitySharedPrefs.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
                     Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
-                    favorite_button.setColorFilter(getResources().getColor(R.color.RudolphsNose));
+                    favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
                 } else {
-                    favorite_button.setColorFilter(getResources().getColor(R.color.primary_light));
+                    favorite_button.setColorFilter(ContextCompat.getColor(context,  R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
@@ -554,16 +527,16 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!slow_mode) {
-                    MainActivity.american_speaker_google.setSpeechRate((float) 0.30);
-                    MainActivity.british_speaker_google.setSpeechRate((float) 0.30);
+                    american_speaker_google.setSpeechRate((float) 0.30);
+                    british_speaker_google.setSpeechRate((float) 0.30);
                     slow_mode = !slow_mode;
                     Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(getResources().getColor(R.color.Yellow600));
+                    slow_button.setColorFilter(ContextCompat.getColor(context, R.color.Yellow600));
                 } else {
-                    MainActivity.american_speaker_google.setSpeechRate((float) 0.90);
-                    MainActivity.british_speaker_google.setSpeechRate((float) 0.90);
+                    american_speaker_google.setSpeechRate((float) 0.90);
+                    british_speaker_google.setSpeechRate((float) 0.90);
                     Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(getResources().getColor(R.color.primary_light));
+                    slow_button.setColorFilter(ContextCompat.getColor(context, R.color.primary_light));
                     slow_mode = !slow_mode;
                 }
             }
@@ -573,11 +546,11 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!accent_flag) {
-                    accent_button.setColorFilter(getResources().getColor(R.color.Yellow600));
+                    accent_button.setColorFilter(ContextCompat.getColor(context, R.color.Yellow600));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 } else {
-                    accent_button.setColorFilter(getResources().getColor(R.color.primary_light));
+                    accent_button.setColorFilter(ContextCompat.getColor(context, R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 }
@@ -608,7 +581,7 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 File recovered_file = new File(view.getContext().getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac");
-                FileOutputStream outputStream = null;
+                FileOutputStream outputStream;
                 try {
                     outputStream = new FileOutputStream(recovered_file);
                     outputStream.write(temp_recording_bytes);
@@ -694,7 +667,7 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case RequestPermissionCode:
                 if (grantResults.length > 0) {
@@ -716,19 +689,38 @@ public class PlayActivity extends AppCompatActivity {
         mInterstitialAd.loadAd(adRequest);
     }
 
-    private TextToSpeech initTTS(Context context, final boolean accent) {
-        TextToSpeech.OnInitListener onInitListener = null;
-        tts_speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+    private void initTTS(Context context){
+
+        american_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
-            public void onInit(int status) {
-                tts_speaker.setPitch((float) 0.90);
-                tts_speaker.setSpeechRate((float) 0.90);
-                if (accent) tts_speaker.setVoice(MainActivity.voice_american_female);
-                else if (!accent) tts_speaker.setVoice(MainActivity.voice_british_female);
+            public void onInit(int i) {
+                if (i == TextToSpeech.SUCCESS) {
+                    american_speaker_google.setPitch(0.90f);
+                    american_speaker_google.setSpeechRate(0.90f);
+                    american_speaker_google.setVoice(MainActivity.voice_american_female);
+                }
+
+                else{
+                    if(MainActivity.isLoggingEnabled)
+                        Log.e("error", "Initilization Failed!");
+                }
             }
         });
 
-        return tts_speaker;
+        british_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                if (i == TextToSpeech.SUCCESS) {
+                    british_speaker_google.setPitch(0.90f);
+                    british_speaker_google.setSpeechRate(0.90f);
+                    british_speaker_google.setVoice(MainActivity.voice_british_female);
+                }
+                else{
+                    if(MainActivity.isLoggingEnabled)
+                        Log.e("error", "Initilization Failed!");
+                }
+            }
+        });
     }
 
 }
