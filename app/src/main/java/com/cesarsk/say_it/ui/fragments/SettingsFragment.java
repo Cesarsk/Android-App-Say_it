@@ -133,7 +133,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         about_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com");
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/29/about-wordly/");
                 return false;
             }
         });
