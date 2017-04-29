@@ -1,4 +1,6 @@
 # Say It!
+[Play Store](https://play.google.com/store/apps/details?id=com.cesarsk.say_it)
+
 Say It! is an Android App aimed to help people with their English Pronunciation.
 We're three Italian students trying to bring something new to people.
 
