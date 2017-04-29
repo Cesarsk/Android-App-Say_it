@@ -67,7 +67,6 @@ public class PlayActivity extends AppCompatActivity {
     public final static String PLAY_WORD = "com.example.cesarsk.say_it.WORD";
     public final static String PLAY_IPA = "com.example.cesarsk.say_it.IPA";
     private static final long UNDO_TIMEOUT = 3000;
-    private static final String AUDIO_RECORDER_FILE_EXT_AAC = ".aac";
     private MediaRecorder recorder = null;
     public static final int RequestPermissionCode = 1;
     private MediaPlayer mediaPlayer;
@@ -78,8 +77,6 @@ public class PlayActivity extends AppCompatActivity {
     private boolean favorite_flag = false;
     private final Context context = this;
     private final int durationMillis = 500;
-    private AlphaAnimation delete_button_anim;
-    private AlphaAnimation delete_button_anim_reverse;
     private Snackbar snackbar;
     private byte[] temp_recording_bytes;
     private Button rec_button;
@@ -95,8 +92,6 @@ public class PlayActivity extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     //private boolean hasInterstitialDisplayed = false;
 
-    //Definizione variabile TTS
-    private TextToSpeech tts_speaker;
     private static TextToSpeech american_speaker_google;
     private static TextToSpeech british_speaker_google;
 
@@ -157,8 +152,7 @@ public class PlayActivity extends AppCompatActivity {
             british_speaker_google = MainActivity.british_speaker_google;
         } else {
             //init TTSs
-            american_speaker_google = initTTS(this, true);
-            british_speaker_google = initTTS(this, false);
+            initTTS(context);
         }
 
         rec_button = (Button) findViewById(R.id.rec_button);
@@ -382,8 +376,8 @@ public class PlayActivity extends AppCompatActivity {
             chronometer.setText(durationText);
         }
 
-        delete_button_anim = new AlphaAnimation(1.0f, 0.0f);
-        delete_button_anim_reverse = new AlphaAnimation(0.0f, 1.0f);
+        AlphaAnimation delete_button_anim = new AlphaAnimation(1.0f, 0.0f);
+        AlphaAnimation delete_button_anim_reverse = new AlphaAnimation(0.0f, 1.0f);
         delete_button_anim.setDuration(500);
         delete_button_anim_reverse.setDuration(500);
         delete_button_anim_reverse.setAnimationListener(new Animation.AnimationListener() {
@@ -587,7 +581,7 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 File recovered_file = new File(view.getContext().getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac");
-                FileOutputStream outputStream = null;
+                FileOutputStream outputStream;
                 try {
                     outputStream = new FileOutputStream(recovered_file);
                     outputStream.write(temp_recording_bytes);
@@ -695,19 +689,38 @@ public class PlayActivity extends AppCompatActivity {
         mInterstitialAd.loadAd(adRequest);
     }
 
-    private TextToSpeech initTTS(Context context, final boolean accent) {
-        TextToSpeech.OnInitListener onInitListener = null;
-        tts_speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+    private void initTTS(Context context){
+
+        american_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
-            public void onInit(int status) {
-                tts_speaker.setPitch((float) 0.90);
-                tts_speaker.setSpeechRate((float) 0.90);
-                if (accent) tts_speaker.setVoice(MainActivity.voice_american_female);
-                else tts_speaker.setVoice(MainActivity.voice_british_female);
+            public void onInit(int i) {
+                if (i == TextToSpeech.SUCCESS) {
+                    american_speaker_google.setPitch(0.90f);
+                    american_speaker_google.setSpeechRate(0.90f);
+                    american_speaker_google.setVoice(MainActivity.voice_american_female);
+                }
+
+                else{
+                    if(MainActivity.isLoggingEnabled)
+                        Log.e("error", "Initilization Failed!");
+                }
             }
         });
 
-        return tts_speaker;
+        british_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                if (i == TextToSpeech.SUCCESS) {
+                    british_speaker_google.setPitch(0.90f);
+                    british_speaker_google.setSpeechRate(0.90f);
+                    british_speaker_google.setVoice(MainActivity.voice_british_female);
+                }
+                else{
+                    if(MainActivity.isLoggingEnabled)
+                        Log.e("error", "Initilization Failed!");
+                }
+            }
+        });
     }
 
 }

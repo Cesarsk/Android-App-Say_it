@@ -268,8 +268,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
         default_accent.setSummary(default_accent.getEntry());
-        final CharSequence choice = default_accent.getValue();
-
         default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {

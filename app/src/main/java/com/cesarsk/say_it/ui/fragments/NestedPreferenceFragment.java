@@ -23,7 +23,6 @@ public class NestedPreferenceFragment extends PreferenceFragment {
     public static final int NESTED_SCREEN_2_KEY = 2;
     //static private int index_notification_rate = 2; //DO NOT REMOVE THIS
     private static final String TAG_KEY = "NESTED_KEY";
-    private static int selected_fragment_layout;
 
     public static NestedPreferenceFragment newInstance(int key) {
         NestedPreferenceFragment fragment = new NestedPreferenceFragment();
@@ -38,7 +37,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        selected_fragment_layout = checkPreferenceResource();
+        int selected_fragment_layout = checkPreferenceResource();
 
         if (selected_fragment_layout == 1) {
             final ListPreference notification_rate = (ListPreference) getPreferenceManager().findPreference("default_notification_rate");

@@ -20,8 +20,6 @@ import static com.cesarsk.say_it.ui.PlayActivity.RequestPermissionCode;
 
 public class UtilityRecordings {
 
-    private static final String AUDIO_RECORDER_FOLDER = "Say it";
-
 
     public static void deleteRecording(Context context, String filename) {
 
@@ -160,7 +158,7 @@ public class UtilityRecordings {
         MainActivity.RECORDINGS = loadRecordingsfromStorage(context);
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "UnusedAssignment"})
     public static void stopPlaying(MediaPlayer mediaPlayer) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();

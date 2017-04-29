@@ -14,8 +14,6 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
 
     //TODO Istanziare un array di FadingTextView e generarle nell'HomeFragment
 
-    private ObjectAnimator fade_animator;
-    private Random rand;
     private android.support.v4.util.Pair<String, String> pair;
     public String word;
     public String ipa;
@@ -38,15 +36,15 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
 
     private void animSetUp(){
         final FadingTextView current_instance = this;
-        rand = new Random();
+        Random rand = new Random();
         pair = UtilityDictionary.getRandomWordWithIPA();
         word = pair.first; ipa = pair.second;
         current_instance.setText(word);
-        fade_animator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f);
-        fade_animator.setDuration((long)rand.nextInt((8000 - 5000) + 1) + 5000);
+        ObjectAnimator fade_animator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f);
+        fade_animator.setDuration((long) rand.nextInt((8000 - 5000) + 1) + 5000);
         fade_animator.setRepeatMode(ValueAnimator.REVERSE);
         fade_animator.setRepeatCount(ValueAnimator.INFINITE);
-        long number = (long)rand.nextInt(7000+1);
+        long number = (long) rand.nextInt(7000+1);
         fade_animator.setStartDelay(number);
         fade_animator.addListener(new Animator.AnimatorListener() {
 

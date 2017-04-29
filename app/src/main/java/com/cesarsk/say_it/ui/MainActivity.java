@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int HISTORY_FRAGMENT_INDEX = 2;
     private static final int RECORDINGS_FRAGMENT_INDEX = 3;
 
-    //Definizione variabile TTS
-    private TextToSpeech tts_speaker;
     public static TextToSpeech american_speaker_google;
     public static TextToSpeech british_speaker_google;
     public static final Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
@@ -117,11 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Bottom Bar variable
     public static BottomBar bottomBar;
-
-    //EditText Searchbar variable
-    private EditText editText;
-    private ImageView lens_search_button;
-    private ImageButton voice_search_button;
 
     //Notification id
     public static final int notifId = 150;
@@ -271,9 +264,9 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO SISTEMARE LISTENER
 
-        editText = (EditText) findViewById(R.id.search_bar_edit_text);
-        lens_search_button = (ImageView) findViewById(R.id.search_bar_hint_icon);
-        voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
+        EditText editText = (EditText) findViewById(R.id.search_bar_edit_text);
+        ImageView lens_search_button = (ImageView) findViewById(R.id.search_bar_hint_icon);
+        ImageButton voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
 
         View.OnClickListener search_bar_listener = new View.OnClickListener() {
             @Override
@@ -374,9 +367,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        //IMPOSTAZIONE TEXT TO SPEECH
-        american_speaker_google = initTTS(this, true);
-        british_speaker_google = initTTS(this, false);
+        //Init TTS
+        initTTS(this);
     }
 
     @Override
@@ -421,18 +413,37 @@ public class MainActivity extends AppCompatActivity {
         mInterstitialAd.loadAd(adRequest);
     }
 
-    private TextToSpeech initTTS(Context context, final boolean accent) {
-        TextToSpeech.OnInitListener onInitListener = null;
-        tts_speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+    private void initTTS(Context context){
+
+        american_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
-            public void onInit(int status) {
-                tts_speaker.setPitch((float) 0.90);
-                tts_speaker.setSpeechRate((float) 0.90);
-                if(accent)tts_speaker.setVoice(voice_american_female);
-                else tts_speaker.setVoice(voice_british_female);
+            public void onInit(int i) {
+                if (i == TextToSpeech.SUCCESS) {
+                    american_speaker_google.setPitch(0.90f);
+                    american_speaker_google.setSpeechRate(0.90f);
+                    american_speaker_google.setVoice(MainActivity.voice_american_female);
+                }
+
+                else{
+                    if(MainActivity.isLoggingEnabled)
+                        Log.e("error", "Initilization Failed!");
+                }
             }
         });
 
-        return tts_speaker;
+        british_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                if (i == TextToSpeech.SUCCESS) {
+                    british_speaker_google.setPitch(0.90f);
+                    british_speaker_google.setSpeechRate(0.90f);
+                    british_speaker_google.setVoice(MainActivity.voice_british_female);
+                }
+                else{
+                    if(MainActivity.isLoggingEnabled)
+                        Log.e("error", "Initilization Failed!");
+                }
+            }
+        });
     }
 }

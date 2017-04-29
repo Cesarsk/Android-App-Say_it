@@ -258,8 +258,6 @@ public class HistoryFragment extends Fragment {
 
         private SayItPair temp_hist;
 
-        private int temp_pos;
-
         private ArrayList<SayItPair> history;
 
         public HistoryAdapter(ArrayList<SayItPair> history_list) {
@@ -375,7 +373,6 @@ public class HistoryFragment extends Fragment {
 
         void remove(int pos) {
             temp_hist = history.get(pos);
-            temp_pos = pos;
 
             UtilitySharedPrefs.removeHist(getActivity(), new SayItPair(history.get(pos).first, history.get(pos).second, history.get(pos).getAdding_time()));
             history = loadDeserializedHistory(getActivity());

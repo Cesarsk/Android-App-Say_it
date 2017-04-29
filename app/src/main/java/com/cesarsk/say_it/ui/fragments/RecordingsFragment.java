@@ -109,7 +109,7 @@ public class RecordingsFragment extends Fragment {
                 snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        FileOutputStream outputStream = null;
+                        FileOutputStream outputStream;
                         try {
                             outputStream = new FileOutputStream(adapter.getTemp_rec_file());
                             outputStream.write(adapter.getTemp_rec_bytes());

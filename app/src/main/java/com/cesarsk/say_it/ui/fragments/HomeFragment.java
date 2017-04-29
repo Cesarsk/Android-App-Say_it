@@ -59,7 +59,6 @@ public class HomeFragment extends Fragment {
     private boolean favorite_flag = false;
     private View view;
 
-    private ArrayList<SayItPair> recentHistory;
     private LinearLayout recentHistoryLinearLayout;
     private LinearLayout.LayoutParams layoutParams;
     private float scale;
@@ -79,7 +78,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
+        ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
         //History not empty
         if(recentHistory != null && !(recentHistory.isEmpty())) {
             recentHistoryLinearLayout.removeAllViews();
