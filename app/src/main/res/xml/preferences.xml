@@ -112,7 +112,7 @@
         <Preference
             android:key="app_version"
             android:layout="@xml/voices_settings_layout"
-            android:summary="Version: 2.0-beta (Click for Privacy Policy)"
+            android:summary="Version: 2.1-beta (Click for Privacy Policy)"
             android:title="Say It! version" />
 
     </PreferenceCategory>
