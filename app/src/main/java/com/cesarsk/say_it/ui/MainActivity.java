@@ -312,10 +312,10 @@ public class MainActivity extends AppCompatActivity {
                 switch (tabId) {
                     case R.id.tab_favorites:
                         if (FAVORITES_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (FAVORITES_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = FAVORITES_FRAGMENT_INDEX;
@@ -325,10 +325,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_home:
                         if (HOME_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HOME_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = HOME_FRAGMENT_INDEX;
@@ -338,10 +338,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_history:
                         if (HISTORY_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HISTORY_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = HISTORY_FRAGMENT_INDEX;
@@ -351,10 +351,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab_recordings:
                         if (RECORDINGS_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.END));
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
                             //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.START));
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
                             //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = RECORDINGS_FRAGMENT_INDEX;
