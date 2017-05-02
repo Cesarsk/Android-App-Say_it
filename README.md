@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/Cesarsk/Say_it.png?label=ready&title=Ready)](https://waffle.io/Cesarsk/Say_it)
 # Say It!
 [Play Store](https://play.google.com/store/apps/details?id=com.cesarsk.say_it)
 
