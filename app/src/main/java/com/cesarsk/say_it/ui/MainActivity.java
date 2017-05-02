@@ -70,9 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static TextToSpeech american_speaker_google;
     public static TextToSpeech british_speaker_google;
+    public static final String google_tts = "com.google.android.tts";
     public static final Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
     public static final Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
-    public static final String google_tts = "com.google.android.tts";
+
     //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;

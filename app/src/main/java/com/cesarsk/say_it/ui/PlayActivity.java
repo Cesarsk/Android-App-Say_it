@@ -99,6 +99,7 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        //mamma
         if (mHelper != null) try {
             mHelper.dispose();
         } catch (IabHelper.IabAsyncInProgressException e) {
