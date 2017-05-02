@@ -705,7 +705,7 @@ public class PlayActivity extends AppCompatActivity {
                         Log.e("error", "Initilization Failed!");
                 }
             }
-        });
+        }, MainActivity.google_tts);
 
         british_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -720,7 +720,7 @@ public class PlayActivity extends AppCompatActivity {
                         Log.e("error", "Initilization Failed!");
                 }
             }
-        });
+        },MainActivity.google_tts);
     }
 
 }

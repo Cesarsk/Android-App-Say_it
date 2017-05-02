@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     public static TextToSpeech british_speaker_google;
     public static final Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
     public static final Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
-
+    public static final String google_tts = "com.google.android.tts";
     //Gestione preferiti, history e recordings
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
@@ -414,7 +414,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTTS(Context context){
-
         american_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
@@ -428,8 +427,9 @@ public class MainActivity extends AppCompatActivity {
                     if(MainActivity.isLoggingEnabled)
                         Log.e("error", "Initilization Failed!");
                 }
+
             }
-        });
+        },google_tts);
 
         british_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -444,6 +444,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("error", "Initilization Failed!");
                 }
             }
-        });
+        },google_tts);
     }
+
 }
