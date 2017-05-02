@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static TextToSpeech american_speaker_google;
     public static TextToSpeech british_speaker_google;
+    public static final String google_tts = "com.google.android.tts";
     public static final Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
     public static final Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
@@ -211,7 +212,8 @@ public class MainActivity extends AppCompatActivity {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if (MainActivity.isLoggingEnabled)
+                        Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 ArrayList<String> SKUs = new ArrayList<>();
                 SKUs.add(PlayActivity.no_ads_in_app);
@@ -221,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
                 }
-                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if (MainActivity.isLoggingEnabled)
+                    Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 
@@ -373,14 +376,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(selectedTab != HOME_FRAGMENT_INDEX)
-        {
+        if (selectedTab != HOME_FRAGMENT_INDEX) {
             bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
-            if(showCaseFragmentView != null) showCaseFragmentView.hide();
-        }
-
-        else
-        {
+            if (showCaseFragmentView != null) showCaseFragmentView.hide();
+        } else {
             if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
                 mInterstitialAd.show();
                 hasInterstitialDisplayed = true;
@@ -413,8 +412,7 @@ public class MainActivity extends AppCompatActivity {
         mInterstitialAd.loadAd(adRequest);
     }
 
-    private void initTTS(Context context){
-
+    private void initTTS(Context context) {
         american_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
@@ -422,14 +420,13 @@ public class MainActivity extends AppCompatActivity {
                     american_speaker_google.setPitch(0.90f);
                     american_speaker_google.setSpeechRate(0.90f);
                     american_speaker_google.setVoice(MainActivity.voice_american_female);
-                }
-
-                else{
-                    if(MainActivity.isLoggingEnabled)
+                } else {
+                    if (MainActivity.isLoggingEnabled)
                         Log.e("error", "Initilization Failed!");
                 }
+
             }
-        });
+        }, google_tts);
 
         british_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -438,12 +435,12 @@ public class MainActivity extends AppCompatActivity {
                     british_speaker_google.setPitch(0.90f);
                     british_speaker_google.setSpeechRate(0.90f);
                     british_speaker_google.setVoice(MainActivity.voice_british_female);
-                }
-                else{
-                    if(MainActivity.isLoggingEnabled)
+                } else {
+                    if (MainActivity.isLoggingEnabled)
                         Log.e("error", "Initilization Failed!");
                 }
             }
-        });
+        }, google_tts);
     }
+
 }
