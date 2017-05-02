@@ -99,7 +99,6 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //mamma
         if (mHelper != null) try {
             mHelper.dispose();
         } catch (IabHelper.IabAsyncInProgressException e) {
@@ -137,10 +136,12 @@ public class PlayActivity extends AppCompatActivity {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if (MainActivity.isLoggingEnabled)
+                        Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 // Hooray, IAB is fully set up!
-                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if (MainActivity.isLoggingEnabled)
+                    Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 
@@ -514,7 +515,7 @@ public class PlayActivity extends AppCompatActivity {
                     Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
                     favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
                 } else {
-                    favorite_button.setColorFilter(ContextCompat.getColor(context,  R.color.primary_light));
+                    favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
@@ -690,7 +691,7 @@ public class PlayActivity extends AppCompatActivity {
         mInterstitialAd.loadAd(adRequest);
     }
 
-    private void initTTS(Context context){
+    private void initTTS(Context context) {
 
         american_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -699,10 +700,8 @@ public class PlayActivity extends AppCompatActivity {
                     american_speaker_google.setPitch(0.90f);
                     american_speaker_google.setSpeechRate(0.90f);
                     american_speaker_google.setVoice(MainActivity.voice_american_female);
-                }
-
-                else{
-                    if(MainActivity.isLoggingEnabled)
+                } else {
+                    if (MainActivity.isLoggingEnabled)
                         Log.e("error", "Initilization Failed!");
                 }
             }
@@ -715,13 +714,12 @@ public class PlayActivity extends AppCompatActivity {
                     british_speaker_google.setPitch(0.90f);
                     british_speaker_google.setSpeechRate(0.90f);
                     british_speaker_google.setVoice(MainActivity.voice_british_female);
-                }
-                else{
-                    if(MainActivity.isLoggingEnabled)
+                } else {
+                    if (MainActivity.isLoggingEnabled)
                         Log.e("error", "Initilization Failed!");
                 }
             }
-        },MainActivity.google_tts);
+        }, MainActivity.google_tts);
     }
 
 }

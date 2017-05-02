@@ -22,3 +22,5 @@ keystore.properties
 app/src/main/java/com/cesarsk/say_it/utility/LCSecurity.java
 
 app/app-release.apk
+
+keystores/android.jks
