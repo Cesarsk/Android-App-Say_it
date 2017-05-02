@@ -47,7 +47,6 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
         long number = (long) rand.nextInt(7000+1);
         fade_animator.setStartDelay(number);
         fade_animator.addListener(new Animator.AnimatorListener() {
-
             @Override
             public void onAnimationStart(Animator animator) {
 
