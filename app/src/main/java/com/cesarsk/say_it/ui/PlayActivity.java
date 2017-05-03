@@ -701,6 +701,7 @@ public class PlayActivity extends AppCompatActivity {
                     american_speaker_google.setPitch(0.90f);
                     american_speaker_google.setSpeechRate(0.90f);
                     american_speaker_google.setVoice(MainActivity.voice_american_female);
+                    american_speaker_google.speak("",QUEUE_ADD,null,null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
                         Log.e("error", "Initialization Failed!");
