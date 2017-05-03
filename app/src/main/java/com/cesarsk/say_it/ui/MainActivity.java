@@ -421,10 +421,10 @@ public class MainActivity extends AppCompatActivity {
                     american_speaker_google.setPitch(0.90f);
                     american_speaker_google.setSpeechRate(0.90f);
                     american_speaker_google.setVoice(MainActivity.voice_american_female);
-                    american_speaker_google.speak("",QUEUE_ADD,null,null);
+                    //american_speaker_google.speak("",QUEUE_ADD,null,null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initilization Failed!");
+                        Log.e("error", "Initialization Failed!");
                 }
             }
         }, google_tts);
@@ -439,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
                     british_speaker_google.speak("",QUEUE_ADD,null,null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initilization Failed!");
+                        Log.e("error", "Initialization Failed!");
                 }
             }
         }, google_tts);
