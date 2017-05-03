@@ -28,7 +28,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 15
-        versionName "2.1.4"
+        versionName "2.1.4-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
