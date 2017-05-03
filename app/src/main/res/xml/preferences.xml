@@ -114,7 +114,6 @@
             android:layout="@xml/voices_settings_layout"
             android:summary="Version defined in Java"
             android:title="Say It! version" />
-
     </PreferenceCategory>
 
 </PreferenceScreen>
