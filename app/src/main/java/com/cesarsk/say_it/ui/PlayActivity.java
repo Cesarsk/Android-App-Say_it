@@ -134,6 +134,9 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        //set default Stream Controller
+        setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
+
         //Get audio service
         audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
