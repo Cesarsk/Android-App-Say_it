@@ -58,6 +58,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
+import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -700,9 +701,10 @@ public class PlayActivity extends AppCompatActivity {
                     american_speaker_google.setPitch(0.90f);
                     american_speaker_google.setSpeechRate(0.90f);
                     american_speaker_google.setVoice(MainActivity.voice_american_female);
+                    american_speaker_google.speak("",QUEUE_ADD,null,null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initilization Failed!");
+                        Log.e("error", "Initialization Failed!");
                 }
             }
         }, MainActivity.google_tts);
@@ -714,12 +716,12 @@ public class PlayActivity extends AppCompatActivity {
                     british_speaker_google.setPitch(0.90f);
                     british_speaker_google.setSpeechRate(0.90f);
                     british_speaker_google.setVoice(MainActivity.voice_british_female);
+                    british_speaker_google.speak("",QUEUE_ADD,null,null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initilization Failed!");
+                        Log.e("error", "Initialization Failed!");
                 }
             }
         }, MainActivity.google_tts);
     }
-
 }

@@ -10,6 +10,8 @@ def keystoreProperties = new Properties()
 // Load your keystore.properties file into the keystoreProperties object.
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
+
+
 android {
     signingConfigs {
         config {
@@ -25,8 +27,8 @@ android {
         applicationId 'com.cesarsk.say_it'
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 14
-        versionName "1.0.2"
+        versionCode 15
+        versionName "2.1.4-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
