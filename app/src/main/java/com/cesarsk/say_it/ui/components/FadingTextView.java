@@ -121,8 +121,8 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
 
     }
 
+    //Check if in developer options animation scale is disabled. If so, do NOT animate to avoid glitches.
     private boolean isAnimationScaleNull() {
-        //Check if in developer options animation scale is disabled. If so, do NOT animate to avoid glitches.
         float animator_duration_scale = 0f, transition_animation_scale = 0f, window_animation_scale = 0f;
         try {
             animator_duration_scale = Settings.Global.getFloat(getContext().getContentResolver(), Settings.Global.ANIMATOR_DURATION_SCALE);

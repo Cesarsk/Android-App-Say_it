@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +54,7 @@ public class HistoryFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private Snackbar snackbar;
+    private AudioManager audio;
 
     public HistoryFragment() {
 
@@ -72,6 +75,9 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
+
+        //Get audio service
+        audio = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
         ArrayList<SayItPair> deserializedHistory = loadDeserializedHistory(getActivity());
 
@@ -297,12 +303,18 @@ public class HistoryFragment extends Fragment {
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (MainActivity.DEFAULT_ACCENT.equals("0")) {
-                        MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                        if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
-                    } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
-                        MainActivity.british_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                        if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                    if (!isVolumeMuted()) {
+                        if (MainActivity.DEFAULT_ACCENT.equals("0")) {
+                            MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                            if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                        } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
+                            MainActivity.british_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                            if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - HISTORY", MainActivity.DEFAULT_ACCENT);
+                        }
+                    } else {
+                        Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     }
                 }
             });
@@ -413,5 +425,10 @@ public class HistoryFragment extends Fragment {
                 .setDismissOnTouch(true)
                 .withoutShape()
                 .show();
+    }
+    private boolean isVolumeMuted() {
+        int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (currentVolume == 0) return true;
+        else return false;
     }
 }

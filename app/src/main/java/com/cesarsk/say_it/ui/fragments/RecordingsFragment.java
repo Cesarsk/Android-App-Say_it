@@ -2,10 +2,12 @@ package com.cesarsk.say_it.ui.fragments;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -18,6 +20,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +51,7 @@ public class RecordingsFragment extends Fragment {
 
     private Snackbar snackbar;
     private RecyclerView recyclerView;
+    private AudioManager audio;
 
     public RecordingsFragment() {
     }
@@ -67,6 +71,9 @@ public class RecordingsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_recordings, container, false);
+
+        //Get audio service
+        audio = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
         UtilityRecordings.updateRecordings(getActivity());
         ArrayList<File> recordings = MainActivity.RECORDINGS;
@@ -311,7 +318,13 @@ public class RecordingsFragment extends Fragment {
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UtilityRecordings.playRecording(getActivity(), mediaPlayer, recordingName + ".aac");
+                    if (!isVolumeMuted()) {
+                        UtilityRecordings.playRecording(getActivity(), mediaPlayer, recordingName + ".aac");
+                    } else {
+                        Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
                 }
             });
 
@@ -398,5 +411,11 @@ public class RecordingsFragment extends Fragment {
                 .setDismissOnTouch(true)
                 .withoutShape()
                 .show();
+    }
+
+    private boolean isVolumeMuted() {
+        int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (currentVolume == 0) return true;
+        else return false;
     }
 }
