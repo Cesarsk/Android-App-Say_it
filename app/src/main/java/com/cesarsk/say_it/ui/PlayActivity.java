@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
@@ -19,6 +20,7 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -96,6 +98,7 @@ public class PlayActivity extends AppCompatActivity {
     private static TextToSpeech american_speaker_google;
     private static TextToSpeech british_speaker_google;
 
+    private AudioManager audio;
 
     @Override
     public void onDestroy() {
@@ -130,6 +133,9 @@ public class PlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+
+        //Get audio service
+        audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, base64EncodedPublicKey);
@@ -338,32 +344,38 @@ public class PlayActivity extends AppCompatActivity {
         play_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                delete_button.setEnabled(false);
-                UtilityRecordings.playRecording(view.getContext(), mediaPlayer, selected_word + ".aac");
-                //START GREEN-to-GREEN-PRESSED ANIMATION
-                play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_green_pressed));
-                green_animation = (TransitionDrawable) play_button.getBackground();
-                green_animation.startTransition(durationMillis);
-                play_button.animate().setDuration(durationMillis).scaleX(0.8f).scaleY(0.8f);
-                new CountDownTimer(mediaPlayer.getDuration(), 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
+                if (!isVolumeMuted()) {
+                    delete_button.setEnabled(false);
+                    UtilityRecordings.playRecording(view.getContext(), mediaPlayer, selected_word + ".aac");
+                    //START GREEN-to-GREEN-PRESSED ANIMATION
+                    play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_to_green_pressed));
+                    green_animation = (TransitionDrawable) play_button.getBackground();
+                    green_animation.startTransition(durationMillis);
+                    play_button.animate().setDuration(durationMillis).scaleX(0.8f).scaleY(0.8f);
+                    new CountDownTimer(mediaPlayer.getDuration(), 1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onFinish() {
-                        play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_pressed_to_green));
-                        green_animation = (TransitionDrawable) play_button.getBackground();
-                        green_animation.startTransition(durationMillis);
-                        play_button.animate().setDuration(durationMillis).scaleX(1).scaleY(1).withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                delete_button.setEnabled(true);
-                            }
-                        });
-                    }
-                }.start();
+                        @Override
+                        public void onFinish() {
+                            play_button.setBackground(getDrawable(R.drawable.circle_color_anim_green_pressed_to_green));
+                            green_animation = (TransitionDrawable) play_button.getBackground();
+                            green_animation.startTransition(durationMillis);
+                            play_button.animate().setDuration(durationMillis).scaleX(1).scaleY(1).withEndAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    delete_button.setEnabled(true);
+                                }
+                            });
+                        }
+                    }.start();
+                } else {
+                    Toast toast = Toast.makeText(context, "Please turn the volume up", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
             }
         });
 
@@ -564,12 +576,18 @@ public class PlayActivity extends AppCompatActivity {
         play_original_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!accent_flag) {
-                    american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                    vibrator.vibrate(100);
-                } else if (accent_flag) {
-                    british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                    vibrator.vibrate(100);
+                if (!isVolumeMuted()) {
+                    if (!accent_flag) {
+                        american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                        vibrator.vibrate(100);
+                    } else if (accent_flag) {
+                        british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
+                        vibrator.vibrate(100);
+                    }
+                } else {
+                    Toast toast = Toast.makeText(context, "Please turn the volume up", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             }
         });
@@ -701,7 +719,7 @@ public class PlayActivity extends AppCompatActivity {
                     american_speaker_google.setPitch(0.90f);
                     american_speaker_google.setSpeechRate(0.90f);
                     american_speaker_google.setVoice(MainActivity.voice_american_female);
-                    american_speaker_google.speak("",QUEUE_ADD,null,null);
+                    american_speaker_google.speak("", QUEUE_ADD, null, null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
                         Log.e("error", "Initialization Failed!");
@@ -716,12 +734,18 @@ public class PlayActivity extends AppCompatActivity {
                     british_speaker_google.setPitch(0.90f);
                     british_speaker_google.setSpeechRate(0.90f);
                     british_speaker_google.setVoice(MainActivity.voice_british_female);
-                    british_speaker_google.speak("",QUEUE_ADD,null,null);
+                    british_speaker_google.speak("", QUEUE_ADD, null, null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
                         Log.e("error", "Initialization Failed!");
                 }
             }
         }, MainActivity.google_tts);
+    }
+
+    private boolean isVolumeMuted() {
+        int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (currentVolume == 0) return true;
+        else return false;
     }
 }

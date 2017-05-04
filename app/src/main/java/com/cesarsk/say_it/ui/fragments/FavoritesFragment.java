@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,7 @@ public class FavoritesFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private Snackbar snackbar;
+    private AudioManager audio;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -66,6 +69,9 @@ public class FavoritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //Get audio service
+        audio = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
         final View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
@@ -308,14 +314,20 @@ public class FavoritesFragment extends Fragment {
                 holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Cliccando su Play Button nella search result tab riproduce play.
-                        if(MainActivity.DEFAULT_ACCENT.equals("0")) {
-                            MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                            
-                        }
-                        else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
-                            MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
-                            
+                        if (!isVolumeMuted()) {
+                            //Cliccando su Play Button nella search result tab riproduce play.
+                            if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                                MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+
+                            }
+                            else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                                MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
+
+                            }
+                        } else {
+                            Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
                         }
                     }
                 });
@@ -395,5 +407,10 @@ public class FavoritesFragment extends Fragment {
                 .setDismissOnTouch(true)
                 .withoutShape()
                 .show();
+    }
+    private boolean isVolumeMuted() {
+        int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (currentVolume == 0) return true;
+        else return false;
     }
 }
