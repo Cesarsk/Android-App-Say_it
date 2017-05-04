@@ -177,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         easyRatingDialog = new EasyRatingDialog(this);
 
+        //set default Stream Controller
+        setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
+
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
                 = new IabHelper.QueryInventoryFinishedListener() {
             @Override
