@@ -53,8 +53,6 @@ import java.util.Set;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
-import static android.speech.tts.TextToSpeech.QUEUE_ADD;
-import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
@@ -175,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         easyRatingDialog = new EasyRatingDialog(this);
 
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
@@ -421,11 +420,11 @@ public class MainActivity extends AppCompatActivity {
                     american_speaker_google.setPitch(0.90f);
                     american_speaker_google.setSpeechRate(0.90f);
                     american_speaker_google.setVoice(MainActivity.voice_american_female);
-                    american_speaker_google.speak("",QUEUE_ADD,null,null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initialization Failed!");
+                        Log.e("error", "Initilization Failed!");
                 }
+
             }
         }, google_tts);
 
@@ -436,10 +435,9 @@ public class MainActivity extends AppCompatActivity {
                     british_speaker_google.setPitch(0.90f);
                     british_speaker_google.setSpeechRate(0.90f);
                     british_speaker_google.setVoice(MainActivity.voice_british_female);
-                    british_speaker_google.speak("",QUEUE_ADD,null,null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initialization Failed!");
+                        Log.e("error", "Initilization Failed!");
                 }
             }
         }, google_tts);
