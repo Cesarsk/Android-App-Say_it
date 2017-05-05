@@ -27,8 +27,8 @@ android {
         applicationId 'com.cesarsk.say_it'
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 15
-        versionName "2.1.4-beta"
+        versionCode 16
+        versionName "2.1.12-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
