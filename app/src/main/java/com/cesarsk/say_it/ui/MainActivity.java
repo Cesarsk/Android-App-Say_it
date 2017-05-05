@@ -509,7 +509,9 @@ public class MainActivity extends AppCompatActivity {
     private void huaweiProtectedApps() {
         try {
             String cmd = "am start -n com.huawei.systemmanager/.optimize.process.ProtectActivity";
-            cmd += " --user " + getUserSerial();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                cmd += " --user " + getUserSerial();
+            }
             Runtime.getRuntime().exec(cmd);
         } catch (IOException ignored) {
         }
