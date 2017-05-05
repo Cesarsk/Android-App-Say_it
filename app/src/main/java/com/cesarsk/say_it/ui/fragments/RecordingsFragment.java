@@ -1,9 +1,11 @@
 package com.cesarsk.say_it.ui.fragments;
 
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -30,6 +32,8 @@ import android.widget.Toast;
 
 import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.R;
+import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.utility.SayItPair;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
@@ -311,9 +315,19 @@ public class RecordingsFragment extends Fragment {
 
             final String recordingName = (recordings.get(position).getName()).substring(0, recordings.get(position).getName().lastIndexOf('.'));
 
-            //TODO: IPA
             holder.wordTextView.setText(recordingName);
             holder.IPATextView.setText(UtilityDictionary.getIPAfromWord(recordingName));
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Intent play_activity_intent = new Intent(getActivity(), PlayActivity.class);
+                    play_activity_intent.putExtra(PlayActivity.PLAY_WORD, holder.wordTextView.getText());
+                    play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
+                    UtilitySharedPrefs.addHist(getActivity(), new SayItPair(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
+                    getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                }
+            });
 
             holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -382,23 +396,12 @@ public class RecordingsFragment extends Fragment {
         public void remove(int pos) {
             temp_rec_file = recordings.get(pos);
             temp_rec_bytes = UtilityRecordings.getRecordingBytesfromFile(recordings.get(pos));
-
-            //UtilitySharedPrefs.removeRecording(getActivity(), recordings.get(pos).getAbsolutePath());
             recordings.get(pos).delete();
             recordings.remove(pos);
-            //UtilitySharedPrefs.loadRecordings(getActivity());
             recordings = UtilityRecordings.loadRecordingsfromStorage(getActivity());
             Collections.sort(recordings);
-            //createFileList();
             notifyItemRemoved(pos);
         }
-
-        /*private void createFileList(){
-            for(int i = 0; i<recordings.size(); i++){
-                File current_recording = new File(recordings.get(i));
-                recordings_files.add(current_recording);
-            }
-        }*/
     }
 
     private void startTutorialPlayActivity(RecordingsAdapter.ViewHolder holder) {
