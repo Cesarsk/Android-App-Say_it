@@ -33,7 +33,12 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_search);
+
+        //set default Stream Controller
+        setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_search);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions

@@ -73,6 +73,37 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
             }
         });
 
-        fade_animator.start();
+        if (!isAnimationScaleNull()) fade_animator.start();
+    }
+
+    //Check if in developer options animation scale is disabled. If so, do NOT animate to avoid glitches.
+    private boolean isAnimationScaleNull() {
+        float animator_duration_scale = 0f, transition_animation_scale = 0f, window_animation_scale = 0f;
+        try {
+            animator_duration_scale = Settings.Global.getFloat(getContext().getContentResolver(), Settings.Global.ANIMATOR_DURATION_SCALE);
+            transition_animation_scale = Settings.Global.getFloat(getContext().getContentResolver(), Settings.Global.TRANSITION_ANIMATION_SCALE);
+            window_animation_scale = Settings.Global.getFloat(getContext().getContentResolver(), Settings.Global.WINDOW_ANIMATION_SCALE);
+
+            if (animator_duration_scale == 0 || window_animation_scale == 0 || transition_animation_scale == 0) {
+                return true;
+            }
+
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void setupListener()
+    {
+        onClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent play_activity_intent = new Intent(getContext(), PlayActivity.class);
+                play_activity_intent.putExtra(PlayActivity.PLAY_WORD, word);
+                play_activity_intent.putExtra(PlayActivity.PLAY_IPA, ipa);
+                v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+            }
+        };
     }
 }

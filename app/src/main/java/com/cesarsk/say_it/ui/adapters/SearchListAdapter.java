@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
     private Context context;
     private ArrayList<Pair<String, String>> results;
     private SearchResultsFilter resultsFilter;
+    private AudioManager audio;
 
     public SearchListAdapter(Context context) {
         this.context = context;
@@ -65,6 +68,9 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        //Get audio service
+        audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
         final SearchResultViewHolder viewHolder;
 
@@ -104,16 +110,21 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         viewHolder.quickPlayImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Cliccando su Play Button nella search result tab riproduce play.
-                if(MainActivity.DEFAULT_ACCENT.equals("0")) {
-                    MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
-                    MainActivity.american_speaker_google.speak(viewHolder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                    if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
-                }
-                else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
-                    MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
-                    MainActivity.british_speaker_google.speak(viewHolder.wordTextView.getText(),QUEUE_FLUSH,null,null);
-                    if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
+                if (!isVolumeMuted()) {
+                    if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                        MainActivity.american_speaker_google.setVoice(MainActivity.voice_american_female);
+                        MainActivity.american_speaker_google.speak(viewHolder.wordTextView.getText(), QUEUE_FLUSH, null, null);
+                        if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
+                    }
+                    else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                        MainActivity.british_speaker_google.setVoice(MainActivity.voice_british_female);
+                        MainActivity.british_speaker_google.speak(viewHolder.wordTextView.getText(),QUEUE_FLUSH,null,null);
+                        if(MainActivity.isLoggingEnabled) Log.i("DEFAULT - SEARCHLIST", MainActivity.DEFAULT_ACCENT);
+                    }
+                } else {
+                    Toast toast = Toast.makeText(context, "Please turn the volume up", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             }
         });
@@ -204,4 +215,9 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         ImageButton addToFavsImgButton;
     }
 
+    private boolean isVolumeMuted() {
+        int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (currentVolume == 0) return true;
+        else return false;
+    }
 }

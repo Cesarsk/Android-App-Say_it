@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +65,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout.LayoutParams layoutParams;
     private float scale;
     private RelativeLayout recent_search = null;
+    private AudioManager audio;
 
     public HomeFragment() {
     }
@@ -142,6 +145,9 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //Get audio service
+        audio = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
         this.view = inflater.inflate(R.layout.fragment_home,
                 container, false);
@@ -263,13 +269,18 @@ public class HomeFragment extends Fragment {
         quick_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(MainActivity.DEFAULT_ACCENT.equals("0")) {
-                    MainActivity.american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
+                if (!isVolumeMuted()) {
+                    if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                        MainActivity.american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
+                    }
+                    else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
+                        MainActivity.british_speaker_google.speak(wordOfTheDay,QUEUE_FLUSH,null,null);
+                    }
+                } else {
+                    Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
-                else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
-                    MainActivity.british_speaker_google.speak(wordOfTheDay,QUEUE_FLUSH,null,null);
-                }
-                //PreferenceManager.getDefaultSharedPreferences(getActivity());
             }
         });
 
@@ -373,5 +384,11 @@ public class HomeFragment extends Fragment {
         wotd_text_view9.setOnClickListener(random_word_listener);
 
         return view;
+    }
+
+    private boolean isVolumeMuted() {
+        int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (currentVolume == 0) return true;
+        else return false;
     }
 }

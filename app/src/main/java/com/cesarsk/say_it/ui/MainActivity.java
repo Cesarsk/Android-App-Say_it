@@ -4,7 +4,12 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
@@ -12,13 +17,16 @@ import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,14 +53,17 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-
+import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
 import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
@@ -175,6 +186,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         easyRatingDialog = new EasyRatingDialog(this);
+
+        //Check Huawei Protected Apps
+        ifHuaweiAlert();
+
+        //set default Stream Controller
+        setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
 
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
                 = new IabHelper.QueryInventoryFinishedListener() {
@@ -420,6 +437,7 @@ public class MainActivity extends AppCompatActivity {
                     american_speaker_google.setPitch(0.90f);
                     american_speaker_google.setSpeechRate(0.90f);
                     american_speaker_google.setVoice(MainActivity.voice_american_female);
+                    american_speaker_google.speak("", QUEUE_ADD, null, null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
                         Log.e("error", "Initilization Failed!");
@@ -435,12 +453,86 @@ public class MainActivity extends AppCompatActivity {
                     british_speaker_google.setPitch(0.90f);
                     british_speaker_google.setSpeechRate(0.90f);
                     british_speaker_google.setVoice(MainActivity.voice_british_female);
+                    british_speaker_google.speak("", QUEUE_ADD, null, null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
                         Log.e("error", "Initilization Failed!");
                 }
             }
         }, google_tts);
+    }
+
+    //Check Huawei Protected Apps
+    private void ifHuaweiAlert() {
+        final SharedPreferences settings = getSharedPreferences("ProtectedApps", MODE_PRIVATE);
+        final String saveIfSkip = "skipProtectedAppsMessage";
+        boolean skipMessage = settings.getBoolean(saveIfSkip, false);
+        if (!skipMessage) {
+            final SharedPreferences.Editor editor = settings.edit();
+            Intent intent = new Intent();
+            intent.setClassName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity");
+            if (isCallable(intent)) {
+                final AppCompatCheckBox dontShowAgain = new AppCompatCheckBox(this);
+                dontShowAgain.setText("Do not show again");
+                dontShowAgain.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        editor.putBoolean(saveIfSkip, isChecked);
+                        editor.apply();
+                    }
+                });
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Huawei Protected Apps")
+                        .setMessage(String.format("%s requires to be enabled in 'Protected Apps' to send notifications.%n", getString(R.string.app_name)))
+                        .setView(dontShowAgain)
+                        .setPositiveButton("Protected Apps", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                huaweiProtectedApps();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            } else {
+                editor.putBoolean(saveIfSkip, true);
+                editor.apply();
+            }
+        }
+    }
+
+    private boolean isCallable(Intent intent) {
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+    private void huaweiProtectedApps() {
+        try {
+            String cmd = "am start -n com.huawei.systemmanager/.optimize.process.ProtectActivity";
+            cmd += " --user " + getUserSerial();
+            Runtime.getRuntime().exec(cmd);
+        } catch (IOException ignored) {
+        }
+    }
+
+    private String getUserSerial() {
+        //noinspection ResourceType
+        Object userManager = getSystemService("user");
+        if (null == userManager) return "";
+
+        try {
+            Method myUserHandleMethod = android.os.Process.class.getMethod("myUserHandle", (Class<?>[]) null);
+            Object myUserHandle = myUserHandleMethod.invoke(android.os.Process.class, (Object[]) null);
+            Method getSerialNumberForUser = userManager.getClass().getMethod("getSerialNumberForUser", myUserHandle.getClass());
+            Long userSerial = (Long) getSerialNumberForUser.invoke(userManager, myUserHandle);
+            if (userSerial != null) {
+                return String.valueOf(userSerial);
+            } else {
+                return "";
+            }
+        } catch (NoSuchMethodException | IllegalArgumentException | InvocationTargetException | IllegalAccessException ignored) {
+        }
+        return "";
     }
 
 }

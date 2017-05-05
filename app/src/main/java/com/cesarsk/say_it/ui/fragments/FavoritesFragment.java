@@ -1,17 +1,13 @@
 package com.cesarsk.say_it.ui.fragments;
 
 
-import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -23,13 +19,10 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.components.FavoritesAdapter;
 import com.cesarsk.say_it.utility.SayItPair;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.gson.Gson;
@@ -40,8 +33,6 @@ import java.util.Comparator;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
-import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -49,6 +40,7 @@ public class FavoritesFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private Snackbar snackbar;
+    private AudioManager audio;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -67,6 +59,9 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //Get audio service
+        audio = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+
         final View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         ArrayList<Pair<String, String>> deserializedFavs = loadDeserializedFavs(getActivity());
@@ -77,7 +72,7 @@ public class FavoritesFragment extends Fragment {
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
 
-        final FavoritesAdapter adapter = new FavoritesAdapter(deserializedFavs);
+        final FavoritesAdapter adapter = new FavoritesAdapter(this, deserializedFavs);
         recyclerView.setAdapter(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
@@ -232,7 +227,7 @@ public class FavoritesFragment extends Fragment {
         return view;
     }
 
-    private static ArrayList<Pair<String, String>> loadDeserializedFavs(Context context) {
+    public static ArrayList<Pair<String, String>> loadDeserializedFavs(Context context) {
 
         UtilitySharedPrefs.loadFavs(context);
         ArrayList<String> SerializedFavs = new ArrayList<>(MainActivity.FAVORITES);
@@ -255,137 +250,8 @@ public class FavoritesFragment extends Fragment {
     }
 
 
+    public void startTutorialPlayActivity(FavoritesAdapter.ViewHolder holder) {
 
-    private class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder> {
-
-        public static final long UNDO_TIMEOUT = 3000; //Timeout prima che l'elemento venga cancellato definitivamente
-
-        private ArrayList<Pair<String, String>> favorites;
-
-        public Pair<String, String> getTemp_fav() {
-            return temp_fav;
-        }
-
-        private Pair<String, String> temp_fav;
-
-        /*private ArrayList<Pair<String, String>> pendingFavorites;
-        private Handler handler = new Handler(); //Handler per gestire i Runnable per permettere l'UNDO con il Delay
-        HashMap<Pair<String, String>, Runnable> pendingRunnables = new HashMap<>(); //HashMap che associa ad ogni elemento della lista un Runnable che aspetterà
-        //3 secondi prima di cancellare l'elemento dalla lista.*/
-
-        FavoritesAdapter(ArrayList<Pair<String, String>> favorites_list) {
-            favorites = favorites_list;
-            //pendingFavorites = new ArrayList<>();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            final TextView wordTextView;
-            final TextView IPATextView;
-            final ImageButton QuickPlayBtn;
-
-            ViewHolder(View itemView) {
-                super(itemView);
-                wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
-                IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
-                QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
-            }
-        }
-
-        @Override
-        public FavoritesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
-            View view = inflater.inflate(R.layout.list_item_favorites, parent, false);
-
-            return new ViewHolder(view);
-        }
-
-
-        @Override
-        public void onBindViewHolder(final FavoritesAdapter.ViewHolder holder, int position) {
-                holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //Cliccando su Play Button nella search result tab riproduce play.
-                        if(MainActivity.DEFAULT_ACCENT.equals("0")) {
-                            MainActivity.american_speaker_google.speak(holder.wordTextView.getText(), QUEUE_FLUSH, null, null);
-                            
-                        }
-                        else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
-                            MainActivity.british_speaker_google.speak(holder.wordTextView.getText(),QUEUE_FLUSH,null,null);
-                            
-                        }
-                    }
-                });
-
-            holder.wordTextView.setText(favorites.get(position).first);
-            holder.IPATextView.setText(favorites.get(position).second);
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final Intent play_activity_intent = new Intent(getActivity(), PlayActivity.class);
-                    play_activity_intent.putExtra(PlayActivity.PLAY_WORD, holder.wordTextView.getText());
-                    play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
-                    UtilitySharedPrefs.addHist(getActivity(), new SayItPair(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
-                    getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
-                }
-            });
-
-            final FloatingActionButton fab =(FloatingActionButton)getActivity().findViewById(R.id.floating_button_history);
-            startTutorialPlayActivity(holder);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("Clear Favorites")
-                            .setMessage("Are you sure you want to clear your Favorites?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //Clear Favorites
-                                    UtilitySharedPrefs.clearFavorites(getActivity());
-                                    setFavorites(loadDeserializedFavs(getActivity()));
-                                    Toast.makeText(getActivity(), "Favorites Cleared!", Toast.LENGTH_SHORT).show();
-
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //do nothing
-                                }
-                            })
-                            .show();
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return favorites.size();
-        }
-
-        void remove(int pos) {
-
-            temp_fav = favorites.get(pos);
-
-            UtilitySharedPrefs.removeFavs(getActivity(), favorites.get(pos));
-            favorites = loadDeserializedFavs(getActivity());
-            notifyItemRemoved(pos);
-        }
-
-        public ArrayList<Pair<String, String>> getFavorites() {
-            return favorites;
-        }
-
-        public void setFavorites(ArrayList<Pair<String, String>> favorites) {
-            this.favorites = favorites;
-            notifyDataSetChanged();
-        }
-    }
-
-    private void startTutorialPlayActivity(FavoritesAdapter.ViewHolder holder) {
         MainActivity.showCaseFragmentView = new MaterialShowcaseView.Builder(getActivity())
                 .setTarget(holder.wordTextView)
                 .setDismissText(getString(R.string.showcase_str_btn_5))
@@ -395,5 +261,10 @@ public class FavoritesFragment extends Fragment {
                 .setDismissOnTouch(true)
                 .withoutShape()
                 .show();
+    }
+    public boolean isVolumeMuted() {
+        int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (currentVolume == 0) return true;
+        else return false;
     }
 }
