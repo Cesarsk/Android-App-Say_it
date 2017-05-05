@@ -1,39 +1,28 @@
 package com.cesarsk.say_it.ui.fragments;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.utility.Utility;
-import com.cesarsk.say_it.utility.UtilityDictionary;
+import com.cesarsk.say_it.ui.components.RecordingsAdapter;
 import com.cesarsk.say_it.utility.UtilityRecordings;
-import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -87,7 +76,7 @@ public class RecordingsFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        final RecordingsAdapter adapter = new RecordingsAdapter(recordings);
+        final RecordingsAdapter adapter = new RecordingsAdapter(this, recordings);
         recyclerView.setAdapter(adapter);
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -249,159 +238,7 @@ public class RecordingsFragment extends Fragment {
         return view;
     }
 
-    private class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.ViewHolder> {
-        static final long UNDO_TIMEOUT = 3000;
-
-        public ArrayList<File> getRecordings() {
-            return recordings;
-        }
-
-        public void setRecordings(ArrayList<File> recordings) {
-            this.recordings = recordings;
-            notifyDataSetChanged();
-        }
-
-        private ArrayList<File> recordings;
-        private final MediaPlayer mediaPlayer = new MediaPlayer();
-
-        public File getTemp_rec_file() {
-            return temp_rec_file;
-        }
-
-        public byte[] getTemp_rec_bytes() {
-            return temp_rec_bytes;
-        }
-
-        private File temp_rec_file;
-        private byte[] temp_rec_bytes;
-
-        RecordingsAdapter(ArrayList<File> recordings_list) {
-            recordings = recordings_list;
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            final TextView wordTextView;
-            final TextView IPATextView;
-            final ImageButton QuickPlayBtn;
-            final ImageButton AddtoFavsBtn;
-
-            ViewHolder(View itemView) {
-                super(itemView);
-                wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
-                IPATextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
-                QuickPlayBtn = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
-                AddtoFavsBtn = (ImageButton) itemView.findViewById(R.id.list_item_addToFavs);
-
-            }
-        }
-
-        @Override
-        public RecordingsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
-            View view = inflater.inflate(R.layout.list_item_recordings, parent, false);
-
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final RecordingsAdapter.ViewHolder holder, int position) {
-
-            final String recordingName = (recordings.get(position).getName()).substring(0, recordings.get(position).getName().lastIndexOf('.'));
-
-            //TODO: IPA
-            holder.wordTextView.setText(recordingName);
-            holder.IPATextView.setText(UtilityDictionary.getIPAfromWord(recordingName));
-
-            holder.QuickPlayBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!isVolumeMuted()) {
-                        UtilityRecordings.playRecording(getActivity(), mediaPlayer, recordingName + ".aac");
-                    } else {
-                        Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    }
-                }
-            });
-
-            if (UtilitySharedPrefs.checkFavs(getActivity(), holder.wordTextView.getText().toString()))
-                holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
-
-            holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!UtilitySharedPrefs.checkFavs(getActivity(), holder.wordTextView.getText().toString())) {
-                        UtilitySharedPrefs.addFavs(getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
-                        Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-                        holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
-                    } else if (UtilitySharedPrefs.checkFavs(getActivity(), holder.wordTextView.getText().toString())) {
-                        UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
-                        Toast.makeText(getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                        holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary_dark));
-                    }
-                }
-            });
-
-            final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floating_button_recordings);
-            startTutorialPlayActivity(holder);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("Delete Recordings")
-                            .setMessage("Are you sure you want to delete your recordings?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Utility.delete_recordings(getActivity());
-                                    UtilityRecordings.updateRecordings(getActivity());
-                                    setRecordings(MainActivity.RECORDINGS);
-                                    Toast.makeText(getActivity(), "Recordings Deleted!", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //do nothing
-                                }
-                            })
-                            .show();
-                }
-            });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return recordings.size();
-        }
-
-        @SuppressWarnings("ResultOfMethodCallIgnored")
-        public void remove(int pos) {
-            temp_rec_file = recordings.get(pos);
-            temp_rec_bytes = UtilityRecordings.getRecordingBytesfromFile(recordings.get(pos));
-
-            //UtilitySharedPrefs.removeRecording(getActivity(), recordings.get(pos).getAbsolutePath());
-            recordings.get(pos).delete();
-            recordings.remove(pos);
-            //UtilitySharedPrefs.loadRecordings(getActivity());
-            recordings = UtilityRecordings.loadRecordingsfromStorage(getActivity());
-            Collections.sort(recordings);
-            //createFileList();
-            notifyItemRemoved(pos);
-        }
-
-        /*private void createFileList(){
-            for(int i = 0; i<recordings.size(); i++){
-                File current_recording = new File(recordings.get(i));
-                recordings_files.add(current_recording);
-            }
-        }*/
-    }
-
-    private void startTutorialPlayActivity(RecordingsAdapter.ViewHolder holder) {
+    public void startTutorialPlayActivity(RecordingsAdapter.ViewHolder holder) {
         MainActivity.showCaseFragmentView = new MaterialShowcaseView.Builder(getActivity())
                 .setTarget(holder.wordTextView)
                 .setDismissText(getString(R.string.showcase_str_btn_5))
@@ -413,7 +250,7 @@ public class RecordingsFragment extends Fragment {
                 .show();
     }
 
-    private boolean isVolumeMuted() {
+    public boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;
         else return false;
