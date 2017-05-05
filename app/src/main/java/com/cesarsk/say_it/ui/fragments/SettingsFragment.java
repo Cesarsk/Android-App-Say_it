@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -147,7 +149,15 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String version = pInfo.versionName;
         final Preference app_version = getPreferenceManager().findPreference("app_version");
+        app_version.setSummary("Version: "+ version +" (Click for Privacy Policy)");
         app_version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -164,6 +174,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 return false;
             }
         });
+
+
 
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(getActivity(), LCSecurity.base64EncodedPublicKey);
