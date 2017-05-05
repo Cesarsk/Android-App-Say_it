@@ -63,7 +63,6 @@ import java.util.Locale;
 import java.util.Set;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -185,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         easyRatingDialog = new EasyRatingDialog(this);
 
         //Check Huawei Protected Apps
@@ -440,8 +440,9 @@ public class MainActivity extends AppCompatActivity {
                     american_speaker_google.speak("", QUEUE_ADD, null, null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initialization Failed!");
+                        Log.e("error", "Initilization Failed!");
                 }
+
             }
         }, google_tts);
 
@@ -455,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
                     british_speaker_google.speak("", QUEUE_ADD, null, null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initialization Failed!");
+                        Log.e("error", "Initilization Failed!");
                 }
             }
         }, google_tts);

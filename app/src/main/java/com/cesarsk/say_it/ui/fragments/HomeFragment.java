@@ -304,23 +304,88 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        LinearLayout linearLayoutFirstRow = (LinearLayout) view.findViewById(R.id.first_row_linear_layout);
-        LinearLayout linearLayoutSecondRow = (LinearLayout) view.findViewById(R.id.second_row_linear_layout);
-        LinearLayout linearLayoutThirdRow = (LinearLayout) view.findViewById(R.id.third_row_linear_layout);
+        final FadingTextView wotd_text_view1 = (FadingTextView)view.findViewById(R.id.first_wotd); wotd_text_view1.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        //final FadingTextView wotd_text_view2 = (FadingTextView)view.findViewById(R.id.second_wotd); wotd_text_view2.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view3 = (FadingTextView)view.findViewById(R.id.third_wotd); wotd_text_view3.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        //final FadingTextView wotd_text_view4 = (FadingTextView)view.findViewById(R.id.fourth_wotd); wotd_text_view4.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view6 = (FadingTextView)view.findViewById(R.id.sixth_wotd); wotd_text_view6.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view7 = (FadingTextView)view.findViewById(R.id.seventh_wotd); wotd_text_view7.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        //final FadingTextView wotd_text_view8 = (FadingTextView)view.findViewById(R.id.eighth_wotd); wotd_text_view8.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        final FadingTextView wotd_text_view9 = (FadingTextView)view.findViewById(R.id.ninth_wotd); wotd_text_view9.setPaintFlags(wotd_text_view1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        for(int i = 0; i < 2; i++)
-        {
-            linearLayoutFirstRow.addView(new FadingTextView(getActivity()));
-            linearLayoutThirdRow.addView(new FadingTextView(getActivity()));
-        }
 
-        for(int i = 0; i < 1; i++)
-        {
-            linearLayoutSecondRow.addView(new FadingTextView(getActivity()));
-        }
+        View.OnClickListener random_word_listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                final Intent play_activity_intent = new Intent(v.getContext(), PlayActivity.class);
+                switch(v.getId()) {
+                    case R.id.first_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view1.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view1.ipa);
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    /*case R.id.second_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view2.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view2.ipa);
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;*/
+
+                    case R.id.third_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view3.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view3.ipa);
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    /*case R.id.fourth_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view4.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view4.ipa);
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;*/
+
+                    case R.id.sixth_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view6.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view6.ipa);
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    case R.id.seventh_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view7.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view7.ipa);
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    /*case R.id.eighth_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view8.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view8.ipa);
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;*/
+
+                    case R.id.ninth_wotd:
+                        play_activity_intent.putExtra(PlayActivity.PLAY_WORD, wotd_text_view9.word);
+                        play_activity_intent.putExtra(PlayActivity.PLAY_IPA, wotd_text_view9.ipa);
+                        v.getContext().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext()).toBundle());
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        };
+
+        wotd_text_view1.setOnClickListener(random_word_listener);
+        //wotd_text_view2.setOnClickListener(random_word_listener);
+        wotd_text_view3.setOnClickListener(random_word_listener);
+        //wotd_text_view4.setOnClickListener(random_word_listener);
+        wotd_text_view6.setOnClickListener(random_word_listener);
+        wotd_text_view7.setOnClickListener(random_word_listener);
+        //wotd_text_view8.setOnClickListener(random_word_listener);
+        wotd_text_view9.setOnClickListener(random_word_listener);
 
         return view;
     }
+
     private boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;

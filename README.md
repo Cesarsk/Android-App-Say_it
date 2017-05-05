@@ -1,9 +1,14 @@
 [![Stories in Ready](https://badge.waffle.io/Cesarsk/Say_it.png?label=ready&title=Ready)](https://waffle.io/Cesarsk/Say_it)
 # Say It!
-[Play Store](https://play.google.com/store/apps/details?id=com.cesarsk.say_it)
 
 Say It! is an Android App aimed to help people with their English Pronunciation.
 We're three Italian students trying to bring something new to people.
+
+Stable versions are available through Google Play Store: 
+
+<a href="https://play.google.com/store/apps/details?id=com.cesarsk.say_it"><img
+  alt="Get it on Google Play" height="80"
+  src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" /></a>
 
 # Welcome to Say It!
 
