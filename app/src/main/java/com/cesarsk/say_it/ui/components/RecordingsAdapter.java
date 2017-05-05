@@ -1,7 +1,9 @@
 package com.cesarsk.say_it.ui.components;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -17,7 +19,9 @@ import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.PlayActivity;
 import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
+import com.cesarsk.say_it.utility.SayItPair;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
@@ -126,6 +130,17 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
                     Toast.makeText(recordingsFragment.getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
                     holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.primary_dark));
                 }
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent play_activity_intent = new Intent(recordingsFragment.getActivity(), PlayActivity.class);
+                play_activity_intent.putExtra(PlayActivity.PLAY_WORD, holder.wordTextView.getText());
+                play_activity_intent.putExtra(PlayActivity.PLAY_IPA, holder.IPATextView.getText());
+                UtilitySharedPrefs.addHist(recordingsFragment.getActivity(), new SayItPair(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
+                recordingsFragment.getActivity().startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation(recordingsFragment.getActivity()).toBundle());
             }
         });
 
