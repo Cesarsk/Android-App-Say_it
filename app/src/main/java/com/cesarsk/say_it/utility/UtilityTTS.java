@@ -27,7 +27,8 @@ public class UtilityTTS {
 
     //IMPOSTAZIONE TEXT TO SPEECH
     public static Voice searchVoice(String voiceName, TextToSpeech tts) {
-        if(MainActivity.isLoggingEnabled) Log.i("VOICES:", tts.getVoices().toString()); //stampa tutte le voci disponibili
+        if (MainActivity.isLoggingEnabled)
+            Log.i("VOICES:", tts.getVoices().toString()); //stampa tutte le voci disponibili
         for (Voice tmpVoice : tts.getVoices()) {
             if (tmpVoice.getName().equals(voiceName)) {
                 return tmpVoice;

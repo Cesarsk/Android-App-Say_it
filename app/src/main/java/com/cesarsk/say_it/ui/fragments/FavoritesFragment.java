@@ -49,7 +49,7 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(recyclerView != null){
+        if (recyclerView != null) {
             FavoritesAdapter adapter = (FavoritesAdapter) recyclerView.getAdapter();
             adapter.setFavorites(loadDeserializedFavs(getActivity()));
         }
@@ -262,6 +262,7 @@ public class FavoritesFragment extends Fragment {
                 .withoutShape()
                 .show();
     }
+
     public boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;

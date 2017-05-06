@@ -28,12 +28,12 @@ public class SayItPair extends Pair<String, String> implements Serializable {
         super(first, second);
     }
 
-    public SayItPair(String first, String second, Date current_time){
+    public SayItPair(String first, String second, Date current_time) {
         super(first, second);
         adding_time = current_time;
     }
 
-    public Date getAdding_time(){
+    public Date getAdding_time() {
         return adding_time;
     }
 }

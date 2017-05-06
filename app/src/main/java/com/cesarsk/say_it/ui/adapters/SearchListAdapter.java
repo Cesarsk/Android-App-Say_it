@@ -130,7 +130,6 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
         });
 
         //Pulsante FAV
-
         if (UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString()))
             viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
 

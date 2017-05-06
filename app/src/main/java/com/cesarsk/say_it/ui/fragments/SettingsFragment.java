@@ -157,7 +157,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         }
         String version = pInfo.versionName;
         final Preference app_version = getPreferenceManager().findPreference("app_version");
-        app_version.setSummary("Version: "+ version +" (Click for Privacy Policy)");
+        app_version.setSummary("Version: " + version + " (Click for Privacy Policy)");
         app_version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -176,17 +176,18 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         });
 
 
-
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(getActivity(), LCSecurity.base64EncodedPublicKey);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if (MainActivity.isLoggingEnabled)
+                        Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 // Hooray, IAB is fully set up!
-                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if (MainActivity.isLoggingEnabled)
+                    Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 
@@ -205,7 +206,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
             public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
                 if (result.isFailure()) {
-                    Toast.makeText(getActivity(), "Query Failed!", Toast.LENGTH_SHORT).show();
+                    if(MainActivity.isLoggingEnabled) Toast.makeText(getActivity(), "Query Failed!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

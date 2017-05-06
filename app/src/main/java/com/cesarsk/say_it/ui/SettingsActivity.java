@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.fragments.NestedPreferenceFragment;
 import com.cesarsk.say_it.ui.fragments.SettingsFragment;
@@ -31,7 +32,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
         }
 
         SettingsFragment fragment = new SettingsFragment();
-        //TODO ANIMATION fragment.setEnterTransition(new Slide(Gravity.END));
+        //TODO ANIMATION fragment.setEnterTransition(new Slide(Gravity.RIGHT));
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.contentSettings, fragment)

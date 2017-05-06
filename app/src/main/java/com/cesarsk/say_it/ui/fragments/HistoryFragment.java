@@ -265,6 +265,7 @@ public class HistoryFragment extends Fragment {
                 .withoutShape()
                 .show();
     }
+
     public boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;

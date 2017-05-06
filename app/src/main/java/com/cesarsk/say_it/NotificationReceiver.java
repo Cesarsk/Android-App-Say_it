@@ -51,7 +51,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setContentTitle("Say it! Reminder ")
                         .setContentText("Hey! Here's your word of the day: " + MainActivity.wordOfTheDay)
                         .setSound(alarmSound)
-                        .setColor(Color.argb(0,21,101,192))
+                        .setColor(Color.argb(0, 21, 101, 192))
                         .setVibrate(new long[]{300, 300, 300, 300, 300})
                         .setAutoCancel(true);
 
@@ -69,7 +69,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         notificationManager.notify(MainActivity.notifId, mBuilder.build());
     }
 
-    public static void scheduleNotification(Context context, int hour, int minute, String mode){
+    public static void scheduleNotification(Context context, int hour, int minute, String mode) {
 
         int mode_code = Integer.parseInt(mode);
         ComponentName receiver = new ComponentName(context, NotificationBootReceiver.class);
@@ -79,7 +79,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         Intent intent = new Intent(context, NotificationReceiver.class);
         PendingIntent notificationPendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if(mode_code == 0){
+        if (mode_code == 0) {
             //Notification OFF
             alarmManager.cancel(notificationPendingIntent);
             pm.setComponentEnabledSetting(receiver,
@@ -97,8 +97,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         calendar.set(Calendar.SECOND, 0);
 
 
-
-        if(mode_code == 2){
+        if (mode_code == 2) {
             //Daily Notifications
             if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
                 calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
@@ -106,15 +105,13 @@ public class NotificationReceiver extends BroadcastReceiver {
 
             //TODO Provare Cancel
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notificationPendingIntent);
-        }
-
-        else if(mode_code == 1){
+        } else if (mode_code == 1) {
             //Weekly Notifications
             if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
-                calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY*7);
+                calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY * 7);
             }
 
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, notificationPendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, notificationPendingIntent);
         }
 
         pm.setComponentEnabledSetting(receiver,

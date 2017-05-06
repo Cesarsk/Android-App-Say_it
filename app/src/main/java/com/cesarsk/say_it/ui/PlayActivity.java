@@ -456,7 +456,8 @@ public class PlayActivity extends AppCompatActivity {
         mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
             public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
                 if (result.isFailure()) {
-                    Toast.makeText(PlayActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
+                    if (MainActivity.isLoggingEnabled)
+                        Toast.makeText(PlayActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
