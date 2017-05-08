@@ -19,6 +19,7 @@ import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.FileTextActivity;
 import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.SettingsActivity;
 import com.cesarsk.say_it.utility.LCSecurity;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -77,8 +78,19 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String version = pInfo.versionName;
+        final Preference app_version = getPreferenceManager().findPreference("app_version");
+        app_version.setSummary("Version: " + version + " (Click for Privacy Policy)");
 
         final Context context = getActivity();
 
@@ -145,23 +157,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/28/say-it-eula-agreement/");
-                return false;
-            }
-        });
-
-        PackageInfo pInfo = null;
-        try {
-            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        String version = pInfo.versionName;
-        final Preference app_version = getPreferenceManager().findPreference("app_version");
-        app_version.setSummary("Version: " + version + " (Click for Privacy Policy)");
-        app_version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/18/privacy-policy/");
                 return false;
             }
         });
@@ -298,7 +293,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         Preference acknowledgements = getPreferenceManager().findPreference("acknowledgements");
         acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-
         {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -307,6 +301,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 args.putString(FileTextActivity.PREFERENCE, "acknowledgements");
                 preference_intent.putExtras(args);
                 startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                return false;
+            }
+        });
+
+        app_version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/18/privacy-policy/");
                 return false;
             }
         });
