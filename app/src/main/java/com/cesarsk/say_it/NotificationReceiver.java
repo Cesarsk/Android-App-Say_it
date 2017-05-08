@@ -103,7 +103,6 @@ public class NotificationReceiver extends BroadcastReceiver {
                 calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
             }
 
-            //TODO Provare Cancel
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notificationPendingIntent);
         } else if (mode_code == 1) {
             //Weekly Notifications

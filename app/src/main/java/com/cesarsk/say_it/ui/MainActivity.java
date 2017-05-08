@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    /*//TODO Blocco try-catch SOLO PER IL TESTING
+                    /*//Try-catch snippet for testing in-app
                     try {
                         mHelper.consumeAsync(inventory.getPurchase(PlayActivity.no_ads_in_app), new IabHelper.OnConsumeFinishedListener() {
                             @Override
@@ -283,8 +283,6 @@ public class MainActivity extends AppCompatActivity {
         //SETUP TOOLBAR
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
-        //TODO SISTEMARE LISTENER
 
         EditText editText = (EditText) findViewById(R.id.search_bar_edit_text);
         ImageView lens_search_button = (ImageView) findViewById(R.id.search_bar_hint_icon);
