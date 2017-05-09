@@ -110,7 +110,6 @@ public class HomeFragment extends Fragment {
         }
 
         //Setup our Stats
-        //TODO racchiudere in un metodo per aggiornare quando si aggiunge una parola ai preferiti dalla Home
         if (MainActivity.RECORDINGS != null || MainActivity.FAVORITES != null) {
 
             RelativeLayout card_stats = (RelativeLayout) view.findViewById(R.id.card_stats);

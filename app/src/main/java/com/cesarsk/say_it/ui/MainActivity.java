@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public static String DEFAULT_NOTIFICATION_HOUR = null;
     public static String DEFAULT_NOTIFICATION_MINUTE = null;
     public static boolean NO_ADS = false;
+    public static boolean FIRST_LAUNCH;
 
     //Gestione Preferenze
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
     public final static String DEFAULT_NOTIFICATION_HOUR_KEY = "SAY.IT.DEFAULT.NOTIFICATION.HOUR";
     public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
+    public final static String FIRST_LAUNCH_KEY = "SAY.IT.FIRST.LAUNCH";
 
     //Unique IDs related to showcase
     public static String id_showcase_playactivity = "utente_playactivity";
@@ -143,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         UtilitySharedPrefs.savePrefs(this, FAVORITES, FAVORITES_PREFS_KEY);
         UtilitySharedPrefs.savePrefs(this, HISTORY, HISTORY_PREFS_KEY);
+        UtilitySharedPrefs.savePrefs(this, false, FIRST_LAUNCH_KEY);
     }
 
     @Override
@@ -179,6 +182,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         easyRatingDialog.showIfNeeded();
+
+        UtilitySharedPrefs.loadAdsStatus(this);
+
+        if (!NO_ADS) {
+            mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_interstitial_mainactivity_back));
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    requestNewInterstitial();
+                }
+            });
+
+            requestNewInterstitial();
+        }
     }
 
     @Override
@@ -187,6 +204,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         easyRatingDialog = new EasyRatingDialog(this);
+
+        UtilitySharedPrefs.loadFirstLaunch(this);
 
         //Check Huawei Protected Apps
         ifHuaweiAlert();
@@ -217,9 +236,9 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }*/
                     if (inventory.hasPurchase(PlayActivity.no_ads_in_app)) {
-                        //TODO Spostare la riga saveprefs
                         UtilitySharedPrefs.savePrefs(MainActivity.this, true, NO_ADS_STATUS_KEY);
-                        Toast.makeText(MainActivity.this, "NO ADS", Toast.LENGTH_SHORT).show();
+                        if(FIRST_LAUNCH)
+                            Toast.makeText(MainActivity.this, "Premium Version restored, restart to apply changes", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -252,20 +271,7 @@ public class MainActivity extends AppCompatActivity {
         UtilitySharedPrefs.loadSettingsPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
-        UtilitySharedPrefs.loadAdsStatus(this);
         RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
-
-        if (!NO_ADS) {
-            mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_interstitial_mainactivity_back));
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    requestNewInterstitial();
-                }
-            });
-
-            requestNewInterstitial();
-        }
 
         if (Wordlists_Map.isEmpty()) {
             //Caricamento dizionario (inclusa word of the day)

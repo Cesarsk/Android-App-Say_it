@@ -37,6 +37,11 @@ public class UtilitySharedPrefs {
         MainActivity.NO_ADS = preferences.getBoolean(MainActivity.NO_ADS_STATUS_KEY, false);
     }
 
+    public static void loadFirstLaunch(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.FIRST_LAUNCH = preferences.getBoolean(MainActivity.FIRST_LAUNCH_KEY, true);
+    }
+
     //Gestione Preferences
     public static void savePrefs(Context context, Set<String> set, String prefs_key) {
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
@@ -266,9 +271,7 @@ public class UtilitySharedPrefs {
         MainActivity.DEFAULT_NOTIFICATION_MINUTE = sharedPreferences.getString(DEFAULT_NOTIFICATION_MINUTE_KEY, "00");
     }
 
-
     public static void deletePreferences(Context context) {
-        //TODO AGGIUNGERE IN IMPOSTAZIONI
         //delete all preferences
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
