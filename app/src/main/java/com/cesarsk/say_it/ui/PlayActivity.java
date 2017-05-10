@@ -67,41 +67,55 @@ import static android.view.View.VISIBLE;
 import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 
 public class PlayActivity extends AppCompatActivity {
+
+    //bundle variables
     public final static String PLAY_WORD = "com.example.cesarsk.say_it.WORD";
     public final static String PLAY_IPA = "com.example.cesarsk.say_it.IPA";
-    private static final long UNDO_TIMEOUT = 3000;
-    private MediaRecorder recorder = null;
-    public static final int RequestPermissionCode = 1;
-    private MediaPlayer mediaPlayer;
     public static String selected_word;
     public static String selected_ipa;
+
+    //snackbar variables
+    private Snackbar snackbar;
+    private static final long UNDO_TIMEOUT = 3000;
+
+    //recorder and player variables
+    private MediaRecorder recorder = null;
+    private MediaPlayer mediaPlayer;
+    private AudioManager audio;
+    public static final int RequestPermissionCode = 1;
+
+    //buttons variables
     private boolean slow_mode = false;
     private boolean accent_flag = false;
     private boolean favorite_flag = false;
-    private final Context context = this;
-    private final int durationMillis = 500;
-    private Snackbar snackbar;
-    private byte[] temp_recording_bytes;
-    private Button rec_button;
-    private Vibrator vibrator;
-    private TransitionDrawable green_animation;
-    private final long scaleAnimationDuration = 200;
-    private final long scaleAnimationDurationLong = 300;
-    private boolean maxDurationReached = false;
+
+    //TTS variables
+    private static TextToSpeech american_speaker_google;
+    private static TextToSpeech british_speaker_google;
+
+    //in-app and ads variables
     private IabHelper mHelper;
     private IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
     private IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
     public static final String no_ads_in_app = "no_ads";
     private InterstitialAd mInterstitialAd;
-    //private boolean hasInterstitialDisplayed = false;
 
-    private static TextToSpeech american_speaker_google;
-    private static TextToSpeech british_speaker_google;
+    //animations variables
+    private TransitionDrawable green_animation;
+    private final long scaleAnimationDuration = 200;
+    private final long scaleAnimationDurationLong = 300;
+    private boolean maxDurationReached = false;
+    private final int durationMillis = 500;
 
-    private AudioManager audio;
+    //other variables
+    private final Context context = this;
+    private byte[] temp_recording_bytes;
+    private Button rec_button;
+    private Vibrator vibrator;
 
     @Override
     public void onDestroy() {
+        //destroying in-app variable to avoid exceptions
         super.onDestroy();
         if (mHelper != null) try {
             mHelper.dispose();
@@ -113,18 +127,11 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        //show ad after pressing back
         super.onBackPressed();
         if (mInterstitialAd != null) {
             if (mInterstitialAd.isLoaded()) {
                 mInterstitialAd.show();
-                //Do not launch this thread because ADMob should automatically load ADs every X minutes.
-                /*hasInterstitialDisplayed = true;
-                new Handler().postDelayed(  new Runnable() {
-                    @Override
-                    public void run() {
-                        hasInterstitialDisplayed = false;
-                    }
-                }, 45000);*/
             }
         }
     }
@@ -134,13 +141,27 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        //getting resources
+        rec_button = (Button) findViewById(R.id.rec_button);
+        final Button play_button = (Button) findViewById(R.id.play_button);
+        final TextView selected_word_view = (TextView) findViewById(R.id.selected_word);
+        final TextView selected_ipa_view = (TextView) findViewById(R.id.selected_word_ipa);
+        final ImageButton delete_button = (ImageButton) findViewById(R.id.delete_button);
+        final ImageButton favorite_button = (ImageButton) findViewById(R.id.favorite_button);
+        final ImageButton slow_button = (ImageButton) findViewById(R.id.slow_button);
+        final ImageButton accent_button = (ImageButton) findViewById(R.id.accent_button);
+        final Button play_original_button = (Button) findViewById(R.id.play_original);
+        final ImageButton your_recordings = (ImageButton) findViewById(R.id.recordings_button);
+        final ImageButton remove_ad = (ImageButton) findViewById(R.id.remove_ads_button);
+        final ImageButton search_meaning = (ImageButton) findViewById(R.id.search_meaning_button);
+
         //set default Stream Controller
         setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
 
-        //Get audio service
+        //get audio service
         audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        // compute your public key and store it in base64EncodedPublicKey
+        //compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, base64EncodedPublicKey);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
@@ -155,9 +176,13 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
+        //getting bundle parameters from other activities
         Intent intent = getIntent();
         Bundle args = intent.getExtras();
+        selected_word = args.getString(PLAY_WORD);
+        selected_ipa = args.getString(PLAY_IPA);
 
+        //loading tts: if we opened other activities before this one, tts are coming from the main activity. If not, we init them again
         if ((MainActivity.american_speaker_google != null || british_speaker_google != null)) {
             //bind TTs
             american_speaker_google = MainActivity.american_speaker_google;
@@ -167,23 +192,9 @@ public class PlayActivity extends AppCompatActivity {
             initTTS(context);
         }
 
-        rec_button = (Button) findViewById(R.id.rec_button);
-        final Button play_button = (Button) findViewById(R.id.play_button);
-        final TextView selected_word_view = (TextView) findViewById(R.id.selected_word);
-        final TextView selected_ipa_view = (TextView) findViewById(R.id.selected_word_ipa);
-        final ImageButton delete_button = (ImageButton) findViewById(R.id.delete_button);
-        final ImageButton favorite_button = (ImageButton) findViewById(R.id.favorite_button);
-        final ImageButton slow_button = (ImageButton) findViewById(R.id.slow_button);
-        final ImageButton accent_button = (ImageButton) findViewById(R.id.accent_button);
-        final Button play_original_button = (Button) findViewById(R.id.play_original);
-        final ImageButton your_recordings = (ImageButton) findViewById(R.id.recordings_button);
-        final ImageButton remove_ad = (ImageButton) findViewById(R.id.remove_ads_button);
-        final ImageButton search_meaning = (ImageButton) findViewById(R.id.search_meaning_button);
-        //final TextView timerTextView = (TextView) findViewById(R.id.recordingTimer);
         vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-        selected_word = args.getString(PLAY_WORD);
-        selected_ipa = args.getString(PLAY_IPA);
 
+        //if premium purchase has been detected, disable ads. If not, init them
         UtilitySharedPrefs.loadAdsStatus(this);
         if (!MainActivity.NO_ADS) {
 
@@ -201,17 +212,17 @@ public class PlayActivity extends AppCompatActivity {
             remove_ad.setVisibility(View.GONE);
         }
 
-        //Setting Up Chronometer
+        //setting Up Chronometer
         final Chronometer chronometer = (Chronometer) findViewById(R.id.recording_timer);
         chronometer.setBase(SystemClock.elapsedRealtime());
 
-        //Setting Up Recorder/Player
+        //setting Up Recorder/Player
         recorder = new MediaRecorder();
         recorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
             @Override
             public void onInfo(MediaRecorder mediaRecorder, int what, int extra) {
-
                 if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    //flag used to check if the max duration has been reached. If so, stop the recording
                     maxDurationReached = true;
                     vibrator.vibrate(100);
                     rec_button.setBackground(getDrawable(R.drawable.circle_red));
@@ -221,9 +232,9 @@ public class PlayActivity extends AppCompatActivity {
 
                     if (checkDuration(chronometer.getText().toString())) {
                         play_button.setVisibility(VISIBLE);
-                        //Button reverse animation to NORMAL RED
+                        //button reverse animation to NORMAL RED
                         rec_button.animate().setDuration(scaleAnimationDuration).scaleX(1).scaleY(1);
-                        //START OVERSHOOT ANIMATION
+                        //starting overshoot animation
                         rec_button.animate().setDuration(scaleAnimationDurationLong).setInterpolator(new AccelerateDecelerateInterpolator()).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                             @Override
                             public void run() {
@@ -244,9 +255,14 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         });
+
+        //init MediaPlayer
         mediaPlayer = new MediaPlayer();
 
-        UtilitySharedPrefs.loadSettingsPrefs(this); //Caricamento dei Settings prima di controllare il DEFAULT_ACCENT (Arresto Anomalo)
+        //loading settings before checking DEFAULT_ACCENT
+        UtilitySharedPrefs.loadSettingsPrefs(this);
+
+        //checking defaul_accent and set the button's color
         if (MainActivity.DEFAULT_ACCENT.equals("0")) {
             accent_button.setColorFilter(ContextCompat.getColor(this, R.color.primary_light));
             accent_flag = false;
@@ -255,7 +271,7 @@ public class PlayActivity extends AppCompatActivity {
             accent_flag = true;
         }
 
-        //Setting Up Record/Play Buttons
+        //setting Up Record/Play Buttons
         rec_button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -310,10 +326,9 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        //Gestione Snackbar + UNDO
+        //handling snackbar
         setupSnackbar(chronometer, delete_button, play_button);
         final Context context = this;
-
 
         delete_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -434,6 +449,7 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
+        //setting Gentium font for the text views
         Typeface plainItalic = Typeface.createFromAsset(getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getAssets(), "fonts/GentiumPlus-R.ttf");
         selected_word_view.setTypeface(plainRegular);
@@ -461,14 +477,14 @@ public class PlayActivity extends AppCompatActivity {
                     return;
                 }
 
-                //Open Purchase Dialog
+                //open Purchase Dialog
                 try {
                     mHelper.flagEndAsync();
                     mHelper.launchPurchaseFlow(PlayActivity.this, no_ads_in_app, 64000, mIabPurchaseFinishedListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
                 }
-                // update the UI
+                //update the UI
             }
         };
 
@@ -493,7 +509,7 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        //Gestione AD (TEST AD)
+        //handling ads
         UtilitySharedPrefs.loadAdsStatus(this);
         AdView mAdView = (AdView) findViewById(R.id.adView);
         if (MainActivity.NO_ADS) {
@@ -604,7 +620,6 @@ public class PlayActivity extends AppCompatActivity {
         snackbar.setAction("UNDO", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 File recovered_file = new File(view.getContext().getFilesDir().getAbsolutePath() + "/" + selected_word + ".aac");
                 FileOutputStream outputStream;
                 try {
@@ -691,8 +706,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case RequestPermissionCode:
                 if (grantResults.length > 0) {
@@ -715,7 +729,6 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private void initTTS(Context context) {
-
         american_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
