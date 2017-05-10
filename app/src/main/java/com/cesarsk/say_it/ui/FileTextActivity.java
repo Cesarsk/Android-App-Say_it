@@ -11,6 +11,8 @@ import com.cesarsk.say_it.utility.UtilityDictionary;
 import java.io.IOException;
 
 public class FileTextActivity extends Activity {
+
+    //this activity is an utility used to read a file from the disk and show it in a scrollable textview. It's used here to show voices like open source licenses and acknowledgements
     public final static String PREFERENCE = "com.example.cesarsk.say_it.PREFERENCE";
 
     @Override

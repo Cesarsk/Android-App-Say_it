@@ -45,7 +45,7 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //Change arrow color Toolbar
+        //change arrow color Toolbar
         final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_ab_back_material);
         upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
