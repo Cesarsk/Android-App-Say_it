@@ -66,11 +66,13 @@ public class UtilityRecordings {
     public static void startRecording(Context context, MediaRecorder recorder, String word) {
         recorder.reset();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         recorder.setMaxDuration(10000);
-        recorder.setAudioEncodingBitRate(16);
+        recorder.setAudioSamplingRate(16000);
+        recorder.setAudioEncodingBitRate(16000*4*1);
         recorder.setAudioSamplingRate(44100);
+        recorder.setAudioChannels(1);
         recorder.setOutputFile(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
         try {
             recorder.prepare();

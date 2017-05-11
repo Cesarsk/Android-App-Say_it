@@ -154,6 +154,7 @@ public class PlayActivity extends AppCompatActivity {
         final ImageButton your_recordings = (ImageButton) findViewById(R.id.recordings_button);
         final ImageButton remove_ad = (ImageButton) findViewById(R.id.remove_ads_button);
         final ImageButton search_meaning = (ImageButton) findViewById(R.id.search_meaning_button);
+        final ImageButton tts_settings = (ImageButton) findViewById(R.id.tts_settings_button);
 
         //set default Stream Controller
         setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
@@ -612,7 +613,17 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        startTutorialPlayActivity(rec_button, play_original_button, accent_button, slow_button);
+        tts_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction("com.android.settings.TTS_SETTINGS");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+
+        });
+        startTutorialPlayActivity(rec_button, play_original_button, accent_button, slow_button, tts_settings);
     }
 
     private void setupSnackbar(final Chronometer chronometer, final ImageButton delete_button, final Button play_button) {
@@ -664,7 +675,7 @@ public class PlayActivity extends AppCompatActivity {
         return true;
     }
 
-    private void startTutorialPlayActivity(Button multibutton, Button play_original_button, ImageButton accent_button, ImageButton slow_button) {
+    private void startTutorialPlayActivity(Button multibutton, Button play_original_button, ImageButton accent_button, ImageButton slow_button, ImageButton tts_settings_button) {
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(50); // 50ms between each showcase views
         config.setShapePadding(15);
@@ -699,6 +710,13 @@ public class PlayActivity extends AppCompatActivity {
                 .setTarget(slow_button)
                 .setDismissText(getString(R.string.showcase_str_btn_4))
                 .setContentText(getString(R.string.showcase_str_4))
+                .setDismissOnTouch(true)
+                .build()
+        );
+        sequence.addSequenceItem(new MaterialShowcaseView.Builder(this)
+                .setTarget(tts_settings_button)
+                .setDismissText(getString(R.string.showcase_str_btn_5))
+                .setContentText(getString(R.string.showcase_str_6))
                 .setDismissOnTouch(true)
                 .build()
         );

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -73,7 +74,7 @@ import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 public class MainActivity extends AppCompatActivity {
 
     //ENABLE this variable only for debug purpose. DO NOT RELEASE THE APP IF THIS VARIABLE IS SET TO TRUE
-    public static final boolean isLoggingEnabled = false;
+    public static final boolean isLoggingEnabled = true;
 
     //Fragments' indexes and bottom bar variables
     private static final int HOME_FRAGMENT_INDEX = 0;

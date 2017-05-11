@@ -75,7 +75,6 @@ public class FavoritesFragment extends Fragment {
         final FavoritesAdapter adapter = new FavoritesAdapter(this, deserializedFavs);
         recyclerView.setAdapter(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
             Drawable background;
             Drawable DeletedIcon;
             int DeletedIconMargin;
