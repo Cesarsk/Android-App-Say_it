@@ -170,6 +170,18 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+        final Preference voice_settings = getPreferenceManager().findPreference("tts_settings");
+        voice_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent();
+                intent.setAction("com.android.settings.TTS_SETTINGS");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                return false;
+            }
+        });
+
 
         // compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(getActivity(), LCSecurity.base64EncodedPublicKey);
