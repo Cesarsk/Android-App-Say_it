@@ -74,7 +74,7 @@ import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 public class MainActivity extends AppCompatActivity {
 
     //ENABLE this variable only for debug purpose. DO NOT RELEASE THE APP IF THIS VARIABLE IS SET TO TRUE
-    public static final boolean isLoggingEnabled = true;
+    public static final boolean isLoggingEnabled = false;
 
     //Fragments' indexes and bottom bar variables
     private static final int HOME_FRAGMENT_INDEX = 0;
@@ -195,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
                     requestNewInterstitial();
                 }
             });
-
             requestNewInterstitial();
         }
     }
