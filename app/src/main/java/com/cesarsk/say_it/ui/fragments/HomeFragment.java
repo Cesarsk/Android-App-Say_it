@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment {
         super.onResume();
         ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
         //History not empty
-        if(recentHistory != null && !(recentHistory.isEmpty())) {
+        if (recentHistory != null && !(recentHistory.isEmpty())) {
             recentHistoryLinearLayout.removeAllViews();
             recent_search.setVisibility(View.VISIBLE);
             for (int i = 0; i < recentHistory.size(); i++) {
@@ -105,38 +105,31 @@ public class HomeFragment extends Fragment {
                 ipaTextView.setText(recentHistory.get(i).second);
                 current_LL.addView(ipaTextView);
             }
-        }
-
-        else if(recent_search.getVisibility() != View.GONE){
+        } else if (recent_search.getVisibility() != View.GONE) {
             recent_search.setVisibility(View.GONE);
         }
 
         //Setup our Stats
-        //TODO racchiudere in un metodo per aggiornare quando si aggiunge una parola ai preferiti dalla Home
         if (MainActivity.RECORDINGS != null || MainActivity.FAVORITES != null) {
 
             RelativeLayout card_stats = (RelativeLayout) view.findViewById(R.id.card_stats);
             final TextView stats_item1 = (TextView) view.findViewById(R.id.card_stats_item1);
-            final TextView stats_item2 = (TextView)view.findViewById(R.id.card_stats_item2);
+            final TextView stats_item2 = (TextView) view.findViewById(R.id.card_stats_item2);
 
-            if(!(MainActivity.RECORDINGS.isEmpty())) {
+            if (!(MainActivity.RECORDINGS.isEmpty())) {
                 card_stats.setVisibility(View.VISIBLE);
                 stats_item1.setVisibility(View.VISIBLE);
                 UtilityRecordings.updateRecordings(getActivity());
                 stats_item1.setText("You've \uD83C\uDFB5 " + MainActivity.RECORDINGS.size() + " words so far!");
-            }
-
-            else {
+            } else {
                 stats_item1.setVisibility(View.GONE);
             }
 
-            if(!MainActivity.FAVORITES.isEmpty()){
+            if (!MainActivity.FAVORITES.isEmpty()) {
                 card_stats.setVisibility(View.VISIBLE);
                 stats_item2.setVisibility(View.VISIBLE);
-                stats_item2.setText("You've ♥ "+MainActivity.FAVORITES.size()+" words so far!");
-            }
-
-            else{
+                stats_item2.setText("You've ♥ " + MainActivity.FAVORITES.size() + " words so far!");
+            } else {
                 stats_item2.setVisibility(View.GONE);
             }
         }
@@ -153,7 +146,7 @@ public class HomeFragment extends Fragment {
                 container, false);
 
         recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
-        recent_search = (RelativeLayout)view.findViewById(R.id.Recent_Search);
+        recent_search = (RelativeLayout) view.findViewById(R.id.Recent_Search);
 
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
@@ -179,43 +172,43 @@ public class HomeFragment extends Fragment {
             adView.loadAd(request);
         }
 
-        final FloatingActionButton fab =(FloatingActionButton) view.findViewById(R.id.floating_button_home);
+        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.floating_button_home);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Intent intent = new Intent(getActivity(),SettingsActivity.class);
+                final Intent intent = new Intent(getActivity(), SettingsActivity.class);
                 startActivity(intent);
             }
         });
 
-        final NestedScrollView scroller = (NestedScrollView)view.findViewById(R.id.nested_scroll_view);
+        final NestedScrollView scroller = (NestedScrollView) view.findViewById(R.id.nested_scroll_view);
         if (scroller != null) {
             scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
                     if (scrollY > oldScrollY) {
-                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "Scroll DOWN");
+                        if (MainActivity.isLoggingEnabled) Log.i("DEBUG", "Scroll DOWN");
                         fab.hide();
                     }
                     if (scrollY < oldScrollY) {
-                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "Scroll UP");
+                        if (MainActivity.isLoggingEnabled) Log.i("DEBUG", "Scroll UP");
                     }
 
                     if (scrollY == 0) {
-                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "TOP SCROLL");
+                        if (MainActivity.isLoggingEnabled) Log.i("DEBUG", "TOP SCROLL");
                         fab.show();
                     }
 
                     if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                        if(MainActivity.isLoggingEnabled) Log.i("DEBUG", "BOTTOM SCROLL");
+                        if (MainActivity.isLoggingEnabled) Log.i("DEBUG", "BOTTOM SCROLL");
                     }
                 }
             });
         }
 
-        final TextView wordOfTheDayTextView = (TextView)view.findViewById(R.id.WOTD_word);
-        wordOfTheDay = wordOfTheDay.substring(0,1).toUpperCase() + wordOfTheDay.substring(1);
+        final TextView wordOfTheDayTextView = (TextView) view.findViewById(R.id.WOTD_word);
+        wordOfTheDay = wordOfTheDay.substring(0, 1).toUpperCase() + wordOfTheDay.substring(1);
         wordOfTheDayTextView.setTypeface(plainRegular);
         wordOfTheDayTextView.setText(wordOfTheDay);
         final TextView IPATextView = (TextView) view.findViewById(R.id.ipa_wotd);
@@ -235,18 +228,18 @@ public class HomeFragment extends Fragment {
         });
 
 
-        final ImageButton favorite_button = (ImageButton)view.findViewById(R.id.favorite_card_button);
+        final ImageButton favorite_button = (ImageButton) view.findViewById(R.id.favorite_card_button);
         favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), wordOfTheDay);
-        if(favorite_flag) favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
+        if (favorite_flag)
+            favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
         favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!favorite_flag) {
+                if (!favorite_flag) {
                     UtilitySharedPrefs.addFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
-                    favorite_flag= !favorite_flag;
+                    favorite_flag = !favorite_flag;
                     favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
-                }
-                else {
+                } else {
                     favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.white));
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag = !favorite_flag;
@@ -259,7 +252,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(null,wordOfTheDay+" ["+IPAofTheDay+"]");
+                ClipData clip = ClipData.newPlainText(null, wordOfTheDay + " [" + IPAofTheDay + "]");
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(getActivity(), "Copied to Clipboard!", Toast.LENGTH_SHORT).show();
             }
@@ -270,11 +263,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!isVolumeMuted()) {
-                    if(MainActivity.DEFAULT_ACCENT.equals("0")) {
+                    if (MainActivity.DEFAULT_ACCENT.equals("0")) {
                         MainActivity.american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
-                    }
-                    else if(MainActivity.DEFAULT_ACCENT.equals("1")) {
-                        MainActivity.british_speaker_google.speak(wordOfTheDay,QUEUE_FLUSH,null,null);
+                    } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
+                        MainActivity.british_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
                     }
                 } else {
                     Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
@@ -292,10 +284,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        final TextView random_quote = (TextView)view.findViewById(R.id.random_quote);
+        final TextView random_quote = (TextView) view.findViewById(R.id.random_quote);
         random_quote.setText(getDailyRandomQuote());
 
-        final TextView view_full_history = (TextView)view.findViewById(R.id.view_full_history);
+        final TextView view_full_history = (TextView) view.findViewById(R.id.view_full_history);
         view_full_history.setText(getString(R.string.full_history_button));
         view_full_history.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,19 +300,18 @@ public class HomeFragment extends Fragment {
         LinearLayout linearLayoutSecondRow = (LinearLayout) view.findViewById(R.id.second_row_linear_layout);
         LinearLayout linearLayoutThirdRow = (LinearLayout) view.findViewById(R.id.third_row_linear_layout);
 
-        for(int i = 0; i < 2; i++)
-        {
+        for (int i = 0; i < 2; i++) {
             linearLayoutFirstRow.addView(new FadingTextView(getActivity()));
             linearLayoutThirdRow.addView(new FadingTextView(getActivity()));
         }
 
-        for(int i = 0; i < 1; i++)
-        {
+        for (int i = 0; i < 1; i++) {
             linearLayoutSecondRow.addView(new FadingTextView(getActivity()));
         }
 
         return view;
     }
+
     private boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;

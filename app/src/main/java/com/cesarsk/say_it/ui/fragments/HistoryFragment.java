@@ -51,7 +51,6 @@ public class HistoryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (recyclerView != null) {
-            //TODO risettare la lista dell'adapter QUI con un metodo di Update (loadDeserializedHistory)
             HistoryAdapter adapter = (HistoryAdapter) recyclerView.getAdapter();
             adapter.setHistory(loadDeserializedHistory(getActivity()));
         }
@@ -265,6 +264,7 @@ public class HistoryFragment extends Fragment {
                 .withoutShape()
                 .show();
     }
+
     public boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;

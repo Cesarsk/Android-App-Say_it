@@ -17,6 +17,14 @@
             android:title="Default Accent" />
 
         <Preference
+            android:key="tts_settings"
+            android:persistent="false"
+            android:title="Voice Settings"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Click on the gear and select 'Install voice data'"
+            />
+
+        <Preference
             android:key="button_notification"
             android:persistent="false"
             android:title="Notification Settings"
@@ -113,7 +121,8 @@
             android:key="app_version"
             android:layout="@xml/voices_settings_layout"
             android:summary="Version defined in Java"
-            android:title="Say It! version" />
+            android:title="Say It! version"
+            android:persistent="false"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

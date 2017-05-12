@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -63,6 +64,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 import static android.speech.tts.TextToSpeech.QUEUE_ADD;
 import static android.speech.tts.Voice.LATENCY_VERY_LOW;
 import static android.speech.tts.Voice.QUALITY_VERY_HIGH;
@@ -71,31 +73,26 @@ import static com.cesarsk.say_it.utility.LCSecurity.base64EncodedPublicKey;
 
 public class MainActivity extends AppCompatActivity {
 
+    //ENABLE this variable only for debug purpose. DO NOT RELEASE THE APP IF THIS VARIABLE IS SET TO TRUE
     public static final boolean isLoggingEnabled = false;
 
-    //Indici per la FragmentList
+    //Fragments' indexes and bottom bar variables
     private static final int HOME_FRAGMENT_INDEX = 0;
     private static final int FAVORITES_FRAGMENT_INDEX = 1;
     private static final int HISTORY_FRAGMENT_INDEX = 2;
     private static final int RECORDINGS_FRAGMENT_INDEX = 3;
+    private final FragmentManager fragmentManager = getFragmentManager();
+    private int selectedTab = 0;
+    public static BottomBar bottomBar;
 
+    //TTS variables
     public static TextToSpeech american_speaker_google;
     public static TextToSpeech british_speaker_google;
     public static final String google_tts = "com.google.android.tts";
     public static final Voice voice_american_female = new Voice("American Language", Locale.US, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
     public static final Voice voice_british_female = new Voice("British Language", Locale.UK, QUALITY_VERY_HIGH, LATENCY_VERY_LOW, false, null);
 
-    //Gestione preferiti, history e recordings
-    public static Set<String> FAVORITES = null;
-    public static Set<String> HISTORY = null;
-    public static ArrayList<File> RECORDINGS = null;
-    public static String DEFAULT_NOTIFICATION_RATE = null;
-    public static String DEFAULT_ACCENT = null;
-    public static String DEFAULT_NOTIFICATION_HOUR = null;
-    public static String DEFAULT_NOTIFICATION_MINUTE = null;
-    public static boolean NO_ADS = false;
-
-    //Gestione Preferenze
+    //shared preferences strings
     public final static String PREFS_NAME = "SAY_IT_PREFS"; //Nome del file delle SharedPreferences
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
@@ -104,52 +101,60 @@ public class MainActivity extends AppCompatActivity {
     public final static String DEFAULT_NOTIFICATION_HOUR_KEY = "SAY.IT.DEFAULT.NOTIFICATION.HOUR";
     public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
+    public final static String FIRST_LAUNCH_KEY = "SAY.IT.FIRST.LAUNCH";
 
-    //Unique IDs related to showcase
+    //shared preferences variables
+    public static Set<String> FAVORITES = null;
+    public static Set<String> HISTORY = null;
+    public static ArrayList<File> RECORDINGS = null;
+    public static String DEFAULT_NOTIFICATION_RATE = null;
+    public static String DEFAULT_ACCENT = null;
+    public static String DEFAULT_NOTIFICATION_HOUR = null;
+    public static String DEFAULT_NOTIFICATION_MINUTE = null;
+    public static boolean NO_ADS = false;
+    public static boolean FIRST_LAUNCH;
+
+    //showcase's unique IDs
     public static String id_showcase_playactivity = "utente_playactivity";
     public static String id_showcase_fragments = "utente_fragments";
     public static MaterialShowcaseView showCaseFragmentView;
 
-
-    private int selectedTab = 0; // or other values
-
+    //other variables
     private boolean doubleBackToExitPressedOnce = false;
     private boolean hasInterstitialDisplayed = false;
+    private final InterstitialAd mInterstitialAd = new InterstitialAd(this);
+    public static final int notifId = 150;
 
     //In-App Billing Helper
     private IabHelper mHelper;
 
-    //Definizione variabile WordList
+    //wordList variables
     public static final HashMap<String, ArrayList<Pair<String, String>>> Wordlists_Map = new HashMap<>();
     public static final ArrayList<String> Quotes = new ArrayList<>();
     public static String wordOfTheDay;
     public static String IPAofTheDay;
 
-    //Bottom Bar variable
-    public static BottomBar bottomBar;
-
-    //Notification id
-    public static final int notifId = 150;
-
-    //Rate Dialog
+    //rate Dialog variables
     private EasyRatingDialog easyRatingDialog;
-
-    private final FragmentManager fragmentManager = getFragmentManager();
-    private final InterstitialAd mInterstitialAd = new InterstitialAd(this);
 
     @Override
     protected void onStop() {
         super.onStop();
+        //saving preferences every time the app has been stopped (not killed)
         UtilitySharedPrefs.savePrefs(this, FAVORITES, FAVORITES_PREFS_KEY);
         UtilitySharedPrefs.savePrefs(this, HISTORY, HISTORY_PREFS_KEY);
+        UtilitySharedPrefs.savePrefs(this, false, FIRST_LAUNCH_KEY);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        //to avoid exceptions, it's very important to shutdown android's tts service
         american_speaker_google.shutdown();
         british_speaker_google.shutdown();
 
+        //as above, mHelper should be closed aswell (related to In App Purchase)
         if (mHelper != null) try {
             mHelper.dispose();
         } catch (IabHelper.IabAsyncInProgressException e) {
@@ -178,6 +183,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         easyRatingDialog.showIfNeeded();
+
+        UtilitySharedPrefs.loadAdsStatus(this);
+
+        //check in-app purchase and do not show app, if so.
+        if (!NO_ADS) {
+            if(mInterstitialAd.getAdUnitId() == null)
+                mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_interstitial_mainactivity_back));
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    requestNewInterstitial();
+                }
+            });
+            requestNewInterstitial();
+        }
     }
 
     @Override
@@ -185,9 +205,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //easy rating dialog
         easyRatingDialog = new EasyRatingDialog(this);
 
-        //Check Huawei Protected Apps
+        //is it the first time that the app has been launched?
+        UtilitySharedPrefs.loadFirstLaunch(this);
+
+        //check Huawei Protected Apps
         ifHuaweiAlert();
 
         //set default Stream Controller
@@ -200,10 +224,11 @@ public class MainActivity extends AppCompatActivity {
                                                  Inventory inventory) {
 
                 if (result.isFailure()) {
-                    Toast.makeText(MainActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
+                    if (isLoggingEnabled)
+                        Toast.makeText(MainActivity.this, "Query Failed!", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    /*//TODO Blocco try-catch SOLO PER IL TESTING
+                    /*//Try-catch snippet for testing in-app
                     try {
                         mHelper.consumeAsync(inventory.getPurchase(PlayActivity.no_ads_in_app), new IabHelper.OnConsumeFinishedListener() {
                             @Override
@@ -215,20 +240,20 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }*/
                     if (inventory.hasPurchase(PlayActivity.no_ads_in_app)) {
-                        //TODO Spostare la riga saveprefs
                         UtilitySharedPrefs.savePrefs(MainActivity.this, true, NO_ADS_STATUS_KEY);
-                        Toast.makeText(MainActivity.this, "NO ADS", Toast.LENGTH_SHORT).show();
+                        if(FIRST_LAUNCH)
+                            Toast.makeText(MainActivity.this, "Premium Version restored, restart to apply changes", Toast.LENGTH_LONG).show();
                     }
                 }
             }
         };
 
-        //IAB Helper initialization
+        //IAB helper initialization
         mHelper = new IabHelper(this, base64EncodedPublicKey);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
-                    // Oh no, there was a problem.
+                    // oh no, there was a problem.
                     if (MainActivity.isLoggingEnabled)
                         Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
@@ -245,28 +270,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        //Caricamento preferenze
+        //loading preferences
         UtilitySharedPrefs.loadSettingsPrefs(this);
         UtilitySharedPrefs.loadFavs(this);
         UtilitySharedPrefs.loadHist(this);
-        UtilitySharedPrefs.loadAdsStatus(this);
         RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
 
-        if (!NO_ADS) {
-            mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_interstitial_mainactivity_back));
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    requestNewInterstitial();
-                }
-            });
-
-            requestNewInterstitial();
-        }
-
         if (Wordlists_Map.isEmpty()) {
-            //Caricamento dizionario (inclusa word of the day)
+            //loading dictionary (word of the day included)
             try {
                 UtilityDictionary.loadDictionary(this);
                 UtilitySharedPrefs.loadQuotes(this);
@@ -278,11 +289,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        //SETUP TOOLBAR
+        //toolbar setup
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
-        //TODO SISTEMARE LISTENER
 
         EditText editText = (EditText) findViewById(R.id.search_bar_edit_text);
         ImageView lens_search_button = (ImageView) findViewById(R.id.search_bar_hint_icon);
@@ -302,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
         lens_search_button.setOnClickListener(search_bar_listener);
         voice_search_button.setOnClickListener(search_bar_listener);
 
-        //Gestione Fragment
+        //managing fragments
         final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
         FragmentArrayList.add(new HomeFragment());
         FragmentArrayList.add(new FavoritesFragment());
@@ -325,18 +334,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabSelected(@IdRes int tabId) {
-
-                //Creating the Fragment transaction
+                //creating the Fragment transaction
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
+                //this switch case is used to move among fragments using the bottombar
                 switch (tabId) {
                     case R.id.tab_favorites:
                         if (FAVORITES_FRAGMENT_INDEX > last_index) {
                             FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
-                            //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (FAVORITES_FRAGMENT_INDEX < last_index) {
                             FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
-                            //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = FAVORITES_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX));
@@ -346,10 +353,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab_home:
                         if (HOME_FRAGMENT_INDEX > last_index) {
                             FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
-                            //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HOME_FRAGMENT_INDEX < last_index) {
                             FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
-                            //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = HOME_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
@@ -359,10 +364,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab_history:
                         if (HISTORY_FRAGMENT_INDEX > last_index) {
                             FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
-                            //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (HISTORY_FRAGMENT_INDEX < last_index) {
                             FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
-                            //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = HISTORY_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX));
@@ -372,10 +375,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab_recordings:
                         if (RECORDINGS_FRAGMENT_INDEX > last_index) {
                             FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
-                            //transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_left);
                         } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
                             FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
-                            //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right);
                         }
                         selectedTab = RECORDINGS_FRAGMENT_INDEX;
                         transaction.replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX));
@@ -393,6 +394,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        //if the tab selected is not the home fragment, then we should back to the home fragment pressing BACK.
+        //loading also an ad to display before closing the app
         if (selectedTab != HOME_FRAGMENT_INDEX) {
             bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
             if (showCaseFragmentView != null) showCaseFragmentView.hide();
@@ -425,11 +428,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestNewInterstitial() {
+        //request a new ad
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
         mInterstitialAd.loadAd(adRequest);
     }
 
     private void initTTS(Context context) {
+        //init american and british tts
+        //tts.speak(""); it is used to pre-load the tts after launching the app, to help low-end devices to reproduce words without lag
         american_speaker_google = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
@@ -440,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
                     american_speaker_google.speak("", QUEUE_ADD, null, null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initilization Failed!");
+                        Log.e("error", "Initialization Failed!");
                 }
 
             }
@@ -456,13 +462,15 @@ public class MainActivity extends AppCompatActivity {
                     british_speaker_google.speak("", QUEUE_ADD, null, null);
                 } else {
                     if (MainActivity.isLoggingEnabled)
-                        Log.e("error", "Initilization Failed!");
+                        Log.e("error", "Initialization Failed!");
                 }
             }
         }, google_tts);
     }
 
-    //Check Huawei Protected Apps
+    //check Huawei Protected Apps
+    //huawei has a system to block every notification incoming. The user should be ALWAYS warn if a notification has been blocked. So this method warns the user, if it has a Huawei smartphone
+    //to add this app to Protected Apps in order to receive notifications
     private void ifHuaweiAlert() {
         final SharedPreferences settings = getSharedPreferences("ProtectedApps", MODE_PRIVATE);
         final String saveIfSkip = "skipProtectedAppsMessage";

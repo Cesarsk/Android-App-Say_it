@@ -44,7 +44,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         setLayoutParams(layoutParams);
         setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        if(isAnimationScaleNull()) setAlpha(1f);
+        if (isAnimationScaleNull()) setAlpha(1f);
         else setAlpha(0f);
         if (!isInEditMode()) animSetUp();
     }
@@ -139,8 +139,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
         return false;
     }
 
-    private void setupListener()
-    {
+    private void setupListener() {
         onClickListener = new OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -21,7 +21,6 @@ public class NestedPreferenceFragment extends PreferenceFragment {
 
     public static final int NESTED_SCREEN_1_KEY = 1;
     public static final int NESTED_SCREEN_2_KEY = 2;
-    //static private int index_notification_rate = 2; //DO NOT REMOVE THIS
     private static final String TAG_KEY = "NESTED_KEY";
 
     public static NestedPreferenceFragment newInstance(int key) {
@@ -39,6 +38,18 @@ public class NestedPreferenceFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         int selected_fragment_layout = checkPreferenceResource();
 
+        /*the following is the scheme used in this class:
+         |- Notification Settings
+           |- Notification Rate
+           |- Notification Time (define ONLY in XML, not JAVA)
+         |- Open Source Licenses
+           |- BottomBar
+           |- Easy Rating Dialog
+           |- MaterialShowCase
+           |- Gson
+           |- Wordlist
+
+            */
         if (selected_fragment_layout == 1) {
             final ListPreference notification_rate = (ListPreference) getPreferenceManager().findPreference("default_notification_rate");
             notification_rate.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

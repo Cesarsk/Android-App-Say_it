@@ -30,18 +30,21 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        //Loading word of the day in Notification in order to show on it.
+        //loading word of the day in Notification in order to show on it.
         if (MainActivity.wordOfTheDay == null) {
             try {
+                //loading the word dictionary with ipa, and quotes
                 UtilityDictionary.loadDictionary(context);
                 UtilitySharedPrefs.loadQuotes(context);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             PlayActivity.selected_word = MainActivity.wordOfTheDay;
             PlayActivity.selected_ipa = MainActivity.IPAofTheDay;
         }
 
+        //pick default notification
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         //Building our custom Notification
@@ -51,10 +54,11 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setContentTitle("Say it! Reminder ")
                         .setContentText("Hey! Here's your word of the day: " + MainActivity.wordOfTheDay)
                         .setSound(alarmSound)
-                        .setColor(Color.argb(0,21,101,192))
+                        .setColor(Color.argb(0, 21, 101, 192))
                         .setVibrate(new long[]{300, 300, 300, 300, 300})
                         .setAutoCancel(true);
 
+        //building an activity stack so that the user can press back from PlayActivity called through the notification and go back to the MainActivity
         Intent resultIntent = new Intent(context, PlayActivity.class);
         resultIntent.putExtra(PlayActivity.PLAY_WORD, MainActivity.wordOfTheDay);
         resultIntent.putExtra(PlayActivity.PLAY_IPA, MainActivity.IPAofTheDay);
@@ -66,11 +70,14 @@ public class NotificationReceiver extends BroadcastReceiver {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentIntent(resultPendingIntent);
+
+        //launch the notification to the user
         notificationManager.notify(MainActivity.notifId, mBuilder.build());
     }
 
-    public static void scheduleNotification(Context context, int hour, int minute, String mode){
+    public static void scheduleNotification(Context context, int hour, int minute, String mode) {
 
+        //this is the method to schedule the notification. It uses an alarmManager built in Android to set, with the Calendar Class, an event in a specific time set by the user
         int mode_code = Integer.parseInt(mode);
         ComponentName receiver = new ComponentName(context, NotificationBootReceiver.class);
         PackageManager pm = context.getPackageManager();
@@ -79,13 +86,12 @@ public class NotificationReceiver extends BroadcastReceiver {
         Intent intent = new Intent(context, NotificationReceiver.class);
         PendingIntent notificationPendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if(mode_code == 0){
+        if (mode_code == 0) {
             //Notification OFF
             alarmManager.cancel(notificationPendingIntent);
             pm.setComponentEnabledSetting(receiver,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
-
             return;
         }
 
@@ -97,24 +103,20 @@ public class NotificationReceiver extends BroadcastReceiver {
         calendar.set(Calendar.SECOND, 0);
 
 
-
-        if(mode_code == 2){
-            //Daily Notifications
+        if (mode_code == 2) {
+            //Daily Notifications. IF statement is important in order to set the notification the day after, if the current time is equal or bigger to the set one.
             if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
                 calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY);
             }
 
-            //TODO Provare Cancel
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notificationPendingIntent);
-        }
-
-        else if(mode_code == 1){
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notificationPendingIntent);
+        } else if (mode_code == 1) {
             //Weekly Notifications
             if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
-                calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY*7);
+                calendar.setTimeInMillis(calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY * 7);
             }
 
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, notificationPendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, notificationPendingIntent);
         }
 
         pm.setComponentEnabledSetting(receiver,

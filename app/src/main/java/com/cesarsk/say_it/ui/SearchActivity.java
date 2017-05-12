@@ -1,6 +1,7 @@
 package com.cesarsk.say_it.ui;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ImageButton;
@@ -43,7 +45,7 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //Change arrow color Toolbar
+        //change arrow color Toolbar
         final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_ab_back_material);
         upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
@@ -52,7 +54,7 @@ public class SearchActivity extends AppCompatActivity {
         final SearchListAdapter adapter = new SearchListAdapter(this);
 
         result_list.setAdapter(adapter);
-        final ImageButton voice_search_button = (ImageButton)findViewById(R.id.search_bar_voice_icon);
+        final ImageButton voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
         final ImageButton clear_editText = (ImageButton) findViewById(R.id.clear_editText);
         clear_editText.setVisibility(View.GONE);
         editText = (EditText) findViewById(R.id.search_bar_edit_text);
@@ -64,11 +66,10 @@ public class SearchActivity extends AppCompatActivity {
             @SuppressWarnings("unchecked")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().isEmpty()){
+                if (s.toString().isEmpty()) {
                     clear_editText.setVisibility(View.GONE);
                     voice_search_button.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     clear_editText.setVisibility(View.VISIBLE);
                     voice_search_button.setVisibility(View.GONE);
 
@@ -86,11 +87,14 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editText.setText("");
+                editText.requestFocus();
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
         //Check Voice Search
-        if(getIntent().getBooleanExtra("VOICE_SEARCH_SELECTED", false)){
+        if (getIntent().getBooleanExtra("VOICE_SEARCH_SELECTED", false)) {
             promptSpeechInput();
         }
 
@@ -100,12 +104,13 @@ public class SearchActivity extends AppCompatActivity {
             public void onClick(View v) {
                 promptSpeechInput();
             }
-        });}
+        });
+    }
 
 
-        /**
-         * Showing google speech input dialog
-         * */
+    /**
+     * Showing google speech input dialog
+     */
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -124,7 +129,7 @@ public class SearchActivity extends AppCompatActivity {
 
     /**
      * Receiving speech input
-     * */
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

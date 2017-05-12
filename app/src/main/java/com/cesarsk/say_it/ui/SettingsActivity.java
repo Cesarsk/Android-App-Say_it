@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.fragments.NestedPreferenceFragment;
 import com.cesarsk.say_it.ui.fragments.SettingsFragment;
@@ -24,14 +25,14 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
             setSupportActionBar(toolbar);
             //noinspection ConstantConditions
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //Change arrow color Toolbar
+            //changing arrow color Toolbar
             final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_ab_back_material);
             upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
+        //this activity is used to host a SettingFragment, which contains all the preferences of the app (defined in preferences.xml)
         SettingsFragment fragment = new SettingsFragment();
-        //TODO ANIMATION fragment.setEnterTransition(new Slide(Gravity.END));
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.contentSettings, fragment)
