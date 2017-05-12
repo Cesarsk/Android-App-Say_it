@@ -49,7 +49,7 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(recyclerView != null){
+        if (recyclerView != null) {
             FavoritesAdapter adapter = (FavoritesAdapter) recyclerView.getAdapter();
             adapter.setFavorites(loadDeserializedFavs(getActivity()));
         }
@@ -75,7 +75,6 @@ public class FavoritesFragment extends Fragment {
         final FavoritesAdapter adapter = new FavoritesAdapter(this, deserializedFavs);
         recyclerView.setAdapter(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
             Drawable background;
             Drawable DeletedIcon;
             int DeletedIconMargin;
@@ -262,6 +261,7 @@ public class FavoritesFragment extends Fragment {
                 .withoutShape()
                 .show();
     }
+
     public boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;

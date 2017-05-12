@@ -57,16 +57,16 @@ public class UtilityDictionary {
         return random_pair;
     }
 
-    public static String getIPAfromWord(String word){
+    public static String getIPAfromWord(String word) {
 
         String IPA = null;
 
-        ArrayList<Pair<String, String>> sublist = MainActivity.Wordlists_Map.get(word.substring(0,1).toLowerCase());
+        ArrayList<Pair<String, String>> sublist = MainActivity.Wordlists_Map.get(word.substring(0, 1).toLowerCase());
 
-        for(Pair<String, String> element : sublist){
-           if(element.first.equalsIgnoreCase(word)){
-               IPA = element.second;
-           }
+        for (Pair<String, String> element : sublist) {
+            if (element.first.equalsIgnoreCase(word)) {
+                IPA = element.second;
+            }
         }
 
         return IPA;
@@ -152,7 +152,7 @@ public class UtilityDictionary {
         return random_quote;
     }
 
-    public static StringBuilder load_textfile(Context context,int resFile) throws IOException {
+    public static StringBuilder load_textfile(Context context, int resFile) throws IOException {
         StringBuilder text = new StringBuilder();
         BufferedReader reader = null;
 

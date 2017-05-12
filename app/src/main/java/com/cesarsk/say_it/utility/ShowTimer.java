@@ -26,8 +26,7 @@ public class ShowTimer {
 
     String old_time;
 
-    public long getDurationInSecs()
-    {
+    public long getDurationInSecs() {
         return secs;
     }
 
@@ -46,7 +45,7 @@ public class ShowTimer {
         customHandler.removeCallbacks(updateTimerThread);
     }
 
-    public void setTimer(String time){
+    public void setTimer(String time) {
         textView.setText(time);
     }
 

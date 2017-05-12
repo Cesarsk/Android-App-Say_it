@@ -34,15 +34,13 @@ public class Utility {
         return content;
     }
 
-    public static void searchMeaning(Context context, String word)
-    {
-        Uri uri = Uri.parse("http://www.google.com/#q="+word+"+meaning");
+    public static void searchMeaning(Context context, String word) {
+        Uri uri = Uri.parse("http://www.google.com/#q=" + word + "+meaning");
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         context.startActivity(intent);
     }
 
-    public static void openURL(Context context, String url)
-    {
+    public static void openURL(Context context, String url) {
         Uri uri = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         context.startActivity(intent);

@@ -32,9 +32,14 @@ import static com.cesarsk.say_it.ui.MainActivity.HISTORY_PREFS_KEY;
 @SuppressWarnings("ALL")
 public class UtilitySharedPrefs {
 
-    public static void loadAdsStatus(Context context){
+    public static void loadAdsStatus(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.NO_ADS = preferences.getBoolean(MainActivity.NO_ADS_STATUS_KEY, false);
+    }
+
+    public static void loadFirstLaunch(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.FIRST_LAUNCH = preferences.getBoolean(MainActivity.FIRST_LAUNCH_KEY, true);
     }
 
     //Gestione Preferences
@@ -46,7 +51,7 @@ public class UtilitySharedPrefs {
         editor.apply();
     }
 
-    public static void savePrefs(Context context, String value, String prefs_key){
+    public static void savePrefs(Context context, String value, String prefs_key) {
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
 
@@ -54,7 +59,7 @@ public class UtilitySharedPrefs {
         editor.apply();
     }
 
-    public static void savePrefs(Context context, int value, String prefs_key){
+    public static void savePrefs(Context context, int value, String prefs_key) {
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
 
@@ -62,7 +67,7 @@ public class UtilitySharedPrefs {
         editor.apply();
     }
 
-    public static void savePrefs(Context context, boolean value, String prefs_key){
+    public static void savePrefs(Context context, boolean value, String prefs_key) {
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
 
@@ -85,17 +90,15 @@ public class UtilitySharedPrefs {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
-    public static ArrayList<SayItPair> getRecentHistory(Context context, int items){
+    public static ArrayList<SayItPair> getRecentHistory(Context context, int items) {
 
         ArrayList<SayItPair> recentHistory = new ArrayList<>();
         ArrayList<SayItPair> DeserializedHistory = HistoryFragment.loadDeserializedHistory(context);
 
-        if(DeserializedHistory != null && !DeserializedHistory.isEmpty()) {
-            if(DeserializedHistory.size() >= items) {
+        if (DeserializedHistory != null && !DeserializedHistory.isEmpty()) {
+            if (DeserializedHistory.size() >= items) {
                 recentHistory = new ArrayList<>(DeserializedHistory.subList(0, items));
-            }
-
-            else{
+            } else {
                 return DeserializedHistory;
             }
         }
@@ -116,12 +119,12 @@ public class UtilitySharedPrefs {
         savePrefs(context, new_favs, MainActivity.FAVORITES_PREFS_KEY);
     }
 
-    public static void clearHistory(Context context){
+    public static void clearHistory(Context context) {
         savePrefs(context, new TreeSet<String>(), MainActivity.HISTORY_PREFS_KEY);
         loadHist(context); //refreshing the view
     }
 
-    public static void clearFavorites(Context context){
+    public static void clearFavorites(Context context) {
         savePrefs(context, new TreeSet<String>(), MainActivity.FAVORITES_PREFS_KEY);
         loadFavs(context);
     }
@@ -195,8 +198,8 @@ public class UtilitySharedPrefs {
         }
 
         //ciclo per evitare duplicati
-        for(int i=0; i<DeserializedHistory.size(); i++){
-            if(DeserializedHistory.get(i).first.equalsIgnoreCase(pair.first)){
+        for (int i = 0; i < DeserializedHistory.size(); i++) {
+            if (DeserializedHistory.get(i).first.equalsIgnoreCase(pair.first)) {
                 new_hist.remove(gson.toJson(DeserializedHistory.get(i)));
                 new_hist.add(gson.toJson(pair));
             }
@@ -259,8 +262,7 @@ public class UtilitySharedPrefs {
         MainActivity.HISTORY = sharedPreferences.getStringSet(HISTORY_PREFS_KEY, new TreeSet<String>());
     }
 
-    public static void loadSettingsPrefs(Context context)
-    {
+    public static void loadSettingsPrefs(Context context) {
         //Caricamento preferenze
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.DEFAULT_ACCENT = sharedPreferences.getString(DEFAULT_ACCENT_KEY, "0");
@@ -269,9 +271,7 @@ public class UtilitySharedPrefs {
         MainActivity.DEFAULT_NOTIFICATION_MINUTE = sharedPreferences.getString(DEFAULT_NOTIFICATION_MINUTE_KEY, "00");
     }
 
-
     public static void deletePreferences(Context context) {
-        //TODO AGGIUNGERE IN IMPOSTAZIONI
         //delete all preferences
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();

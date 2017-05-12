@@ -19,6 +19,7 @@ import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.FileTextActivity;
 import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.SettingsActivity;
 import com.cesarsk.say_it.utility.LCSecurity;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -77,8 +78,19 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String version = pInfo.versionName;
+        final Preference app_version = getPreferenceManager().findPreference("app_version");
+        app_version.setSummary("Version: " + version + " (Click for Privacy Policy)");
 
         final Context context = getActivity();
 
@@ -149,23 +161,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
-        PackageInfo pInfo = null;
-        try {
-            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        String version = pInfo.versionName;
-        final Preference app_version = getPreferenceManager().findPreference("app_version");
-        app_version.setSummary("Version: "+ version +" (Click for Privacy Policy)");
-        app_version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/18/privacy-policy/");
-                return false;
-            }
-        });
-
         final Preference github = getPreferenceManager().findPreference("github");
         github.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -175,6 +170,17 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+        final Preference voice_settings = getPreferenceManager().findPreference("tts_settings");
+        voice_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent();
+                intent.setAction("com.android.settings.TTS_SETTINGS");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                return false;
+            }
+        });
 
 
         // compute your public key and store it in base64EncodedPublicKey
@@ -183,10 +189,12 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
                     // Oh no, there was a problem.
-                    if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Problem setting up In-app Billing: " + result);
+                    if (MainActivity.isLoggingEnabled)
+                        Log.d("Say It!", "Problem setting up In-app Billing: " + result);
                 }
                 // Hooray, IAB is fully set up!
-                if(MainActivity.isLoggingEnabled) Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
+                if (MainActivity.isLoggingEnabled)
+                    Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
 
@@ -205,7 +213,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
             public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
                 if (result.isFailure()) {
-                    Toast.makeText(getActivity(), "Query Failed!", Toast.LENGTH_SHORT).show();
+                    if(MainActivity.isLoggingEnabled) Toast.makeText(getActivity(), "Query Failed!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -297,7 +305,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         Preference acknowledgements = getPreferenceManager().findPreference("acknowledgements");
         acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-
         {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -306,6 +313,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 args.putString(FileTextActivity.PREFERENCE, "acknowledgements");
                 preference_intent.putExtras(args);
                 startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                return false;
+            }
+        });
+
+        app_version.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/18/privacy-policy/");
                 return false;
             }
         });

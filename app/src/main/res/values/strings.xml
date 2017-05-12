@@ -61,16 +61,27 @@
     <string name="erd_rate_now">Rate now.</string>
 
     <!-- showcase tutorial strings -->
-    <string name="showcase_str_1" tools:ignore="TypographyFractions">[1/4] HOLD this button to record a word. Release and PRESS it to listen to your recording.</string>
-    <string name="showcase_str_2">[2/4] PRESS this button to listen to the original pronunciation.</string>
-    <string name="showcase_str_3" tools:ignore="TypographyFractions">[3/4] Want to switch the accent? PRESS this one!</string>
-    <string name="showcase_str_4">[4/4] Is the pronunciation too quick? Use the SLOW BUTTON.</string>
-    <string name="showcase_str_5">Swipe an item to remove it from this list.</string>
+    <string name="showcase_str_1" tools:ignore="TypographyFractions">[1/5] HOLD this button to record a word. Release and PRESS it to listen to your recording.</string>
     <string name="showcase_str_btn_1">[OKAY]</string>
+
+
+    <string name="showcase_str_2">[2/5] PRESS this button to listen to the original pronunciation.</string>
     <string name="showcase_str_btn_2">[GO AWAY!]</string>
+
+
+    <string name="showcase_str_3" tools:ignore="TypographyFractions">[3/5] Want to switch the accent? PRESS this one!</string>
     <string name="showcase_str_btn_3">[SERIOUSLY, I\'VE GOT THIS!]</string>
-    <string name="showcase_str_btn_4">[…I will]</string>
-    <string name="showcase_str_btn_5">[OKAY]</string>
+
+
+    <string name="showcase_str_4">[4/5] Is the pronunciation too quick? Use the SLOW BUTTON.</string>
+    <string name="showcase_str_btn_4">[OKAY!]</string>
+
+
+    <string name="showcase_str_6">[5/5] Pick your FAVORITE VOICE using this button, there are plenty of them!</string>
+    <string name="showcase_str_btn_5">[…I will]</string>
+
+
+    <string name="showcase_str_5">Swipe an item to remove it from this list.</string>
     <string name="ad_space_card">AD SPACE</string>
     <string name="undo">UNDO</string>
 
@@ -89,6 +100,7 @@
     <string name="quickplay_button_description">Listen to the pronunciation of this word</string>
     <string name="favorite_button_description">Add word to favorites</string>
     <string name="voice_search_button_description">Dictate your word</string>
+    <string name="tts_settings_button_description">Pick your favorite voice</string>
 
 
 </resources>

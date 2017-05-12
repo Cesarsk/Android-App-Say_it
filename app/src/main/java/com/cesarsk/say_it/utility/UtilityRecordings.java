@@ -63,14 +63,16 @@ public class UtilityRecordings {
                 String[]{RECORD_AUDIO}, RequestPermissionCode);
     }
 
-    public static void startRecording(Context context, MediaRecorder recorder, String word){
+    public static void startRecording(Context context, MediaRecorder recorder, String word) {
         recorder.reset();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         recorder.setMaxDuration(10000);
-        recorder.setAudioEncodingBitRate(16);
+        recorder.setAudioSamplingRate(16000);
+        recorder.setAudioEncodingBitRate(16000*4*1);
         recorder.setAudioSamplingRate(44100);
+        recorder.setAudioChannels(1);
         recorder.setOutputFile(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
         try {
             recorder.prepare();
@@ -81,8 +83,8 @@ public class UtilityRecordings {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void stopRecording(Context context, MediaRecorder recorder, String word){
-        if(recorder != null){
+    public static void stopRecording(Context context, MediaRecorder recorder, String word) {
+        if (recorder != null) {
             File recording_file = new File(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
 
             try {
@@ -96,16 +98,16 @@ public class UtilityRecordings {
         }
     }
 
-    public static long getRecordingDuration(Context context, MediaPlayer mediaPlayer, String word){
+    public static long getRecordingDuration(Context context, MediaPlayer mediaPlayer, String word) {
 
         File file = new File(context.getFilesDir().getAbsolutePath() + "/" + word + ".aac");
         long duration = 0;
 
-        if(mediaPlayer == null){
+        if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
         }
 
-        if(file.exists()){
+        if (file.exists()) {
             mediaPlayer.reset();
             try {
                 mediaPlayer.setDataSource(file.getAbsolutePath());
