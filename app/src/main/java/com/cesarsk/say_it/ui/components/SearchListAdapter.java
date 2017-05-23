@@ -1,4 +1,4 @@
-package com.cesarsk.say_it.ui.adapters;
+package com.cesarsk.say_it.ui.components;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -20,12 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.R;
+import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.ui.PlayActivity;
-
 import com.cesarsk.say_it.utility.SayItPair;
-
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.ArrayList;
@@ -34,60 +32,33 @@ import java.util.Calendar;
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 
 /**
- * Created by Claffo on 08/02/2017.
+ * Created by Claudio on 23/05/2017.
  */
 
-@SuppressWarnings("ALL")
-public class SearchListAdapter extends BaseAdapter implements Filterable {
+public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.ViewHolder> implements Filterable {
 
     private Context context;
     private ArrayList<Pair<String, String>> results;
     private SearchResultsFilter resultsFilter;
     private AudioManager audio;
 
-    public SearchListAdapter(Context context) {
+    public SearchListAdapter(Context context, ArrayList<Pair<String, String>> results){
         this.context = context;
-        results = new ArrayList<>();
-    }
-
-    @Override
-    public int getCount() {
-        return results.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return results.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        //Get audio service
+        this.results = results;
         audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    }
 
-        final SearchResultViewHolder viewHolder;
+    @Override
+    public SearchListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        if (convertView == null) {
+        View view = inflater.inflate(R.layout.list_item_generic, parent, false);
 
-            viewHolder = new SearchResultViewHolder();
-            convertView = inflater.inflate(R.layout.list_item_generic, parent, false);
-            viewHolder.wordTextView = (TextView) convertView.findViewById(R.id.list_item_first_line);
-            viewHolder.ipaTextView = (TextView) convertView.findViewById(R.id.list_item_second_line);
-            viewHolder.quickPlayImgButton = (ImageButton) convertView.findViewById(R.id.list_item_quickplay);
-            viewHolder.addToFavsImgButton = (ImageButton) convertView.findViewById(R.id.list_item_addToFavs);
-            viewHolder.textLayout = (LinearLayout) convertView.findViewById(R.id.list_item_generic_layout);
+        return new ViewHolder(view);
+    }
 
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (SearchResultViewHolder) convertView.getTag();
-        }
+    @Override
+    public void onBindViewHolder(final SearchListAdapter.ViewHolder viewHolder, int position) {
 
         String current_word = results.get(position).first.substring(0,1).toUpperCase() + results.get(position).first.substring(1);
         viewHolder.wordTextView.setText(current_word);
@@ -150,7 +121,12 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
             }
         });
 
-        return convertView;
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return results.size();
     }
 
     @Override
@@ -201,17 +177,27 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                 notifyDataSetChanged();
             } else {
                 results.clear();
-                notifyDataSetInvalidated();
+                notifyDataSetChanged();
             }
         }
     }
 
-    private static class SearchResultViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView wordTextView;
         TextView ipaTextView;
         LinearLayout textLayout;
         ImageButton quickPlayImgButton;
         ImageButton addToFavsImgButton;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            wordTextView = (TextView) itemView.findViewById(R.id.list_item_first_line);
+            ipaTextView = (TextView) itemView.findViewById(R.id.list_item_second_line);
+            quickPlayImgButton = (ImageButton) itemView.findViewById(R.id.list_item_quickplay);
+            addToFavsImgButton = (ImageButton) itemView.findViewById(R.id.list_item_addToFavs);
+            textLayout = (LinearLayout) itemView.findViewById(R.id.list_item_generic_layout);
+        }
     }
 
     private boolean isVolumeMuted() {

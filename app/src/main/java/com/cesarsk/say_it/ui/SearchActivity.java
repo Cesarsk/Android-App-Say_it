@@ -8,8 +8,13 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.speech.RecognizerIntent;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -50,10 +55,14 @@ public class SearchActivity extends AppCompatActivity {
         upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
-        final ListView result_list = (ListView) findViewById(R.id.result_list_view);
-        final SearchListAdapter adapter = new SearchListAdapter(this);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.search_list);
+        final com.cesarsk.say_it.ui.components.SearchListAdapter adapter = new com.cesarsk.say_it.ui.components.SearchListAdapter(this, new ArrayList<Pair<String, String>>());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(defaultItemAnimator);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, linearLayoutManager.getOrientation()));
 
-        result_list.setAdapter(adapter);
         final ImageButton voice_search_button = (ImageButton) findViewById(R.id.search_bar_voice_icon);
         final ImageButton clear_editText = (ImageButton) findViewById(R.id.clear_editText);
         clear_editText.setVisibility(View.GONE);
