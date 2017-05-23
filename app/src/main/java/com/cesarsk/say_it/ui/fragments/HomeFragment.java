@@ -109,30 +109,7 @@ public class HomeFragment extends Fragment {
             recent_search.setVisibility(View.GONE);
         }
 
-        //Setup our Stats
-        if (MainActivity.RECORDINGS != null || MainActivity.FAVORITES != null) {
-
-            RelativeLayout card_stats = (RelativeLayout) view.findViewById(R.id.card_stats);
-            final TextView stats_item1 = (TextView) view.findViewById(R.id.card_stats_item1);
-            final TextView stats_item2 = (TextView) view.findViewById(R.id.card_stats_item2);
-
-            if (!(MainActivity.RECORDINGS.isEmpty())) {
-                card_stats.setVisibility(View.VISIBLE);
-                stats_item1.setVisibility(View.VISIBLE);
-                UtilityRecordings.updateRecordings(getActivity());
-                stats_item1.setText("You've \uD83C\uDFB5 " + MainActivity.RECORDINGS.size() + " words so far!");
-            } else {
-                stats_item1.setVisibility(View.GONE);
-            }
-
-            if (!MainActivity.FAVORITES.isEmpty()) {
-                card_stats.setVisibility(View.VISIBLE);
-                stats_item2.setVisibility(View.VISIBLE);
-                stats_item2.setText("You've ♥ " + MainActivity.FAVORITES.size() + " words so far!");
-            } else {
-                stats_item2.setVisibility(View.GONE);
-            }
-        }
+        checkStats();
     }
 
     @Override
@@ -244,6 +221,7 @@ public class HomeFragment extends Fragment {
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag = !favorite_flag;
                 }
+                checkStats();
             }
         });
 
@@ -316,5 +294,40 @@ public class HomeFragment extends Fragment {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;
         else return false;
+    }
+
+    private void checkStats(){
+        //checks whether recordings and favorites lists need to be updated
+
+        UtilitySharedPrefs.loadFavs(getActivity());
+        UtilityRecordings.loadRecordingsfromStorage(getActivity());
+
+        if (MainActivity.RECORDINGS != null || MainActivity.FAVORITES != null) {
+
+            RelativeLayout card_stats = (RelativeLayout) view.findViewById(R.id.card_stats);
+            final TextView stats_item1 = (TextView) view.findViewById(R.id.card_stats_item1);
+            final TextView stats_item2 = (TextView) view.findViewById(R.id.card_stats_item2);
+
+            if (!(MainActivity.RECORDINGS.isEmpty())) {
+                card_stats.setVisibility(View.VISIBLE);
+                stats_item1.setVisibility(View.VISIBLE);
+                UtilityRecordings.updateRecordings(getActivity());
+                stats_item1.setText("You've \uD83C\uDFB5 " + MainActivity.RECORDINGS.size() + " words so far!");
+            } else {
+                stats_item1.setVisibility(View.GONE);
+            }
+
+            if (!MainActivity.FAVORITES.isEmpty()) {
+                card_stats.setVisibility(View.VISIBLE);
+                stats_item2.setVisibility(View.VISIBLE);
+                stats_item2.setText("You've ♥ " + MainActivity.FAVORITES.size() + " words so far!");
+            } else {
+                stats_item2.setVisibility(View.GONE);
+            }
+
+            if(MainActivity.RECORDINGS.isEmpty() && MainActivity.FAVORITES.isEmpty()){
+                card_stats.setVisibility(View.GONE);
+            }
+        }
     }
 }
