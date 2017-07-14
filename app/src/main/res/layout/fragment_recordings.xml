@@ -4,7 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tutorial_text"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="Swipe to delete an item"
+        android:textStyle="italic"
+        android:textSize="18sp"
+        android:textColor="@color/Blue900"
+        android:textAlignment="center"></TextView>
+
     <LinearLayout
+        android:layout_below="@id/tutorial_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -43,6 +59,8 @@
         </RelativeLayout>
 
     </LinearLayout>
+
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floating_button_recordings"

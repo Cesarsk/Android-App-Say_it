@@ -253,6 +253,7 @@ public class HistoryFragment extends Fragment {
         return DeserializedHistory;
     }
 
+    /*
     public void startTutorialPlayActivity(HistoryAdapter.ViewHolder holder) {
         MainActivity.showCaseFragmentView = new MaterialShowcaseView.Builder(getActivity())
                 .setTarget(holder.wordTextView)
@@ -263,7 +264,7 @@ public class HistoryFragment extends Fragment {
                 .setDismissOnTouch(true)
                 .withoutShape()
                 .show();
-    }
+    } */
 
     public boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);

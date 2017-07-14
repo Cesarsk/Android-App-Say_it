@@ -255,10 +255,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             public boolean onPreferenceClick(Preference preference) {
                 Random rand = new Random();
                 int randomNum = rand.nextInt((10000 - 10) + 1) + 10; //(max - min) + 1 + min
-                int randomNum2 = rand.nextInt((10000 - 10) + 1) + 10; //(max - min) + 1 + min
                 MainActivity.id_showcase_playactivity = "" + randomNum;
-                MainActivity.id_showcase_fragments = "" + randomNum2;
                 Toast.makeText(getActivity(), "Tutorial has been reset", Toast.LENGTH_SHORT).show();
+                //MainActivity.id_showcase_fragments = "" + randomNum2;
+                //int randomNum2 = rand.nextInt((10000 - 10) + 1) + 10; //(max - min) + 1 + min //These two statements are commented because MaterialShowCase often crashes on fragments and while pressing the back button.
                 return false;
             }
         });

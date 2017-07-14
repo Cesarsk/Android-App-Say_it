@@ -6,7 +6,17 @@
     android:layout_height="match_parent">
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:scaleX="1.0"
+        android:scaleY="1.0"
+        app:adSize="BANNER"
+        app:adUnitId="@string/ad_unit_id_banner_playactivity" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -56,11 +66,10 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/recording_menu_description"
                 android:src="@drawable/ic_format_list_bulleted"
                 android:tint="@color/primary_light"
-                android:contentDescription="@string/recording_menu_description"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/accent_button"
@@ -69,10 +78,9 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_flag"
-                android:tint="@color/primary_light"
                 android:contentDescription="@string/accent_button_description"
-                />
+                android:src="@drawable/ic_flag"
+                android:tint="@color/primary_light" />
 
             <ImageButton
                 android:id="@+id/slow_button"
@@ -81,9 +89,9 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/slow_button_description"
                 android:src="@drawable/ic_slow_motion_video"
-                android:tint="@color/primary_light"
-                android:contentDescription="@string/slow_button_description"/>
+                android:tint="@color/primary_light" />
 
             <ImageButton
                 android:id="@+id/tts_settings_button"
@@ -92,10 +100,9 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_hearing_white_24dp"
-                android:tint="@color/primary_light"
                 android:contentDescription="@string/tts_settings_button_description"
-                />
+                android:src="@drawable/ic_hearing_white_24dp"
+                android:tint="@color/primary_light" />
 
             <ImageButton
                 android:id="@+id/favorite_button"
@@ -104,9 +111,9 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/favorite_button_description"
                 android:src="@drawable/ic_favorite_black_24dp"
-                android:tint="@color/primary_light"
-                android:contentDescription="@string/favorite_button_description"/>
+                android:tint="@color/primary_light" />
 
             <ImageButton
                 android:id="@+id/search_meaning_button"
@@ -115,9 +122,9 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/search_meaning_button_description"
                 android:src="@drawable/ic_explore_black_24dp"
-                android:tint="@color/primary_light"
-                android:contentDescription="@string/search_meaning_button_description"/>
+                android:tint="@color/primary_light" />
 
             <ImageButton
                 android:id="@+id/remove_ads_button"
@@ -126,9 +133,9 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/remove_ads_button_description"
                 android:src="@drawable/ic_local_grocery_store"
-                android:tint="@color/primary_light"
-                android:contentDescription="@string/remove_ads_button_description"/>
+                android:tint="@color/primary_light" />
 
             <View
                 android:layout_width="0dp"
@@ -142,10 +149,10 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/delete_button_description"
                 android:src="@drawable/ic_delete_black_24dp"
                 android:tint="@color/primary_light"
-                android:visibility="gone"
-                android:contentDescription="@string/delete_button_description"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -195,16 +202,6 @@
         </RelativeLayout>
 
     </RelativeLayout>
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:scaleX="1.0"
-        android:scaleY="1.0"
-        app:adSize="BANNER"
-        app:adUnitId="@string/ad_unit_id_banner_playactivity" />
 
 </android.support.design.widget.CoordinatorLayout>
 

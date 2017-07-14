@@ -109,7 +109,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         });
 
         final FloatingActionButton fab = (FloatingActionButton) favoritesFragment.getActivity().findViewById(R.id.floating_button_history);
-        favoritesFragment.startTutorialPlayActivity(holder);
+        //favoritesFragment.startTutorialPlayActivity(holder);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
