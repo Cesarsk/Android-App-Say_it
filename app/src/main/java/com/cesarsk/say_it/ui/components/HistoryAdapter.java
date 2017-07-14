@@ -143,7 +143,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         });
 
         final FloatingActionButton fab = (FloatingActionButton) historyFragment.getActivity().findViewById(R.id.floating_button_history);
-        historyFragment.startTutorialPlayActivity(holder);
+        //historyFragment.startTutorialPlayActivity(holder);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

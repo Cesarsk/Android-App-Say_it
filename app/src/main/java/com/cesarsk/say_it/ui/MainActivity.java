@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     //showcase's unique IDs
     public static String id_showcase_playactivity = "utente_playactivity";
-    public static String id_showcase_fragments = "utente_fragments";
+    //public static String id_showcase_fragments = "utente_fragments";
     public static MaterialShowcaseView showCaseFragmentView;
 
     //other variables
@@ -397,8 +397,8 @@ public class MainActivity extends AppCompatActivity {
         //if the tab selected is not the home fragment, then we should back to the home fragment pressing BACK.
         //loading also an ad to display before closing the app
         if (selectedTab != HOME_FRAGMENT_INDEX) {
+            //if (showCaseFragmentView != null) showCaseFragmentView.hide();
             bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
-            if (showCaseFragmentView != null) showCaseFragmentView.hide();
         } else {
             if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
                 mInterstitialAd.show();

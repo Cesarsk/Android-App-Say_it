@@ -664,9 +664,25 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private boolean checkDuration(String time) {
+        /*
+            String string = "004-034556";
+            String[] parts = string.split("-");
+            String part1 = parts[0]; // 004
+            String part2 = parts[1]; // 034556
+        */
 
         String[] time_units = time.split(":");
-        int seconds = Integer.parseInt(time_units[1]);
+        int seconds;
+
+        //This is an attempt to handle the exception an user sent us through ANR with his XIAOMI RED MI NOTE 4.
+        try {
+            seconds = Integer.parseInt(time_units[1]);
+
+        } catch(ArrayIndexOutOfBoundsException e)
+        {
+            seconds = 0;
+        }
+
         if (seconds < 1) {
             Toast.makeText(context, "Minimum not reached!", Toast.LENGTH_SHORT).show();
             UtilityRecordings.deleteRecording(context, selected_word + ".aac");

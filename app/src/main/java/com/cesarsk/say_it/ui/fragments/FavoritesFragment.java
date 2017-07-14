@@ -249,7 +249,7 @@ public class FavoritesFragment extends Fragment {
     }
 
 
-    public void startTutorialPlayActivity(FavoritesAdapter.ViewHolder holder) {
+    /*public void startTutorialPlayActivity(FavoritesAdapter.ViewHolder holder) {
 
         MainActivity.showCaseFragmentView = new MaterialShowcaseView.Builder(getActivity())
                 .setTarget(holder.wordTextView)
@@ -260,7 +260,7 @@ public class FavoritesFragment extends Fragment {
                 .setDismissOnTouch(true)
                 .withoutShape()
                 .show();
-    }
+    }*/
 
     public boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);

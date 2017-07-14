@@ -145,7 +145,7 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
         });
 
         final FloatingActionButton fab = (FloatingActionButton) recordingsFragment.getActivity().findViewById(R.id.floating_button_recordings);
-        recordingsFragment.startTutorialPlayActivity(holder);
+        //recordingsFragment.startTutorialPlayActivity(holder);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

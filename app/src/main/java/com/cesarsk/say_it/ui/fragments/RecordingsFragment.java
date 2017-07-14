@@ -246,7 +246,7 @@ public class RecordingsFragment extends Fragment {
         return view;
     }
 
-    public void startTutorialPlayActivity(RecordingsAdapter.ViewHolder holder) {
+    /*public void startTutorialPlayActivity(RecordingsAdapter.ViewHolder holder) {
         MainActivity.showCaseFragmentView = new MaterialShowcaseView.Builder(getActivity())
                 .setTarget(holder.wordTextView)
                 .setDismissText(getString(R.string.showcase_str_btn_5))
@@ -256,7 +256,7 @@ public class RecordingsFragment extends Fragment {
                 .setDismissOnTouch(true)
                 .withoutShape()
                 .show();
-    }
+    }*/
 
     public boolean isVolumeMuted() {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);

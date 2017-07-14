@@ -61,10 +61,10 @@ public class HomeFragment extends Fragment {
     private boolean favorite_flag = false;
     private View view;
 
-    private LinearLayout recentHistoryLinearLayout;
+    /*private LinearLayout recentHistoryLinearLayout;
     private LinearLayout.LayoutParams layoutParams;
     private float scale;
-    private RelativeLayout recent_search = null;
+    private RelativeLayout recent_search = null; */
     private AudioManager audio;
 
     public HomeFragment() {
@@ -73,15 +73,18 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        scale = getResources().getDisplayMetrics().density;
+        //layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //scale = getResources().getDisplayMetrics().density;
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+    /*
         ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
+
         //History not empty
         if (recentHistory != null && !(recentHistory.isEmpty())) {
             recentHistoryLinearLayout.removeAllViews();
@@ -109,6 +112,7 @@ public class HomeFragment extends Fragment {
             recent_search.setVisibility(View.GONE);
         }
 
+    */
         //Setup our Stats
         if (MainActivity.RECORDINGS != null || MainActivity.FAVORITES != null) {
 
@@ -145,8 +149,8 @@ public class HomeFragment extends Fragment {
         this.view = inflater.inflate(R.layout.fragment_home,
                 container, false);
 
-        recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
-        recent_search = (RelativeLayout) view.findViewById(R.id.Recent_Search);
+        /*recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
+        recent_search = (RelativeLayout) view.findViewById(R.id.Recent_Search);*/
 
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
