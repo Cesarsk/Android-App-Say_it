@@ -93,6 +93,12 @@
             android:title="About Us" />
 
         <Preference
+            android:key="other_apps"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Check out other apps made by us"
+            android:title="Other Apps" />
+
+        <Preference
             android:key="github"
             android:layout="@xml/voices_settings_layout"
             android:summary="Visit our Github"

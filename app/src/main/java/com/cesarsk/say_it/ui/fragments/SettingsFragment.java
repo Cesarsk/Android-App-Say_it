@@ -147,7 +147,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         about_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/04/29/about-wordly/");
+                Utility.openURL(getActivity(), "https://lucacesaranoblog.wordpress.com/2017/07/18/about-us/");
                 return false;
             }
         });
@@ -166,6 +166,15 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Utility.openURL(getActivity(), "https://github.com/Cesarsk/Say_it");
+                return false;
+            }
+        });
+
+        final Preference other_apps = getPreferenceManager().findPreference("other_apps");
+        other_apps.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Utility.openURL(getActivity(), "https://play.google.com/store/apps/developer?id=Cesarsk+Dev+Team");
                 return false;
             }
         });
