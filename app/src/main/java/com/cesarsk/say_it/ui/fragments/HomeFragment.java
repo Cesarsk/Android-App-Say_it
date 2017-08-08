@@ -169,7 +169,9 @@ public class HomeFragment extends Fragment {
             adView.setAdSize(new AdSize(adWidth, 150));
 
             RelativeLayout adCardRL = (RelativeLayout) view.findViewById(R.id.adNativeCard);
-            adCardRL.setVisibility(View.VISIBLE);
+            /* 08-08-2017 -> One month premium no ads
+            adCardRL.setVisibility(View.VISIBLE);*/
+            adCardRL.setVisibility(View.GONE);
             adCardRL.addView(adView);
 
             AdRequest request = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
