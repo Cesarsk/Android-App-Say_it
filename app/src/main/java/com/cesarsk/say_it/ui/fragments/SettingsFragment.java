@@ -236,7 +236,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         };
 
-        final Preference remove_ads = getPreferenceManager().findPreference("remove_ads");
+        /* final Preference remove_ads = getPreferenceManager().findPreference("remove_ads");
         if (MainActivity.NO_ADS) {
             remove_ads.setEnabled(false);
             remove_ads.setSummary("Thank you for supporting us ❤");
@@ -256,7 +256,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     return false;
                 }
             });
-        }
+        } */
 
         final Preference reset_tutorial = getPreferenceManager().findPreference("reset_showcase");
         reset_tutorial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

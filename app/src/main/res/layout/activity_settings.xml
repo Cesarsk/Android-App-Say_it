@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        app:titleTextColor="@color/white"
+        app:titleTextColor="@color/White"
         android:minHeight="?attr/actionBarSize" />
 
     <FrameLayout

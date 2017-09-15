@@ -1,13 +1,11 @@
 package com.cesarsk.say_it.ui.fragments;
 
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -20,7 +18,6 @@ import android.support.v4.widget.NestedScrollView;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,15 +33,12 @@ import com.cesarsk.say_it.ui.PlayActivity;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.components.FadingTextView;
 import com.cesarsk.say_it.ui.SettingsActivity;
-import com.cesarsk.say_it.utility.SayItPair;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
-
-import java.util.ArrayList;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
@@ -237,16 +231,16 @@ public class HomeFragment extends Fragment {
         final ImageButton favorite_button = (ImageButton) view.findViewById(R.id.favorite_card_button);
         favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), wordOfTheDay);
         if (favorite_flag)
-            favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
+            favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.rec_button));
         favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!favorite_flag) {
                     UtilitySharedPrefs.addFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag = !favorite_flag;
-                    favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.RudolphsNose));
+                    favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.rec_button));
                 } else {
-                    favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.white));
+                    favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.White));
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag = !favorite_flag;
                 }

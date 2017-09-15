@@ -73,7 +73,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/White"
         android:textSize="18sp"
         android:clickable="true"
         android:background="@color/Red500"

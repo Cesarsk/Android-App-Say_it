@@ -7,27 +7,27 @@
         icon="@drawable/ic_home"
         title="Home"
         activeColor="@color/primary"
-        barColorWhenSelected="@color/BottomBarColor"/>
+        barColorWhenSelected="@color/bottomBarColor"/>
 
     <tab
         id="@+id/tab_favorites"
         icon="@drawable/ic_favorite_black_24dp"
         title="Favorites"
         activeColor="@color/primary"
-        barColorWhenSelected="@color/BottomBarColor"/>
+        barColorWhenSelected="@color/bottomBarColor"/>
 
     <tab
         id="@+id/tab_history"
         icon="@drawable/ic_history"
         title="History"
         activeColor="@color/primary"
-        barColorWhenSelected="@color/BottomBarColor"/>
+        barColorWhenSelected="@color/bottomBarColor"/>
 
     <tab
         id="@+id/tab_recordings"
         icon="@drawable/ic_voicemail"
         title="Recordings"
         activeColor="@color/primary"
-        barColorWhenSelected="@color/BottomBarColor"/>
+        barColorWhenSelected="@color/bottomBarColor"/>
 
 </tabs>

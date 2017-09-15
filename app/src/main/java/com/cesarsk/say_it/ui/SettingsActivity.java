@@ -27,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             //changing arrow color Toolbar
             final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_ab_back_material);
-            upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
+            upArrow.setColorFilter(ContextCompat.getColor(this, R.color.White), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 

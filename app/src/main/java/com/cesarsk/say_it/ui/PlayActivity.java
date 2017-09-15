@@ -52,9 +52,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -489,7 +487,10 @@ public class PlayActivity extends AppCompatActivity {
             }
         };
 
-        remove_ad.setOnClickListener(new View.OnClickListener() {
+        //15 Sept 2017 - Updating Say It! Removing In-app purchase button and replacing it with a donation button (redirecting to Paypal).
+        //The new remove_ad Button will be place below this commented method
+
+        /*remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<String> additionalSkuList = new ArrayList<>();
@@ -500,6 +501,13 @@ public class PlayActivity extends AppCompatActivity {
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
                 }
+            }
+        });*/
+
+        remove_ad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.openURL(v.getContext(), "https://paypal.me/cesarsk/1");
             }
         });
 
@@ -536,7 +544,7 @@ public class PlayActivity extends AppCompatActivity {
 
         favorite_flag = UtilitySharedPrefs.checkFavs(this, selected_word);
         if (favorite_flag)
-            favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
+            favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.rec_button));
 
         favorite_button.setOnClickListener(new View.OnClickListener()
 
@@ -547,7 +555,7 @@ public class PlayActivity extends AppCompatActivity {
                     UtilitySharedPrefs.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
                     Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
-                    favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
+                    favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.rec_button));
                 } else {
                     favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.primary_light));
                     Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
@@ -567,7 +575,7 @@ public class PlayActivity extends AppCompatActivity {
                     british_speaker_google.setSpeechRate((float) 0.30);
                     slow_mode = !slow_mode;
                     Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(ContextCompat.getColor(context, R.color.Yellow600));
+                    slow_button.setColorFilter(ContextCompat.getColor(context, R.color.Amber400));
                 } else {
                     american_speaker_google.setSpeechRate((float) 0.90);
                     british_speaker_google.setSpeechRate((float) 0.90);
@@ -582,7 +590,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!accent_flag) {
-                    accent_button.setColorFilter(ContextCompat.getColor(context, R.color.Yellow600));
+                    accent_button.setColorFilter(ContextCompat.getColor(context, R.color.Amber400));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 } else {

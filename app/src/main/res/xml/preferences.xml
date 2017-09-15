@@ -74,11 +74,11 @@
             android:summary="Support our effort with a little donation ❤"
             android:title="Donate us!" />
 
-        <Preference
+       <!-- <Preference
             android:key="remove_ads"
             android:layout="@xml/voices_settings_layout"
             android:summary="Remove ads from this app"
-            android:title="Remove ads!" />
+            android:title="Remove ads!" /> -->
 
     </PreferenceCategory>
 

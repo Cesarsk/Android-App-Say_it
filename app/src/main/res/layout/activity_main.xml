@@ -59,7 +59,7 @@
         android:layout_alignParentBottom="true"
         app:bb_tabXmlResource="@xml/bottombar_tabs"
         android:layout_height="60dp"
-        app:bb_inActiveTabColor="@color/inActiveTabColor"
+        app:bb_inActiveTabColor="@color/inactiveBBTabColor"
         app:bb_inActiveTabAlpha="0.8"
         app:bb_activeTabAlpha="1"
         android:visibility="visible"
