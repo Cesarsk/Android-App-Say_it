@@ -24,6 +24,7 @@ android {
     defaultConfig {
         applicationId 'com.cesarsk.say_it'
         minSdkVersion 21
+        multiDexEnabled = true
         targetSdkVersion 25
         versionCode 26
         versionName "1.2.4"
