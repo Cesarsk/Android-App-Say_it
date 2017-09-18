@@ -27,7 +27,7 @@
         android:icon="@mipmap/ic_say_it"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/BlueYellow"
+        android:theme="@style/BlueYellowStyle.Theme"
         android:fullBackupContent="false">
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
@@ -69,7 +69,7 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName="com.cesarsk.say_it.ui.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/BlueYellowPreference" />
+            android:theme="@style/BlueYellowStyle.PreferenceTheme" />
         <activity
             android:name="com.cesarsk.say_it.ui.PlayActivity"
             android:parentActivityName="com.cesarsk.say_it.ui.MainActivity"
