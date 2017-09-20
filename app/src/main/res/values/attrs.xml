@@ -8,5 +8,10 @@
     <attr name="imageView" format="reference" />
     <attr name="editText" format="reference" />
     <attr name="view" format="reference" />
+    <attr name="textView" format="reference" />
+    <attr name="imageButton" format="reference" />
+    <attr name="chronometer" format="reference" />
+    <attr name="playTTS" format="reference" />
+    <attr name="searchListDivider" format="reference" />
 
 </resources>

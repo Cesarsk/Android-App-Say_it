@@ -7,6 +7,12 @@
         <item name="imageView">@style/BlueYellowImageView</item>
         <item name="editText">@style/BlueYellowEditText</item>
         <item name="view">@style/BlueYellowView</item>
+        <item name="textView">@style/BlueYellowTextView</item>
+        <item name="imageButton">@style/BlueYellowImageButton</item>
+        <item name="chronometer">@style/BlueYellowChronometer</item>
+        <item name="playTTS">@style/BlueYellowPlayTTS</item>
+        <item name="searchListDivider">@style/BlueYellowSearchListDivider</item>
+
     </style>
 
     <style name="BlueYellowStyle.PreferenceTheme">

@@ -23,10 +23,32 @@
         <item name="android:background">@color/primary_dark</item>
         <item name="android:backgroundTint">@color/primary_dark</item>
         <item name="android:textColorHint">@color/primary_light</item>
+        <item name="android:textColor">@color/primary_light</item>
     </style>
 
     <style name="BlueYellowView">
         <item name="android:background">@color/primary</item>
+    </style>
+
+    <style name="BlueYellowTextView">
+        <item name="android:textColor">@color/primary_light</item>
+    </style>
+
+    <style name="BlueYellowChronometer">
+        <item name="android:textColor">@color/primary_dark</item>
+    </style>
+
+    <style name="BlueYellowImageButton">
+        <item name="android:tint">@color/primary_light</item>
+        <item name="android:background">@color/primary_dark</item>
+    </style>
+
+    <style name="BlueYellowPlayTTS">
+        <item name="android:backgroundTint">@color/Amber400</item>
+    </style>
+
+    <style name="BlueYellowSearchListDivider">
+        <item name="android:divider">@color/divider</item>
     </style>
 
     <style name="BlueYellowStyle.PreferenceActivity">
