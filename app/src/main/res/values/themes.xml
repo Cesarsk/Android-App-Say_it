@@ -2,19 +2,15 @@
 <resources>
 
     <style name="BlueYellowStyle.Theme">
-        <item name="General">@style/BlueYellowStyle</item>
+        <item name="general">@style/BlueYellowStyle</item>
+        <item name="toolbar">@style/BlueYellowToolbar</item>
+        <item name="imageView">@style/BlueYellowImageView</item>
+        <item name="editText">@style/BlueYellowEditText</item>
+        <item name="view">@style/BlueYellowView</item>
     </style>
 
     <style name="BlueYellowStyle.PreferenceTheme">
-        <item name="Preference">@style/BlueYellowStyle.PreferenceActivity</item>
-    </style>
-
-    <style name="DarkStyle.Theme">
-        <item name="General">@style/BlueYellowStyle</item>
-    </style>
-
-    <style name="DarkStyle.PreferenceTheme">
-        <item name="Preference">@style/BlueYellowStyle.PreferenceActivity</item>
+        <item name="preference">@style/BlueYellowStyle.PreferenceActivity</item>
     </style>
 
 </resources>

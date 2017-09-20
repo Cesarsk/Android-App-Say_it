@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="General" format="reference" />
-    <attr name="Preference" format="reference" />
+    <attr name="general" format="reference" />
+    <attr name="preference" format="reference" />
+
+    <attr name="toolbar" format="reference" />
+    <attr name="imageView" format="reference" />
+    <attr name="editText" format="reference" />
+    <attr name="view" format="reference" />
 
 </resources>

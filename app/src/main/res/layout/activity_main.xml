@@ -6,10 +6,10 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
+        style="?toolbar"
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="?attr/colorPrimary"
         android:layout_alignParentStart="true">
 
         <LinearLayout
@@ -19,6 +19,7 @@
             android:paddingEnd="16dp">
 
             <ImageView
+                style="?imageView"
                 android:id="@+id/search_bar_hint_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -27,12 +28,10 @@
                 android:contentDescription="@string/search_bar_hint_icon_description" />
 
             <EditText
+                style="?editText"
                 android:id="@+id/search_bar_edit_text"
                 android:layout_width="0dp"
                 android:hint="@string/search_hint"
-                android:textColorHint="@color/primary_light"
-                android:backgroundTint="@color/primary_dark"
-                android:background="@color/primary_dark"
                 android:inputType="textCapWords"
                 android:layout_weight="1"
                 android:layout_height="32dp"
@@ -41,11 +40,11 @@
                 />
 
             <ImageButton
+                style="?imageView"
                 android:id="@+id/search_bar_voice_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_mic_blue_yellow"
-                android:background="@color/primary_dark"
                 android:contentDescription="@string/voice_search_button_description"/>
 
         </LinearLayout>
@@ -65,6 +64,7 @@
         app:bb_showShadow="false"/>
 
     <View
+        style="?view"
         android:id="@+id/imageview_logo"
         android:layout_width="match_parent"
         android:layout_height="32dp"
