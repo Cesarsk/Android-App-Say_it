@@ -12,11 +12,21 @@
         <item name="chronometer">@style/BlueYellowChronometer</item>
         <item name="playTTS">@style/BlueYellowPlayTTS</item>
         <item name="searchListDivider">@style/BlueYellowSearchListDivider</item>
-
+        <item name="swipeHint">@style/BlueYellowSwipeHint</item>
+        <item name="floatingButton">@style/BlueYellowFloatingButton</item>
+        <item name="textCard">@style/BlueYellowTextCard</item>
+        <item name="cardDivider">@style/BlueYellowCardDivider</item>
+        <item name="cardStats">@style/BlueYellowCardStats</item>
+        <item name="randomQuote">@style/BlueYellowRandomQuote</item>
+        <item name="itemSearchedPrimaryText">@style/BlueYellowItemSearchedPrimaryText</item>
+        <item name="itemSearchedSecondaryText">@style/BlueYellowItemSearchedSecondaryText</item>
+        <item name="quickPlayList">@style/BlueYellowQuickPlayList</item>
+        <item name="deleteItemList">@style/BlueYellowDeleteItemList</item>
     </style>
 
     <style name="BlueYellowStyle.PreferenceTheme">
         <item name="preference">@style/BlueYellowStyle.PreferenceActivity</item>
+        <item name="toolbarSettings">@style/BlueYellowToolbarSettings</item>
     </style>
 
 </resources>

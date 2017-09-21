@@ -9,14 +9,14 @@
         android:layout_height="match_parent">
 
     <TextView
+        style="?swipeHint"
         android:id="@+id/tutorial_text"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:text="Swipe to delete an item"
+        android:text="@string/swipe_hint"
         android:textStyle="italic"
         android:textSize="18sp"
-        android:textColor="@color/Blue900"
         android:textAlignment="center"> </TextView>
 
     <LinearLayout
@@ -63,13 +63,13 @@
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
+        style="?floatingButton"
         android:id="@+id/floating_button_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
         android:src="@drawable/ic_delete_forever_black_24dp"
-        android:tint="@color/White"
         app:layout_anchor="@id/relative_history_fragment"
         app:layout_anchorGravity="bottom|right|end" />
 </android.support.design.widget.CoordinatorLayout>

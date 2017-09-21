@@ -48,13 +48,60 @@
     </style>
 
     <style name="BlueYellowSearchListDivider">
-        <item name="android:divider">@color/divider</item>
+        <item name="android:divider">@color/White</item>
+    </style>
+
+    <style name="BlueYellowCardDivider">
+        <item name="android:background">@color/White</item>
+    </style>
+
+    <style name="BlueYellowSwipeHint">
+        <item name="android:textColor">@color/Blue900</item>
+    </style>
+
+    <style name="BlueYellowFloatingButton">
+        <item name="android:tint">@color/White</item>
+    </style>
+
+    <style name="BlueYellowTextCard">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="BlueYellowCardStats">
+        <item name="android:background">@color/White</item>
+    </style>
+
+    <style name="BlueYellowRandomQuote">
+        <item name="android:textColor">@color/Grey600</item>
+    </style>
+
+    <style name="BlueYellowItemSearchedPrimaryText">
+        <item name="android:textColor">@color/Grey900</item>
+    </style>
+
+    <style name="BlueYellowItemSearchedSecondaryText">
+        <item name="android:textColor">@color/Grey600</item>
+    </style>
+
+    <style name="BlueYellowDeleteItemList">
+        <item name="android:background">@color/Red500</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="BlueYellowQuickPlayList">
+        <item name="android:tint">@color/primary_dark</item>
+        <item name="android:backgroundTint">@color/Grey100</item>
     </style>
 
     <style name="BlueYellowStyle.PreferenceActivity">
         <item name="colorAccent">@color/primary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:statusBarColor">@color/primary_dark</item>
+    </style>
+
+    <style name="BlueYellowToolbarSettings" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/primary</item>
+        <item name="titleTextColor">@color/White</item>
     </style>
 
 </resources>

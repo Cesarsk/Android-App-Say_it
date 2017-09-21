@@ -13,5 +13,15 @@
     <attr name="chronometer" format="reference" />
     <attr name="playTTS" format="reference" />
     <attr name="searchListDivider" format="reference" />
-
+    <attr name="swipeHint" format="reference" />
+    <attr name="floatingButton" format="reference" />
+    <attr name="textCard" format="reference"/>
+    <attr name="cardDivider" format="reference"/>
+    <attr name="cardStats" format="reference"/>
+    <attr name="randomQuote" format="reference"/>
+    <attr name="itemSearchedPrimaryText" format="reference"/>
+    <attr name="itemSearchedSecondaryText" format="reference"/>
+    <attr name="quickPlayList" format="reference"/>
+    <attr name="deleteItemList" format="reference"/>
+    <attr name="toolbarSettings" format="reference"/>
 </resources>
