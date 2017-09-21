@@ -231,14 +231,14 @@ public class HomeFragment extends Fragment {
         final ImageButton favorite_button = (ImageButton) view.findViewById(R.id.favorite_card_button);
         favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), wordOfTheDay);
         if (favorite_flag)
-            favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.rec_button));
+            favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.Red700));
         favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!favorite_flag) {
                     UtilitySharedPrefs.addFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag = !favorite_flag;
-                    favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.rec_button));
+                    favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.Red700));
                 } else {
                     favorite_button.setColorFilter(ContextCompat.getColor(getActivity(), R.color.White));
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));

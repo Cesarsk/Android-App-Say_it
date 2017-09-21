@@ -131,7 +131,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
 
         //Pulsante FAV
         if (UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString()))
-            viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.rec_button));
+            viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.Red700));
 
         viewHolder.addToFavsImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,13 +139,13 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                 if (!UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.addFavs(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                     Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show();
-                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.rec_button));
+                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.Red700));
                 }
 
                 else if(UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                     Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.primary_dark));
+                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.Blue800));
                 }
             }
         });

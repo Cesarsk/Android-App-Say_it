@@ -116,7 +116,7 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
         });
 
         if (UtilitySharedPrefs.checkFavs(recordingsFragment.getActivity(), holder.wordTextView.getText().toString()))
-            holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.rec_button));
+            holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.Red700));
 
         holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,11 +124,11 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
                 if (!UtilitySharedPrefs.checkFavs(recordingsFragment.getActivity(), holder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.addFavs(recordingsFragment.getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                     Toast.makeText(recordingsFragment.getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.rec_button));
+                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.Red700));
                 } else if (UtilitySharedPrefs.checkFavs(recordingsFragment.getActivity(), holder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                     Toast.makeText(recordingsFragment.getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.primary_dark));
+                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.Blue800));
                 }
             }
         });

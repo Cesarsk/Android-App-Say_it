@@ -27,6 +27,7 @@
     <style name="BlueYellowStyle.PreferenceTheme">
         <item name="preference">@style/BlueYellowStyle.PreferenceActivity</item>
         <item name="toolbarSettings">@style/BlueYellowToolbarSettings</item>
+        <item name="itemSearchedPrimaryText">@style/BlueYellowItemSearchedPrimaryText</item>
     </style>
 
 </resources>

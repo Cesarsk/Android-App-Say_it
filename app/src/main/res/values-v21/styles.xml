@@ -1,46 +1,46 @@
 <resources>
     <!-- Base application theme. -->
     <style name="BlueYellowStyle" parent="Theme.Design.Light.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorAccent">@color/floatingButton</item>
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:colorBackground">@color/background</item>
-        <item name="android:navigationBarColor">@color/navigationBar</item>
-        <item name="android:statusBarColor">@color/primary</item>
-        <item name="android:textColorPrimary">@color/primary_text</item>
-        <item name="android:textColorSecondary">@color/secondary_text</item>
+        <item name="colorPrimary">@color/Blue700</item>
+        <item name="colorAccent">@color/Amber400</item>
+        <item name="android:colorPrimaryDark">@color/Blue800</item>
+        <item name="android:colorBackground">@color/Grey100</item>
+        <item name="android:navigationBarColor">@color/Black</item>
+        <item name="android:statusBarColor">@color/Blue700</item>
+        <item name="android:textColorPrimary">@color/Grey900</item>
+        <item name="android:textColorSecondary">@color/Grey600</item>
     </style>
 
     <style name="BlueYellowToolbar">
-        <item name="android:background">@color/primary</item>
+        <item name="android:background">@color/Blue700</item>
     </style>
 
     <style name="BlueYellowImageView">
-        <item name="android:background">@color/primary_dark</item>
+        <item name="android:background">@color/Blue800</item>
     </style>
 
     <style name="BlueYellowEditText">
-        <item name="android:background">@color/primary_dark</item>
-        <item name="android:backgroundTint">@color/primary_dark</item>
-        <item name="android:textColorHint">@color/primary_light</item>
-        <item name="android:textColor">@color/primary_light</item>
+        <item name="android:background">@color/Blue800</item>
+        <item name="android:backgroundTint">@color/Blue800</item>
+        <item name="android:textColorHint">@color/Blue100</item>
+        <item name="android:textColor">@color/Blue100</item>
     </style>
 
     <style name="BlueYellowView">
-        <item name="android:background">@color/primary</item>
+        <item name="android:background">@color/Blue700</item>
     </style>
 
     <style name="BlueYellowTextView">
-        <item name="android:textColor">@color/primary_light</item>
+        <item name="android:textColor">@color/Blue100</item>
     </style>
 
     <style name="BlueYellowChronometer">
-        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:textColor">@color/Blue800</item>
     </style>
 
     <style name="BlueYellowImageButton">
-        <item name="android:tint">@color/primary_light</item>
-        <item name="android:background">@color/primary_dark</item>
+        <item name="android:tint">@color/Blue100</item>
+        <item name="android:background">@color/Blue800</item>
     </style>
 
     <style name="BlueYellowPlayTTS">
@@ -89,18 +89,18 @@
     </style>
 
     <style name="BlueYellowQuickPlayList">
-        <item name="android:tint">@color/primary_dark</item>
+        <item name="android:tint">@color/Blue800</item>
         <item name="android:backgroundTint">@color/Grey100</item>
     </style>
 
     <style name="BlueYellowStyle.PreferenceActivity">
-        <item name="colorAccent">@color/primary</item>
+        <item name="colorAccent">@color/Blue700</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:statusBarColor">@color/Blue800</item>
     </style>
 
     <style name="BlueYellowToolbarSettings" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">@color/primary</item>
+        <item name="android:background">@color/Blue700</item>
         <item name="titleTextColor">@color/White</item>
     </style>
 

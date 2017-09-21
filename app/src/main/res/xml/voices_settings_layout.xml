@@ -7,10 +7,10 @@
     android:padding="16dp">
 
     <TextView android:id="@android:id/title"
+        style="?itemSearchedPrimaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/primary_text"/>
+        android:textSize="16sp" />
 
     <TextView android:id="@android:id/summary"
         android:layout_width="wrap_content"
