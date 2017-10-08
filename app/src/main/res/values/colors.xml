@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <color name="White">#ffffff</color>
-    <color name="Black">#000000</color>
     <color name="Yellow600">#FDD835</color>
     <color name="Red500">#F44336</color>
+    <color name="Blue100">#BBDEFB</color>
+    <color name="Blue800">#1565C0</color>
+    <color name="Amber400">#ffca28</color>
+    <color name="Red700">#d50000</color>
+
+    <color name="Black">#000000</color>
     <color name="Grey100">#F5F5F5</color>
     <color name="Grey400">#BDBDBD</color>
     <color name="Grey600">#757575</color>
     <color name="Grey900">#212121</color>
-    <color name="Blue100">#BBDEFB</color>
     <color name="Blue700">#1976D2</color>
-    <color name="Blue800">#1565C0</color>
     <color name="Blue900">#0D47A1</color>
-    <color name="Amber400">#ffca28</color>
-    <color name="Red700">#d50000</color>
     <color name="Red900">#b71c1c</color>
     <color name="Green700Custom1">#02ec02</color>
     <color name="Green700Custom2">#00bc00</color>

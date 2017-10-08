@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.AudioManager;
@@ -20,6 +21,7 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -590,7 +592,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!accent_flag) {
-                    accent_button.setColorFilter(ContextCompat.getColor(context, R.color.Amber400));
+                    accent_button.setColorFilter(ContextCompat.getColor(context, getThemeAccentColor(context)));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 } else {
@@ -632,6 +634,16 @@ public class PlayActivity extends AppCompatActivity {
 
         });
         startTutorialPlayActivity(rec_button, play_original_button, accent_button, slow_button, tts_settings);
+    }
+
+    private static int getThemeAccentColor(Context context) {
+        int colorAttr = android.R.attr.colorBackground;
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(colorAttr, outValue, true);
+        String colore = Integer.toHexString(outValue.data);
+        Log.i("TEST", ""+R.color.Amber400);
+        Log.i("TEST", "#"+colore);
+        return outValue.data;
     }
 
     private void setupSnackbar(final Chronometer chronometer, final ImageButton delete_button, final Button play_button) {
