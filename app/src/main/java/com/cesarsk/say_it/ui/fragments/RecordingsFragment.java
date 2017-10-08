@@ -95,7 +95,7 @@ public class RecordingsFragment extends Fragment {
             boolean initiated;
 
             void init() {
-                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
+                background = new ColorDrawable(Utility.setColorByTheme(R.attr.favoriteButton, getActivity()));
                 DeletedIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_close_white_24dp);
                 DeletedIconMargin = (int) getActivity().getResources().getDimension(R.dimen.deleted_icon_margin);
                 initiated = true;
@@ -171,7 +171,7 @@ public class RecordingsFragment extends Fragment {
             boolean initiated;
 
             private void init() {
-                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
+                background = new ColorDrawable(Utility.setColorByTheme(R.attr.favoriteButton, getActivity()));
                 initiated = true;
             }
 

@@ -26,6 +26,7 @@ import com.cesarsk.say_it.ui.PlayActivity;
 
 import com.cesarsk.say_it.utility.SayItPair;
 
+import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
 
         //Pulsante FAV
         if (UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString()))
-            viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.Red700));
+            viewHolder.addToFavsImgButton.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, context));
 
         viewHolder.addToFavsImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,13 +140,13 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                 if (!UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.addFavs(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                     Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show();
-                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.Red700));
+                    viewHolder.addToFavsImgButton.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, context));
                 }
 
                 else if(UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                     Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.Blue800));
+                    viewHolder.addToFavsImgButton.setColorFilter(Utility.setColorByTheme(R.attr.colorPrimaryDark, context));
                 }
             }
         });

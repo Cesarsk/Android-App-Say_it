@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.adapters.SearchListAdapter;
+import com.cesarsk.say_it.utility.Utility;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -47,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //change arrow color Toolbar
         final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_ab_back_material);
-        upArrow.setColorFilter(ContextCompat.getColor(this, R.color.White), PorterDuff.Mode.SRC_ATOP);
+        upArrow.setColorFilter(Utility.setColorByTheme(R.attr.upArrow, this), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
         final ListView result_list = (ListView) findViewById(R.id.result_list_view);

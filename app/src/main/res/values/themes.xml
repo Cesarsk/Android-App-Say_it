@@ -30,4 +30,34 @@
         <item name="itemSearchedPrimaryText">@style/BlueYellowItemSearchedPrimaryText</item>
     </style>
 
+    <style name="DarkStyle.Theme">
+        <item name="general">@style/DarkStyle</item>
+        <item name="toolbar">@style/DarkToolbar</item>
+        <item name="imageView">@style/DarkImageView</item>
+        <item name="editText">@style/DarkEditText</item>
+        <item name="view">@style/DarkView</item>
+        <item name="textView">@style/DarkTextView</item>
+        <item name="imageButton">@style/DarkImageButton</item>
+        <item name="chronometer">@style/DarkChronometer</item>
+        <item name="playTTS">@style/DarkPlayTTS</item>
+        <item name="searchListDivider">@style/DarkSearchListDivider</item>
+        <item name="swipeHint">@style/DarkSwipeHint</item>
+        <item name="floatingButton">@style/DarkFloatingButton</item>
+        <item name="textCard">@style/DarkTextCard</item>
+        <item name="cardDivider">@style/DarkCardDivider</item>
+        <item name="cardStats">@style/DarkCardStats</item>
+        <item name="randomQuote">@style/DarkRandomQuote</item>
+        <item name="itemSearchedPrimaryText">@style/DarkItemSearchedPrimaryText</item>
+        <item name="itemSearchedSecondaryText">@style/DarkItemSearchedSecondaryText</item>
+        <item name="quickPlayList">@style/DarkQuickPlayList</item>
+        <item name="deleteItemList">@style/DarkDeleteItemList</item>
+    </style>
+
+    <style name="DarkStyle.PreferenceTheme">
+        <item name="preference">@style/DarkStyle.PreferenceActivity</item>
+        <item name="toolbarSettings">@style/DarkToolbarSettings</item>
+        <item name="itemSearchedPrimaryText">@style/DarkItemSearchedPrimaryText</item>
+    </style>
+
+
 </resources>

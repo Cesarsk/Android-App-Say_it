@@ -3,9 +3,11 @@ package com.cesarsk.say_it.utility;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.TypedValue;
 
 import java.io.File;
 
@@ -80,6 +82,15 @@ public class Utility {
                     Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
         }
 
+    }
+
+    public static int setColorByTheme(int attribute, Context context)
+    {
+        TypedValue typedValue = new TypedValue();
+        if (context.getTheme().resolveAttribute(attribute, typedValue, true))
+            return typedValue.data;
+        else
+            return Color.TRANSPARENT;
     }
 
 

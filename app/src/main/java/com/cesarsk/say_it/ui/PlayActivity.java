@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.AudioManager;
@@ -263,12 +264,12 @@ public class PlayActivity extends AppCompatActivity {
         //loading settings before checking DEFAULT_ACCENT
         UtilitySharedPrefs.loadSettingsPrefs(this);
 
-        //checking defaul_accent and set the button's color
+        //checking default_accent and set the button's color
         if (MainActivity.DEFAULT_ACCENT.equals("0")) {
-            accent_button.setColorFilter(ContextCompat.getColor(this, R.color.Blue100));
+            accent_button.setColorFilter(Utility.setColorByTheme(R.attr.idleButton, context));
             accent_flag = false;
         } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
-            accent_button.setColorFilter(ContextCompat.getColor(this, R.color.Yellow600));
+            accent_button.setColorFilter(Utility.setColorByTheme(R.attr.colorAccent, context));
             accent_flag = true;
         }
 
@@ -546,7 +547,7 @@ public class PlayActivity extends AppCompatActivity {
 
         favorite_flag = UtilitySharedPrefs.checkFavs(this, selected_word);
         if (favorite_flag)
-            favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.Red700));
+            favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, context));
 
         favorite_button.setOnClickListener(new View.OnClickListener()
 
@@ -557,9 +558,9 @@ public class PlayActivity extends AppCompatActivity {
                     UtilitySharedPrefs.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
                     Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
-                    favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.Red700));
+                    favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, context));
                 } else {
-                    favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.Blue100));
+                    favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.idleButton, context));
                     Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
@@ -577,12 +578,12 @@ public class PlayActivity extends AppCompatActivity {
                     british_speaker_google.setSpeechRate((float) 0.30);
                     slow_mode = !slow_mode;
                     Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(ContextCompat.getColor(context, R.color.Amber400));
+                    slow_button.setColorFilter(Utility.setColorByTheme(R.attr.colorAccent, context));
                 } else {
                     american_speaker_google.setSpeechRate((float) 0.90);
                     british_speaker_google.setSpeechRate((float) 0.90);
                     Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(ContextCompat.getColor(context, R.color.Blue100));
+                    slow_button.setColorFilter(Utility.setColorByTheme(R.attr.idleButton, context));
                     slow_mode = !slow_mode;
                 }
             }
@@ -592,11 +593,11 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!accent_flag) {
-                    accent_button.setColorFilter(ContextCompat.getColor(context, getThemeAccentColor(context)));
+                    accent_button.setColorFilter(Utility.setColorByTheme(R.attr.colorAccent, context));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 } else {
-                    accent_button.setColorFilter(ContextCompat.getColor(context, R.color.Blue100));
+                    accent_button.setColorFilter(Utility.setColorByTheme(R.attr.idleButton, context));
                     Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 }
@@ -634,16 +635,6 @@ public class PlayActivity extends AppCompatActivity {
 
         });
         startTutorialPlayActivity(rec_button, play_original_button, accent_button, slow_button, tts_settings);
-    }
-
-    private static int getThemeAccentColor(Context context) {
-        int colorAttr = android.R.attr.colorBackground;
-        TypedValue outValue = new TypedValue();
-        context.getTheme().resolveAttribute(colorAttr, outValue, true);
-        String colore = Integer.toHexString(outValue.data);
-        Log.i("TEST", ""+R.color.Amber400);
-        Log.i("TEST", "#"+colore);
-        return outValue.data;
     }
 
     private void setupSnackbar(final Chronometer chronometer, final ImageButton delete_button, final Button play_button) {

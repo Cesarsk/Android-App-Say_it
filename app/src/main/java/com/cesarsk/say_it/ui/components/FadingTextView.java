@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 
 import java.util.Random;
@@ -39,7 +40,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
         setOnClickListener(onClickListener);
         setClickable(true);
         setGravity(Gravity.CENTER);
-        setTextColor(ContextCompat.getColor(context, R.color.White));
+        setTextColor(Utility.setColorByTheme(R.attr.fadingText, context));
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         setLayoutParams(layoutParams);
         setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -54,7 +55,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
         setOnClickListener(onClickListener);
         setClickable(true);
         setGravity(Gravity.CENTER);
-        setTextColor(ContextCompat.getColor(context, R.color.White));
+        setTextColor(Utility.setColorByTheme(R.attr.fadingText, context));
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         setLayoutParams(layoutParams);
         setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -67,7 +68,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
         setOnClickListener(onClickListener);
         setClickable(true);
         setGravity(Gravity.CENTER);
-        setTextColor(ContextCompat.getColor(context, R.color.White));
+        setTextColor(Utility.setColorByTheme(R.attr.fadingText, context));
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         setLayoutParams(layoutParams);
         setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

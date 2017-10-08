@@ -22,6 +22,7 @@ import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.ui.PlayActivity;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.cesarsk.say_it.utility.SayItPair;
+import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.ArrayList;
@@ -125,7 +126,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         });
 
         if (UtilitySharedPrefs.checkFavs(historyFragment.getActivity(), history.get(position).first))
-            holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(historyFragment.getActivity(), R.color.Red700));
+            holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, historyFragment.getActivity()));
 
         holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,11 +134,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 if (!UtilitySharedPrefs.checkFavs(historyFragment.getActivity(), history.get(holder.getAdapterPosition()).first)) {
                     UtilitySharedPrefs.addFavs(historyFragment.getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                     Toast.makeText(historyFragment.getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(historyFragment.getActivity(), R.color.Red700));
+                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, historyFragment.getActivity()));
                 } else if (UtilitySharedPrefs.checkFavs(historyFragment.getActivity(), history.get(holder.getAdapterPosition()).first)) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), history.get(holder.getAdapterPosition()));
                     Toast.makeText(historyFragment.getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(historyFragment.getActivity(), R.color.Blue800));
+                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.colorPrimaryDark, historyFragment.getActivity()));
                 }
             }
         });

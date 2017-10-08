@@ -24,6 +24,7 @@ import com.cesarsk.say_it.ui.MainActivity;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.components.FavoritesAdapter;
 import com.cesarsk.say_it.utility.SayItPair;
+import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.gson.Gson;
 
@@ -81,7 +82,7 @@ public class FavoritesFragment extends Fragment {
             boolean initiated;
 
             void init() {
-                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
+                background = new ColorDrawable(Utility.setColorByTheme(R.attr.favoriteButton, getActivity()));
                 DeletedIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_close_white_24dp);
                 DeletedIconMargin = (int) getActivity().getResources().getDimension(R.dimen.deleted_icon_margin);
                 initiated = true;
@@ -149,7 +150,7 @@ public class FavoritesFragment extends Fragment {
             boolean initiated;
 
             private void init() {
-                background = new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.Red500));
+                background = new ColorDrawable(Utility.setColorByTheme(R.attr.favoriteButton, getActivity()));
                 initiated = true;
             }
 

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.fragments.NestedPreferenceFragment;
 import com.cesarsk.say_it.ui.fragments.SettingsFragment;
+import com.cesarsk.say_it.utility.Utility;
 
 public class SettingsActivity extends AppCompatActivity implements SettingsFragment.Callback {
     private static final String TAG_NESTED = "TAG_NESTED";
@@ -27,7 +28,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             //changing arrow color Toolbar
             final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_ab_back_material);
-            upArrow.setColorFilter(ContextCompat.getColor(this, R.color.White), PorterDuff.Mode.SRC_ATOP);
+            upArrow.setColorFilter(Utility.setColorByTheme(R.attr.upArrow, this), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
 
