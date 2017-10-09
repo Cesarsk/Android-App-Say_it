@@ -57,10 +57,6 @@
                 <data android:scheme="http"
                     android:host="www.lucacesaranoblog.wordpress.com"
                     android:pathPrefix="/" />
-                <!-- note that the leading "/" is required for pathPrefix-->
-                <!-- Accepts URIs that begin with "example://gizmos” more information: https://developer.android.com/training/app-indexing/deep-linking.html
-                <data android:scheme="example"
-                      android:host="gizmos" /> -->
             </intent-filter>
         </activity>
 

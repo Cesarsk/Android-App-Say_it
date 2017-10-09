@@ -138,7 +138,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 } else if (UtilitySharedPrefs.checkFavs(historyFragment.getActivity(), history.get(holder.getAdapterPosition()).first)) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), history.get(holder.getAdapterPosition()));
                     Toast.makeText(historyFragment.getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.colorPrimaryDark, historyFragment.getActivity()));
+                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.primaryDark, historyFragment.getActivity()));
                 }
             }
         });

@@ -146,7 +146,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                 else if(UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                     Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    viewHolder.addToFavsImgButton.setColorFilter(Utility.setColorByTheme(R.attr.colorPrimaryDark, context));
+                    viewHolder.addToFavsImgButton.setColorFilter(Utility.setColorByTheme(R.attr.primaryDark, context));
                 }
             }
         });

@@ -3,6 +3,7 @@
     <style name="BlueYellowStyle" parent="Theme.Design.Light.NoActionBar">
         <item name="colorPrimary">@color/Blue700</item>
         <item name="colorAccent">@color/Amber400</item>
+        <item name="primaryDark">@color/Blue800</item>
         <item name="idleButton">@color/Blue100</item>
         <item name="unfavoritedButton">@color/White</item>
         <item name="fadingText">@color/White</item>

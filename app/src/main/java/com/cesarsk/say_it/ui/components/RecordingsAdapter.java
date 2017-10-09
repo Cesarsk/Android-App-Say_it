@@ -128,7 +128,7 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
                 } else if (UtilitySharedPrefs.checkFavs(recordingsFragment.getActivity(), holder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                     Toast.makeText(recordingsFragment.getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.colorPrimaryDark, recordingsFragment.getActivity()));
+                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.primaryDark, recordingsFragment.getActivity()));
                 }
             }
         });
