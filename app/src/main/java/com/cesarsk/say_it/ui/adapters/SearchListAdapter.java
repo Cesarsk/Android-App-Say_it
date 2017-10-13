@@ -5,7 +5,6 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,9 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.activities.PlayActivity;
 
 import com.cesarsk.say_it.utility.SayItPair;
 

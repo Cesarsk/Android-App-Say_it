@@ -7,10 +7,10 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
 
-import com.cesarsk.say_it.NotificationReceiver;
+import com.cesarsk.say_it.notifications.NotificationReceiver;
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.FileTextActivity;
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.FileTextActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 /**

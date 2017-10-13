@@ -8,7 +8,7 @@ import android.media.MediaRecorder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static android.Manifest.permission.RECORD_AUDIO;
-import static com.cesarsk.say_it.ui.PlayActivity.RequestPermissionCode;
+import static com.cesarsk.say_it.ui.activities.PlayActivity.RequestPermissionCode;
 
 public class UtilityRecordings {
 

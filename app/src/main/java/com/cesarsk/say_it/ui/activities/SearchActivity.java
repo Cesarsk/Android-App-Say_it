@@ -1,4 +1,4 @@
-package com.cesarsk.say_it.ui;
+package com.cesarsk.say_it.ui.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;

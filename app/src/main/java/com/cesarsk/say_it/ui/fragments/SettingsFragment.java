@@ -16,10 +16,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.FileTextActivity;
-import com.cesarsk.say_it.ui.MainActivity;
-import com.cesarsk.say_it.ui.PlayActivity;
-import com.cesarsk.say_it.ui.SettingsActivity;
+import com.cesarsk.say_it.ui.activities.FileTextActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
+import com.cesarsk.say_it.ui.activities.PlayActivity;
 import com.cesarsk.say_it.utility.LCSecurity;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -28,8 +27,6 @@ import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.cesarsk.say_it.utility.utility_aidl.Purchase;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import static com.cesarsk.say_it.utility.Utility.rateUs;
@@ -41,6 +38,7 @@ import static com.cesarsk.say_it.utility.Utility.shareToMail;
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
     private final String[] emails = {"sayit.edu@gmail.com"};
     static private int index_default_accent = 0;
+    static private int index_default_theme = 0;
     private Callback mCallback;
     private static final String KEY_1 = "button_notification";
     private static final String KEY_2 = "open_source_licenses";
@@ -311,6 +309,26 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 return true;
             }
         });
+
+        final ListPreference theme_selector = (ListPreference) getPreferenceManager().findPreference("theme_selector");
+        theme_selector.setSummary(theme_selector.getEntry());
+        theme_selector.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String new_value = newValue.toString();
+                index_default_theme = theme_selector.findIndexOfValue(new_value);
+                CharSequence[] entries = theme_selector.getEntries();
+                //TODO: CAMBIARE IL TEMA QUI
+                UtilitySharedPrefs.savePrefs(getActivity(), new_value, MainActivity.DEFAULT_THEME_KEY);
+                theme_selector.setSummary(theme_selector.getEntries()[theme_selector.findIndexOfValue(new_value)]);
+                Toast.makeText(getActivity(), String.valueOf(entries[index_default_theme]), Toast.LENGTH_SHORT).show();
+                UtilitySharedPrefs.loadSettingsPrefs(context);
+                getActivity().finish();
+                startActivity(getActivity().getIntent());
+                return true;
+            }
+        });
+
 
         Preference acknowledgements = getPreferenceManager().findPreference("acknowledgements");
         acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()

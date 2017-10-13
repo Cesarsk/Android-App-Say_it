@@ -1,10 +1,10 @@
-package com.cesarsk.say_it;
+package com.cesarsk.say_it.notifications;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 /**

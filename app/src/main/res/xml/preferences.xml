@@ -9,19 +9,28 @@
 
         <ListPreference
             android:defaultValue="0"
-            android:entries="@array/default_voice"
+            android:entries="@array/default_voice_entries"
             android:entryValues="@array/default_voice_values"
             android:key="default_accent"
             android:layout="@xml/voices_settings_layout"
             android:summary="Set default accent within the app"
             android:title="Default Accent" />
 
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/themes_selector_entries"
+            android:entryValues="@array/themes_selector_values"
+            android:key="theme_selector"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Touch to pick a different theme."
+            android:title="Theme" />
+
         <Preference
             android:key="tts_settings"
             android:persistent="false"
             android:title="Voice Settings"
             android:layout="@xml/voices_settings_layout"
-            android:summary="Click on the gear and select 'Install voice data'"
+            android:summary="Touch on the gear and select 'Install voice data'"
             />
 
         <Preference

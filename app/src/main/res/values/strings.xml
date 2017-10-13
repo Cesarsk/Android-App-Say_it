@@ -23,7 +23,7 @@
     <string name="ad_unit_id_interstitial_playactivity_back">ca-app-pub-9284620118215899/4707483164</string>
     <string name="ad_unit_id_banner_settings" tools:ignore="UnusedResources">ca-app-pub-9284620118215899/7660949569</string>
 
-    <string-array name="default_voice">
+    <string-array name="default_voice_entries">
         <item>American English</item>
         <item>British English</item>
     </string-array>
@@ -43,6 +43,16 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+
+    <string-array name="themes_selector_entries">
+        <item>Default Theme</item>
+        <item>Dark Theme</item>
+    </string-array>
+
+    <string-array name="themes_selector_values">
+        <item>0</item>
+        <item>1</item>
     </string-array>
 
     <string name="title_activity_settings">Settings</string>
@@ -101,6 +111,10 @@
     <string name="favorite_button_description">Add word to favorites</string>
     <string name="voice_search_button_description">Dictate your word</string>
     <string name="tts_settings_button_description">Pick your favorite voice</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 
 </resources>

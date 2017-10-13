@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.support.v4.util.Pair;
 import android.widget.Toast;
 
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.google.gson.Gson;
@@ -18,12 +18,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.cesarsk.say_it.ui.MainActivity.DEFAULT_ACCENT_KEY;
-import static com.cesarsk.say_it.ui.MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY;
-import static com.cesarsk.say_it.ui.MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY;
-import static com.cesarsk.say_it.ui.MainActivity.DEFAULT_NOTIFICATION_RATE_KEY;
-import static com.cesarsk.say_it.ui.MainActivity.FAVORITES_PREFS_KEY;
-import static com.cesarsk.say_it.ui.MainActivity.HISTORY_PREFS_KEY;
+import static com.cesarsk.say_it.ui.activities.MainActivity.DEFAULT_ACCENT_KEY;
+import static com.cesarsk.say_it.ui.activities.MainActivity.DEFAULT_NOTIFICATION_HOUR_KEY;
+import static com.cesarsk.say_it.ui.activities.MainActivity.DEFAULT_NOTIFICATION_MINUTE_KEY;
+import static com.cesarsk.say_it.ui.activities.MainActivity.DEFAULT_NOTIFICATION_RATE_KEY;
+import static com.cesarsk.say_it.ui.activities.MainActivity.DEFAULT_THEME_KEY;
+import static com.cesarsk.say_it.ui.activities.MainActivity.FAVORITES_PREFS_KEY;
+import static com.cesarsk.say_it.ui.activities.MainActivity.HISTORY_PREFS_KEY;
 
 /**
  * Created by Claudio on 22/03/2017.
@@ -265,6 +266,7 @@ public class UtilitySharedPrefs {
     public static void loadSettingsPrefs(Context context) {
         //Caricamento preferenze
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.DEFAULT_THEME = sharedPreferences.getString(DEFAULT_THEME_KEY, "0");
         MainActivity.DEFAULT_ACCENT = sharedPreferences.getString(DEFAULT_ACCENT_KEY, "0");
         MainActivity.DEFAULT_NOTIFICATION_RATE = sharedPreferences.getString(DEFAULT_NOTIFICATION_RATE_KEY, "2");
         MainActivity.DEFAULT_NOTIFICATION_HOUR = sharedPreferences.getString(DEFAULT_NOTIFICATION_HOUR_KEY, "12");

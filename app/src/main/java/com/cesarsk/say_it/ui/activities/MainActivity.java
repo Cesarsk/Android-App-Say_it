@@ -1,4 +1,4 @@
-package com.cesarsk.say_it.ui;
+package com.cesarsk.say_it.ui.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -9,9 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.os.Handler;
-import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
@@ -33,7 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.cesarsk.say_it.NotificationReceiver;
+import com.cesarsk.say_it.notifications.NotificationReceiver;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.fragments.FavoritesFragment;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
@@ -97,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
     public final static String DEFAULT_ACCENT_KEY = "SAY.IT.DEFAULT.ACCENT"; //Chiave che identifica il DEFAULT ACCENT
+    public final static String DEFAULT_THEME_KEY = "SAY.IT.DEFAULT.THEME"; //Chiave che identifica il DEFAULT THEME
     public final static String DEFAULT_NOTIFICATION_RATE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.RATE";
     public final static String DEFAULT_NOTIFICATION_HOUR_KEY = "SAY.IT.DEFAULT.NOTIFICATION.HOUR";
     public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
@@ -109,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<File> RECORDINGS = null;
     public static String DEFAULT_NOTIFICATION_RATE = null;
     public static String DEFAULT_ACCENT = null;
+    public static String DEFAULT_THEME = null;
     public static String DEFAULT_NOTIFICATION_HOUR = null;
     public static String DEFAULT_NOTIFICATION_MINUTE = null;
     public static boolean NO_ADS = false;

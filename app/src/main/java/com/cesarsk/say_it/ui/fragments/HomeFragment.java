@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
 
@@ -28,11 +27,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cesarsk.say_it.ui.MainActivity;
-import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
+import com.cesarsk.say_it.ui.activities.PlayActivity;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.components.FadingTextView;
-import com.cesarsk.say_it.ui.SettingsActivity;
+import com.cesarsk.say_it.ui.activities.SettingsActivity;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -41,8 +40,8 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-import static com.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
-import static com.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
+import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheDay;
+import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheDay;
 import static com.cesarsk.say_it.utility.UtilityDictionary.getDailyRandomQuote;
 
 

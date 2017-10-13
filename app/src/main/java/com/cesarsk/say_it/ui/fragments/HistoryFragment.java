@@ -20,7 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.components.HistoryAdapter;
 import com.cesarsk.say_it.utility.SayItPair;
@@ -31,8 +31,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 
 /**

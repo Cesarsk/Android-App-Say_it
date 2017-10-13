@@ -1,4 +1,4 @@
-package com.cesarsk.say_it.ui;
+package com.cesarsk.say_it.ui.activities;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
