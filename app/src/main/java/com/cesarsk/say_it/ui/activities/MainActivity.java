@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(R.style.DarkStyle_Theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

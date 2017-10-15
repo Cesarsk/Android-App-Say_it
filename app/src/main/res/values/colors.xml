@@ -2,6 +2,7 @@
 <resources>
     <color name="White">#ffffff</color>
     <color name="Black">#000000</color>
+    <color name="Amber100">#ffe57f</color>
     <color name="Amber400">#ffca28</color>
     <color name="Grey100">#F5F5F5</color>
     <color name="Grey200">#EEEEEE</color>
@@ -13,6 +14,9 @@
     <color name="Blue700">#1976D2</color>
     <color name="Blue800">#1565C0</color>
     <color name="Blue900">#0D47A1</color>
+    <color name="BlueGrey800">#0a3446</color>
+    <color name="BlueGrey900Custom1">#171E30</color>
+    <color name="BlueGrey900Custom2">#0b0f18</color>
     <color name="Red500">#F44336</color>
     <color name="Red700">#d50000</color>
     <color name="Red900">#b71c1c</color>

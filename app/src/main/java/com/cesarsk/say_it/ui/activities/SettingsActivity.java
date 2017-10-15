@@ -1,21 +1,23 @@
 package com.cesarsk.say_it.ui.activities;
 
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.fragments.NestedPreferenceFragment;
 import com.cesarsk.say_it.ui.fragments.SettingsFragment;
 import com.cesarsk.say_it.utility.Utility;
+import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 public class SettingsActivity extends AppCompatActivity implements SettingsFragment.Callback {
     private static final String TAG_NESTED = "TAG_NESTED";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
