@@ -321,7 +321,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
                 UtilitySharedPrefs.savePrefs(getActivity(), new_value, MainActivity.DEFAULT_ACCENT_KEY);
                 default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
-                Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
                 UtilitySharedPrefs.loadSettingsPrefs(context);
                 return true;
             }
@@ -342,7 +342,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 CharSequence[] entries = theme_selector.getEntries();
                 UtilitySharedPrefs.savePrefs(getActivity(), new_value, MainActivity.DEFAULT_THEME_KEY);
                 theme_selector.setSummary(theme_selector.getEntries()[theme_selector.findIndexOfValue(new_value)]);
-                Toast.makeText(getActivity(), String.valueOf(entries[index_default_theme]), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), String.valueOf(entries[index_default_theme]), Toast.LENGTH_SHORT).show();
                 UtilitySharedPrefs.loadSettingsPrefs(context);
                 Toast.makeText(getActivity(), "Done! Reboot to see changes.", Toast.LENGTH_SHORT).show();
                 return true;

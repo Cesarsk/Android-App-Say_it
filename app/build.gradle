@@ -26,8 +26,8 @@ android {
         minSdkVersion 21
         multiDexEnabled = true
         targetSdkVersion 25
-        versionCode 26
-        versionName "1.2.4"
+        versionCode 27
+        versionName "1.5"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

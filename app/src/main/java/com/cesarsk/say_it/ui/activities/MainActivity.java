@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         if (b != null) {
             selectedTab = b.getInt("fragment_index");
             navigation.setSelectedItemId(selectedTab);
-        } else navigation.setSelectedItemId(HOME_FRAGMENT_INDEX);
+        } else navigation.setSelectedItemId(R.id.tab_home);
     }
 
     @Override
@@ -402,68 +402,6 @@ public class MainActivity extends AppCompatActivity {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        /*
-        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX); //Default: Home
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
-
-            private int last_index = HOME_FRAGMENT_INDEX;
-
-            @Override
-            public void onTabSelected(@IdRes int tabId) {
-                //creating the Fragment transaction
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                //this switch case is used to move among fragments using the bottombar
-                switch (tabId) {
-                    case R.id.tab_favorites:
-                        if (FAVORITES_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
-                        } else if (FAVORITES_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
-                        }
-                        selectedTab = FAVORITES_FRAGMENT_INDEX;
-                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX));
-                        last_index = FAVORITES_FRAGMENT_INDEX;
-                        break;
-
-                    case R.id.tab_home:
-                        if (HOME_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
-                        } else if (HOME_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
-                        }
-                        selectedTab = HOME_FRAGMENT_INDEX;
-                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
-                        last_index = HOME_FRAGMENT_INDEX;
-                        break;
-
-                    case R.id.tab_history:
-                        if (HISTORY_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
-                        } else if (HISTORY_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
-                        }
-                        selectedTab = HISTORY_FRAGMENT_INDEX;
-                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX));
-                        last_index = HISTORY_FRAGMENT_INDEX;
-                        break;
-
-                    case R.id.tab_recordings:
-                        if (RECORDINGS_FRAGMENT_INDEX > last_index) {
-                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
-                        } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
-                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
-                        }
-                        selectedTab = RECORDINGS_FRAGMENT_INDEX;
-                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX));
-                        last_index = RECORDINGS_FRAGMENT_INDEX;
-                        break;
-                }
-               transaction.commit();
-            }
-
-        });
-        */
         //Init TTS
         initTTS(this);
     }
@@ -478,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
             selectedTab = HOME_FRAGMENT_INDEX;
             transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
             transaction.commit();
-            navigation.setSelectedItemId(HOME_FRAGMENT_INDEX);
+            navigation.setSelectedItemId(R.id.tab_home);
             //bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
         } else {
             if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
