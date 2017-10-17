@@ -135,15 +135,13 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //loading default_theme and applying themes
         UtilitySharedPrefs.loadSettingsPrefs(this);
         if (MainActivity.DEFAULT_THEME.equals("0")) {
             setTheme(R.style.BlueYellowStyle_Theme);
         } else if (MainActivity.DEFAULT_THEME.equals("1")) {
-            Toast.makeText(this, "set theme", Toast.LENGTH_SHORT).show();
             setTheme(R.style.DarkStyle_Theme);
         }
-        Toast.makeText(this, "Theme has been reset to " + MainActivity.DEFAULT_THEME, Toast.LENGTH_SHORT).show();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 

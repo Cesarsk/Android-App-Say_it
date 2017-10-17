@@ -41,6 +41,7 @@ import com.cesarsk.say_it.ui.fragments.FavoritesFragment;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
+import com.cesarsk.say_it.ui.fragments.SettingsFragment;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -151,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
         UtilitySharedPrefs.savePrefs(this, false, FIRST_LAUNCH_KEY);
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -207,15 +209,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        //loading preferences
         UtilitySharedPrefs.loadSettingsPrefs(this);
+        UtilitySharedPrefs.loadFavs(this);
+        UtilitySharedPrefs.loadHist(this);
+        RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
+
+        //loading default_theme and applying themes
         if (DEFAULT_THEME.equals("0")) {
             setTheme(R.style.BlueYellowStyle_Theme);
         } else if (DEFAULT_THEME.equals("1")) {
-            Toast.makeText(this, "set theme", Toast.LENGTH_SHORT).show();
             setTheme(R.style.DarkStyle_Theme);
         }
-        Toast.makeText(this, "Theme has been reset to " + DEFAULT_THEME, Toast.LENGTH_SHORT).show();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -283,12 +288,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("Say It!", "Hooray. IAB is fully set up!" + result);
             }
         });
-
-        //loading preferences
-        UtilitySharedPrefs.loadSettingsPrefs(this);
-        UtilitySharedPrefs.loadFavs(this);
-        UtilitySharedPrefs.loadHist(this);
-        RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
 
         if (Wordlists_Map.isEmpty()) {
             //loading dictionary (word of the day included)
@@ -624,5 +623,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return "";
     }
-
 }

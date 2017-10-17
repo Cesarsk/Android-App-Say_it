@@ -6,12 +6,18 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.content.IntentCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,6 +36,7 @@ import com.cesarsk.say_it.utility.utility_aidl.Purchase;
 import java.util.Random;
 
 import static com.cesarsk.say_it.utility.Utility.rateUs;
+import static com.cesarsk.say_it.utility.Utility.setColorByTheme;
 import static com.cesarsk.say_it.utility.Utility.shareToMail;
 
 /**
@@ -45,7 +52,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private IabHelper mHelper;
     private IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
     private IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
-
     public interface Callback {
         void onNestedPreferenceSelected(int key);
     }
@@ -311,23 +317,25 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         final ListPreference theme_selector = (ListPreference) getPreferenceManager().findPreference("theme_selector");
         theme_selector.setSummary(theme_selector.getEntry());
+        if(true){
+            Spannable summary = new SpannableString("Currently This Color");
+            summary.setSpan(new ForegroundColorSpan(Color.WHITE), 0, summary.length(), 0);
+            preference.setSummary(summary);
+        }
         theme_selector.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String new_value = newValue.toString();
                 index_default_theme = theme_selector.findIndexOfValue(new_value);
                 CharSequence[] entries = theme_selector.getEntries();
-                //TODO: CAMBIARE IL TEMA QUI
                 UtilitySharedPrefs.savePrefs(getActivity(), new_value, MainActivity.DEFAULT_THEME_KEY);
                 theme_selector.setSummary(theme_selector.getEntries()[theme_selector.findIndexOfValue(new_value)]);
                 Toast.makeText(getActivity(), String.valueOf(entries[index_default_theme]), Toast.LENGTH_SHORT).show();
                 UtilitySharedPrefs.loadSettingsPrefs(context);
-                getActivity().finish();
-                startActivity(getActivity().getIntent());
+                Toast.makeText(getActivity(), "Done! Reboot to see changes.", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
-
 
         Preference acknowledgements = getPreferenceManager().findPreference("acknowledgements");
         acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
