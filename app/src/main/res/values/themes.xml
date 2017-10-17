@@ -59,6 +59,7 @@
         <item name="preference">@style/DarkStyle.PreferenceActivity</item>
         <item name="toolbarSettings">@style/DarkToolbarSettings</item>
         <item name="itemSearchedPrimaryText">@style/DarkItemSearchedPrimaryText</item>
+        <item name="itemSearchedSecondaryText">@style/DarkItemSearchedSecondaryText</item>
     </style>
 
 

@@ -475,10 +475,10 @@ public class MainActivity extends AppCompatActivity {
         if (selectedTab != HOME_FRAGMENT_INDEX) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             //if (showCaseFragmentView != null) showCaseFragmentView.hide();
-            navigation.setSelectedItemId(HOME_FRAGMENT_INDEX);
             selectedTab = HOME_FRAGMENT_INDEX;
             transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
             transaction.commit();
+            navigation.setSelectedItemId(HOME_FRAGMENT_INDEX);
             //bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
         } else {
             if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {

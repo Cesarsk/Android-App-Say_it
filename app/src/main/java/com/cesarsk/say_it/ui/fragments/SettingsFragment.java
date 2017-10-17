@@ -316,12 +316,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         });
 
         final ListPreference theme_selector = (ListPreference) getPreferenceManager().findPreference("theme_selector");
-        theme_selector.setSummary(theme_selector.getEntry());
-        if(true){
-            Spannable summary = new SpannableString("Currently This Color");
-            summary.setSpan(new ForegroundColorSpan(Color.WHITE), 0, summary.length(), 0);
-            preference.setSummary(summary);
-        }
+        Spannable summary = new SpannableString(theme_selector.getEntry());
+        summary.setSpan(new ForegroundColorSpan(Color.WHITE), 0, summary.length(), 0);
+        theme_selector.setSummary(summary);
         theme_selector.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
