@@ -275,13 +275,19 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+        //setting an own Alert Dialog's title color
+        final Spannable title = new SpannableString("Delete Recordings");
+        title.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, title.length(), 0);
+        final Spannable message = new SpannableString("Are you sure you want to delete all recordings?");
+        message.setSpan(new ForegroundColorSpan(Color.GRAY), 0, message.length(), 0);
+
         final Preference delete_recordings = getPreferenceManager().findPreference("delete_recordings");
         delete_recordings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Delete Recordings")
-                        .setMessage("Are you sure you want to delete all recordings?")
+                        .setTitle(title)
+                        .setMessage(message)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Utility.delete_recordings(getActivity());
@@ -298,8 +304,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+
+
         final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
         default_accent.setSummary(default_accent.getEntry());
+        final Spannable default_accent_title = new SpannableString("Default Accent");
+        default_accent_title.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, default_accent_title.length(), 0);
+        default_accent.setDialogTitle(default_accent_title);
+
         default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -316,7 +328,12 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         });
 
         final ListPreference theme_selector = (ListPreference) getPreferenceManager().findPreference("theme_selector");
+        final Spannable theme_selector_title = new SpannableString("Theme");
+        theme_selector_title.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, theme_selector_title.length(), 0);
+        theme_selector.setDialogTitle(theme_selector_title);
+
         theme_selector.setSummary(theme_selector.getEntry());
+
         theme_selector.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
