@@ -1,4 +1,4 @@
-package com.cesarsk.say_it.ui;
+package com.cesarsk.say_it.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.utility.UtilityDictionary;
+import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.io.IOException;
 
@@ -17,6 +18,15 @@ public class FileTextActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*
+        //loading default_theme and applying themes
+        UtilitySharedPrefs.loadSettingsPrefs(this);
+        if (MainActivity.DEFAULT_THEME.equals("0")) {
+            setTheme(R.style.BlueYellowStyle_PreferenceTheme);
+        } else if (MainActivity.DEFAULT_THEME.equals("1")) {
+            setTheme(R.style.DarkStyle_PreferenceTheme);
+        }
+        */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_text);
 

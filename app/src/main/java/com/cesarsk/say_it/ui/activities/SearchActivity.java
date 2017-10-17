@@ -1,4 +1,4 @@
-package com.cesarsk.say_it.ui;
+package com.cesarsk.say_it.ui.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.adapters.SearchListAdapter;
+import com.cesarsk.say_it.utility.Utility;
+import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -34,8 +36,14 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //loading default_theme and applying themes
+        UtilitySharedPrefs.loadSettingsPrefs(this);
+        if (MainActivity.DEFAULT_THEME.equals("0")) {
+            setTheme(R.style.BlueYellowStyle_Theme);
+        } else if (MainActivity.DEFAULT_THEME.equals("1")) {
+            setTheme(R.style.DarkStyle_Theme);
+        }
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_search);
 
         //set default Stream Controller
@@ -47,7 +55,7 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //change arrow color Toolbar
         final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_ab_back_material);
-        upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
+        upArrow.setColorFilter(Utility.setColorByTheme(R.attr.upArrow, this), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
         final ListView result_list = (ListView) findViewById(R.id.result_list_view);

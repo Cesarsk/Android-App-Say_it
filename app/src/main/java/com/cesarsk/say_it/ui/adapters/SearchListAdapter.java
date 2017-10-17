@@ -5,7 +5,6 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,12 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.activities.PlayActivity;
 
 import com.cesarsk.say_it.utility.SayItPair;
 
+import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.ArrayList;
@@ -131,7 +131,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
 
         //Pulsante FAV
         if (UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString()))
-            viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
+            viewHolder.addToFavsImgButton.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, context));
 
         viewHolder.addToFavsImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,13 +139,13 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                 if (!UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.addFavs(context, new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                     Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show();
-                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
+                    viewHolder.addToFavsImgButton.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, context));
                 }
 
                 else if(UtilitySharedPrefs.checkFavs(context, viewHolder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString()));
                     Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    viewHolder.addToFavsImgButton.setColorFilter(ContextCompat.getColor(context, R.color.primary_dark));
+                    viewHolder.addToFavsImgButton.setColorFilter(Utility.setColorByTheme(R.attr.primaryDark, context));
                 }
             }
         });

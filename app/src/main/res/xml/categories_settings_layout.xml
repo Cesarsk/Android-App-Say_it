@@ -12,5 +12,5 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="@color/primary_dark"/>
+        android:textColor="@color/Blue800"/>
 </LinearLayout>

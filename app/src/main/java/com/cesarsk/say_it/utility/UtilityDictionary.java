@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.util.Pair;
 import android.widget.Toast;
 
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 import com.cesarsk.say_it.R;
 
 import java.io.BufferedReader;
@@ -18,8 +18,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import static com.cesarsk.say_it.ui.MainActivity.IPAofTheDay;
-import static com.cesarsk.say_it.ui.MainActivity.wordOfTheDay;
+import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheDay;
+import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheDay;
 
 /**
  * Created by Claudio on 22/03/2017.

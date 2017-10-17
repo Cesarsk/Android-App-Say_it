@@ -9,8 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -19,7 +17,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.activities.PlayActivity;
+import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 
 import java.util.Random;
@@ -40,7 +39,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
         setOnClickListener(onClickListener);
         setClickable(true);
         setGravity(Gravity.CENTER);
-        setTextColor(ContextCompat.getColor(context, R.color.white));
+        setTextColor(Utility.setColorByTheme(R.attr.fadingText, context));
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         setLayoutParams(layoutParams);
         setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -55,7 +54,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
         setOnClickListener(onClickListener);
         setClickable(true);
         setGravity(Gravity.CENTER);
-        setTextColor(ContextCompat.getColor(context, R.color.white));
+        setTextColor(Utility.setColorByTheme(R.attr.fadingText, context));
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         setLayoutParams(layoutParams);
         setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -68,7 +67,7 @@ public class FadingTextView extends android.support.v7.widget.AppCompatTextView 
         setOnClickListener(onClickListener);
         setClickable(true);
         setGravity(Gravity.CENTER);
-        setTextColor(ContextCompat.getColor(context, R.color.white));
+        setTextColor(Utility.setColorByTheme(R.attr.fadingText, context));
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         setLayoutParams(layoutParams);
         setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

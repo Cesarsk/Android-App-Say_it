@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BlueYellowStyle.Theme">
+        <item name="general">@style/BlueYellowStyle</item>
+        <item name="toolbar">@style/BlueYellowToolbar</item>
+        <item name="imageView">@style/BlueYellowImageView</item>
+        <item name="editText">@style/BlueYellowEditText</item>
+        <item name="view">@style/BlueYellowView</item>
+        <item name="textView">@style/BlueYellowTextView</item>
+        <item name="imageButton">@style/BlueYellowImageButton</item>
+        <item name="chronometer">@style/BlueYellowChronometer</item>
+        <item name="playTTS">@style/BlueYellowPlayTTS</item>
+        <item name="searchListDivider">@style/BlueYellowSearchListDivider</item>
+        <item name="swipeHint">@style/BlueYellowSwipeHint</item>
+        <item name="floatingButton">@style/BlueYellowFloatingButton</item>
+        <item name="bottomBar">@style/BlueYellowBottomBar</item>
+        <item name="textCard">@style/BlueYellowTextCard</item>
+        <item name="cardDivider">@style/BlueYellowCardDivider</item>
+        <item name="cardStats">@style/BlueYellowCardStats</item>
+        <item name="randomQuote">@style/BlueYellowRandomQuote</item>
+        <item name="itemSearchedPrimaryText">@style/BlueYellowItemSearchedPrimaryText</item>
+        <item name="itemSearchedSecondaryText">@style/BlueYellowItemSearchedSecondaryText</item>
+        <item name="quickPlayList">@style/BlueYellowQuickPlayList</item>
+        <item name="deleteItemList">@style/BlueYellowDeleteItemList</item>
+    </style>
+
+    <style name="BlueYellowStyle.PreferenceTheme">
+        <item name="preference">@style/BlueYellowStyle.PreferenceActivity</item>
+        <item name="toolbarSettings">@style/BlueYellowToolbarSettings</item>
+        <item name="itemSearchedPrimaryText">@style/BlueYellowItemSearchedPrimaryText</item>
+    </style>
+
+    <style name="DarkStyle.Theme">
+        <item name="general">@style/DarkStyle</item>
+        <item name="toolbar">@style/DarkToolbar</item>
+        <item name="imageView">@style/DarkImageView</item>
+        <item name="editText">@style/DarkEditText</item>
+        <item name="view">@style/DarkView</item>
+        <item name="textView">@style/DarkTextView</item>
+        <item name="imageButton">@style/DarkImageButton</item>
+        <item name="chronometer">@style/DarkChronometer</item>
+        <item name="playTTS">@style/DarkPlayTTS</item>
+        <item name="searchListDivider">@style/DarkSearchListDivider</item>
+        <item name="swipeHint">@style/DarkSwipeHint</item>
+        <item name="floatingButton">@style/DarkFloatingButton</item>
+        <item name="bottomBar">@style/DarkBottomBar</item>
+        <item name="textCard">@style/DarkTextCard</item>
+        <item name="cardDivider">@style/DarkCardDivider</item>
+        <item name="cardStats">@style/DarkCardStats</item>
+        <item name="randomQuote">@style/DarkRandomQuote</item>
+        <item name="itemSearchedPrimaryText">@style/DarkItemSearchedPrimaryText</item>
+        <item name="itemSearchedSecondaryText">@style/DarkItemSearchedSecondaryText</item>
+        <item name="quickPlayList">@style/DarkQuickPlayList</item>
+        <item name="deleteItemList">@style/DarkDeleteItemList</item>
+    </style>
+
+    <style name="DarkStyle.PreferenceTheme">
+        <item name="preference">@style/DarkStyle.PreferenceActivity</item>
+        <item name="toolbarSettings">@style/DarkToolbarSettings</item>
+        <item name="itemSearchedPrimaryText">@style/DarkItemSearchedPrimaryText</item>
+        <item name="itemSearchedSecondaryText">@style/DarkItemSearchedSecondaryText</item>
+    </style>
+
+
+</resources>

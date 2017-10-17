@@ -1,40 +1,226 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="BlueYellowThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
+    <style name="BlueYellowStyle" parent="Theme.Design.Light.NoActionBar">
+        <item name="colorPrimary">@color/Blue700</item>
+        <item name="colorAccent">@color/Amber400</item>
+        <item name="primaryDark">@color/Blue800</item>
+        <item name="idleButton">@color/Blue100</item>
+        <item name="unfavoritedButton">@color/White</item>
+        <item name="fadingText">@color/White</item>
+        <item name="favoriteButton">@color/Red700</item>
+        <item name="upArrow">@color/White</item>
+        <item name="android:colorPrimaryDark">@color/Blue800</item>
         <item name="android:colorBackground">@color/Grey100</item>
-        <item name="android:navigationBarColor">#000000</item>
-        <item name="android:statusBarColor">@color/primary</item>
-        <item name="android:textColorPrimary">@color/primary_text</item>
-        <item name="android:textColorSecondary">@color/secondary_text</item>
+        <item name="android:navigationBarColor">@color/Black</item>
+        <item name="android:statusBarColor">@color/Blue700</item>
+        <item name="android:textColorPrimary">@color/Grey900</item>
+        <item name="android:textColorSecondary">@color/Grey600</item>
     </style>
 
-    <style name="BlueYellowThemeActionBar" parent="Base.Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="android:colorBackground">@color/Grey100</item>
-        <item name="android:navigationBarColor">#000000</item>
-        <item name="android:statusBarColor">@color/primary</item>
-        <item name="android:textColorPrimary">@color/primary_text</item>
-        <item name="android:textColorSecondary">@color/secondary_text</item>
+    <style name="BlueYellowToolbar">
+        <item name="android:background">@color/Blue700</item>
     </style>
 
-    <style name="BlueYellowEditText" parent="Base.V7.Widget.AppCompat.EditText">
-        <item name="background">@color/primary_dark</item>
-        <item name="android:backgroundTint">@color/primary_dark</item>
-        <item name="android:textColorHint">@color/primary_light</item>
+    <style name="BlueYellowImageView">
+        <item name="android:background">@color/Blue800</item>
     </style>
 
-    <style name="Preference" parent="BlueYellowThemeNoActionBar">
-        <item name="colorAccent">@color/primary</item>
-        <item name="android:textColorPrimary">@color/primary_text</item>
+    <style name="BlueYellowBottomBar">
+    <item name="android:background">@color/White</item>
+    </style>
+
+    <style name="BlueYellowEditText">
+        <item name="android:background">@color/Blue800</item>
+        <item name="android:backgroundTint">@color/Blue800</item>
+        <item name="android:textColorHint">@color/Blue100</item>
+        <item name="android:textColor">@color/Blue100</item>
+    </style>
+
+    <style name="BlueYellowView">
+        <item name="android:background">@color/Blue700</item>
+    </style>
+
+    <style name="BlueYellowTextView">
+        <item name="android:textColor">@color/Blue100</item>
+    </style>
+
+    <style name="BlueYellowChronometer">
+        <item name="android:textColor">@color/Blue800</item>
+    </style>
+
+    <style name="BlueYellowImageButton">
+        <item name="android:tint">@color/Blue100</item>
+        <item name="android:background">@color/Blue800</item>
+    </style>
+
+    <style name="BlueYellowPlayTTS">
+        <item name="android:backgroundTint">@color/Amber400</item>
+    </style>
+
+    <style name="BlueYellowSearchListDivider">
+        <item name="android:divider">@color/Grey300</item>
+    </style>
+
+    <style name="BlueYellowCardDivider">
+        <item name="android:background">@color/White</item>
+    </style>
+
+    <style name="BlueYellowSwipeHint">
+        <item name="android:textColor">@color/Blue900</item>
+    </style>
+
+    <style name="BlueYellowFloatingButton">
+        <item name="android:tint">@color/White</item>
+    </style>
+
+    <style name="BlueYellowTextCard">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="BlueYellowCardStats">
+        <item name="android:background">@color/White</item>
+    </style>
+
+    <style name="BlueYellowRandomQuote">
+        <item name="android:textColor">@color/Grey600</item>
+    </style>
+
+    <style name="BlueYellowItemSearchedPrimaryText">
+        <item name="android:textColor">@color/Grey900</item>
+    </style>
+
+    <style name="BlueYellowItemSearchedSecondaryText">
+        <item name="android:textColor">@color/Grey600</item>
+    </style>
+
+    <style name="BlueYellowDeleteItemList">
+        <item name="android:background">@color/Red500</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="BlueYellowQuickPlayList">
+        <item name="android:tint">@color/Blue800</item>
+        <item name="android:backgroundTint">@color/Grey100</item>
+    </style>
+
+    <style name="BlueYellowStyle.PreferenceActivity">
+        <item name="colorAccent">@color/Blue700</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:statusBarColor">@color/Blue800</item>
     </style>
 
+    <style name="BlueYellowToolbarSettings" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/Blue700</item>
+        <item name="titleTextColor">@color/White</item>
+    </style>
+
+    <!-- Dark application theme. -->
+    <style name="DarkStyle" parent="Theme.Design.Light.NoActionBar">
+        <item name="colorPrimary">@color/White</item>
+        <item name="colorAccent">@color/Amber400</item>
+        <item name="android:colorPrimaryDark">@color/Red500</item>
+        <item name="android:colorBackground">@color/BlueGrey800</item>
+        <item name="android:navigationBarColor">@color/Black</item>
+        <item name="android:statusBarColor">@color/BlueGrey900Custom1</item>
+        <item name="android:textColorPrimary">@color/White</item>
+        <item name="android:textColorSecondary">@color/Grey600</item>
+    </style>
+
+    <style name="DarkToolbar">
+        <item name="android:background">@color/BlueGrey900Custom1</item>
+    </style>
+
+    <style name="DarkBottomBar">
+        <item name="android:background">@color/BlueGrey900Custom1</item>
+    </style>
+
+    <style name="DarkImageView">
+        <item name="android:background">@color/BlueGrey900Custom2</item>
+        <item name="android:tint">@color/White</item>
+    </style>
+
+    <style name="DarkEditText">
+        <item name="android:background">@color/Amber100</item>
+        <item name="android:backgroundTint">@color/BlueGrey900Custom2</item>
+        <item name="android:textColorHint">@color/White</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkView">
+        <item name="android:background">@color/BlueGrey900Custom1</item>
+    </style>
+
+    <style name="DarkTextView">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkChronometer">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkImageButton">
+        <item name="android:tint">@color/White</item>
+        <item name="android:background">@color/BlueGrey900Custom2</item>
+    </style>
+
+    <style name="DarkPlayTTS">
+        <item name="android:backgroundTint">@color/Amber400</item>
+    </style>
+
+    <style name="DarkSearchListDivider">
+        <item name="android:divider">@color/White</item>
+    </style>
+
+    <style name="DarkCardDivider">
+        <item name="android:background">@color/White</item>
+    </style>
+
+    <style name="DarkSwipeHint">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkFloatingButton">
+        <item name="android:tint">@color/White</item>
+    </style>
+
+    <style name="DarkTextCard">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkCardStats">
+        <item name="android:background">@color/BlueGrey900Custom1</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkRandomQuote">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkItemSearchedPrimaryText">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkItemSearchedSecondaryText">
+        <item name="android:textColor">@color/Amber100</item>
+    </style>
+
+    <style name="DarkDeleteItemList">
+        <item name="android:background">@color/Red500</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkQuickPlayList">
+        <item name="android:tint">@color/Amber400</item>
+        <item name="android:backgroundTint">@color/Grey100</item>
+    </style>
+
+    <style name="DarkStyle.PreferenceActivity">
+        <item name="android:textSize">16sp</item>
+        <item name="android:statusBarColor">@color/BlueGrey900Custom1</item>
+    </style>
+
+    <style name="DarkToolbarSettings" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/BlueGrey900Custom1</item>
+        <item name="titleTextColor">@color/White</item>
+    </style>
 </resources>

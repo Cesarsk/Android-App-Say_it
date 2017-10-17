@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,10 +17,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.MainActivity;
-import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
+import com.cesarsk.say_it.ui.activities.PlayActivity;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.cesarsk.say_it.utility.SayItPair;
+import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.ArrayList;
@@ -125,7 +125,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         });
 
         if (UtilitySharedPrefs.checkFavs(historyFragment.getActivity(), history.get(position).first))
-            holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(historyFragment.getActivity(), R.color.RudolphsNose));
+            holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, historyFragment.getActivity()));
 
         holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,11 +133,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 if (!UtilitySharedPrefs.checkFavs(historyFragment.getActivity(), history.get(holder.getAdapterPosition()).first)) {
                     UtilitySharedPrefs.addFavs(historyFragment.getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                     Toast.makeText(historyFragment.getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(historyFragment.getActivity(), R.color.RudolphsNose));
+                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, historyFragment.getActivity()));
                 } else if (UtilitySharedPrefs.checkFavs(historyFragment.getActivity(), history.get(holder.getAdapterPosition()).first)) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), history.get(holder.getAdapterPosition()));
                     Toast.makeText(historyFragment.getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(historyFragment.getActivity(), R.color.primary_dark));
+                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.primaryDark, historyFragment.getActivity()));
                 }
             }
         });

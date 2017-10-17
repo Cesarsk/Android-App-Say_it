@@ -1,4 +1,4 @@
-package com.cesarsk.say_it.ui;
+package com.cesarsk.say_it.ui.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -9,14 +9,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.os.Handler;
-import android.provider.Settings;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -33,12 +35,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.cesarsk.say_it.NotificationReceiver;
+import com.cesarsk.say_it.notifications.NotificationReceiver;
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.fragments.FavoritesFragment;
 import com.cesarsk.say_it.ui.fragments.HistoryFragment;
 import com.cesarsk.say_it.ui.fragments.HomeFragment;
 import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
+import com.cesarsk.say_it.ui.fragments.SettingsFragment;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -51,7 +54,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -82,8 +84,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int HISTORY_FRAGMENT_INDEX = 2;
     private static final int RECORDINGS_FRAGMENT_INDEX = 3;
     private final FragmentManager fragmentManager = getFragmentManager();
+    private final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
     private int selectedTab = 0;
     public static BottomBar bottomBar;
+    public BottomNavigationView navigation;
 
     //TTS variables
     public static TextToSpeech american_speaker_google;
@@ -97,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
     public final static String FAVORITES_PREFS_KEY = "SAY.IT.FAVORITES"; //Chiave che identifica il Set dei favorites nelle SharedPreferences
     public final static String HISTORY_PREFS_KEY = "SAY.IT.HISTORY"; //Chiave che identifica il Set della history nelle SharedPreferences
     public final static String DEFAULT_ACCENT_KEY = "SAY.IT.DEFAULT.ACCENT"; //Chiave che identifica il DEFAULT ACCENT
+    public final static String DEFAULT_THEME_KEY = "SAY.IT.DEFAULT.THEME"; //Chiave che identifica il DEFAULT THEME
     public final static String DEFAULT_NOTIFICATION_RATE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.RATE";
     public final static String DEFAULT_NOTIFICATION_HOUR_KEY = "SAY.IT.DEFAULT.NOTIFICATION.HOUR";
     public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
@@ -109,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<File> RECORDINGS = null;
     public static String DEFAULT_NOTIFICATION_RATE = null;
     public static String DEFAULT_ACCENT = null;
+    public static String DEFAULT_THEME = null;
     public static String DEFAULT_NOTIFICATION_HOUR = null;
     public static String DEFAULT_NOTIFICATION_MINUTE = null;
     public static boolean NO_ADS = false;
@@ -146,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
         UtilitySharedPrefs.savePrefs(this, false, FIRST_LAUNCH_KEY);
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -169,8 +176,8 @@ public class MainActivity extends AppCompatActivity {
         Bundle b = intent.getExtras();
         if (b != null) {
             selectedTab = b.getInt("fragment_index");
-            bottomBar.selectTabAtPosition(selectedTab);
-        } else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
+            navigation.setSelectedItemId(selectedTab);
+        } else navigation.setSelectedItemId(HOME_FRAGMENT_INDEX);
     }
 
     @Override
@@ -202,6 +209,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        //loading preferences
+        UtilitySharedPrefs.loadSettingsPrefs(this);
+        UtilitySharedPrefs.loadFavs(this);
+        UtilitySharedPrefs.loadHist(this);
+        RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
+
+        //loading default_theme and applying themes
+        if (DEFAULT_THEME.equals("0")) {
+            setTheme(R.style.BlueYellowStyle_Theme);
+        } else if (DEFAULT_THEME.equals("1")) {
+            setTheme(R.style.DarkStyle_Theme);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -270,12 +289,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //loading preferences
-        UtilitySharedPrefs.loadSettingsPrefs(this);
-        UtilitySharedPrefs.loadFavs(this);
-        UtilitySharedPrefs.loadHist(this);
-        RECORDINGS = UtilityRecordings.loadRecordingsfromStorage(this);
-
         if (Wordlists_Map.isEmpty()) {
             //loading dictionary (word of the day included)
             try {
@@ -312,7 +325,6 @@ public class MainActivity extends AppCompatActivity {
         voice_search_button.setOnClickListener(search_bar_listener);
 
         //managing fragments
-        final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
         FragmentArrayList.add(new HomeFragment());
         FragmentArrayList.add(new FavoritesFragment());
         FragmentArrayList.add(new HistoryFragment());
@@ -322,10 +334,75 @@ public class MainActivity extends AppCompatActivity {
             element.setExitTransition(new Fade());
         }
 
+
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
         transaction.commit();
 
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
+        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            private int last_index = HOME_FRAGMENT_INDEX;
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                switch (item.getItemId()) {
+                    case R.id.tab_favorites:
+                        if (FAVORITES_FRAGMENT_INDEX > last_index) {
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                        } else if (FAVORITES_FRAGMENT_INDEX < last_index) {
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                        }
+                        selectedTab = FAVORITES_FRAGMENT_INDEX;
+                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX));
+                        last_index = FAVORITES_FRAGMENT_INDEX;
+                        transaction.commit();
+                        return true;
+                    case R.id.tab_home:
+                        if (HOME_FRAGMENT_INDEX > last_index) {
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                        } else if (HOME_FRAGMENT_INDEX < last_index) {
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                        }
+                        selectedTab = HOME_FRAGMENT_INDEX;
+                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
+                        last_index = HOME_FRAGMENT_INDEX;
+                        transaction.commit();
+                        return true;
+                    case R.id.tab_history:
+                        if (HISTORY_FRAGMENT_INDEX > last_index) {
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                        } else if (HISTORY_FRAGMENT_INDEX < last_index) {
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                        }
+                        selectedTab = HISTORY_FRAGMENT_INDEX;
+                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX));
+                        last_index = HISTORY_FRAGMENT_INDEX;
+                        transaction.commit();
+                        return true;
+                    case R.id.tab_recordings:
+                        if (RECORDINGS_FRAGMENT_INDEX > last_index) {
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                        } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                        }
+                        selectedTab = RECORDINGS_FRAGMENT_INDEX;
+                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX));
+                        last_index = RECORDINGS_FRAGMENT_INDEX;
+                        transaction.commit();
+                        return true;
+                }
+                return false;
+            }
+        };
+
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        /*
         bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX); //Default: Home
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -336,7 +413,6 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(@IdRes int tabId) {
                 //creating the Fragment transaction
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-
                 //this switch case is used to move among fragments using the bottombar
                 switch (tabId) {
                     case R.id.tab_favorites:
@@ -383,11 +459,11 @@ public class MainActivity extends AppCompatActivity {
                         last_index = RECORDINGS_FRAGMENT_INDEX;
                         break;
                 }
-                transaction.commit();
+               transaction.commit();
             }
 
         });
-
+        */
         //Init TTS
         initTTS(this);
     }
@@ -397,8 +473,13 @@ public class MainActivity extends AppCompatActivity {
         //if the tab selected is not the home fragment, then we should back to the home fragment pressing BACK.
         //loading also an ad to display before closing the app
         if (selectedTab != HOME_FRAGMENT_INDEX) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
             //if (showCaseFragmentView != null) showCaseFragmentView.hide();
-            bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
+            selectedTab = HOME_FRAGMENT_INDEX;
+            transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
+            transaction.commit();
+            navigation.setSelectedItemId(HOME_FRAGMENT_INDEX);
+            //bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
         } else {
             if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
                 mInterstitialAd.show();
@@ -542,5 +623,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return "";
     }
-
 }

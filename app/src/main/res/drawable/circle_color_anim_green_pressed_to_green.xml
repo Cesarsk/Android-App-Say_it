@@ -2,7 +2,7 @@
 <transition xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/green_play_pressed_button"/>
+            <solid android:color="@color/Green700Custom2"/>
             <stroke android:color="#3b91d7" android:width="0dp"/>
             <!-- Set the same value for both width and height to get a circular shape -->
             <size android:width="250dp" android:height="250dp"/>
@@ -10,7 +10,7 @@
     </item>
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/green_play_button"/>
+            <solid android:color="@color/Green700Custom1"/>
             <stroke android:color="#3b91d7" android:width="0dp"/>
             <!-- Set the same value for both width and height to get a circular shape -->
             <size android:width="250dp" android:height="250dp"/>

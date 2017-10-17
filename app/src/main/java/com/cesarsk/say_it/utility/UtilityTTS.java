@@ -4,10 +4,10 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.util.Log;
 
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
-import static com.cesarsk.say_it.ui.MainActivity.american_speaker_google;
+import static com.cesarsk.say_it.ui.activities.MainActivity.american_speaker_google;
 
 /**
  * Created by Claudio on 22/03/2017.

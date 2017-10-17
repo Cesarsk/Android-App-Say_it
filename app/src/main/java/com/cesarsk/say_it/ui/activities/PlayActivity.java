@@ -1,4 +1,4 @@
-package com.cesarsk.say_it.ui;
+package com.cesarsk.say_it.ui.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,7 +15,6 @@ import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,9 +51,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -138,6 +135,13 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //loading default_theme and applying themes
+        UtilitySharedPrefs.loadSettingsPrefs(this);
+        if (MainActivity.DEFAULT_THEME.equals("0")) {
+            setTheme(R.style.BlueYellowStyle_Theme);
+        } else if (MainActivity.DEFAULT_THEME.equals("1")) {
+            setTheme(R.style.DarkStyle_Theme);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
@@ -263,12 +267,12 @@ public class PlayActivity extends AppCompatActivity {
         //loading settings before checking DEFAULT_ACCENT
         UtilitySharedPrefs.loadSettingsPrefs(this);
 
-        //checking defaul_accent and set the button's color
+        //checking default_accent and set the button's color
         if (MainActivity.DEFAULT_ACCENT.equals("0")) {
-            accent_button.setColorFilter(ContextCompat.getColor(this, R.color.primary_light));
+            accent_button.setColorFilter(Utility.setColorByTheme(R.attr.idleButton, context));
             accent_flag = false;
         } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
-            accent_button.setColorFilter(ContextCompat.getColor(this, R.color.Yellow600));
+            accent_button.setColorFilter(Utility.setColorByTheme(R.attr.colorAccent, context));
             accent_flag = true;
         }
 
@@ -489,7 +493,10 @@ public class PlayActivity extends AppCompatActivity {
             }
         };
 
-        remove_ad.setOnClickListener(new View.OnClickListener() {
+        //15 Sept 2017 - Updating Say It! Removing In-app purchase button and replacing it with a donation button (redirecting to Paypal).
+        //The new remove_ad Button will be place below this commented method
+
+        /*remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<String> additionalSkuList = new ArrayList<>();
@@ -500,6 +507,13 @@ public class PlayActivity extends AppCompatActivity {
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     e.printStackTrace();
                 }
+            }
+        });*/
+
+        remove_ad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.openURL(v.getContext(), "https://paypal.me/cesarsk/1");
             }
         });
 
@@ -536,7 +550,7 @@ public class PlayActivity extends AppCompatActivity {
 
         favorite_flag = UtilitySharedPrefs.checkFavs(this, selected_word);
         if (favorite_flag)
-            favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
+            favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, context));
 
         favorite_button.setOnClickListener(new View.OnClickListener()
 
@@ -547,9 +561,9 @@ public class PlayActivity extends AppCompatActivity {
                     UtilitySharedPrefs.addFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
                     Toast.makeText(PlayActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
-                    favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.RudolphsNose));
+                    favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, context));
                 } else {
-                    favorite_button.setColorFilter(ContextCompat.getColor(context, R.color.primary_light));
+                    favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.idleButton, context));
                     Toast.makeText(PlayActivity.this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(selected_word, selected_ipa));
                     favorite_flag = !favorite_flag;
@@ -567,12 +581,12 @@ public class PlayActivity extends AppCompatActivity {
                     british_speaker_google.setSpeechRate((float) 0.30);
                     slow_mode = !slow_mode;
                     Toast.makeText(PlayActivity.this, "Slow Mode Activated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(ContextCompat.getColor(context, R.color.Yellow600));
+                    slow_button.setColorFilter(Utility.setColorByTheme(R.attr.colorAccent, context));
                 } else {
                     american_speaker_google.setSpeechRate((float) 0.90);
                     british_speaker_google.setSpeechRate((float) 0.90);
                     Toast.makeText(PlayActivity.this, "Slow Mode Deactivated", Toast.LENGTH_SHORT).show();
-                    slow_button.setColorFilter(ContextCompat.getColor(context, R.color.primary_light));
+                    slow_button.setColorFilter(Utility.setColorByTheme(R.attr.idleButton, context));
                     slow_mode = !slow_mode;
                 }
             }
@@ -582,11 +596,11 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!accent_flag) {
-                    accent_button.setColorFilter(ContextCompat.getColor(context, R.color.Yellow600));
+                    accent_button.setColorFilter(Utility.setColorByTheme(R.attr.colorAccent, context));
                     Toast.makeText(PlayActivity.this, "British Accent selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 } else {
-                    accent_button.setColorFilter(ContextCompat.getColor(context, R.color.primary_light));
+                    accent_button.setColorFilter(Utility.setColorByTheme(R.attr.idleButton, context));
                     Toast.makeText(PlayActivity.this, "American English selected", Toast.LENGTH_SHORT).show();
                     accent_flag = !accent_flag;
                 }

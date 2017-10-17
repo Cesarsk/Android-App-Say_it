@@ -2,15 +2,19 @@ package com.cesarsk.say_it.ui.fragments;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Color;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 
-import com.cesarsk.say_it.NotificationReceiver;
+import com.cesarsk.say_it.notifications.NotificationReceiver;
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.FileTextActivity;
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.ui.activities.FileTextActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 /**
@@ -52,6 +56,11 @@ public class NestedPreferenceFragment extends PreferenceFragment {
             */
         if (selected_fragment_layout == 1) {
             final ListPreference notification_rate = (ListPreference) getPreferenceManager().findPreference("default_notification_rate");
+            final Spannable notification_rate_title = new SpannableString("Set Notification Rate");
+
+            notification_rate_title.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, notification_rate_title.length(), 0);
+            notification_rate.setDialogTitle(notification_rate_title);
+
             notification_rate.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {

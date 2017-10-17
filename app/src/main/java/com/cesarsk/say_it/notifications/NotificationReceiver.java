@@ -1,4 +1,4 @@
-package com.cesarsk.say_it;
+package com.cesarsk.say_it.notifications;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -15,8 +15,8 @@ import android.net.Uri;
 import android.support.v7.app.NotificationCompat;
 
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.MainActivity;
-import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
+import com.cesarsk.say_it.ui.activities.PlayActivity;
 import com.cesarsk.say_it.utility.UtilityDictionary;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 

@@ -6,20 +6,25 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.content.IntentCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.FileTextActivity;
-import com.cesarsk.say_it.ui.MainActivity;
-import com.cesarsk.say_it.ui.PlayActivity;
-import com.cesarsk.say_it.ui.SettingsActivity;
+import com.cesarsk.say_it.ui.activities.FileTextActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
+import com.cesarsk.say_it.ui.activities.PlayActivity;
 import com.cesarsk.say_it.utility.LCSecurity;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
@@ -28,11 +33,10 @@ import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.cesarsk.say_it.utility.utility_aidl.Purchase;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import static com.cesarsk.say_it.utility.Utility.rateUs;
+import static com.cesarsk.say_it.utility.Utility.setColorByTheme;
 import static com.cesarsk.say_it.utility.Utility.shareToMail;
 
 /**
@@ -41,13 +45,13 @@ import static com.cesarsk.say_it.utility.Utility.shareToMail;
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
     private final String[] emails = {"sayit.edu@gmail.com"};
     static private int index_default_accent = 0;
+    static private int index_default_theme = 0;
     private Callback mCallback;
     private static final String KEY_1 = "button_notification";
     private static final String KEY_2 = "open_source_licenses";
     private IabHelper mHelper;
     private IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
     private IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
-
     public interface Callback {
         void onNestedPreferenceSelected(int key);
     }
@@ -78,7 +82,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
@@ -236,7 +239,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         };
 
-        final Preference remove_ads = getPreferenceManager().findPreference("remove_ads");
+        /* final Preference remove_ads = getPreferenceManager().findPreference("remove_ads");
         if (MainActivity.NO_ADS) {
             remove_ads.setEnabled(false);
             remove_ads.setSummary("Thank you for supporting us ❤");
@@ -256,7 +259,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     return false;
                 }
             });
-        }
+        } */
 
         final Preference reset_tutorial = getPreferenceManager().findPreference("reset_showcase");
         reset_tutorial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -272,13 +275,19 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+        //setting an own Alert Dialog's title color
+        final Spannable title = new SpannableString("Delete Recordings");
+        title.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, title.length(), 0);
+        final Spannable message = new SpannableString("Are you sure you want to delete all recordings?");
+        message.setSpan(new ForegroundColorSpan(Color.GRAY), 0, message.length(), 0);
+
         final Preference delete_recordings = getPreferenceManager().findPreference("delete_recordings");
         delete_recordings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Delete Recordings")
-                        .setMessage("Are you sure you want to delete all recordings?")
+                        .setTitle(title)
+                        .setMessage(message)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Utility.delete_recordings(getActivity());
@@ -295,8 +304,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+
+
         final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
         default_accent.setSummary(default_accent.getEntry());
+        final Spannable default_accent_title = new SpannableString("Default Accent");
+        default_accent_title.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, default_accent_title.length(), 0);
+        default_accent.setDialogTitle(default_accent_title);
+
         default_accent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -308,6 +323,28 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 default_accent.setSummary(default_accent.getEntries()[default_accent.findIndexOfValue(new_value)]);
                 Toast.makeText(getActivity(), String.valueOf(entries[index_default_accent]), Toast.LENGTH_SHORT).show();
                 UtilitySharedPrefs.loadSettingsPrefs(context);
+                return true;
+            }
+        });
+
+        final ListPreference theme_selector = (ListPreference) getPreferenceManager().findPreference("theme_selector");
+        final Spannable theme_selector_title = new SpannableString("Theme");
+        theme_selector_title.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, theme_selector_title.length(), 0);
+        theme_selector.setDialogTitle(theme_selector_title);
+
+        theme_selector.setSummary(theme_selector.getEntry());
+
+        theme_selector.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String new_value = newValue.toString();
+                index_default_theme = theme_selector.findIndexOfValue(new_value);
+                CharSequence[] entries = theme_selector.getEntries();
+                UtilitySharedPrefs.savePrefs(getActivity(), new_value, MainActivity.DEFAULT_THEME_KEY);
+                theme_selector.setSummary(theme_selector.getEntries()[theme_selector.findIndexOfValue(new_value)]);
+                Toast.makeText(getActivity(), String.valueOf(entries[index_default_theme]), Toast.LENGTH_SHORT).show();
+                UtilitySharedPrefs.loadSettingsPrefs(context);
+                Toast.makeText(getActivity(), "Done! Reboot to see changes.", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });

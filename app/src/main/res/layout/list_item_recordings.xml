@@ -9,7 +9,6 @@
     android:background="?attr/selectableItemBackground">
 
     <LinearLayout
-
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -17,28 +16,29 @@
         android:layout_gravity="center">
 
         <TextView
+            style="?itemSearchedPrimaryText"
             android:id="@+id/list_item_first_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="@color/primary_text"
             android:text="@string/PLACEHOLDER" />
 
         <TextView
+            style="?itemSearchedSecondaryText"
             android:id="@+id/list_item_second_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="@color/secondary_text"
             android:text="@string/PLACEHOLDER" />
 
     </LinearLayout>
 
     <ImageButton
+        style="?quickPlayList"
         android:id="@+id/list_item_quickplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,21 +47,17 @@
         android:layout_gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:backgroundTint="@color/Grey100"
-        android:tint="@color/primary_dark"
         android:contentDescription="@string/quickplay_button_description"/>
 
     <ImageButton
+        style="?quickPlayList"
         android:id="@+id/list_item_addToFavs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:backgroundTint="@color/Grey100"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_favorite_black_24dp"
-        android:tint="@color/primary_dark"
         android:contentDescription="@string/favorite_button_description"/>
-
 </LinearLayout>

@@ -7,8 +7,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
 
-import com.cesarsk.say_it.NotificationReceiver;
-import com.cesarsk.say_it.ui.MainActivity;
+import com.cesarsk.say_it.notifications.NotificationReceiver;
+import com.cesarsk.say_it.ui.activities.MainActivity;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.Calendar;

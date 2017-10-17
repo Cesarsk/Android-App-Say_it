@@ -6,12 +6,12 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
+        style="?toolbar"
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="?attr/colorPrimary"
-        android:layout_alignParentStart="true"
-        style="@style/BlueYellowThemeActionBar">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,20 +20,18 @@
             android:paddingEnd="16dp">
 
             <ImageView
+                style="?imageView"
                 android:id="@+id/search_bar_hint_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_search_blue_yellow"
-                android:background="@color/primary_dark"
                 android:contentDescription="@string/search_bar_hint_icon_description" />
 
             <EditText
+                style="?editText"
                 android:id="@+id/search_bar_edit_text"
                 android:layout_width="0dp"
                 android:hint="@string/search_hint"
-                android:textColorHint="@color/primary_light"
-                android:backgroundTint="@color/primary_dark"
-                android:background="@color/primary_dark"
                 android:inputType="textCapWords"
                 android:layout_weight="1"
                 android:layout_height="32dp"
@@ -42,34 +40,45 @@
                 />
 
             <ImageButton
+                style="?imageView"
                 android:id="@+id/search_bar_voice_icon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_mic_blue_yellow"
-                android:background="@color/primary_dark"
                 android:contentDescription="@string/voice_search_button_description"/>
 
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
 
+    <!--
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         app:bb_tabXmlResource="@xml/bottombar_tabs"
         android:layout_height="60dp"
-        app:bb_inActiveTabColor="@color/inActiveTabColor"
+        app:bb_inActiveTabColor="@color/Grey600"
         app:bb_inActiveTabAlpha="0.8"
         app:bb_activeTabAlpha="1"
-        android:visibility="visible"
-        app:bb_showShadow="false"/>
+        android:visibility="gone"
+        app:bb_showShadow="false" />
+    -->
+
+    <android.support.design.widget.BottomNavigationView
+        style="?bottomBar"
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/navigation" />
 
     <View
+        style="?view"
         android:id="@+id/imageview_logo"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:background="@color/primary"
         android:layout_below="@+id/my_toolbar"
         android:layout_alignParentStart="true"
         />
@@ -79,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/imageview_logo"
-        android:layout_above="@id/bottomBar"
+        android:layout_above="@id/navigation"
         android:layout_alignParentStart="true">
     </FrameLayout>
 </RelativeLayout>

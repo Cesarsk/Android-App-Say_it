@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -18,8 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
-import com.cesarsk.say_it.ui.MainActivity;
-import com.cesarsk.say_it.ui.PlayActivity;
+import com.cesarsk.say_it.ui.activities.MainActivity;
+import com.cesarsk.say_it.ui.activities.PlayActivity;
 import com.cesarsk.say_it.ui.fragments.RecordingsFragment;
 import com.cesarsk.say_it.utility.SayItPair;
 import com.cesarsk.say_it.utility.Utility;
@@ -116,7 +115,7 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
         });
 
         if (UtilitySharedPrefs.checkFavs(recordingsFragment.getActivity(), holder.wordTextView.getText().toString()))
-            holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.RudolphsNose));
+            holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, recordingsFragment.getActivity()));
 
         holder.AddtoFavsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,11 +123,11 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
                 if (!UtilitySharedPrefs.checkFavs(recordingsFragment.getActivity(), holder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.addFavs(recordingsFragment.getActivity(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                     Toast.makeText(recordingsFragment.getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.RudolphsNose));
+                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, recordingsFragment.getActivity()));
                 } else if (UtilitySharedPrefs.checkFavs(recordingsFragment.getActivity(), holder.wordTextView.getText().toString())) {
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(holder.wordTextView.getText().toString(), holder.IPATextView.getText().toString()));
                     Toast.makeText(recordingsFragment.getActivity(), "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    holder.AddtoFavsBtn.setColorFilter(ContextCompat.getColor(recordingsFragment.getActivity(), R.color.primary_dark));
+                    holder.AddtoFavsBtn.setColorFilter(Utility.setColorByTheme(R.attr.primaryDark, recordingsFragment.getActivity()));
                 }
             }
         });
