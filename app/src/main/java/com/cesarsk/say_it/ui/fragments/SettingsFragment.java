@@ -76,7 +76,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 

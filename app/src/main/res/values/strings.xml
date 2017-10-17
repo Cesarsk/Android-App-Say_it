@@ -116,6 +116,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_test_bottom_bar">TestBottomBarActivity</string>
-
-
+    <string name="bottom_bar_home_label">Home</string>
+    <string name="bottom_bar_favorites_label">Favorites</string>
+    <string name="bottom_bar_history_label">History</string>
+    <string name="bottom_bar_recordings_label">Recordings</string>
 </resources>

@@ -89,6 +89,9 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".ui.activities.TestBottomBarActivity"
+            android:label="@string/title_activity_test_bottom_bar"></activity>
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@
         <item name="searchListDivider">@style/BlueYellowSearchListDivider</item>
         <item name="swipeHint">@style/BlueYellowSwipeHint</item>
         <item name="floatingButton">@style/BlueYellowFloatingButton</item>
+        <item name="bottomBar">@style/BlueYellowBottomBar</item>
         <item name="textCard">@style/BlueYellowTextCard</item>
         <item name="cardDivider">@style/BlueYellowCardDivider</item>
         <item name="cardStats">@style/BlueYellowCardStats</item>
@@ -43,6 +44,7 @@
         <item name="searchListDivider">@style/DarkSearchListDivider</item>
         <item name="swipeHint">@style/DarkSwipeHint</item>
         <item name="floatingButton">@style/DarkFloatingButton</item>
+        <item name="bottomBar">@style/DarkBottomBar</item>
         <item name="textCard">@style/DarkTextCard</item>
         <item name="cardDivider">@style/DarkCardDivider</item>
         <item name="cardStats">@style/DarkCardStats</item>

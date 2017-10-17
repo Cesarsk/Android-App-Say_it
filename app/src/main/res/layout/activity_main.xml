@@ -51,6 +51,7 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <!--
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
@@ -60,8 +61,18 @@
         app:bb_inActiveTabColor="@color/Grey600"
         app:bb_inActiveTabAlpha="0.8"
         app:bb_activeTabAlpha="1"
-        android:visibility="visible"
-        app:bb_showShadow="false"/>
+        android:visibility="gone"
+        app:bb_showShadow="false" />
+    -->
+
+    <android.support.design.widget.BottomNavigationView
+        style="?bottomBar"
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/navigation" />
 
     <View
         style="?view"
@@ -77,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/imageview_logo"
-        android:layout_above="@id/bottomBar"
+        android:layout_above="@id/navigation"
         android:layout_alignParentStart="true">
     </FrameLayout>
 </RelativeLayout>

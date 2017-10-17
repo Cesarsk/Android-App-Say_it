@@ -10,11 +10,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +27,7 @@ import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -49,7 +53,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -80,8 +83,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int HISTORY_FRAGMENT_INDEX = 2;
     private static final int RECORDINGS_FRAGMENT_INDEX = 3;
     private final FragmentManager fragmentManager = getFragmentManager();
+    private final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
     private int selectedTab = 0;
     public static BottomBar bottomBar;
+    public BottomNavigationView navigation;
 
     //TTS variables
     public static TextToSpeech american_speaker_google;
@@ -169,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
         Bundle b = intent.getExtras();
         if (b != null) {
             selectedTab = b.getInt("fragment_index");
-            bottomBar.selectTabAtPosition(selectedTab);
-        } else bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
+            navigation.setSelectedItemId(selectedTab);
+        } else navigation.setSelectedItemId(HOME_FRAGMENT_INDEX);
     }
 
     @Override
@@ -202,7 +207,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(R.style.DarkStyle_Theme);
+        UtilitySharedPrefs.loadSettingsPrefs(this);
+        if (DEFAULT_THEME.equals("0")) {
+            setTheme(R.style.BlueYellowStyle_Theme);
+        } else if (DEFAULT_THEME.equals("1")) {
+            Toast.makeText(this, "set theme", Toast.LENGTH_SHORT).show();
+            setTheme(R.style.DarkStyle_Theme);
+        }
+        Toast.makeText(this, "Theme has been reset to " + DEFAULT_THEME, Toast.LENGTH_SHORT).show();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -313,7 +326,6 @@ public class MainActivity extends AppCompatActivity {
         voice_search_button.setOnClickListener(search_bar_listener);
 
         //managing fragments
-        final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
         FragmentArrayList.add(new HomeFragment());
         FragmentArrayList.add(new FavoritesFragment());
         FragmentArrayList.add(new HistoryFragment());
@@ -323,10 +335,75 @@ public class MainActivity extends AppCompatActivity {
             element.setExitTransition(new Fade());
         }
 
+
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
         transaction.commit();
 
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
+        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            private int last_index = HOME_FRAGMENT_INDEX;
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                switch (item.getItemId()) {
+                    case R.id.tab_favorites:
+                        if (FAVORITES_FRAGMENT_INDEX > last_index) {
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                        } else if (FAVORITES_FRAGMENT_INDEX < last_index) {
+                            FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                        }
+                        selectedTab = FAVORITES_FRAGMENT_INDEX;
+                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(FAVORITES_FRAGMENT_INDEX));
+                        last_index = FAVORITES_FRAGMENT_INDEX;
+                        transaction.commit();
+                        return true;
+                    case R.id.tab_home:
+                        if (HOME_FRAGMENT_INDEX > last_index) {
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                        } else if (HOME_FRAGMENT_INDEX < last_index) {
+                            FragmentArrayList.get(HOME_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                        }
+                        selectedTab = HOME_FRAGMENT_INDEX;
+                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
+                        last_index = HOME_FRAGMENT_INDEX;
+                        transaction.commit();
+                        return true;
+                    case R.id.tab_history:
+                        if (HISTORY_FRAGMENT_INDEX > last_index) {
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                        } else if (HISTORY_FRAGMENT_INDEX < last_index) {
+                            FragmentArrayList.get(HISTORY_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                        }
+                        selectedTab = HISTORY_FRAGMENT_INDEX;
+                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(HISTORY_FRAGMENT_INDEX));
+                        last_index = HISTORY_FRAGMENT_INDEX;
+                        transaction.commit();
+                        return true;
+                    case R.id.tab_recordings:
+                        if (RECORDINGS_FRAGMENT_INDEX > last_index) {
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.RIGHT));
+                        } else if (RECORDINGS_FRAGMENT_INDEX < last_index) {
+                            FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX).setEnterTransition(new Slide(Gravity.LEFT));
+                        }
+                        selectedTab = RECORDINGS_FRAGMENT_INDEX;
+                        transaction.replace(R.id.fragment_container, FragmentArrayList.get(RECORDINGS_FRAGMENT_INDEX));
+                        last_index = RECORDINGS_FRAGMENT_INDEX;
+                        transaction.commit();
+                        return true;
+                }
+                return false;
+            }
+        };
+
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        /*
         bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX); //Default: Home
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -337,7 +414,6 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(@IdRes int tabId) {
                 //creating the Fragment transaction
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-
                 //this switch case is used to move among fragments using the bottombar
                 switch (tabId) {
                     case R.id.tab_favorites:
@@ -384,11 +460,11 @@ public class MainActivity extends AppCompatActivity {
                         last_index = RECORDINGS_FRAGMENT_INDEX;
                         break;
                 }
-                transaction.commit();
+               transaction.commit();
             }
 
         });
-
+        */
         //Init TTS
         initTTS(this);
     }
@@ -398,8 +474,13 @@ public class MainActivity extends AppCompatActivity {
         //if the tab selected is not the home fragment, then we should back to the home fragment pressing BACK.
         //loading also an ad to display before closing the app
         if (selectedTab != HOME_FRAGMENT_INDEX) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
             //if (showCaseFragmentView != null) showCaseFragmentView.hide();
-            bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
+            navigation.setSelectedItemId(HOME_FRAGMENT_INDEX);
+            selectedTab = HOME_FRAGMENT_INDEX;
+            transaction.replace(R.id.fragment_container, FragmentArrayList.get(HOME_FRAGMENT_INDEX));
+            transaction.commit();
+            //bottomBar.selectTabAtPosition(HOME_FRAGMENT_INDEX);
         } else {
             if (mInterstitialAd.isLoaded() && !hasInterstitialDisplayed) {
                 mInterstitialAd.show();

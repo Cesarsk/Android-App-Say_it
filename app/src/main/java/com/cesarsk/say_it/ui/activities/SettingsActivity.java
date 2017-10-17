@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cesarsk.say_it.R;
 import com.cesarsk.say_it.ui.fragments.NestedPreferenceFragment;
@@ -20,6 +21,15 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
     private static final String TAG_NESTED = "TAG_NESTED";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        UtilitySharedPrefs.loadSettingsPrefs(this);
+        if (MainActivity.DEFAULT_THEME.equals("0")) {
+            setTheme(R.style.BlueYellowStyle_PreferenceTheme);
+        } else if (MainActivity.DEFAULT_THEME.equals("1")) {
+            Toast.makeText(this, "set theme", Toast.LENGTH_SHORT).show();
+            setTheme(R.style.DarkStyle_PreferenceTheme);
+        }
+        Toast.makeText(this, "Theme has been reset to " + MainActivity.DEFAULT_THEME, Toast.LENGTH_SHORT).show();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 

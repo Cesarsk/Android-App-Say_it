@@ -9,14 +9,15 @@
     <color name="Grey300">#E0E0E0</color>
     <color name="Grey400">#BDBDBD</color>
     <color name="Grey600">#757575</color>
+    <color name="Grey800">#424242</color>
     <color name="Grey900">#212121</color>
     <color name="Blue100">#BBDEFB</color>
     <color name="Blue700">#1976D2</color>
     <color name="Blue800">#1565C0</color>
     <color name="Blue900">#0D47A1</color>
-    <color name="BlueGrey800">#0a3446</color>
+    <color name="BlueGrey800">#182850</color>
     <color name="BlueGrey900Custom1">#171E30</color>
-    <color name="BlueGrey900Custom2">#0b0f18</color>
+    <color name="BlueGrey900Custom2">#0e131e</color>
     <color name="Red500">#F44336</color>
     <color name="Red700">#d50000</color>
     <color name="Red900">#b71c1c</color>
