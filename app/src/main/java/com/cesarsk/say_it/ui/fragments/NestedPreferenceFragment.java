@@ -57,6 +57,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
         if (selected_fragment_layout == 1) {
             final ListPreference notification_rate = (ListPreference) getPreferenceManager().findPreference("default_notification_rate");
             final Spannable notification_rate_title = new SpannableString("Set Notification Rate");
+
             notification_rate_title.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, notification_rate_title.length(), 0);
             notification_rate.setDialogTitle(notification_rate_title);
 
