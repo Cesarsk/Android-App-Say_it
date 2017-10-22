@@ -59,7 +59,7 @@
             android:layout_below="@+id/display_play">
 
             <ImageButton
-                style="?imageButton"
+                style="?idleButton"
                 android:id="@+id/recordings_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 android:visibility="gone" />
 
             <ImageButton
-                style="?imageButton"
+                style="?idleButton"
                 android:id="@+id/accent_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                 android:src="@drawable/ic_flag" />
 
             <ImageButton
-                style="?imageButton"
+                style="?idleButton"
                 android:id="@+id/slow_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                 android:src="@drawable/ic_slow_motion_video" />
 
             <ImageButton
-                style="?imageButton"
+                style="?idleButton"
                 android:id="@+id/tts_settings_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
                 android:src="@drawable/ic_hearing_white_24dp" />
 
             <ImageButton
-                style="?imageButton"
+                style="?idleButton"
                 android:id="@+id/favorite_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                 android:src="@drawable/ic_favorite_black_24dp" />
 
             <ImageButton
-                style="?imageButton"
+                style="?idleButton"
                 android:id="@+id/search_meaning_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                 android:src="@drawable/ic_explore_black_24dp" />
 
             <ImageButton
-                style="?imageButton"
+                style="?idleButton"
                 android:id="@+id/remove_ads_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
                 android:layout_weight="1" />
 
             <ImageButton
-                style="?imageButton"
+                style="?idleButton"
                 android:id="@+id/delete_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

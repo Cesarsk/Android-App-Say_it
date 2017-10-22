@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.MalformedInputException;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -268,6 +269,7 @@ public class UtilitySharedPrefs {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.DEFAULT_THEME = sharedPreferences.getString(DEFAULT_THEME_KEY, "0");
         MainActivity.DEFAULT_ACCENT = sharedPreferences.getString(DEFAULT_ACCENT_KEY, "0");
+        MainActivity.DEFAULT_VIBRATION = sharedPreferences.getString(MainActivity.DEFAULT_VIBRATION_KEY, "1");
         MainActivity.DEFAULT_NOTIFICATION_RATE = sharedPreferences.getString(DEFAULT_NOTIFICATION_RATE_KEY, "2");
         MainActivity.DEFAULT_NOTIFICATION_HOUR = sharedPreferences.getString(DEFAULT_NOTIFICATION_HOUR_KEY, "12");
         MainActivity.DEFAULT_NOTIFICATION_MINUTE = sharedPreferences.getString(DEFAULT_NOTIFICATION_MINUTE_KEY, "00");

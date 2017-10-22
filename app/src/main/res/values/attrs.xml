@@ -29,7 +29,7 @@
     <attr name="idleButton" format="reference"/>
     <attr name="favoriteButton" format="reference"/>
     <attr name="upArrow" format="reference"/>
-    <attr name="unfavoritedButton" format="reference"/>
+    <attr name="unfavoriteButton" format="reference"/>
     <attr name="fadingText" format="reference"/>
     <attr name="primaryDark" format="reference"/>
 

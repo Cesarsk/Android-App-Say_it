@@ -46,12 +46,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private final String[] emails = {"sayit.edu@gmail.com"};
     static private int index_default_accent = 0;
     static private int index_default_theme = 0;
+    static private int index_default_vibration = 1;
     private Callback mCallback;
     private static final String KEY_1 = "button_notification";
     private static final String KEY_2 = "open_source_licenses";
     private IabHelper mHelper;
     private IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
     private IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
+
     public interface Callback {
         void onNestedPreferenceSelected(int key);
     }
@@ -261,6 +263,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             });
         } */
 
+
         final Preference reset_tutorial = getPreferenceManager().findPreference("reset_showcase");
         reset_tutorial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -304,6 +307,25 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
+        final ListPreference button_vibration = (ListPreference) getPreferenceManager().findPreference("button_vibration");
+        button_vibration.setSummary(button_vibration.getEntry());
+        final Spannable default_vibration_settings_title = new SpannableString("Vibration Settings");
+        default_vibration_settings_title.setSpan(new ForegroundColorSpan(Color.DKGRAY), 0, default_vibration_settings_title.length(), 0);
+        button_vibration.setDialogTitle(default_vibration_settings_title);
+
+        button_vibration.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String new_value = newValue.toString();
+                index_default_vibration = button_vibration.findIndexOfValue(new_value);
+                CharSequence[] entries = button_vibration.getEntries();
+                UtilitySharedPrefs.savePrefs(getActivity(), new_value, MainActivity.DEFAULT_VIBRATION_KEY);
+                button_vibration.setSummary(button_vibration.getEntries()[button_vibration.findIndexOfValue(new_value)]);
+                Toast.makeText(getActivity(), String.valueOf(entries[index_default_vibration]), Toast.LENGTH_SHORT).show();
+                UtilitySharedPrefs.loadSettingsPrefs(context);
+                return true;
+            }
+        });
 
 
         final ListPreference default_accent = (ListPreference) getPreferenceManager().findPreference("default_accent");
