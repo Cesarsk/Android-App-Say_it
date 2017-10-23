@@ -41,6 +41,15 @@
             android:summary="Enter Notification Settings"
             />
 
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/default_vibration_settings"
+            android:entryValues="@array/default_vibration_settings_values"
+            android:key="button_vibration"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Set vibration settings."
+            android:title="Vibration Settings" />
+
         <Preference
             android:key="delete_recordings"
             android:layout="@xml/voices_settings_layout"

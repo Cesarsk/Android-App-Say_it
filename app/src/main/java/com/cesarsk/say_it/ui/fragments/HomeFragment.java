@@ -239,7 +239,7 @@ public class HomeFragment extends Fragment {
                     favorite_flag = !favorite_flag;
                     favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, view.getContext()));
                 } else {
-                    favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.unfavoritedButton, view.getContext()));
+                    favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.unfavoriteButton, view.getContext()));
                     UtilitySharedPrefs.removeFavs(v.getContext(), new Pair<>(wordOfTheDay, IPAofTheDay));
                     favorite_flag = !favorite_flag;
                 }

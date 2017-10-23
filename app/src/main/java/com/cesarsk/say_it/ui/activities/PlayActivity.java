@@ -229,7 +229,8 @@ public class PlayActivity extends AppCompatActivity {
                 if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
                     //flag used to check if the max duration has been reached. If so, stop the recording
                     maxDurationReached = true;
-                    vibrator.vibrate(100);
+                    if(MainActivity.DEFAULT_VIBRATION.equals("1")) vibrator.vibrate(100);
+                    else vibrator.vibrate(0);
                     rec_button.setBackground(getDrawable(R.drawable.circle_red));
                     chronometer.stop();
 
@@ -282,9 +283,9 @@ public class PlayActivity extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (UtilityRecordings.checkRecordAudioPermissions(view.getContext())) {
                     switch (motionEvent.getAction()) {
-
                         case MotionEvent.ACTION_DOWN:
-                            vibrator.vibrate(100);
+                            if(MainActivity.DEFAULT_VIBRATION.equals("1")) vibrator.vibrate(100);
+                            else vibrator.vibrate(0);
                             rec_button.setBackground(getDrawable(R.drawable.circle_red_pressed));
                             //Scale animation
                             rec_button.animate().setDuration(scaleAnimationDuration).setInterpolator(new OvershootInterpolator()).scaleX(0.8f).scaleY(0.8f);
@@ -295,7 +296,8 @@ public class PlayActivity extends AppCompatActivity {
 
                         case MotionEvent.ACTION_UP:
                             if (!maxDurationReached) {
-                                vibrator.vibrate(100);
+                                if(MainActivity.DEFAULT_VIBRATION.equals("1")) vibrator.vibrate(100);
+                                else vibrator.vibrate(0);
                                 rec_button.setBackground(getDrawable(R.drawable.circle_red));
                                 chronometer.stop();
 
@@ -614,10 +616,12 @@ public class PlayActivity extends AppCompatActivity {
                 if (!isVolumeMuted()) {
                     if (!accent_flag) {
                         american_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                        vibrator.vibrate(100);
+                        if(MainActivity.DEFAULT_VIBRATION.equals("1")) vibrator.vibrate(100);
+                        else vibrator.vibrate(0);
                     } else if (accent_flag) {
                         british_speaker_google.speak(selected_word, QUEUE_FLUSH, null, null);
-                        vibrator.vibrate(100);
+                        if(MainActivity.DEFAULT_VIBRATION.equals("1")) vibrator.vibrate(100);
+                        else vibrator.vibrate(0);
                     }
                 } else {
                     Toast toast = Toast.makeText(context, "Please turn the volume up", Toast.LENGTH_LONG);

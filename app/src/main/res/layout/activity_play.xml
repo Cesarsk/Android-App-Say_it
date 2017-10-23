@@ -20,14 +20,14 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            style="?view"
             android:id="@+id/display_play"
+            style="?view"
             android:layout_width="match_parent"
             android:layout_height="165dp">
 
             <TextView
-                style="?textView"
                 android:id="@+id/selected_word"
+                style="?textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -38,8 +38,8 @@
                 android:textSize="40sp" />
 
             <TextView
-                style="?textView"
                 android:id="@+id/selected_word_ipa"
+                style="?textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/selected_word"
@@ -51,16 +51,16 @@
         </RelativeLayout>
 
         <LinearLayout
-            style="?imageView"
             android:id="@+id/buttons_bar"
+            style="?imageView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/display_play">
 
             <ImageButton
-                style="?imageButton"
                 android:id="@+id/recordings_button"
+                style="?colorDrawable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -71,8 +71,8 @@
                 android:visibility="gone" />
 
             <ImageButton
-                style="?imageButton"
                 android:id="@+id/accent_button"
+                style="?colorDrawable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -82,8 +82,8 @@
                 android:src="@drawable/ic_flag" />
 
             <ImageButton
-                style="?imageButton"
                 android:id="@+id/slow_button"
+                style="?colorDrawable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -93,8 +93,8 @@
                 android:src="@drawable/ic_slow_motion_video" />
 
             <ImageButton
-                style="?imageButton"
                 android:id="@+id/tts_settings_button"
+                style="?colorDrawable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -104,8 +104,8 @@
                 android:src="@drawable/ic_hearing_white_24dp" />
 
             <ImageButton
-                style="?imageButton"
                 android:id="@+id/favorite_button"
+                style="?colorDrawable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -115,8 +115,8 @@
                 android:src="@drawable/ic_favorite_black_24dp" />
 
             <ImageButton
-                style="?imageButton"
                 android:id="@+id/search_meaning_button"
+                style="?colorDrawable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -126,8 +126,8 @@
                 android:src="@drawable/ic_explore_black_24dp" />
 
             <ImageButton
-                style="?imageButton"
                 android:id="@+id/remove_ads_button"
+                style="?colorDrawable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -142,8 +142,8 @@
                 android:layout_weight="1" />
 
             <ImageButton
-                style="?imageButton"
                 android:id="@+id/delete_button"
+                style="?colorDrawable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -161,8 +161,8 @@
             android:layout_below="@id/buttons_bar">
 
             <Chronometer
-                style="?chronometer"
                 android:id="@+id/recording_timer"
+                style="?chronometer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -188,8 +188,8 @@
                 android:visibility="gone" />
 
             <Button
-                style="?playTTS"
                 android:id="@+id/play_original"
+                style="?playTTS"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignEnd="@id/rec_button"

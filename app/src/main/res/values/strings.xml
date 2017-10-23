@@ -45,6 +45,16 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="default_vibration_settings">
+        <item>Off</item>
+        <item>On</item>
+    </string-array>
+
+    <string-array name="default_vibration_settings_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <string-array name="themes_selector_entries">
         <item>Default Theme</item>
         <item>Dark Theme</item>

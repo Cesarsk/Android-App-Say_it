@@ -107,12 +107,14 @@ public class MainActivity extends AppCompatActivity {
     public final static String DEFAULT_NOTIFICATION_MINUTE_KEY = "SAY.IT.DEFAULT.NOTIFICATION.MINUTE";
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
     public final static String FIRST_LAUNCH_KEY = "SAY.IT.FIRST.LAUNCH";
+    public final static String DEFAULT_VIBRATION_KEY = "SAY.IT.VIBRATION";
 
     //shared preferences variables
     public static Set<String> FAVORITES = null;
     public static Set<String> HISTORY = null;
     public static ArrayList<File> RECORDINGS = null;
     public static String DEFAULT_NOTIFICATION_RATE = null;
+    public static String DEFAULT_VIBRATION = null;
     public static String DEFAULT_ACCENT = null;
     public static String DEFAULT_THEME = null;
     public static String DEFAULT_NOTIFICATION_HOUR = null;
