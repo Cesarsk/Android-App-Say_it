@@ -53,7 +53,7 @@
         <item name="android:background">@color/Blue800</item>
     </style>
 
-    <style name="BlueYellowIdleButton">
+    <style name="BlueYellowDrawable">
         <item name="android:tint">@color/Blue100</item>
     </style>
 
@@ -122,6 +122,8 @@
     <style name="DarkStyle" parent="Theme.Design.Light.NoActionBar">
         <item name="colorPrimary">@color/White</item>
         <item name="colorAccent">@color/Amber400</item>
+        <item name="primaryDark">@color/Amber400</item>
+        <item name="idleButton">@color/White</item>
         <item name="android:colorPrimaryDark">@color/Red500</item>
         <item name="android:colorBackground">@color/BlueGrey800</item>
         <item name="android:navigationBarColor">@color/Black</item>
@@ -167,7 +169,7 @@
         <item name="android:background">@color/BlueGrey900Custom2</item>
     </style>
 
-    <style name="DarkIdleButton">
+    <style name="DarkDrawable">
         <item name="android:tint">@color/White</item>
     </style>
 

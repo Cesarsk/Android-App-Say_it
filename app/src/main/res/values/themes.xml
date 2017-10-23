@@ -23,7 +23,7 @@
         <item name="itemSearchedSecondaryText">@style/BlueYellowItemSearchedSecondaryText</item>
         <item name="quickPlayList">@style/BlueYellowQuickPlayList</item>
         <item name="deleteItemList">@style/BlueYellowDeleteItemList</item>
-        <item name="idleButton">@style/BlueYellowIdleButton</item>
+        <item name="colorDrawable">@style/BlueYellowDrawable</item>
     </style>
 
     <style name="BlueYellowStyle.PreferenceTheme">
@@ -54,7 +54,7 @@
         <item name="itemSearchedSecondaryText">@style/DarkItemSearchedSecondaryText</item>
         <item name="quickPlayList">@style/DarkQuickPlayList</item>
         <item name="deleteItemList">@style/DarkDeleteItemList</item>
-        <item name="idleButton">@style/DarkIdleButton</item>
+        <item name="colorDrawable">@style/DarkDrawable</item>
     </style>
 
     <style name="DarkStyle.PreferenceTheme">
