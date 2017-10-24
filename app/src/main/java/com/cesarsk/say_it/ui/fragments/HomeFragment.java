@@ -291,7 +291,6 @@ public class HomeFragment extends Fragment {
         view_full_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.bottomBar.selectTabAtPosition(2);
             }
         });
 

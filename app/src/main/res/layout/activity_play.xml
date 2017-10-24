@@ -132,6 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
+                android:visibility="gone"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/remove_ads_button_description"
                 android:src="@drawable/ic_local_grocery_store" />

@@ -139,14 +139,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
-        final Preference donate_us = getPreferenceManager().findPreference("donate_us");
+       /* final Preference donate_us = getPreferenceManager().findPreference("donate_us");
         donate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Utility.openURL(getActivity(), "https://www.paypal.me/cesarsk");
                 return false;
             }
-        });
+        });*/
 
         final Preference about_us = getPreferenceManager().findPreference("about_us");
         about_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

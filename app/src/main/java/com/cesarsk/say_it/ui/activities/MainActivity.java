@@ -52,8 +52,6 @@ import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -86,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
     private final FragmentManager fragmentManager = getFragmentManager();
     private final ArrayList<Fragment> FragmentArrayList = new ArrayList<>();
     private int selectedTab = 0;
-    public static BottomBar bottomBar;
     public BottomNavigationView navigation;
 
     //TTS variables

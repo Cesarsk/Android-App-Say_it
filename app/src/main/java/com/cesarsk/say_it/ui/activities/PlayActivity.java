@@ -512,12 +512,12 @@ public class PlayActivity extends AppCompatActivity {
             }
         });*/
 
-        remove_ad.setOnClickListener(new View.OnClickListener() {
+       /* remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utility.openURL(v.getContext(), "https://paypal.me/cesarsk/1");
             }
-        });
+        });*/
 
         search_meaning.setOnClickListener(new View.OnClickListener() {
             @Override
