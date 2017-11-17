@@ -149,27 +149,6 @@ public class HomeFragment extends Fragment {
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
         UtilitySharedPrefs.loadAdsStatus(getActivity());
-        if (!MainActivity.NO_ADS) {
-            NativeExpressAdView adView = new NativeExpressAdView(getActivity());
-            RelativeLayout.LayoutParams adViewlayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            adView.setLayoutParams(adViewlayoutParams);
-            adView.setAdUnitId(getString(R.string.ad_unit_id_native_card));
-
-            DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-            int adWidth = (int) dpWidth - 16;
-
-            adView.setAdSize(new AdSize(adWidth, 150));
-
-            RelativeLayout adCardRL = (RelativeLayout) view.findViewById(R.id.adNativeCard);
-            /* 08-08-2017 -> One month premium no ads
-            adCardRL.setVisibility(View.VISIBLE);*/
-            adCardRL.setVisibility(View.GONE);
-            adCardRL.addView(adView);
-
-            AdRequest request = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
-            adView.loadAd(request);
-        }
 
         final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.floating_button_home);
         fab.setOnClickListener(new View.OnClickListener() {

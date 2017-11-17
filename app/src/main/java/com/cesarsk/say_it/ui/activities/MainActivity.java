@@ -193,17 +193,6 @@ public class MainActivity extends AppCompatActivity {
         UtilitySharedPrefs.loadAdsStatus(this);
 
         //check in-app purchase and do not show app, if so.
-        if (!NO_ADS) {
-            if(mInterstitialAd.getAdUnitId() == null)
-                mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_interstitial_mainactivity_back));
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    requestNewInterstitial();
-                }
-            });
-            requestNewInterstitial();
-        }
     }
 
     @Override

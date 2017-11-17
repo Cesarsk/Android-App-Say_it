@@ -51,7 +51,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -498,7 +500,7 @@ public class PlayActivity extends AppCompatActivity {
         //15 Sept 2017 - Updating Say It! Removing In-app purchase button and replacing it with a donation button (redirecting to Paypal).
         //The new remove_ad Button will be place below this commented method
 
-        /*remove_ad.setOnClickListener(new View.OnClickListener() {
+        remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<String> additionalSkuList = new ArrayList<>();
@@ -510,14 +512,7 @@ public class PlayActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        });*/
-
-       /* remove_ad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utility.openURL(v.getContext(), "https://paypal.me/cesarsk/1");
-            }
-        });*/
+        });
 
         search_meaning.setOnClickListener(new View.OnClickListener() {
             @Override
