@@ -37,6 +37,8 @@ import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.NativeExpressAdView;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
@@ -272,6 +274,15 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
             }
         });
+
+        AdView mAdView = view.findViewById(R.id.adView);
+        if (MainActivity.NO_ADS) {
+            mAdView.setVisibility(View.GONE);
+        } else {
+            MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.ad_unit_id_banner_homeFragment));
+            AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
+            mAdView.loadAd(adRequest);
+        }
 
         LinearLayout linearLayoutFirstRow = (LinearLayout) view.findViewById(R.id.first_row_linear_layout);
         LinearLayout linearLayoutSecondRow = (LinearLayout) view.findViewById(R.id.second_row_linear_layout);

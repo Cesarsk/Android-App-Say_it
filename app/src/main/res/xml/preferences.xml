@@ -86,17 +86,11 @@
             android:summary="Found something strange? Tell us!"
             android:title="Bug Report" />
 
-        <!-- <Preference
-            android:key="donate_us"
-            android:layout="@xml/voices_settings_layout"
-            android:summary="Support our effort with a little donation ❤"
-            android:title="Donate us!" /> -->
-
-       <!-- <Preference
+       <Preference
             android:key="remove_ads"
             android:layout="@xml/voices_settings_layout"
-            android:summary="Remove ads from this app"
-            android:title="Remove ads!" /> -->
+            android:summary="Support our effort removing ads ❤"
+            android:title="Remove ads! " />
 
     </PreferenceCategory>
 

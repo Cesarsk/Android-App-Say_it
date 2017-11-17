@@ -33,6 +33,8 @@ import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.cesarsk.say_it.utility.utility_aidl.Purchase;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static com.cesarsk.say_it.utility.Utility.rateUs;
@@ -241,7 +243,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         };
 
-        /* final Preference remove_ads = getPreferenceManager().findPreference("remove_ads");
+        final Preference remove_ads = getPreferenceManager().findPreference("remove_ads");
         if (MainActivity.NO_ADS) {
             remove_ads.setEnabled(false);
             remove_ads.setSummary("Thank you for supporting us ❤");
@@ -261,7 +263,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     return false;
                 }
             });
-        } */
+        }
 
 
         final Preference reset_tutorial = getPreferenceManager().findPreference("reset_showcase");

@@ -13,7 +13,7 @@
         android:scaleX="1.0"
         android:scaleY="1.0"
         app:adSize="BANNER"
-        app:adUnitId="@string/ad_unit_id_banner_playactivity" />
+        app:adUnitId="@string/ad_unit_id_banner_playActivity" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/remove_ads_button_description"
                 android:src="@drawable/ic_local_grocery_store" />

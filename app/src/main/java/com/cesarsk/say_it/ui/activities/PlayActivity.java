@@ -168,6 +168,11 @@ public class PlayActivity extends AppCompatActivity {
         //get audio service
         audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+        //if ads are disable not show the button
+        if(MainActivity.NO_ADS){
+            remove_ad.setVisibility(View.GONE);
+        }
+
         //compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, base64EncodedPublicKey);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
@@ -203,21 +208,6 @@ public class PlayActivity extends AppCompatActivity {
 
         //if premium purchase has been detected, disable ads. If not, init them
         UtilitySharedPrefs.loadAdsStatus(this);
-        if (!MainActivity.NO_ADS) {
-
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id_interstitial_playactivity_back));
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    requestNewInterstitial();
-                }
-            });
-
-            requestNewInterstitial();
-        } else if (MainActivity.NO_ADS) {
-            remove_ad.setVisibility(View.GONE);
-        }
 
         //setting Up Chronometer
         final Chronometer chronometer = (Chronometer) findViewById(R.id.recording_timer);
@@ -527,7 +517,7 @@ public class PlayActivity extends AppCompatActivity {
         if (MainActivity.NO_ADS) {
             mAdView.setVisibility(View.GONE);
         } else {
-            MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.ad_unit_id_test));
+            MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.ad_unit_id_banner_playActivity));
             AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
             mAdView.loadAd(adRequest);
         }
