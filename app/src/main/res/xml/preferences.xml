@@ -86,6 +86,12 @@
             android:summary="Found something strange? Tell us!"
             android:title="Bug Report" />
 
+        <Preference
+            android:key="donation_ad"
+            android:layout="@xml/voices_settings_layout"
+            android:summary="Watch a short video to support us without paying!"
+            android:title="Donation AD" />
+
        <Preference
             android:key="remove_ads"
             android:layout="@xml/voices_settings_layout"
