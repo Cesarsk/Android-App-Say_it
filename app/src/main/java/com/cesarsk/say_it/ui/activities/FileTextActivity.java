@@ -69,6 +69,15 @@ public class FileTextActivity extends Activity {
                 e.printStackTrace();
             }
         }
+
+        if (selected_preference != null && selected_preference.equals("snowfall")) {
+            try {
+                selected_license_text_view.setText(UtilityDictionary.load_textfile(this, R.raw.snowfall_license));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         if (selected_preference != null && selected_preference.equals("acknowledgements")) {
             try {
                 selected_license_text_view.setText(UtilityDictionary.load_textfile(this, R.raw.acknowledgements));

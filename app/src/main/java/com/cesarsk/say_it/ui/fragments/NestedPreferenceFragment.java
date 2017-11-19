@@ -52,6 +52,7 @@ public class NestedPreferenceFragment extends PreferenceFragment {
            |- MaterialShowCase
            |- Gson
            |- Wordlist
+           |- Snowfall
 
             */
         if (selected_fragment_layout == 1) {
@@ -133,6 +134,19 @@ public class NestedPreferenceFragment extends PreferenceFragment {
                     final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
                     Bundle args = new Bundle();
                     args.putString(FileTextActivity.PREFERENCE, "wordlist");
+                    preference_intent.putExtras(args);
+                    startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+                    return false;
+                }
+            });
+
+            Preference number_six = getPreferenceManager().findPreference("number_6");
+            number_six.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
+                    Bundle args = new Bundle();
+                    args.putString(FileTextActivity.PREFERENCE, "snowfall");
                     preference_intent.putExtras(args);
                     startActivity(preference_intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                     return false;
