@@ -90,7 +90,7 @@
             android:key="donation_ad"
             android:layout="@xml/voices_settings_layout"
             android:summary="Watch a short video to support us without paying!"
-            android:title="Donation AD" />
+            android:title="Donation Advertisement" />
 
        <Preference
             android:key="remove_ads"

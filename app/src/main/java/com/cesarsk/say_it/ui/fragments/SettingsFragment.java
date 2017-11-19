@@ -189,7 +189,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
-        Preference donate_ad = getPreferenceManager().findPreference("donate_ad");
+        Preference donate_ad = getPreferenceManager().findPreference("donation_ad");
         donate_ad.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
