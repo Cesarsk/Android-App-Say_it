@@ -448,9 +448,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     }
 
     private void loadRewardedVideoAd() {
-        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+        mRewardedVideoAd.loadAd(getResources().getString(R.string.ad_unit_id_rewarded_donation),
                 new AdRequest.Builder().build());
-        //After testing, replace with : getResources().getString(R.string.ad_unit_rewarded_donation);
     }
 
     @Override
