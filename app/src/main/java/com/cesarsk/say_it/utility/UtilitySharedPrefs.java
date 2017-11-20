@@ -267,7 +267,7 @@ public class UtilitySharedPrefs {
     public static void loadSettingsPrefs(Context context) {
         //Caricamento preferenze
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
-        MainActivity.DEFAULT_THEME = sharedPreferences.getString(DEFAULT_THEME_KEY, "0");
+        MainActivity.DEFAULT_THEME = sharedPreferences.getString(DEFAULT_THEME_KEY, "2");
         MainActivity.DEFAULT_ACCENT = sharedPreferences.getString(DEFAULT_ACCENT_KEY, "0");
         MainActivity.DEFAULT_VIBRATION = sharedPreferences.getString(MainActivity.DEFAULT_VIBRATION_KEY, "1");
         MainActivity.DEFAULT_NOTIFICATION_RATE = sharedPreferences.getString(DEFAULT_NOTIFICATION_RATE_KEY, "2");

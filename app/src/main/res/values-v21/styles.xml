@@ -163,7 +163,6 @@
     <style name="DarkViewPlayActivity">
         <item name="android:background">@color/BlueGrey900Custom1</item>
     </style>
-    DarkPlayActivity
 
     <style name="DarkTextView">
         <item name="android:textColor">@color/White</item>
@@ -253,7 +252,7 @@
         <item name="android:colorBackground">@color/Grey100</item>
         <item name="android:navigationBarColor">@color/Black</item>
         <item name="android:statusBarColor">@color/RudolphNose</item>
-        <item name="android:textColorPrimary">@color/White</item>
+        <item name="android:textColorPrimary">@color/Black</item>
         <item name="android:textColorSecondary">@color/White</item>
     </style>
 
