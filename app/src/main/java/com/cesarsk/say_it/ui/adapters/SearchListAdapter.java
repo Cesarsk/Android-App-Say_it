@@ -30,6 +30,7 @@ import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 
@@ -101,7 +102,7 @@ public class SearchListAdapter extends BaseAdapter implements Filterable {
                 final Intent play_activity_intent = new Intent(context, PlayActivity.class);
                 play_activity_intent.putExtra(PlayActivity.PLAY_WORD, viewHolder.wordTextView.getText());
                 play_activity_intent.putExtra(PlayActivity.PLAY_IPA, viewHolder.ipaTextView.getText());
-                UtilitySharedPrefs.addHist(context, new SayItPair(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString(), Calendar.getInstance().getTime()));
+                UtilitySharedPrefs.addHist(context, new SayItPair(viewHolder.wordTextView.getText().toString(), viewHolder.ipaTextView.getText().toString(), new Date(System.currentTimeMillis())));
                 context.startActivity(play_activity_intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context).toBundle());
             }
         });
