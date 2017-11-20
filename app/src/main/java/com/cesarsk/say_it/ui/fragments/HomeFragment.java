@@ -111,9 +111,9 @@ public class HomeFragment extends Fragment {
         //Setup our Stats
         if (MainActivity.RECORDINGS != null || MainActivity.FAVORITES != null) {
 
-            RelativeLayout card_stats = (RelativeLayout) view.findViewById(R.id.card_stats);
-            final TextView stats_item1 = (TextView) view.findViewById(R.id.card_stats_item1);
-            final TextView stats_item2 = (TextView) view.findViewById(R.id.card_stats_item2);
+            RelativeLayout card_stats = view.findViewById(R.id.card_stats);
+            final TextView stats_item1 = view.findViewById(R.id.card_stats_item1);
+            final TextView stats_item2 = view.findViewById(R.id.card_stats_item2);
 
             if (!(MainActivity.RECORDINGS.isEmpty())) {
                 card_stats.setVisibility(View.VISIBLE);
@@ -152,7 +152,7 @@ public class HomeFragment extends Fragment {
 
         UtilitySharedPrefs.loadAdsStatus(getActivity());
 
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.floating_button_home);
+        final FloatingActionButton fab = view.findViewById(R.id.floating_button_home);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,7 +161,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        final NestedScrollView scroller = (NestedScrollView) view.findViewById(R.id.nested_scroll_view);
+        final NestedScrollView scroller = view.findViewById(R.id.nested_scroll_view);
         if (scroller != null) {
             scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
@@ -208,7 +208,7 @@ public class HomeFragment extends Fragment {
         });
 
 
-        final ImageButton favorite_button = (ImageButton) view.findViewById(R.id.favorite_card_button);
+        final ImageButton favorite_button = view.findViewById(R.id.favorite_card_button);
         favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), wordOfTheDay);
         if (favorite_flag)
             favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, view.getContext()));
@@ -227,7 +227,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ImageButton copy_button = (ImageButton) view.findViewById(R.id.copy_button_card);
+        ImageButton copy_button = view.findViewById(R.id.copy_button_card);
         copy_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,7 +256,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ImageButton share_word = (ImageButton) view.findViewById(R.id.share_word_button_card);
+        ImageButton share_word = view.findViewById(R.id.share_word_button_card);
         share_word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,10 +264,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        final TextView random_quote = (TextView) view.findViewById(R.id.random_quote);
+        final TextView random_quote = view.findViewById(R.id.random_quote);
         random_quote.setText(getDailyRandomQuote());
 
-        final TextView view_full_history = (TextView) view.findViewById(R.id.view_full_history);
+        final TextView view_full_history = view.findViewById(R.id.view_full_history);
         view_full_history.setText(getString(R.string.full_history_button));
         view_full_history.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -284,9 +284,9 @@ public class HomeFragment extends Fragment {
             mAdView.loadAd(adRequest);
         }
 
-        LinearLayout linearLayoutFirstRow = (LinearLayout) view.findViewById(R.id.first_row_linear_layout);
-        LinearLayout linearLayoutSecondRow = (LinearLayout) view.findViewById(R.id.second_row_linear_layout);
-        LinearLayout linearLayoutThirdRow = (LinearLayout) view.findViewById(R.id.third_row_linear_layout);
+        LinearLayout linearLayoutFirstRow = view.findViewById(R.id.first_row_linear_layout);
+        LinearLayout linearLayoutSecondRow = view.findViewById(R.id.second_row_linear_layout);
+        LinearLayout linearLayoutThirdRow = view.findViewById(R.id.third_row_linear_layout);
 
         for (int i = 0; i < 2; i++) {
             linearLayoutFirstRow.addView(new FadingTextView(getActivity()));

@@ -27,6 +27,8 @@ public class SettingsActivity extends AppCompatActivity implements SettingsFragm
             setTheme(R.style.BlueYellowStyle_PreferenceTheme);
         } else if (MainActivity.DEFAULT_THEME.equals("1")) {
             setTheme(R.style.DarkStyle_PreferenceTheme);
+        } else if (MainActivity.DEFAULT_THEME.equals("2")){
+            setTheme(R.style.ChristmasStyle_PreferenceTheme);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);

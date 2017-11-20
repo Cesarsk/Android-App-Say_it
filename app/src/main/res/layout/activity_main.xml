@@ -61,7 +61,7 @@
         app:menu="@menu/navigation" />
 
     <View
-        style="?view"
+        style="?toolbar"
         android:id="@+id/imageview_logo"
         android:layout_width="match_parent"
         android:layout_height="32dp"

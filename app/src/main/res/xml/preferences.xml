@@ -23,7 +23,7 @@
             android:key="theme_selector"
             android:layout="@xml/voices_settings_layout"
             android:summary="Touch to pick a different theme."
-            android:title="Theme" />
+            android:title="Theme"/>
 
         <Preference
             android:key="tts_settings"

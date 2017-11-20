@@ -21,7 +21,7 @@
 
         <RelativeLayout
             android:id="@+id/display_play"
-            style="?view"
+            style="?viewPlayActivity"
             android:layout_width="match_parent"
             android:layout_height="165dp">
 

@@ -40,6 +40,10 @@
         <item name="android:background">@color/Blue700</item>
     </style>
 
+    <style name="BlueYellowViewPlayActivity">
+        <item name="android:background">@color/Blue700</item>
+    </style>
+
     <style name="BlueYellowTextView">
         <item name="android:textColor">@color/Blue100</item>
     </style>
@@ -156,6 +160,11 @@
         <item name="android:background">@color/BlueGrey900Custom1</item>
     </style>
 
+    <style name="DarkViewPlayActivity">
+        <item name="android:background">@color/BlueGrey900Custom1</item>
+    </style>
+    DarkPlayActivity
+
     <style name="DarkTextView">
         <item name="android:textColor">@color/White</item>
     </style>
@@ -230,6 +239,126 @@
     </style>
 
     <style name="DarkToolbarSettings" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/BlueGrey900Custom1</item>
+        <item name="titleTextColor">@color/White</item>
+    </style>
+
+    <!-- Christmas application theme. -->
+    <style name="ChristmasStyle" parent="Theme.Design.Light.NoActionBar">
+        <item name="colorPrimary">@color/White</item>
+        <item name="colorAccent">@color/Amber400</item>
+        <item name="primaryDark">@color/Amber400</item>
+        <item name="idleButton">@color/White</item>
+        <item name="android:colorPrimaryDark">@color/Red500</item>
+        <item name="android:colorBackground">@color/Grey100</item>
+        <item name="android:navigationBarColor">@color/Black</item>
+        <item name="android:statusBarColor">@color/RudolphNose</item>
+        <item name="android:textColorPrimary">@color/White</item>
+        <item name="android:textColorSecondary">@color/White</item>
+    </style>
+
+    <style name="ChristmasToolbar">
+        <item name="android:background">@color/RudolphNose</item>
+    </style>
+
+    <style name="ChristmasBottomBar">
+        <item name="android:background">@color/RudolphNose</item>
+    </style>
+
+    <style name="ChristmasImageView">
+        <item name="android:background">@color/RudolphNoseDark</item>
+        <item name="android:tint">@color/White</item>
+    </style>
+
+    <style name="ChristmasEditText">
+        <item name="android:background">@color/RudolphNose</item>
+        <item name="android:backgroundTint">@color/RudolphNoseDark</item>
+        <item name="android:textColorHint">@color/White</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="ChristmasView">
+        <item name="android:background">@color/Green800</item>
+    </style>
+
+    <style name="ChristmasViewPlayActivity">
+        <item name="android:background">@color/RudolphNose</item>
+    </style>
+
+    <style name="ChristmasTextView">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="ChristmasChronometer">
+        <item name="android:textColor">@color/Green800</item>
+    </style>
+
+    <style name="ChristmasImageButton">
+        <item name="android:tint">@color/White</item>
+        <item name="android:background">@color/RudolphNoseDark</item>
+    </style>
+
+    <style name="ChristmasDrawable">
+        <item name="android:tint">@color/White</item>
+    </style>
+
+    <style name="ChristmasPlayTTS">
+        <item name="android:backgroundTint">@color/Amber400</item>
+    </style>
+
+    <style name="ChristmasSearchListDivider">
+        <item name="android:divider">@color/Grey300</item>
+    </style>
+
+    <style name="ChristmasCardDivider">
+        <item name="android:background">@color/White</item>
+    </style>
+
+    <style name="ChristmasSwipeHint">
+        <item name="android:textColor">@color/Grey900</item>
+    </style>
+
+    <style name="ChristmasFloatingButton">
+        <item name="android:tint">@color/White</item>
+    </style>
+
+    <style name="ChristmasTextCard">
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="ChristmasCardStats">
+        <item name="android:background">@color/White</item>
+        <item name="android:textColor">@color/Green800</item>
+    </style>
+
+    <style name="ChristmasRandomQuote">
+        <item name="android:textColor">@color/Grey600</item>
+    </style>
+
+    <style name="ChristmasItemSearchedPrimaryText">
+        <item name="android:textColor">@color/Grey900</item>
+    </style>
+
+    <style name="ChristmasItemSearchedSecondaryText">
+        <item name="android:textColor">@color/Grey600</item>
+    </style>
+
+    <style name="ChristmasDeleteItemList">
+        <item name="android:background">@color/Red500</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="ChristmasQuickPlayList">
+        <item name="android:tint">@color/Green800</item>
+        <item name="android:backgroundTint">@color/Grey100</item>
+    </style>
+
+    <style name="ChristmasStyle.PreferenceActivity">
+        <item name="android:textSize">16sp</item>
+        <item name="android:statusBarColor">@color/BlueGrey900Custom1</item>
+    </style>
+
+    <style name="ChristmasToolbarSettings" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">@color/BlueGrey900Custom1</item>
         <item name="titleTextColor">@color/White</item>
     </style>

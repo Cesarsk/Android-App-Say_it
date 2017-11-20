@@ -18,10 +18,16 @@
     <color name="BlueGrey800">#182850</color>
     <color name="BlueGrey900Custom1">#171E30</color>
     <color name="BlueGrey900Custom2">#0e131e</color>
+    <color name="Red100">#ff8a80</color>
     <color name="Red500">#F44336</color>
+    <color name="Red600">#e53935</color>
     <color name="Red700">#d50000</color>
     <color name="Red900">#b71c1c</color>
+    <color name="RudolphNose">#bf2923</color>
+    <color name="RudolphNoseDark">#891d18</color>
     <color name="Yellow600">#FDD835</color>
+    <color name="Green300">#71f36d</color>
+    <color name="Green800">#3d8b37</color>
     <color name="Green700Custom1">#02ec02</color>
     <color name="Green700Custom2">#00bc00</color>
 </resources>

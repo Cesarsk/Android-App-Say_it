@@ -143,6 +143,8 @@ public class PlayActivity extends AppCompatActivity {
             setTheme(R.style.BlueYellowStyle_Theme);
         } else if (MainActivity.DEFAULT_THEME.equals("1")) {
             setTheme(R.style.DarkStyle_Theme);
+        } else if (MainActivity.DEFAULT_THEME.equals("2")){
+            setTheme(R.style.ChristmasStyle_Theme);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
