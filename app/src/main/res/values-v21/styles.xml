@@ -85,6 +85,11 @@
         <item name="android:textColor">@color/White</item>
     </style>
 
+    <style name="BlueYellowPlayWordButtonGameCard">
+        <item name="android:textColor">@color/Blue700</item>
+        <item name="android:backgroundTint">@color/Grey100</item>
+    </style>
+
     <style name="BlueYellowCardStats">
         <item name="android:background">@color/White</item>
     </style>
@@ -166,6 +171,11 @@
 
     <style name="DarkTextView">
         <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="DarkPlayWordButtonGameCard">
+        <item name="android:textColor">@color/BlueGrey900Custom1</item>
+        <item name="android:backgroundTint">@color/White</item>
     </style>
 
     <style name="DarkChronometer">
@@ -286,6 +296,11 @@
 
     <style name="ChristmasTextView">
         <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="ChristmasPlayWordButtonGameCard">
+        <item name="android:textColor">@color/Green800</item>
+        <item name="android:backgroundTint">@color/White</item>
     </style>
 
     <style name="ChristmasChronometer">

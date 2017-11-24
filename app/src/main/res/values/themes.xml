@@ -25,6 +25,7 @@
         <item name="quickPlayList">@style/BlueYellowQuickPlayList</item>
         <item name="deleteItemList">@style/BlueYellowDeleteItemList</item>
         <item name="colorDrawable">@style/BlueYellowDrawable</item>
+        <item name="playWordButtonGameCard">@style/BlueYellowPlayWordButtonGameCard</item>
     </style>
 
     <style name="BlueYellowStyle.PreferenceTheme">
@@ -57,6 +58,7 @@
         <item name="quickPlayList">@style/DarkQuickPlayList</item>
         <item name="deleteItemList">@style/DarkDeleteItemList</item>
         <item name="colorDrawable">@style/DarkDrawable</item>
+        <item name="playWordButtonGameCard">@style/DarkPlayWordButtonGameCard</item>
     </style>
 
     <style name="DarkStyle.PreferenceTheme">
@@ -90,6 +92,7 @@
         <item name="quickPlayList">@style/ChristmasQuickPlayList</item>
         <item name="deleteItemList">@style/ChristmasDeleteItemList</item>
         <item name="colorDrawable">@style/ChristmasDrawable</item>
+        <item name="playWordButtonGameCard">@style/ChristmasPlayWordButtonGameCard</item>
     </style>
 
     <style name="ChristmasStyle.PreferenceTheme">

@@ -16,6 +16,7 @@
     <attr name="swipeHint" format="reference" />
     <attr name="floatingButton" format="reference" />
     <attr name="textCard" format="reference"/>
+    <attr name="playWordButtonGameCard" format="reference"/>
     <attr name="cardDivider" format="reference"/>
     <attr name="cardStats" format="reference"/>
     <attr name="randomQuote" format="reference"/>
