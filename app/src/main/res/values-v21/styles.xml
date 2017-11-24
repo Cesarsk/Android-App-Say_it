@@ -77,6 +77,11 @@
         <item name="android:textColor">@color/Blue900</item>
     </style>
 
+    <style name="BlueYellowEditTextGamePlayCard">
+        <item name="android:background">@color/Blue700</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
     <style name="BlueYellowFloatingButton">
         <item name="android:tint">@color/White</item>
     </style>
@@ -232,6 +237,11 @@
         <item name="android:textColor">@color/Amber100</item>
     </style>
 
+    <style name="DarkEditTextGamePlayCard">
+        <item name="android:background">@color/BlueGrey900Custom1</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
     <style name="DarkDeleteItemList">
         <item name="android:background">@color/Red500</item>
         <item name="android:textColor">@color/White</item>
@@ -305,6 +315,11 @@
 
     <style name="ChristmasChronometer">
         <item name="android:textColor">@color/Green800</item>
+    </style>
+
+    <style name="ChristmasEditTextGamePlayCard">
+        <item name="android:background">@color/Green800</item>
+        <item name="android:textColor">@color/White</item>
     </style>
 
     <style name="ChristmasImageButton">

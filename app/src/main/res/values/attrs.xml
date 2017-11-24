@@ -28,6 +28,8 @@
     <attr name="bottomBar" format="reference"/>
     <attr name="colorDrawable" format="reference"/>
     <attr name="viewPlayActivity" format="reference"/>
+    <attr name="editTextGameCard" format="reference"/>
+
 
     <attr name="idleButton" format="reference"/>
     <attr name="favoriteButton" format="reference"/>
