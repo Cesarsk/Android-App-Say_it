@@ -20,6 +20,8 @@ import java.util.Random;
 
 import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheDay;
 import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheDay;
+import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheGame;
+import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheGame;
 
 /**
  * Created by Claudio on 22/03/2017.
@@ -124,8 +126,12 @@ public class UtilityDictionary {
 
         Calendar c = Calendar.getInstance();
         Long seed = Long.parseLong(getDate(c.getTimeInMillis()));
+
         wordOfTheDay = getRandomWord(seed, false);
         IPAofTheDay = getRandomWord(seed, true);
+
+        wordOfTheGame = getRandomWord(seed+1, false);
+        IPAofTheGame = getRandomWord(seed+1, true);
     }
 
     public static String getDate(long timeStamp) {

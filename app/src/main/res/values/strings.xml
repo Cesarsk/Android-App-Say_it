@@ -131,5 +131,6 @@
     <string name="bottom_bar_recordings_label">Recordings</string>
     <string name="game_card_streak">Your current streak: 0</string>
     <string name="game_card_play_word">Play Word</string>
-    <string name="game_card_title">Guess the word!</string>
+    <string name="game_card_title">Guess the word! (experimental)</string>
+    <string name="game_card_editText_hint">Which word was it? Type it here!</string>
 </resources>

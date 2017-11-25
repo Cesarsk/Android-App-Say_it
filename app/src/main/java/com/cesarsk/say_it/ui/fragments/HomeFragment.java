@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,6 +45,8 @@ import com.google.android.gms.ads.NativeExpressAdView;
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheDay;
 import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheDay;
+import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheGame;
+import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheGame;
 import static com.cesarsk.say_it.utility.UtilityDictionary.getDailyRandomQuote;
 
 
@@ -63,14 +66,6 @@ public class HomeFragment extends Fragment {
     private AudioManager audio;
 
     public HomeFragment() {
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        //scale = getResources().getDisplayMetrics().density;
-
     }
 
     @Override
@@ -195,6 +190,10 @@ public class HomeFragment extends Fragment {
         IPATextView.setTypeface(plainItalic);
         IPATextView.setText(IPAofTheDay);
 
+        Button gameCardPlayButton = (Button) view.findViewById(R.id.game_card_play_word);
+        gameCardPlayButton.setTypeface(plainItalic);
+        gameCardPlayButton.setText(IPAofTheGame);
+
         wordOfTheDayTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -247,6 +246,23 @@ public class HomeFragment extends Fragment {
                         MainActivity.american_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
                     } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
                         MainActivity.british_speaker_google.speak(wordOfTheDay, QUEUE_FLUSH, null, null);
+                    }
+                } else {
+                    Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            }
+        });
+
+        gameCardPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isVolumeMuted()) {
+                    if (MainActivity.DEFAULT_ACCENT.equals("0")) {
+                        MainActivity.american_speaker_google.speak(wordOfTheGame, QUEUE_FLUSH, null, null);
+                    } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
+                        MainActivity.british_speaker_google.speak(wordOfTheGame, QUEUE_FLUSH, null, null);
                     }
                 } else {
                     Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);

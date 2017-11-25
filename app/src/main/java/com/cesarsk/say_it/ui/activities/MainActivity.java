@@ -138,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
     public static final ArrayList<String> Quotes = new ArrayList<>();
     public static String wordOfTheDay;
     public static String IPAofTheDay;
+    public static String wordOfTheGame;
+    public static String IPAofTheGame;
 
     //rate Dialog variables
     private EasyRatingDialog easyRatingDialog;
