@@ -52,6 +52,8 @@ import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.jetradarmobile.snowfall.SnowfallView;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -228,6 +230,12 @@ public class MainActivity extends AppCompatActivity {
 
         //set default Stream Controller
         setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
+
+        if(DEFAULT_THEME.equals("2"))
+        {
+            SnowfallView snowfall = (SnowfallView)findViewById(R.id.snowfall);
+            snowfall.setVisibility(View.VISIBLE);
+        }
 
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
                 = new IabHelper.QueryInventoryFinishedListener() {
