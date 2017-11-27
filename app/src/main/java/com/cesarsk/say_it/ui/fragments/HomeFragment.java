@@ -58,6 +58,7 @@ public class HomeFragment extends Fragment {
     private static final int RECENT_HISTORY_CARD_ROW_LIMIT = 5;
     private boolean favorite_flag = false;
     private View view;
+    private boolean slow_temp = false;
 
     /*private LinearLayout recentHistoryLinearLayout;
     private LinearLayout.LayoutParams layoutParams;
@@ -261,8 +262,28 @@ public class HomeFragment extends Fragment {
                 if (!isVolumeMuted()) {
                     if (MainActivity.DEFAULT_ACCENT.equals("0")) {
                         MainActivity.american_speaker_google.speak(wordOfTheGame, QUEUE_FLUSH, null, null);
+                        if(!slow_temp)
+                        {
+                            MainActivity.american_speaker_google.setSpeechRate(0.30f);
+                            slow_temp = !slow_temp;
+                        }
+                        else
+                        {
+                            MainActivity.american_speaker_google.setSpeechRate(1f);
+                            slow_temp = !slow_temp;
+                        }
                     } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
                         MainActivity.british_speaker_google.speak(wordOfTheGame, QUEUE_FLUSH, null, null);
+                        if(!slow_temp)
+                        {
+                            MainActivity.british_speaker_google.setSpeechRate(0.30f);
+                            slow_temp = !slow_temp;
+                        }
+                        else
+                        {
+                            MainActivity.british_speaker_google.setSpeechRate(1f);
+                            slow_temp = !slow_temp;
+                        }
                     }
                 } else {
                     Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
