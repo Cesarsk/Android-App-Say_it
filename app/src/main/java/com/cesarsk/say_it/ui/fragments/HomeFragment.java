@@ -305,7 +305,7 @@ public class HomeFragment extends Fragment {
                 gameCardPlayButton.setText("YOU ROCK!");
                 gameCardPlayButton.setEnabled(false);
                 wordOfTheGame_editText.setFocusable(false);
-                wordOfTheGame_editText.setText("Come back tomorrow for a new word!");
+                wordOfTheGame_editText.setText("See you tomorrow for a new word!");
                 //INCREASE STREAK
                 //PLAY SOUND BRAVO
                 Log.i("TEST TEST TEST", "POSITIVO");
