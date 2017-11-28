@@ -130,8 +130,8 @@ public class UtilityDictionary {
         wordOfTheDay = getRandomWord(seed, false);
         IPAofTheDay = getRandomWord(seed, true);
 
-        wordOfTheGame = getRandomWord(seed+1, false);
-        IPAofTheGame = getRandomWord(seed+1, true);
+        wordOfTheGame = getRandomWord(seed/2, false);
+        IPAofTheGame = getRandomWord(seed/2, true);
     }
 
     public static String getDate(long timeStamp) {

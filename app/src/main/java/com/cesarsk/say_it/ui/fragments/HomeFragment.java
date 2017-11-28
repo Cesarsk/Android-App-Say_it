@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -191,7 +192,7 @@ public class HomeFragment extends Fragment {
         IPATextView.setTypeface(plainItalic);
         IPATextView.setText(IPAofTheDay);
 
-        Button gameCardPlayButton = (Button) view.findViewById(R.id.game_card_play_word);
+        final Button gameCardPlayButton = (Button) view.findViewById(R.id.game_card_play_word);
         gameCardPlayButton.setTypeface(plainItalic);
         gameCardPlayButton.setText(IPAofTheGame);
 
@@ -261,29 +262,14 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 if (!isVolumeMuted()) {
                     if (MainActivity.DEFAULT_ACCENT.equals("0")) {
+                        MainActivity.american_speaker_google.setSpeechRate(0.60f);
                         MainActivity.american_speaker_google.speak(wordOfTheGame, QUEUE_FLUSH, null, null);
-                        if(!slow_temp)
-                        {
-                            MainActivity.american_speaker_google.setSpeechRate(0.30f);
-                            slow_temp = !slow_temp;
-                        }
-                        else
-                        {
-                            MainActivity.american_speaker_google.setSpeechRate(1f);
-                            slow_temp = !slow_temp;
-                        }
+                        MainActivity.american_speaker_google.setSpeechRate(1f);
+
                     } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
+                        MainActivity.british_speaker_google.setSpeechRate(0.60f);
                         MainActivity.british_speaker_google.speak(wordOfTheGame, QUEUE_FLUSH, null, null);
-                        if(!slow_temp)
-                        {
-                            MainActivity.british_speaker_google.setSpeechRate(0.30f);
-                            slow_temp = !slow_temp;
-                        }
-                        else
-                        {
-                            MainActivity.british_speaker_google.setSpeechRate(1f);
-                            slow_temp = !slow_temp;
-                        }
+                        MainActivity.british_speaker_google.setSpeechRate(1f);
                     }
                 } else {
                     Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
@@ -298,6 +284,39 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Utility.shareWord(wordOfTheDay, IPAofTheDay, getActivity());
+            }
+        });
+
+        final EditText wordOfTheGame_editText = view.findViewById(R.id.card_game_edit_Text);
+
+        ImageButton submit_word = view.findViewById(R.id.submit_word);
+        submit_word.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            String typedWord = wordOfTheGame_editText.getText().toString().toLowerCase();
+            wordOfTheGame = wordOfTheGame.trim();
+
+            Log.i("STRING TEST", ""+typedWord);
+            Log.i("STRING TEST", ""+wordOfTheGame);
+
+
+                if(typedWord.compareTo(wordOfTheGame) == 0)
+            {
+                gameCardPlayButton.setText("YOU ROCK!");
+                gameCardPlayButton.setEnabled(false);
+                wordOfTheGame_editText.setFocusable(false);
+                wordOfTheGame_editText.setText("Come back tomorrow for a new word!");
+                //INCREASE STREAK
+                //PLAY SOUND BRAVO
+                Log.i("TEST TEST TEST", "POSITIVO");
+            }
+            else
+            {
+                //PLAY SOUND OH NO
+                //STREAK = 0
+                Log.i("TEST TEST TEST", "NEGATIVO");
+            }
+
             }
         });
 
