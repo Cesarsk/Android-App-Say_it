@@ -1,6 +1,7 @@
 package com.cesarsk.say_it.ui.fragments;
 
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -8,8 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Debug;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
@@ -21,6 +24,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -45,6 +49,7 @@ import com.google.android.gms.ads.NativeExpressAdView;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheDay;
+import static com.cesarsk.say_it.ui.activities.MainActivity.isLoggingEnabled;
 import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheDay;
 import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheGame;
 import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheGame;
@@ -141,9 +146,6 @@ public class HomeFragment extends Fragment {
         this.view = inflater.inflate(R.layout.fragment_home,
                 container, false);
 
-        /*recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
-        recent_search = (RelativeLayout) view.findViewById(R.id.Recent_Search);*/
-
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
@@ -195,6 +197,20 @@ public class HomeFragment extends Fragment {
         final Button gameCardPlayButton = (Button) view.findViewById(R.id.game_card_play_word);
         gameCardPlayButton.setTypeface(plainItalic);
         gameCardPlayButton.setText(IPAofTheGame);
+
+        final TextView gameCardStreak = view.findViewById(R.id.game_card_streak);
+        gameCardStreak.setText("Your current streak: " +MainActivity.GAME_STREAK);
+
+        final EditText wordOfTheGame_editText = view.findViewById(R.id.card_game_edit_Text);
+
+        if(isLoggingEnabled) Log.i("STRING TEST", ""+MainActivity.wordOfTheGame+"\n"+MainActivity.WORD_OF_THE_GAME);
+        if(MainActivity.WORD_OF_THE_GAME.equals(MainActivity.wordOfTheGame.trim()))
+        {
+            gameCardPlayButton.setText("YOU ROCK!");
+            gameCardPlayButton.setEnabled(false);
+            wordOfTheGame_editText.setFocusable(false);
+            wordOfTheGame_editText.setText("See you tomorrow for a new word!");
+        }
 
         wordOfTheDayTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,35 +303,50 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        final EditText wordOfTheGame_editText = view.findViewById(R.id.card_game_edit_Text);
+        final MediaPlayer mp_pos = MediaPlayer.create(getActivity(), R.raw.clap);
+        final MediaPlayer mp_neg = MediaPlayer.create(getActivity(), R.raw.oh_no);
+
+        wordOfTheGame_editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                wordOfTheGame_editText.setCursorVisible(true);
+            }
+        });
 
         ImageButton submit_word = view.findViewById(R.id.submit_word);
         submit_word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            String typedWord = wordOfTheGame_editText.getText().toString().toLowerCase();
-            wordOfTheGame = wordOfTheGame.trim();
+                String typedWord = wordOfTheGame_editText.getText().toString().toLowerCase();
+                wordOfTheGame = wordOfTheGame.trim();
 
-            Log.i("STRING TEST", ""+typedWord);
-            Log.i("STRING TEST", ""+wordOfTheGame);
+                if(MainActivity.isLoggingEnabled) {
+                    Log.i("STRING TEST", "" + typedWord);
+                    Log.i("STRING TEST", "" + wordOfTheGame);
+                }
 
-
-                if(typedWord.compareTo(wordOfTheGame) == 0)
-            {
-                gameCardPlayButton.setText("YOU ROCK!");
-                gameCardPlayButton.setEnabled(false);
-                wordOfTheGame_editText.setFocusable(false);
-                wordOfTheGame_editText.setText("See you tomorrow for a new word!");
-                //INCREASE STREAK
-                //PLAY SOUND BRAVO
-                Log.i("TEST TEST TEST", "POSITIVO");
-            }
-            else
-            {
-                //PLAY SOUND OH NO
-                //STREAK = 0
-                Log.i("TEST TEST TEST", "NEGATIVO");
-            }
+                if (typedWord.compareTo(wordOfTheGame) == 0) {
+                    gameCardPlayButton.setText("YOU ROCK!");
+                    gameCardPlayButton.setEnabled(false);
+                    hideSoftKeyboard(getActivity());
+                    wordOfTheGame_editText.setFocusable(false);
+                    wordOfTheGame_editText.setText("");
+                    wordOfTheGame_editText.setHint("See you tomorrow for a new word!");
+                    MainActivity.GAME_STREAK++;
+                    gameCardStreak.setText("Your current streak: "+MainActivity.GAME_STREAK);
+                    UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.GAME_STREAK, MainActivity.GAME_STREAK_KEY);
+                    UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.wordOfTheGame, MainActivity.WORD_OF_THE_GAME_KEY);
+                    mp_pos.start();
+                    //PLAY SOUND BRAVO
+                } else {
+                    //PLAY SOUND OH NO
+                    MainActivity.GAME_STREAK = 0;
+                    wordOfTheGame_editText.setHint("Oh no! Try again!");
+                    wordOfTheGame_editText.setText("");
+                    mp_neg.start();
+                    gameCardStreak.setText("Your current streak: "+MainActivity.GAME_STREAK);
+                    UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.GAME_STREAK, MainActivity.GAME_STREAK_KEY);
+                }
 
             }
         });
@@ -360,5 +391,15 @@ public class HomeFragment extends Fragment {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;
         else return false;
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        if(activity.getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }

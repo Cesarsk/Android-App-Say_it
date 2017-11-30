@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
     public final static String FIRST_LAUNCH_KEY = "SAY.IT.FIRST.LAUNCH";
     public final static String DEFAULT_VIBRATION_KEY = "SAY.IT.VIBRATION";
+    public final static String GAME_STREAK_KEY = "SAY.IT.GAMESTREAK";
+    public final static String WORD_OF_THE_GAME_KEY = "SAY.IT.WORDOFTHEGAME";
 
     //shared preferences variables
     public static Set<String> FAVORITES = null;
@@ -120,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
     public static String DEFAULT_NOTIFICATION_MINUTE = null;
     public static boolean NO_ADS = false;
     public static boolean FIRST_LAUNCH;
+    public static int GAME_STREAK = 0;
+    public static String WORD_OF_THE_GAME = null;
 
     //showcase's unique IDs
     public static String id_showcase_playactivity = "utente_playactivity";
