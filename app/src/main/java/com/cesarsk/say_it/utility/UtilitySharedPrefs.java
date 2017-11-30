@@ -225,6 +225,27 @@ public class UtilitySharedPrefs {
         MainActivity.WORD_OF_THE_GAME = sharedPreferences.getString(WORD_OF_THE_GAME_KEY, "");
     }
 
+    public static void loadCardGamePrefs(Context context)
+    {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.GAME_STREAK = sharedPreferences.getInt(GAME_STREAK_KEY, 0);
+        MainActivity.WORD_OF_THE_GAME = sharedPreferences.getString(WORD_OF_THE_GAME_KEY, "");
+    }
+
+    public static void loadStringPref(Context context, String key, String var)
+    {
+        //not sure if this method works
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        var = sharedPreferences.getString(key, "");
+    }
+
+    public static void loadIntPref(Context context, String key, int var)
+    {
+        //not sure if this method works
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        var = sharedPreferences.getInt(key, 0);
+    }
+
     public static void deletePreferences(Context context) {
         //delete all preferences
         SharedPreferences settings = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);

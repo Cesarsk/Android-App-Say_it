@@ -79,37 +79,6 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-    /*
-        ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
-
-        //History not empty
-        if (recentHistory != null && !(recentHistory.isEmpty())) {
-            recentHistoryLinearLayout.removeAllViews();
-            recent_search.setVisibility(View.VISIBLE);
-            for (int i = 0; i < recentHistory.size(); i++) {
-                LinearLayout current_LL = new LinearLayout(getActivity());
-                recentHistoryLinearLayout.addView(current_LL);
-                current_LL.setLayoutParams(layoutParams);
-                TextView wordTextView = new TextView(getActivity());
-                wordTextView.setLayoutParams(layoutParams);
-                wordTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
-                wordTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                wordTextView.setTypeface(Typeface.DEFAULT_BOLD);
-                wordTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (2 * scale + 0.5f), 0);
-                wordTextView.setText(recentHistory.get(i).first);
-                current_LL.addView(wordTextView);
-                TextView ipaTextView = new TextView(getActivity());
-                ipaTextView.setLayoutParams(layoutParams);
-                ipaTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                //ipaTextView.setPaddingRelative((int) (16 * scale + 0.5f), 0, (int) (8 * scale + 0.5f), 0);
-                ipaTextView.setText(recentHistory.get(i).second);
-                current_LL.addView(ipaTextView);
-            }
-        } else if (recent_search.getVisibility() != View.GONE) {
-            recent_search.setVisibility(View.GONE);
-        }
-
-    */
         //Setup our Stats
         if (MainActivity.RECORDINGS != null || MainActivity.FAVORITES != null) {
 
@@ -150,6 +119,7 @@ public class HomeFragment extends Fragment {
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
         UtilitySharedPrefs.loadAdsStatus(getActivity());
+        UtilitySharedPrefs.loadCardGamePrefs(getActivity());
 
         final FloatingActionButton fab = view.findViewById(R.id.floating_button_home);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -203,13 +173,14 @@ public class HomeFragment extends Fragment {
 
         final EditText wordOfTheGame_editText = view.findViewById(R.id.card_game_edit_Text);
 
-        if(isLoggingEnabled) Log.i("STRING TEST", ""+MainActivity.wordOfTheGame+"\n"+MainActivity.WORD_OF_THE_GAME);
+        if(isLoggingEnabled) Log.i("STRING TEST", "MainActivity.wotg: "+MainActivity.wordOfTheGame+"\nMainActivity.WOFG: "+MainActivity.WORD_OF_THE_GAME);
         if(MainActivity.WORD_OF_THE_GAME.equals(MainActivity.wordOfTheGame.trim()))
         {
             gameCardPlayButton.setText("YOU ROCK!");
             gameCardPlayButton.setEnabled(false);
             wordOfTheGame_editText.setFocusable(false);
-            wordOfTheGame_editText.setText("See you tomorrow for a new word!");
+            wordOfTheGame_editText.setText("");
+            wordOfTheGame_editText.setHint("See you tomorrow for a new word!");
         }
 
         wordOfTheDayTextView.setOnClickListener(new View.OnClickListener() {
@@ -337,9 +308,7 @@ public class HomeFragment extends Fragment {
                     UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.GAME_STREAK, MainActivity.GAME_STREAK_KEY);
                     UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.wordOfTheGame, MainActivity.WORD_OF_THE_GAME_KEY);
                     mp_pos.start();
-                    //PLAY SOUND BRAVO
                 } else {
-                    //PLAY SOUND OH NO
                     MainActivity.GAME_STREAK = 0;
                     wordOfTheGame_editText.setHint("Oh no! Try again!");
                     wordOfTheGame_editText.setText("");
