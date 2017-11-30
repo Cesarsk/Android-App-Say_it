@@ -51,20 +51,6 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <!--
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        app:bb_tabXmlResource="@xml/bottombar_tabs"
-        android:layout_height="60dp"
-        app:bb_inActiveTabColor="@color/Grey600"
-        app:bb_inActiveTabAlpha="0.8"
-        app:bb_activeTabAlpha="1"
-        android:visibility="gone"
-        app:bb_showShadow="false" />
-    -->
-
     <android.support.design.widget.BottomNavigationView
         style="?bottomBar"
         android:id="@+id/navigation"
@@ -75,7 +61,7 @@
         app:menu="@menu/navigation" />
 
     <View
-        style="?view"
+        style="?toolbar"
         android:id="@+id/imageview_logo"
         android:layout_width="match_parent"
         android:layout_height="32dp"
@@ -91,4 +77,21 @@
         android:layout_above="@id/navigation"
         android:layout_alignParentStart="true">
     </FrameLayout>
+
+    <com.jetradarmobile.snowfall.SnowfallView
+        android:visibility="gone"
+        android:id="@+id/snowfall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:snowflakesNum="250"
+        app:snowflakeAlphaMin="150"
+        app:snowflakeAlphaMax="255"
+        app:snowflakeAngleMax="5"
+        app:snowflakeSizeMin="8dp"
+        app:snowflakeSizeMax="32dp"
+        app:snowflakeSpeedMin="4"
+        app:snowflakeSpeedMax="12"
+        app:snowflakesFadingEnabled="true"
+        app:snowflakesAlreadyFalling="false"
+        app:snowflakeImage="@drawable/snowflake"/>
 </RelativeLayout>

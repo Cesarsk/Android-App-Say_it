@@ -25,7 +25,9 @@ import static com.cesarsk.say_it.ui.activities.MainActivity.DEFAULT_NOTIFICATION
 import static com.cesarsk.say_it.ui.activities.MainActivity.DEFAULT_NOTIFICATION_RATE_KEY;
 import static com.cesarsk.say_it.ui.activities.MainActivity.DEFAULT_THEME_KEY;
 import static com.cesarsk.say_it.ui.activities.MainActivity.FAVORITES_PREFS_KEY;
+import static com.cesarsk.say_it.ui.activities.MainActivity.GAME_STREAK_KEY;
 import static com.cesarsk.say_it.ui.activities.MainActivity.HISTORY_PREFS_KEY;
+import static com.cesarsk.say_it.ui.activities.MainActivity.WORD_OF_THE_GAME_KEY;
 
 /**
  * Created by Claudio on 22/03/2017.
@@ -131,18 +133,6 @@ public class UtilitySharedPrefs {
         loadFavs(context);
     }
 
-    /*public static void removeRecording(Context context, String recordingFilename){
-        Set<String> new_recs = new TreeSet<>();
-        loadRecordings(context);
-        if (MainActivity.RECORDINGS != null) {
-            for (String element : MainActivity.RECORDINGS) {
-                new_recs.add(element);
-            }
-        }
-        new_recs.remove(recordingFilename);
-        savePrefs(context, new_recs, MainActivity.RECORDINGS_PREFS_KEY);
-    }*/
-
     public static void removeHist(Context context, SayItPair pair) {
         Set<String> new_favs = new TreeSet<>();
         loadHist(context);
@@ -211,53 +201,11 @@ public class UtilitySharedPrefs {
         savePrefs(context, new_hist, MainActivity.HISTORY_PREFS_KEY);
     }
 
-    /*public static void addRecording(Context context, String recordingFilename){
-        Set<String> new_recs = new TreeSet<>();
-        loadRecordings(context);
-        if (MainActivity.RECORDINGS != null) {
-            for (String element : MainActivity.RECORDINGS) {
-                new_recs.add(element);
-            }
-        }
-
-        new_recs.add(recordingFilename);
-        savePrefs(context, new_recs, MainActivity.RECORDINGS_PREFS_KEY);
-    }*/
-
-    /*public static boolean checkRecording(Context context, String word){
-        Set<String> new_recs = new TreeSet<>();
-        loadRecordings(context);
-        if (MainActivity.RECORDINGS != null) {
-            for (String element : MainActivity.RECORDINGS) {
-                new_recs.add(element);
-            }
-        }
-
-        String filename = Environment.getExternalStorageDirectory().getPath() + "/" + UtilityRecordings.AUDIO_RECORDER_FOLDER + "/" + word + ".aac";
-
-        if(new_recs.contains(filename)) {
-
-            if (!(new File(filename).exists())) {
-                removeRecording(context, filename);
-                return false;
-            }
-
-            else
-                return true;
-        }
-
-        return false;
-    }*/
 
     public static void loadFavs(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         MainActivity.FAVORITES = sharedPreferences.getStringSet(FAVORITES_PREFS_KEY, new TreeSet<String>());
     }
-
-    /*public static void loadRecordings(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
-        MainActivity.RECORDINGS = sharedPreferences.getStringSet(RECORDINGS_PREFS_KEY, new TreeSet<String>());
-    }*/
 
     public static void loadHist(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
@@ -267,12 +215,35 @@ public class UtilitySharedPrefs {
     public static void loadSettingsPrefs(Context context) {
         //Caricamento preferenze
         SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
-        MainActivity.DEFAULT_THEME = sharedPreferences.getString(DEFAULT_THEME_KEY, "0");
+        MainActivity.DEFAULT_THEME = sharedPreferences.getString(DEFAULT_THEME_KEY, "2");
         MainActivity.DEFAULT_ACCENT = sharedPreferences.getString(DEFAULT_ACCENT_KEY, "0");
         MainActivity.DEFAULT_VIBRATION = sharedPreferences.getString(MainActivity.DEFAULT_VIBRATION_KEY, "1");
         MainActivity.DEFAULT_NOTIFICATION_RATE = sharedPreferences.getString(DEFAULT_NOTIFICATION_RATE_KEY, "2");
         MainActivity.DEFAULT_NOTIFICATION_HOUR = sharedPreferences.getString(DEFAULT_NOTIFICATION_HOUR_KEY, "12");
         MainActivity.DEFAULT_NOTIFICATION_MINUTE = sharedPreferences.getString(DEFAULT_NOTIFICATION_MINUTE_KEY, "00");
+        MainActivity.GAME_STREAK = sharedPreferences.getInt(GAME_STREAK_KEY, 0);
+        MainActivity.WORD_OF_THE_GAME = sharedPreferences.getString(WORD_OF_THE_GAME_KEY, "");
+    }
+
+    public static void loadCardGamePrefs(Context context)
+    {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        MainActivity.GAME_STREAK = sharedPreferences.getInt(GAME_STREAK_KEY, 0);
+        MainActivity.WORD_OF_THE_GAME = sharedPreferences.getString(WORD_OF_THE_GAME_KEY, "");
+    }
+
+    public static void loadStringPref(Context context, String key, String var)
+    {
+        //not sure if this method works
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        var = sharedPreferences.getString(key, "");
+    }
+
+    public static void loadIntPref(Context context, String key, int var)
+    {
+        //not sure if this method works
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        var = sharedPreferences.getInt(key, 0);
     }
 
     public static void deletePreferences(Context context) {

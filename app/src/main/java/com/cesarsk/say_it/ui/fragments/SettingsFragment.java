@@ -32,7 +32,14 @@ import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.cesarsk.say_it.utility.utility_aidl.Purchase;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static com.cesarsk.say_it.utility.Utility.rateUs;
@@ -42,7 +49,7 @@ import static com.cesarsk.say_it.utility.Utility.shareToMail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, RewardedVideoAdListener{
     private final String[] emails = {"sayit.edu@gmail.com"};
     static private int index_default_accent = 0;
     static private int index_default_theme = 0;
@@ -53,6 +60,42 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private IabHelper mHelper;
     private IabHelper.QueryInventoryFinishedListener mQueryFinishedListener;
     private IabHelper.OnIabPurchaseFinishedListener mIabPurchaseFinishedListener;
+    private RewardedVideoAd mRewardedVideoAd;
+
+    @Override
+    public void onRewardedVideoAdLoaded() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem) {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+
+    }
 
     public interface Callback {
         void onNestedPreferenceSelected(int key);
@@ -86,6 +129,13 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        // Use an activity context to get the rewarded video instance.
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getActivity());
+        mRewardedVideoAd.setRewardedVideoAdListener(this);
+
+        loadRewardedVideoAd();
+
 
         PackageInfo pInfo = null;
         try {
@@ -139,14 +189,17 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
-       /* final Preference donate_us = getPreferenceManager().findPreference("donate_us");
-        donate_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference donate_ad = getPreferenceManager().findPreference("donation_ad");
+        donate_ad.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Utility.openURL(getActivity(), "https://www.paypal.me/cesarsk");
+                //Launch AD
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
                 return false;
             }
-        });*/
+        });
 
         final Preference about_us = getPreferenceManager().findPreference("about_us");
         about_us.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -241,7 +294,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         };
 
-        /* final Preference remove_ads = getPreferenceManager().findPreference("remove_ads");
+        final Preference remove_ads = getPreferenceManager().findPreference("remove_ads");
         if (MainActivity.NO_ADS) {
             remove_ads.setEnabled(false);
             remove_ads.setSummary("Thank you for supporting us ❤");
@@ -261,7 +314,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     return false;
                 }
             });
-        } */
+        }
 
 
         final Preference reset_tutorial = getPreferenceManager().findPreference("reset_showcase");
@@ -393,4 +446,28 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
     }
+
+    private void loadRewardedVideoAd() {
+        mRewardedVideoAd.loadAd(getResources().getString(R.string.ad_unit_id_rewarded_donation),
+                new AdRequest.Builder().build());
+    }
+
+    @Override
+    public void onResume() {
+        mRewardedVideoAd.resume(getActivity());
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mRewardedVideoAd.pause(getActivity());
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mRewardedVideoAd.destroy(getActivity());
+        super.onDestroy();
+    }
+
 }

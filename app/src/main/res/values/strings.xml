@@ -13,15 +13,12 @@
     <string name="app_name">Say It!</string>
     <string name="search_hint">Search for a word</string>
     <string name="ad_unit_id_test">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="ad_unit_id_banner_playactivity">ca-app-pub-9284620118215899/4312360361</string>
-    <string name="ad_unit_id_interstitial_mainactivity_back">ca-app-pub-9284620118215899/2835627168</string>
-    <string name="ad_unit_id_native_card">ca-app-pub-9284620118215899/1101541969</string>
-    <string name="banner_ad_unit_app" tools:ignore="UnusedResources">ca-app-pub-9284620118215899~4265868761</string>
-    <string name="test_device_oneplus_3">91BE4FE979D3D0967B1CE55B15248365</string>
+    <string name="ad_unit_id_banner_playActivity">ca-app-pub-9284620118215899/2728160456</string>
+    <string name="ad_unit_id_banner_homeFragment">ca-app-pub-9284620118215899/4971180411</string>
+    <string name="ad_unit_id_rewarded_donation">ca-app-pub-9284620118215899/1562488258</string>
+    <string name="test_device_oneplus_3">118C0E3617A142EDF7CE24E485631A20</string>
     <string name="test_device_honor_6">E43D79007EC93EBAA6B24FC5A1771C6D</string>
     <string name="test_device_htc_one_m8">8F41413C950FF0509CECFF6C1EC8FEFC</string>
-    <string name="ad_unit_id_interstitial_playactivity_back">ca-app-pub-9284620118215899/4707483164</string>
-    <string name="ad_unit_id_banner_settings" tools:ignore="UnusedResources">ca-app-pub-9284620118215899/7660949569</string>
 
     <string-array name="default_voice_entries">
         <item>American English</item>
@@ -58,11 +55,13 @@
     <string-array name="themes_selector_entries">
         <item>Default Theme</item>
         <item>Dark Theme</item>
+        <item>Christmas Theme</item>
     </string-array>
 
     <string-array name="themes_selector_values">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
 
     <string name="title_activity_settings">Settings</string>
@@ -130,4 +129,14 @@
     <string name="bottom_bar_favorites_label">Favorites</string>
     <string name="bottom_bar_history_label">History</string>
     <string name="bottom_bar_recordings_label">Recordings</string>
+    <string name="game_card_streak">Your current streak: 0</string>
+    <string name="game_card_play_word">Play Word</string>
+    <string name="game_card_title">Guess the word! (experimental)</string>
+    <string name="game_card_editText_hint">Which word was it? Type it here!</string>
+    <string name="card_history_first_part">You\'ve 🎵</string>
+    <string name="card_history_second_part">words so far!</string>
+    <string name="card_history_fav_first_part">You\'ve ♥</string>
+    <string name="card_history_fav_second_part">words so far!</string>
+    <string name="you_rock">YOU ROCK!</string>
+    <string name="game_card_current_streak">Your current streak: </string>
 </resources>

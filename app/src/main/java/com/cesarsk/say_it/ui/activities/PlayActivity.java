@@ -51,7 +51,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -141,6 +143,8 @@ public class PlayActivity extends AppCompatActivity {
             setTheme(R.style.BlueYellowStyle_Theme);
         } else if (MainActivity.DEFAULT_THEME.equals("1")) {
             setTheme(R.style.DarkStyle_Theme);
+        } else if (MainActivity.DEFAULT_THEME.equals("2")){
+            setTheme(R.style.ChristmasStyle_Theme);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
@@ -165,6 +169,11 @@ public class PlayActivity extends AppCompatActivity {
 
         //get audio service
         audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        //if ads are disable not show the button
+        if(MainActivity.NO_ADS){
+            remove_ad.setVisibility(View.GONE);
+        }
 
         //compute your public key and store it in base64EncodedPublicKey
         mHelper = new IabHelper(this, base64EncodedPublicKey);
@@ -201,21 +210,6 @@ public class PlayActivity extends AppCompatActivity {
 
         //if premium purchase has been detected, disable ads. If not, init them
         UtilitySharedPrefs.loadAdsStatus(this);
-        if (!MainActivity.NO_ADS) {
-
-            mInterstitialAd = new InterstitialAd(this);
-            mInterstitialAd.setAdUnitId(getString(R.string.ad_unit_id_interstitial_playactivity_back));
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    requestNewInterstitial();
-                }
-            });
-
-            requestNewInterstitial();
-        } else if (MainActivity.NO_ADS) {
-            remove_ad.setVisibility(View.GONE);
-        }
 
         //setting Up Chronometer
         final Chronometer chronometer = (Chronometer) findViewById(R.id.recording_timer);
@@ -498,7 +492,7 @@ public class PlayActivity extends AppCompatActivity {
         //15 Sept 2017 - Updating Say It! Removing In-app purchase button and replacing it with a donation button (redirecting to Paypal).
         //The new remove_ad Button will be place below this commented method
 
-        /*remove_ad.setOnClickListener(new View.OnClickListener() {
+        remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<String> additionalSkuList = new ArrayList<>();
@@ -510,14 +504,7 @@ public class PlayActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        });*/
-
-       /* remove_ad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utility.openURL(v.getContext(), "https://paypal.me/cesarsk/1");
-            }
-        });*/
+        });
 
         search_meaning.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -532,7 +519,7 @@ public class PlayActivity extends AppCompatActivity {
         if (MainActivity.NO_ADS) {
             mAdView.setVisibility(View.GONE);
         } else {
-            MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.ad_unit_id_test));
+            MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.ad_unit_id_banner_playActivity));
             AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
             mAdView.loadAd(adRequest);
         }

@@ -7,6 +7,7 @@
         <item name="imageView">@style/BlueYellowImageView</item>
         <item name="editText">@style/BlueYellowEditText</item>
         <item name="view">@style/BlueYellowView</item>
+        <item name="viewPlayActivity">@style/BlueYellowViewPlayActivity</item>
         <item name="textView">@style/BlueYellowTextView</item>
         <item name="imageButton">@style/BlueYellowImageButton</item>
         <item name="chronometer">@style/BlueYellowChronometer</item>
@@ -24,6 +25,9 @@
         <item name="quickPlayList">@style/BlueYellowQuickPlayList</item>
         <item name="deleteItemList">@style/BlueYellowDeleteItemList</item>
         <item name="colorDrawable">@style/BlueYellowDrawable</item>
+        <item name="playWordButtonGameCard">@style/BlueYellowPlayWordButtonGameCard</item>
+        <item name="editTextGameCard">@style/BlueYellowEditTextGamePlayCard</item>
+
     </style>
 
     <style name="BlueYellowStyle.PreferenceTheme">
@@ -38,6 +42,7 @@
         <item name="imageView">@style/DarkImageView</item>
         <item name="editText">@style/DarkEditText</item>
         <item name="view">@style/DarkView</item>
+        <item name="viewPlayActivity">@style/DarkViewPlayActivity</item>
         <item name="textView">@style/DarkTextView</item>
         <item name="imageButton">@style/DarkImageButton</item>
         <item name="chronometer">@style/DarkChronometer</item>
@@ -55,6 +60,8 @@
         <item name="quickPlayList">@style/DarkQuickPlayList</item>
         <item name="deleteItemList">@style/DarkDeleteItemList</item>
         <item name="colorDrawable">@style/DarkDrawable</item>
+        <item name="playWordButtonGameCard">@style/DarkPlayWordButtonGameCard</item>
+        <item name="editTextGameCard">@style/DarkEditTextGamePlayCard</item>
     </style>
 
     <style name="DarkStyle.PreferenceTheme">
@@ -64,5 +71,38 @@
         <item name="itemSearchedSecondaryText">@style/DarkItemSearchedSecondaryText</item>
     </style>
 
+    <style name="ChristmasStyle.Theme">
+        <item name="general">@style/ChristmasStyle</item>
+        <item name="toolbar">@style/ChristmasToolbar</item>
+        <item name="imageView">@style/ChristmasImageView</item>
+        <item name="editText">@style/ChristmasEditText</item>
+        <item name="view">@style/ChristmasView</item>
+        <item name="viewPlayActivity">@style/ChristmasViewPlayActivity</item>
+        <item name="textView">@style/ChristmasTextView</item>
+        <item name="imageButton">@style/ChristmasImageButton</item>
+        <item name="chronometer">@style/ChristmasChronometer</item>
+        <item name="playTTS">@style/ChristmasPlayTTS</item>
+        <item name="searchListDivider">@style/ChristmasSearchListDivider</item>
+        <item name="swipeHint">@style/ChristmasSwipeHint</item>
+        <item name="floatingButton">@style/ChristmasFloatingButton</item>
+        <item name="bottomBar">@style/ChristmasBottomBar</item>
+        <item name="textCard">@style/ChristmasTextCard</item>
+        <item name="cardDivider">@style/ChristmasCardDivider</item>
+        <item name="cardStats">@style/ChristmasCardStats</item>
+        <item name="randomQuote">@style/ChristmasRandomQuote</item>
+        <item name="itemSearchedPrimaryText">@style/ChristmasItemSearchedPrimaryText</item>
+        <item name="itemSearchedSecondaryText">@style/ChristmasItemSearchedSecondaryText</item>
+        <item name="quickPlayList">@style/ChristmasQuickPlayList</item>
+        <item name="deleteItemList">@style/ChristmasDeleteItemList</item>
+        <item name="colorDrawable">@style/ChristmasDrawable</item>
+        <item name="playWordButtonGameCard">@style/ChristmasPlayWordButtonGameCard</item>
+        <item name="editTextGameCard">@style/ChristmasEditTextGamePlayCard</item>
+    </style>
 
+    <style name="ChristmasStyle.PreferenceTheme">
+        <item name="preference">@style/ChristmasStyle.PreferenceActivity</item>
+        <item name="toolbarSettings">@style/ChristmasToolbarSettings</item>
+        <item name="itemSearchedPrimaryText">@style/ChristmasItemSearchedPrimaryText</item>
+        <item name="itemSearchedSecondaryText">@style/ChristmasItemSearchedSecondaryText</item>
+    </style>
 </resources>

@@ -17,13 +17,13 @@
             android:title="Default Accent" />
 
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="2"
             android:entries="@array/themes_selector_entries"
             android:entryValues="@array/themes_selector_values"
             android:key="theme_selector"
             android:layout="@xml/voices_settings_layout"
             android:summary="Touch to pick a different theme."
-            android:title="Theme" />
+            android:title="Theme"/>
 
         <Preference
             android:key="tts_settings"
@@ -86,17 +86,17 @@
             android:summary="Found something strange? Tell us!"
             android:title="Bug Report" />
 
-        <!-- <Preference
-            android:key="donate_us"
+        <Preference
+            android:key="donation_ad"
             android:layout="@xml/voices_settings_layout"
-            android:summary="Support our effort with a little donation ❤"
-            android:title="Donate us!" /> -->
+            android:summary="Watch a short video to support us without paying!"
+            android:title="Donation Advertisement" />
 
-       <!-- <Preference
+       <Preference
             android:key="remove_ads"
             android:layout="@xml/voices_settings_layout"
-            android:summary="Remove ads from this app"
-            android:title="Remove ads!" /> -->
+            android:summary="Support our effort removing ads ❤"
+            android:title="Remove ads! " />
 
     </PreferenceCategory>
 

@@ -52,6 +52,8 @@ import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.jetradarmobile.snowfall.SnowfallView;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -105,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
     public final static String NO_ADS_STATUS_KEY = "SAY.IT.NO.ADS.KEY";
     public final static String FIRST_LAUNCH_KEY = "SAY.IT.FIRST.LAUNCH";
     public final static String DEFAULT_VIBRATION_KEY = "SAY.IT.VIBRATION";
+    public final static String GAME_STREAK_KEY = "SAY.IT.GAMESTREAK";
+    public final static String WORD_OF_THE_GAME_KEY = "SAY.IT.WORDOFTHEGAME";
 
     //shared preferences variables
     public static Set<String> FAVORITES = null;
@@ -118,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
     public static String DEFAULT_NOTIFICATION_MINUTE = null;
     public static boolean NO_ADS = false;
     public static boolean FIRST_LAUNCH;
+    public static int GAME_STREAK = 0;
+    public static String WORD_OF_THE_GAME = null;
 
     //showcase's unique IDs
     public static String id_showcase_playactivity = "utente_playactivity";
@@ -138,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
     public static final ArrayList<String> Quotes = new ArrayList<>();
     public static String wordOfTheDay;
     public static String IPAofTheDay;
+    public static String wordOfTheGame;
+    public static String IPAofTheGame;
 
     //rate Dialog variables
     private EasyRatingDialog easyRatingDialog;
@@ -190,20 +198,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         easyRatingDialog.showIfNeeded();
 
+        //check in-app purchase and do not show ads, if so.
         UtilitySharedPrefs.loadAdsStatus(this);
-
-        //check in-app purchase and do not show app, if so.
-        if (!NO_ADS) {
-            if(mInterstitialAd.getAdUnitId() == null)
-                mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_interstitial_mainactivity_back));
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    requestNewInterstitial();
-                }
-            });
-            requestNewInterstitial();
-        }
     }
 
     @Override
@@ -219,7 +215,10 @@ public class MainActivity extends AppCompatActivity {
             setTheme(R.style.BlueYellowStyle_Theme);
         } else if (DEFAULT_THEME.equals("1")) {
             setTheme(R.style.DarkStyle_Theme);
+        } else if (DEFAULT_THEME.equals("2")){
+            setTheme(R.style.ChristmasStyle_Theme);
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -234,6 +233,12 @@ public class MainActivity extends AppCompatActivity {
 
         //set default Stream Controller
         setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
+
+        if(DEFAULT_THEME.equals("2"))
+        {
+            SnowfallView snowfall = (SnowfallView)findViewById(R.id.snowfall);
+            snowfall.setVisibility(View.VISIBLE);
+        }
 
         final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
                 = new IabHelper.QueryInventoryFinishedListener() {

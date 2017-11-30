@@ -16,6 +16,7 @@
     <attr name="swipeHint" format="reference" />
     <attr name="floatingButton" format="reference" />
     <attr name="textCard" format="reference"/>
+    <attr name="playWordButtonGameCard" format="reference"/>
     <attr name="cardDivider" format="reference"/>
     <attr name="cardStats" format="reference"/>
     <attr name="randomQuote" format="reference"/>
@@ -26,6 +27,9 @@
     <attr name="toolbarSettings" format="reference"/>
     <attr name="bottomBar" format="reference"/>
     <attr name="colorDrawable" format="reference"/>
+    <attr name="viewPlayActivity" format="reference"/>
+    <attr name="editTextGameCard" format="reference"/>
+
 
     <attr name="idleButton" format="reference"/>
     <attr name="favoriteButton" format="reference"/>

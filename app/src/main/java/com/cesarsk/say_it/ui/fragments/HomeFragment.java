@@ -1,6 +1,7 @@
 package com.cesarsk.say_it.ui.fragments;
 
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -8,8 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Debug;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.util.Pair;
@@ -21,6 +24,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,11 +43,16 @@ import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.NativeExpressAdView;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheDay;
+import static com.cesarsk.say_it.ui.activities.MainActivity.isLoggingEnabled;
 import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheDay;
+import static com.cesarsk.say_it.ui.activities.MainActivity.wordOfTheGame;
+import static com.cesarsk.say_it.ui.activities.MainActivity.IPAofTheGame;
 import static com.cesarsk.say_it.utility.UtilityDictionary.getDailyRandomQuote;
 
 
@@ -53,6 +64,7 @@ public class HomeFragment extends Fragment {
     private static final int RECENT_HISTORY_CARD_ROW_LIMIT = 5;
     private boolean favorite_flag = false;
     private View view;
+    private boolean slow_temp = false;
 
     /*private LinearLayout recentHistoryLinearLayout;
     private LinearLayout.LayoutParams layoutParams;
@@ -64,60 +76,21 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        //scale = getResources().getDisplayMetrics().density;
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
-    /*
-        ArrayList<SayItPair> recentHistory = UtilitySharedPrefs.getRecentHistory(getActivity(), RECENT_HISTORY_CARD_ROW_LIMIT);
-
-        //History not empty
-        if (recentHistory != null && !(recentHistory.isEmpty())) {
-            recentHistoryLinearLayout.removeAllViews();
-            recent_search.setVisibility(View.VISIBLE);
-            for (int i = 0; i < recentHistory.size(); i++) {
-                LinearLayout current_LL = new LinearLayout(getActivity());
-                recentHistoryLinearLayout.addView(current_LL);
-                current_LL.setLayoutParams(layoutParams);
-                TextView wordTextView = new TextView(getActivity());
-                wordTextView.setLayoutParams(layoutParams);
-                wordTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_dark));
-                wordTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                wordTextView.setTypeface(Typeface.DEFAULT_BOLD);
-                wordTextView.setPaddingRelative((int) (12 * scale + 0.5f), 0, (int) (2 * scale + 0.5f), 0);
-                wordTextView.setText(recentHistory.get(i).first);
-                current_LL.addView(wordTextView);
-                TextView ipaTextView = new TextView(getActivity());
-                ipaTextView.setLayoutParams(layoutParams);
-                ipaTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                //ipaTextView.setPaddingRelative((int) (16 * scale + 0.5f), 0, (int) (8 * scale + 0.5f), 0);
-                ipaTextView.setText(recentHistory.get(i).second);
-                current_LL.addView(ipaTextView);
-            }
-        } else if (recent_search.getVisibility() != View.GONE) {
-            recent_search.setVisibility(View.GONE);
-        }
-
-    */
         //Setup our Stats
         if (MainActivity.RECORDINGS != null || MainActivity.FAVORITES != null) {
 
-            RelativeLayout card_stats = (RelativeLayout) view.findViewById(R.id.card_stats);
-            final TextView stats_item1 = (TextView) view.findViewById(R.id.card_stats_item1);
-            final TextView stats_item2 = (TextView) view.findViewById(R.id.card_stats_item2);
+            RelativeLayout card_stats = view.findViewById(R.id.card_stats);
+            final TextView stats_item1 = view.findViewById(R.id.card_stats_item1);
+            final TextView stats_item2 = view.findViewById(R.id.card_stats_item2);
 
             if (!(MainActivity.RECORDINGS.isEmpty())) {
                 card_stats.setVisibility(View.VISIBLE);
                 stats_item1.setVisibility(View.VISIBLE);
                 UtilityRecordings.updateRecordings(getActivity());
-                stats_item1.setText("You've \uD83C\uDFB5 " + MainActivity.RECORDINGS.size() + " words so far!");
+                stats_item1.setText(getString(R.string.card_history_first_part) + MainActivity.RECORDINGS.size() + getString(R.string.card_history_second_part));
             } else {
                 stats_item1.setVisibility(View.GONE);
             }
@@ -125,7 +98,7 @@ public class HomeFragment extends Fragment {
             if (!MainActivity.FAVORITES.isEmpty()) {
                 card_stats.setVisibility(View.VISIBLE);
                 stats_item2.setVisibility(View.VISIBLE);
-                stats_item2.setText("You've ♥ " + MainActivity.FAVORITES.size() + " words so far!");
+                stats_item2.setText(getString(R.string.card_history_fav_first_part) + MainActivity.FAVORITES.size() + getString(R.string.card_history_fav_second_part));
             } else {
                 stats_item2.setVisibility(View.GONE);
             }
@@ -142,36 +115,13 @@ public class HomeFragment extends Fragment {
         this.view = inflater.inflate(R.layout.fragment_home,
                 container, false);
 
-        /*recentHistoryLinearLayout = (LinearLayout) view.findViewById(R.id.recent_hist_linear_layout);
-        recent_search = (RelativeLayout) view.findViewById(R.id.Recent_Search);*/
-
         Typeface plainItalic = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-I.ttf");
         Typeface plainRegular = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GentiumPlus-R.ttf");
 
         UtilitySharedPrefs.loadAdsStatus(getActivity());
-        if (!MainActivity.NO_ADS) {
-            NativeExpressAdView adView = new NativeExpressAdView(getActivity());
-            RelativeLayout.LayoutParams adViewlayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            adView.setLayoutParams(adViewlayoutParams);
-            adView.setAdUnitId(getString(R.string.ad_unit_id_native_card));
+        UtilitySharedPrefs.loadCardGamePrefs(getActivity());
 
-            DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-            int adWidth = (int) dpWidth - 16;
-
-            adView.setAdSize(new AdSize(adWidth, 150));
-
-            RelativeLayout adCardRL = (RelativeLayout) view.findViewById(R.id.adNativeCard);
-            /* 08-08-2017 -> One month premium no ads
-            adCardRL.setVisibility(View.VISIBLE);*/
-            adCardRL.setVisibility(View.GONE);
-            adCardRL.addView(adView);
-
-            AdRequest request = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
-            adView.loadAd(request);
-        }
-
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.floating_button_home);
+        final FloatingActionButton fab = view.findViewById(R.id.floating_button_home);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,7 +130,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        final NestedScrollView scroller = (NestedScrollView) view.findViewById(R.id.nested_scroll_view);
+        final NestedScrollView scroller = view.findViewById(R.id.nested_scroll_view);
         if (scroller != null) {
             scroller.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
@@ -214,6 +164,25 @@ public class HomeFragment extends Fragment {
         IPATextView.setTypeface(plainItalic);
         IPATextView.setText(IPAofTheDay);
 
+        final Button gameCardPlayButton = (Button) view.findViewById(R.id.game_card_play_word);
+        gameCardPlayButton.setTypeface(plainItalic);
+        gameCardPlayButton.setText(IPAofTheGame);
+
+        final TextView gameCardStreak = view.findViewById(R.id.game_card_streak);
+        gameCardStreak.setText("Your current streak: " +MainActivity.GAME_STREAK);
+
+        final EditText wordOfTheGame_editText = view.findViewById(R.id.card_game_edit_Text);
+
+        if(isLoggingEnabled) Log.i("STRING TEST", "MainActivity.wotg: "+MainActivity.wordOfTheGame+"\nMainActivity.WOFG: "+MainActivity.WORD_OF_THE_GAME);
+        if(MainActivity.WORD_OF_THE_GAME.equals(MainActivity.wordOfTheGame.trim()))
+        {
+            gameCardPlayButton.setText(R.string.you_rock);
+            gameCardPlayButton.setEnabled(false);
+            wordOfTheGame_editText.setFocusable(false);
+            wordOfTheGame_editText.setText("");
+            wordOfTheGame_editText.setHint("See you tomorrow for a new word!");
+        }
+
         wordOfTheDayTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +196,7 @@ public class HomeFragment extends Fragment {
         });
 
 
-        final ImageButton favorite_button = (ImageButton) view.findViewById(R.id.favorite_card_button);
+        final ImageButton favorite_button = view.findViewById(R.id.favorite_card_button);
         favorite_flag = UtilitySharedPrefs.checkFavs(getActivity(), wordOfTheDay);
         if (favorite_flag)
             favorite_button.setColorFilter(Utility.setColorByTheme(R.attr.favoriteButton, view.getContext()));
@@ -246,13 +215,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ImageButton copy_button = (ImageButton) view.findViewById(R.id.copy_button_card);
+        ImageButton copy_button = view.findViewById(R.id.copy_button_card);
         copy_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(null, wordOfTheDay + " [" + IPAofTheDay + "]");
-                clipboard.setPrimaryClip(clip);
+                if(clipboard != null) clipboard.setPrimaryClip(clip);
                 Toast.makeText(getActivity(), "Copied to Clipboard!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -275,7 +244,29 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ImageButton share_word = (ImageButton) view.findViewById(R.id.share_word_button_card);
+        gameCardPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isVolumeMuted()) {
+                    if (MainActivity.DEFAULT_ACCENT.equals("0")) {
+                        MainActivity.american_speaker_google.setSpeechRate(0.60f);
+                        MainActivity.american_speaker_google.speak(wordOfTheGame, QUEUE_FLUSH, null, null);
+                        MainActivity.american_speaker_google.setSpeechRate(1f);
+
+                    } else if (MainActivity.DEFAULT_ACCENT.equals("1")) {
+                        MainActivity.british_speaker_google.setSpeechRate(0.60f);
+                        MainActivity.british_speaker_google.speak(wordOfTheGame, QUEUE_FLUSH, null, null);
+                        MainActivity.british_speaker_google.setSpeechRate(1f);
+                    }
+                } else {
+                    Toast toast = Toast.makeText(getActivity(), "Please turn the volume up", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            }
+        });
+
+        ImageButton share_word = view.findViewById(R.id.share_word_button_card);
         share_word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -283,10 +274,56 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        final TextView random_quote = (TextView) view.findViewById(R.id.random_quote);
+        final MediaPlayer mp_pos = MediaPlayer.create(getActivity(), R.raw.clap);
+        final MediaPlayer mp_neg = MediaPlayer.create(getActivity(), R.raw.oh_no);
+
+        wordOfTheGame_editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                wordOfTheGame_editText.setCursorVisible(true);
+            }
+        });
+
+        ImageButton submit_word = view.findViewById(R.id.submit_word);
+        submit_word.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String typedWord = wordOfTheGame_editText.getText().toString().toLowerCase();
+                wordOfTheGame = wordOfTheGame.trim();
+
+                if(MainActivity.isLoggingEnabled) {
+                    Log.i("STRING TEST", "" + typedWord);
+                    Log.i("STRING TEST", "" + wordOfTheGame);
+                }
+
+                if (typedWord.compareTo(wordOfTheGame) == 0) {
+                    gameCardPlayButton.setText(R.string.you_rock);
+                    gameCardPlayButton.setEnabled(false);
+                    hideSoftKeyboard(getActivity());
+                    wordOfTheGame_editText.setFocusable(false);
+                    wordOfTheGame_editText.setText("");
+                    wordOfTheGame_editText.setHint("See you tomorrow for a new word!");
+                    MainActivity.GAME_STREAK++;
+                    gameCardStreak.setText(getString(R.string.game_card_current_streak + MainActivity.GAME_STREAK));
+                    UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.GAME_STREAK, MainActivity.GAME_STREAK_KEY);
+                    UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.wordOfTheGame, MainActivity.WORD_OF_THE_GAME_KEY);
+                    mp_pos.start();
+                } else {
+                    MainActivity.GAME_STREAK = 0;
+                    wordOfTheGame_editText.setHint("Oh no! Try again!");
+                    wordOfTheGame_editText.setText("");
+                    mp_neg.start();
+                    gameCardStreak.setText(getString(R.string.game_card_current_streak) + MainActivity.GAME_STREAK);
+                    UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.GAME_STREAK, MainActivity.GAME_STREAK_KEY);
+                }
+
+            }
+        });
+
+        final TextView random_quote = view.findViewById(R.id.random_quote);
         random_quote.setText(getDailyRandomQuote());
 
-        final TextView view_full_history = (TextView) view.findViewById(R.id.view_full_history);
+        final TextView view_full_history = view.findViewById(R.id.view_full_history);
         view_full_history.setText(getString(R.string.full_history_button));
         view_full_history.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,9 +331,18 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        LinearLayout linearLayoutFirstRow = (LinearLayout) view.findViewById(R.id.first_row_linear_layout);
-        LinearLayout linearLayoutSecondRow = (LinearLayout) view.findViewById(R.id.second_row_linear_layout);
-        LinearLayout linearLayoutThirdRow = (LinearLayout) view.findViewById(R.id.third_row_linear_layout);
+        AdView mAdView = view.findViewById(R.id.adView);
+        if (MainActivity.NO_ADS) {
+            mAdView.setVisibility(View.GONE);
+        } else {
+            MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.ad_unit_id_banner_homeFragment));
+            AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
+            mAdView.loadAd(adRequest);
+        }
+
+        LinearLayout linearLayoutFirstRow = view.findViewById(R.id.first_row_linear_layout);
+        LinearLayout linearLayoutSecondRow = view.findViewById(R.id.second_row_linear_layout);
+        LinearLayout linearLayoutThirdRow = view.findViewById(R.id.third_row_linear_layout);
 
         for (int i = 0; i < 2; i++) {
             linearLayoutFirstRow.addView(new FadingTextView(getActivity()));
@@ -314,5 +360,15 @@ public class HomeFragment extends Fragment {
         int currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (currentVolume == 0) return true;
         else return false;
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        if(activity.getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }
