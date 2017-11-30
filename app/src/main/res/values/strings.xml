@@ -133,4 +133,10 @@
     <string name="game_card_play_word">Play Word</string>
     <string name="game_card_title">Guess the word! (experimental)</string>
     <string name="game_card_editText_hint">Which word was it? Type it here!</string>
+    <string name="card_history_first_part">You\'ve 🎵</string>
+    <string name="card_history_second_part">words so far!</string>
+    <string name="card_history_fav_first_part">You\'ve ♥</string>
+    <string name="card_history_fav_second_part">words so far!</string>
+    <string name="you_rock">YOU ROCK!</string>
+    <string name="game_card_current_streak">Your current streak: </string>
 </resources>

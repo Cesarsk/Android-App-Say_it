@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
                 card_stats.setVisibility(View.VISIBLE);
                 stats_item1.setVisibility(View.VISIBLE);
                 UtilityRecordings.updateRecordings(getActivity());
-                stats_item1.setText("You've \uD83C\uDFB5 " + MainActivity.RECORDINGS.size() + " words so far!");
+                stats_item1.setText(getString(R.string.card_history_first_part) + MainActivity.RECORDINGS.size() + getString(R.string.card_history_second_part));
             } else {
                 stats_item1.setVisibility(View.GONE);
             }
@@ -98,7 +98,7 @@ public class HomeFragment extends Fragment {
             if (!MainActivity.FAVORITES.isEmpty()) {
                 card_stats.setVisibility(View.VISIBLE);
                 stats_item2.setVisibility(View.VISIBLE);
-                stats_item2.setText("You've ♥ " + MainActivity.FAVORITES.size() + " words so far!");
+                stats_item2.setText(getString(R.string.card_history_fav_first_part) + MainActivity.FAVORITES.size() + getString(R.string.card_history_fav_second_part));
             } else {
                 stats_item2.setVisibility(View.GONE);
             }
@@ -176,7 +176,7 @@ public class HomeFragment extends Fragment {
         if(isLoggingEnabled) Log.i("STRING TEST", "MainActivity.wotg: "+MainActivity.wordOfTheGame+"\nMainActivity.WOFG: "+MainActivity.WORD_OF_THE_GAME);
         if(MainActivity.WORD_OF_THE_GAME.equals(MainActivity.wordOfTheGame.trim()))
         {
-            gameCardPlayButton.setText("YOU ROCK!");
+            gameCardPlayButton.setText(R.string.you_rock);
             gameCardPlayButton.setEnabled(false);
             wordOfTheGame_editText.setFocusable(false);
             wordOfTheGame_editText.setText("");
@@ -221,7 +221,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(null, wordOfTheDay + " [" + IPAofTheDay + "]");
-                clipboard.setPrimaryClip(clip);
+                if(clipboard != null) clipboard.setPrimaryClip(clip);
                 Toast.makeText(getActivity(), "Copied to Clipboard!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -297,14 +297,14 @@ public class HomeFragment extends Fragment {
                 }
 
                 if (typedWord.compareTo(wordOfTheGame) == 0) {
-                    gameCardPlayButton.setText("YOU ROCK!");
+                    gameCardPlayButton.setText(R.string.you_rock);
                     gameCardPlayButton.setEnabled(false);
                     hideSoftKeyboard(getActivity());
                     wordOfTheGame_editText.setFocusable(false);
                     wordOfTheGame_editText.setText("");
                     wordOfTheGame_editText.setHint("See you tomorrow for a new word!");
                     MainActivity.GAME_STREAK++;
-                    gameCardStreak.setText("Your current streak: "+MainActivity.GAME_STREAK);
+                    gameCardStreak.setText(getString(R.string.game_card_current_streak + MainActivity.GAME_STREAK));
                     UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.GAME_STREAK, MainActivity.GAME_STREAK_KEY);
                     UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.wordOfTheGame, MainActivity.WORD_OF_THE_GAME_KEY);
                     mp_pos.start();
@@ -313,7 +313,7 @@ public class HomeFragment extends Fragment {
                     wordOfTheGame_editText.setHint("Oh no! Try again!");
                     wordOfTheGame_editText.setText("");
                     mp_neg.start();
-                    gameCardStreak.setText("Your current streak: "+MainActivity.GAME_STREAK);
+                    gameCardStreak.setText(getString(R.string.game_card_current_streak) + MainActivity.GAME_STREAK);
                     UtilitySharedPrefs.savePrefs(getActivity(), MainActivity.GAME_STREAK, MainActivity.GAME_STREAK_KEY);
                 }
 
