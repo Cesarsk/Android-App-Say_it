@@ -198,9 +198,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         easyRatingDialog.showIfNeeded();
 
+        //check in-app purchase and do not show ads, if so.
         UtilitySharedPrefs.loadAdsStatus(this);
-
-        //check in-app purchase and do not show app, if so.
     }
 
     @Override
