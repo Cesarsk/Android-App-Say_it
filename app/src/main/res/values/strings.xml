@@ -139,4 +139,5 @@
     <string name="card_history_fav_second_part">words so far!</string>
     <string name="you_rock">YOU ROCK!</string>
     <string name="game_card_current_streak">Your current streak: </string>
+    <string name="Do_not_show_again">Do not show again</string>
 </resources>

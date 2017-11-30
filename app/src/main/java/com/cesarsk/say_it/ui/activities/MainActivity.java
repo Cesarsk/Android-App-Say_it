@@ -504,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setClassName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity");
             if (isCallable(intent)) {
                 final AppCompatCheckBox dontShowAgain = new AppCompatCheckBox(this);
-                dontShowAgain.setText("Do not show again");
+                dontShowAgain.setText(R.string.Do_not_show_again);
                 dontShowAgain.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

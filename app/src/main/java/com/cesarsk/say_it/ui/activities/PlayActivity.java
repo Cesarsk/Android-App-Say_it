@@ -40,6 +40,7 @@ import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.cesarsk.say_it.utility.utility_aidl.Purchase;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -489,9 +490,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         };
 
-        //15 Sept 2017 - Updating Say It! Removing In-app purchase button and replacing it with a donation button (redirecting to Paypal).
-        //The new remove_ad Button will be place below this commented method
-
         remove_ad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -519,8 +517,17 @@ public class PlayActivity extends AppCompatActivity {
         if (MainActivity.NO_ADS) {
             mAdView.setVisibility(View.GONE);
         } else {
+            Bundle extras = new Bundle();
+            extras.putBoolean("is_designed_for_families", true);
+
             MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.ad_unit_id_banner_playActivity));
-            AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice(getString(R.string.test_device_oneplus_3))
+                    .addTestDevice(getString(R.string.test_device_honor_6))
+                    .addTestDevice(getString(R.string.test_device_htc_one_m8))
+                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                    .tagForChildDirectedTreatment(true)
+                    .build();
             mAdView.loadAd(adRequest);
         }
 

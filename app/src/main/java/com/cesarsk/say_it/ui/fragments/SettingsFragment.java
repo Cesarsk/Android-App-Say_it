@@ -32,6 +32,7 @@ import com.cesarsk.say_it.utility.utility_aidl.IabHelper;
 import com.cesarsk.say_it.utility.utility_aidl.IabResult;
 import com.cesarsk.say_it.utility.utility_aidl.Inventory;
 import com.cesarsk.say_it.utility.utility_aidl.Purchase;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
@@ -49,7 +50,7 @@ import static com.cesarsk.say_it.utility.Utility.shareToMail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, RewardedVideoAdListener{
+public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, RewardedVideoAdListener {
     private final String[] emails = {"sayit.edu@gmail.com"};
     static private int index_default_accent = 0;
     static private int index_default_theme = 0;
@@ -280,7 +281,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
             public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
                 if (result.isFailure()) {
-                    if(MainActivity.isLoggingEnabled) Toast.makeText(getActivity(), "Query Failed!", Toast.LENGTH_SHORT).show();
+                    if (MainActivity.isLoggingEnabled)
+                        Toast.makeText(getActivity(), "Query Failed!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -425,8 +427,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         });
 
         Preference acknowledgements = getPreferenceManager().findPreference("acknowledgements");
-        acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-        {
+        acknowledgements.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 final Intent preference_intent = new Intent(getActivity(), FileTextActivity.class);
@@ -448,8 +449,17 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     }
 
     private void loadRewardedVideoAd() {
+        Bundle extras = new Bundle();
+        extras.putBoolean("is_designed_for_families", true);
+
         mRewardedVideoAd.loadAd(getResources().getString(R.string.ad_unit_id_rewarded_donation),
-                new AdRequest.Builder().build());
+                new AdRequest.Builder()
+                        .addTestDevice(getString(R.string.test_device_oneplus_3))
+                        .addTestDevice(getString(R.string.test_device_honor_6))
+                        .addTestDevice(getString(R.string.test_device_htc_one_m8))
+                        .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                        .tagForChildDirectedTreatment(true)
+                        .build());
     }
 
     @Override

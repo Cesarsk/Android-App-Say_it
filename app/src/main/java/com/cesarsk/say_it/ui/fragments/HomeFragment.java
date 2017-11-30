@@ -41,6 +41,7 @@ import com.cesarsk.say_it.ui.activities.SettingsActivity;
 import com.cesarsk.say_it.utility.Utility;
 import com.cesarsk.say_it.utility.UtilityRecordings;
 import com.cesarsk.say_it.utility.UtilitySharedPrefs;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -335,8 +336,16 @@ public class HomeFragment extends Fragment {
         if (MainActivity.NO_ADS) {
             mAdView.setVisibility(View.GONE);
         } else {
+            Bundle extras = new Bundle();
+            extras.putBoolean("is_designed_for_families", true);
             MobileAds.initialize(getActivity().getApplicationContext(), getResources().getString(R.string.ad_unit_id_banner_homeFragment));
-            AdRequest adRequest = new AdRequest.Builder().addTestDevice(getString(R.string.test_device_oneplus_3)).addTestDevice(getString(R.string.test_device_honor_6)).addTestDevice(getString(R.string.test_device_htc_one_m8)).build();
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice(getString(R.string.test_device_oneplus_3))
+                    .addTestDevice(getString(R.string.test_device_honor_6))
+                    .addTestDevice(getString(R.string.test_device_htc_one_m8))
+                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                    .tagForChildDirectedTreatment(true)
+                    .build();
             mAdView.loadAd(adRequest);
         }
 
