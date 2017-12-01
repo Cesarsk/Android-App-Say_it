@@ -116,11 +116,12 @@
             android:summary="Check out other apps made by us"
             android:title="Other Apps" />
 
-        <Preference
+        <!-- <Preference
             android:key="github"
             android:layout="@xml/voices_settings_layout"
             android:summary="Visit our Github"
-            android:title="Github" />
+            android:title="Github"
+            /> -->
 
         <Preference
             android:key="open_source_licenses"

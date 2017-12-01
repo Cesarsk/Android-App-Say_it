@@ -220,14 +220,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             }
         });
 
-        final Preference github = getPreferenceManager().findPreference("github");
+        /*final Preference github = getPreferenceManager().findPreference("github");
         github.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Utility.openURL(getActivity(), "https://github.com/Cesarsk/Say_it");
                 return false;
             }
-        });
+        });*/
 
         final Preference other_apps = getPreferenceManager().findPreference("other_apps");
         other_apps.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
